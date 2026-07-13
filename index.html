@@ -1,0 +1,1648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RADIANT · The Case for Nuclear Energy</title>
+<meta name="description" content="Bringing data-driven clarity to nuclear energy discussions. An evidence-based advocacy project by Desmond Wong.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230F172A'/><circle cx='50' cy='50' r='12' fill='%23F59E0B'/><g fill='%23F59E0B'><path d='M50 14a36 36 0 0 1 31 18l-21 12a12 12 0 0 0-10-6V14Z'/><path d='M19 32l21 12a12 12 0 0 0 0 12L19 68a36 36 0 0 1 0-36Z'/><path d='M50 86a36 36 0 0 0 31-18L60 56a12 12 0 0 1-10 6v24Z'/></g></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script>document.documentElement.classList.add('js');</script>
+<style>
+  :root {
+    --ink: #0F172A;
+    --body: #334155;
+    --muted: #64748B;
+    --faint: #94A3B8;
+    --hair: #E2E8F0;
+    --tint: #F8FAFC;
+    --card: #FFFFFF;
+    --blue: #2563EB;       /* data accent, validated >=3:1 on white */
+    --blue-deep: #1D4ED8;
+    --blue-wash: #EFF6FF;
+    --amber: #F59E0B;      /* small accents only, never text */
+    --navy: #0F172A;
+    --green-ok: #047857;
+    --serif: 'Newsreader', Georgia, serif;
+    --sans: 'Public Sans', system-ui, -apple-system, sans-serif;
+    --shadow: 0 1px 2px rgba(15,23,42,0.05), 0 8px 24px rgba(15,23,42,0.06);
+    --shadow-lift: 0 2px 4px rgba(15,23,42,0.06), 0 14px 34px rgba(15,23,42,0.10);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; scroll-padding-top: 5rem; overflow-x: clip; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+
+  body {
+    font-family: var(--sans);
+    font-size: 1.0625rem; line-height: 1.7;
+    background: #FFFFFF; color: var(--body);
+    overflow-x: clip;
+  }
+
+  h1, h2, h3 { font-family: var(--serif); font-weight: 500; color: var(--ink); }
+  a { color: var(--blue-deep); }
+  ::selection { background: rgba(245,158,11,0.3); }
+  :focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; border-radius: 2px; }
+
+  .skip-link {
+    position: absolute; left: -9999px; top: 0;
+    background: var(--ink); color: #fff;
+    padding: 0.6rem 1rem; z-index: 100; font-weight: 600; text-decoration: none;
+  }
+  .skip-link:focus { left: 0; }
+
+  /* ============ REVEAL ANIMATION ============ */
+  @media (prefers-reduced-motion: no-preference) {
+    .js .reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.55s ease, transform 0.55s ease; }
+    .js .reveal.in { opacity: 1; transform: none; }
+  }
+
+  /* ============ NAV ============ */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+    background: rgba(255,255,255,0.88);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--hair);
+    display: flex; align-items: center; gap: 1.25rem;
+    padding: 0 1.25rem; height: 4rem;
+  }
+  .nav__brand {
+    font-family: var(--serif); font-size: 1.3rem; font-weight: 600; color: var(--ink);
+    text-decoration: none; display: flex; align-items: center; gap: 0.55rem; flex-shrink: 0;
+  }
+  .nav__brand svg { color: var(--blue); }
+  .nav__links { display: flex; margin-left: auto; overflow-x: auto; scrollbar-width: none; }
+  .nav__links::-webkit-scrollbar { display: none; }
+  .nav__links a {
+    font-size: 0.8rem; font-weight: 500; color: var(--muted);
+    text-decoration: none; white-space: nowrap;
+    padding: 1.3rem 0.65rem; /* ≥44px touch target */
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .nav__links a:hover { color: var(--ink); }
+  .nav__links a.active { color: var(--blue-deep); border-bottom-color: var(--blue); }
+
+  /* ============ LAYOUT ============ */
+  .wrap { max-width: 68rem; margin: 0 auto; padding: 0 1.5rem; }
+  .band { padding: 5.5rem 0; border-top: 1px solid var(--hair); }
+  .band--tint { background: var(--tint); }
+  .band--navy { background: var(--navy); border-top: none; }
+
+  .overline {
+    display: block; font-size: 0.75rem; font-weight: 600;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 1.1rem;
+  }
+  .overline .n { color: var(--amber); margin-right: 0.35rem; }
+
+  .section-head { max-width: 46rem; margin-bottom: 2.8rem; }
+  .section-head h2 { font-size: clamp(1.9rem, 4vw, 2.7rem); line-height: 1.12; margin-bottom: 0.9rem; letter-spacing: -0.01em; }
+  .lede { font-family: var(--serif); font-size: 1.22rem; line-height: 1.55; color: var(--muted); }
+
+  p + p { margin-top: 1.1rem; }
+  .prose { max-width: 42rem; font-size: 1rem; }
+  .prose strong { font-weight: 600; color: var(--ink); }
+
+  /* ============ HERO ============ */
+  .hero { padding: 9.5rem 0 6rem; text-align: center; }
+  .hero .overline { margin-bottom: 1.4rem; }
+  .hero h1 { font-size: clamp(2.7rem, 7vw, 4.7rem); line-height: 1.04; letter-spacing: -0.015em; max-width: 17ch; margin: 0 auto 1.4rem; }
+  .hero__lede { font-family: var(--serif); font-size: clamp(1.15rem, 2.4vw, 1.4rem); line-height: 1.5; color: var(--muted); max-width: 36rem; margin: 0 auto 1rem; }
+  .hero__byline { font-size: 0.9rem; color: var(--muted); margin-bottom: 2.6rem; }
+  .hero__cta { display: flex; gap: 1rem; justify-content: center; align-items: center; flex-wrap: wrap; margin-bottom: 5rem; }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    font-family: var(--sans); font-size: 0.92rem; font-weight: 600;
+    background: var(--ink); color: #fff;
+    border: none; border-radius: 10px;
+    padding: 0.9rem 1.7rem; min-height: 48px;
+    text-decoration: none; cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn:hover { background: #1E293B; }
+  .btn--link { background: none; color: var(--blue-deep); padding: 0.9rem 0.5rem; }
+  .btn--link:hover { background: none; text-decoration: underline; }
+
+  .principles {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5rem;
+    max-width: 56rem; margin: 0 auto;
+    padding-top: 3rem; border-top: 1px solid var(--hair);
+    text-align: left;
+  }
+  .principle svg { color: var(--blue); margin-bottom: 0.8rem; }
+  .principle h3 { font-family: var(--sans); font-size: 1rem; font-weight: 600; margin-bottom: 0.4rem; }
+  .principle p { font-size: 0.9rem; color: var(--muted); line-height: 1.6; }
+
+  /* ============ CHART CARD ============ */
+  .chart-card {
+    background: var(--card);
+    border: 1px solid var(--hair); border-radius: 12px;
+    box-shadow: var(--shadow);
+    padding: 1.8rem 1.8rem 1.4rem;
+    max-width: 54rem; margin: 0 0 2.6rem;
+  }
+  .chart-card__head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.4rem 1.2rem; justify-content: space-between; }
+  .chart-card__title { font-size: 1.02rem; font-weight: 600; color: var(--ink); }
+  .chart-card__unit { font-size: 0.75rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+  .chart-card__legend { display: flex; gap: 1.2rem; margin: 0.6rem 0 1.5rem; font-size: 0.78rem; color: var(--muted); }
+  .chart-card__legend .key { display: inline-flex; align-items: center; gap: 0.45rem; }
+  .chart-card__legend .swatch { width: 13px; height: 13px; border-radius: 3px; display: inline-block; }
+
+  .chart-rows { display: flex; flex-direction: column; gap: 10px; }
+  .crow {
+    display: grid; grid-template-columns: var(--label-w, 8.5rem) 1fr;
+    align-items: center; gap: 0.9rem;
+    min-height: 30px; border-radius: 6px; cursor: default;
+  }
+  .crow:hover, .crow:focus-visible { background: var(--tint); }
+  .crow__label { text-align: right; font-size: 0.85rem; color: var(--body); line-height: 1.25; }
+  .crow--hero .crow__label { font-weight: 600; color: var(--ink); }
+  .crow__label .cat { display: block; font-size: 0.6rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint); }
+  .crow__track { position: relative; height: 22px; display: flex; align-items: center; }
+  .crow__bar {
+    height: 22px; background: var(--faint);
+    border-radius: 0 4px 4px 0; width: 0;
+    transition: width 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+    flex-shrink: 0;
+  }
+  .crow--hero .crow__bar { background: var(--blue); }
+  .crow__val { font-size: 0.85rem; font-weight: 600; color: var(--ink); margin-left: 0.55rem; white-space: nowrap; }
+
+  .chart-plot { position: relative; }
+  .chart-tip {
+    position: absolute; z-index: 20;
+    background: var(--ink); color: #fff;
+    padding: 0.6rem 0.85rem; font-size: 0.8rem; line-height: 1.45;
+    border-radius: 8px; pointer-events: none; max-width: 16rem; display: none;
+  }
+  .chart-tip strong { font-size: 0.95rem; font-weight: 600; display: block; }
+  .chart-tip .tipname { color: #CBD5E1; }
+
+  .chart-card__foot {
+    display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
+    gap: 0.8rem; margin-top: 1.6rem; padding-top: 1.1rem;
+    border-top: 1px solid var(--hair);
+  }
+  .chart-card__src { font-size: 0.72rem; color: var(--muted); max-width: 30rem; }
+  .table-toggle {
+    font-family: var(--sans); font-size: 0.8rem; font-weight: 600; color: var(--body);
+    background: none; border: 1px solid var(--hair); border-radius: 8px;
+    padding: 0.55rem 1rem; min-height: 44px; min-width: 44px;
+    cursor: pointer; transition: background 0.2s, border-color 0.2s;
+  }
+  .table-toggle:hover { background: var(--tint); border-color: #CBD5E1; }
+
+  .data-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+  .data-table caption { text-align: left; font-size: 0.75rem; color: var(--muted); padding-bottom: 0.7rem; }
+  .data-table th, .data-table td { padding: 0.55rem 0.75rem; border-bottom: 1px solid var(--hair); text-align: left; }
+  .data-table td.num, .data-table th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .data-table thead th { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid #CBD5E1; }
+  .data-table .hero-row { background: var(--blue-wash); font-weight: 600; color: var(--ink); }
+
+  /* ============ PULL STAT / CALLOUT ============ */
+  .callout { max-width: 54rem; border-left: 4px solid var(--amber); padding: 0.4rem 0 0.4rem 1.8rem; margin-bottom: 2.6rem; }
+  .callout__big { font-family: var(--serif); font-weight: 500; font-size: clamp(2.2rem, 6vw, 3.8rem); line-height: 1.05; color: var(--ink); letter-spacing: -0.01em; }
+  .callout__big small { display: block; font-family: var(--sans); font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-top: 0.8rem; }
+
+  /* ============ STAT TILES ============ */
+  .tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; max-width: 58rem; margin-bottom: 2.8rem; }
+  .tile { background: var(--card); border: 1px solid var(--hair); border-radius: 12px; box-shadow: var(--shadow); padding: 1.5rem 1.5rem 1.6rem; }
+  .tile__label { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.9rem; }
+  .tile__value { font-family: var(--sans); font-weight: 700; font-size: clamp(2rem, 4.5vw, 2.7rem); line-height: 1; color: var(--ink); letter-spacing: -0.02em; }
+  .tile__value .unit { font-size: 0.42em; font-weight: 600; color: var(--muted); margin-left: 0.15em; }
+  .tile__desc { font-size: 0.85rem; color: var(--muted); margin-top: 0.9rem; line-height: 1.6; }
+
+  /* ============ PULL QUOTE ============ */
+  .pull {
+    font-family: var(--serif); font-style: italic; font-weight: 500;
+    font-size: clamp(1.4rem, 3.2vw, 1.9rem); line-height: 1.35; color: var(--ink);
+    max-width: 44rem; margin: 2.6rem 0 0;
+  }
+  .pull mark { background: linear-gradient(transparent 62%, rgba(245,158,11,0.35) 62%); color: inherit; padding: 0 0.1em; }
+
+  /* ============ VERDICTS ============ */
+  .verdicts { max-width: 46rem; display: flex; flex-direction: column; gap: 1rem; margin: 2.6rem 0 0; }
+  .verdict { display: flex; gap: 1rem; align-items: flex-start; }
+  .verdict svg { flex-shrink: 0; margin-top: 0.2rem; }
+  .verdict p { font-size: 1rem; }
+
+  /* ============ PLANT DIAGRAM ============ */
+  .plant-fig {
+    max-width: 56rem; margin: 0 0 2.4rem;
+    background: var(--card); border: 1px solid var(--hair); border-radius: 12px;
+    box-shadow: var(--shadow); padding: 1.6rem 1.4rem 1.2rem;
+  }
+  .plant-fig svg { width: 100%; height: auto; display: block; }
+  .plant-fig figcaption { font-size: 0.78rem; color: var(--muted); margin-top: 0.9rem; }
+  .plant-steps {
+    list-style: none; counter-reset: step;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: 1.4rem 1.8rem; max-width: 56rem;
+  }
+  .plant-steps li { counter-increment: step; position: relative; padding-left: 2.5rem; font-size: 0.88rem; color: var(--muted); line-height: 1.6; }
+  .plant-steps li strong { color: var(--ink); font-weight: 600; }
+  .plant-steps li::before {
+    content: counter(step);
+    position: absolute; left: 0; top: 0.1rem;
+    width: 1.65rem; height: 1.65rem;
+    background: var(--ink); color: #fff; border-radius: 50%;
+    font-size: 0.8rem; font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* ============ INFO CARDS (baseload etc.) ============ */
+  .duo { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; max-width: 54rem; margin-bottom: 2.4rem; }
+  .info-card { background: var(--card); border: 1px solid var(--hair); border-radius: 12px; box-shadow: var(--shadow); padding: 1.5rem 1.6rem; }
+  .info-card h3 { font-family: var(--sans); font-size: 0.98rem; font-weight: 600; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+  .info-card h3 svg { color: var(--blue); flex-shrink: 0; }
+  .info-card p { font-size: 0.88rem; color: var(--muted); line-height: 1.6; }
+  .info-card p strong { color: var(--ink); font-weight: 600; }
+
+  /* ============ INCIDENT TABS ============ */
+  .tabs { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 1.6rem; }
+  .tab {
+    font-family: var(--sans); font-size: 0.88rem; font-weight: 600; color: var(--body);
+    background: var(--card); border: 1px solid var(--hair); border-radius: 10px;
+    padding: 0.7rem 1.2rem; min-height: 48px; cursor: pointer;
+    transition: border-color 0.2s, background 0.2s, color 0.2s;
+    display: flex; flex-direction: column; align-items: flex-start; gap: 0.05rem;
+  }
+  .tab small { font-size: 0.7rem; font-weight: 500; color: var(--muted); }
+  .tab:hover { border-color: #CBD5E1; }
+  .tab[aria-selected="true"] { border-color: var(--blue); color: var(--blue-deep); background: var(--blue-wash); }
+  .tab[aria-selected="true"] small { color: var(--blue-deep); }
+
+  .incident-panel {
+    background: var(--card); border: 1px solid var(--hair); border-radius: 12px;
+    box-shadow: var(--shadow); padding: 1.8rem; max-width: 54rem; margin-bottom: 1.6rem;
+  }
+  .incident-panel__head { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem 1rem; justify-content: space-between; margin-bottom: 0.6rem; }
+  .incident-panel__head h3 { font-size: 1.5rem; }
+  .chip { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; background: var(--tint); border: 1px solid var(--hair); color: var(--muted); border-radius: 999px; padding: 0.3rem 0.8rem; }
+  .perception {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.4rem 0;
+  }
+  .perception > div { border: 1px solid var(--hair); border-radius: 10px; padding: 1.1rem 1.3rem; }
+  .perception .p-label { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.4rem; }
+  .perception .p-value { font-family: var(--serif); font-size: 1.7rem; font-weight: 500; color: var(--ink); line-height: 1.1; }
+  .perception .confirmed { background: var(--blue-wash); border-color: #BFDBFE; }
+  .perception .confirmed .p-value { color: var(--blue-deep); }
+  .incident-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem 2rem; margin-top: 1.4rem; }
+  .incident-cols h4 { font-family: var(--sans); font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.6rem; }
+  .incident-cols ul { list-style: none; }
+  .incident-cols li { font-size: 0.86rem; color: var(--body); padding: 0.3rem 0 0.3rem 1rem; border-left: 2px solid var(--hair); margin-bottom: 0.4rem; line-height: 1.55; }
+
+  /* ============ ACCORDION (myths, careers) ============ */
+  .acc { background: var(--card); border: 1px solid var(--hair); border-radius: 12px; box-shadow: var(--shadow); max-width: 54rem; margin-bottom: 1rem; overflow: hidden; }
+  .acc-head {
+    width: 100%; text-align: left; background: none; border: none; cursor: pointer;
+    padding: 1.3rem 1.5rem; min-height: 48px;
+    display: flex; align-items: flex-start; gap: 1rem;
+    font-family: var(--sans); transition: background 0.2s;
+  }
+  .acc-head:hover { background: var(--tint); }
+  .acc-head .acc-icon { flex-shrink: 0; margin-top: 0.15rem; }
+  .acc-head .acc-title { flex: 1; }
+  .acc-head .acc-kicker { display: block; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.2rem; }
+  .acc-head .acc-text { font-size: 1rem; font-weight: 600; color: var(--ink); line-height: 1.45; }
+  .acc-head .acc-sub { display: block; font-size: 0.82rem; font-weight: 400; color: var(--muted); margin-top: 0.25rem; }
+  .acc-caret { flex-shrink: 0; color: var(--faint); transition: transform 0.25s; margin-top: 0.3rem; }
+  .acc.open .acc-caret { transform: rotate(180deg); }
+  .acc-panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.3s ease; }
+  .acc.open .acc-panel { grid-template-rows: 1fr; }
+  .acc-panel > div { overflow: hidden; }
+  .acc-body { padding: 0 1.5rem 1.5rem; }
+  .fact-box { background: #ECFDF5; border: 1px solid #A7F3D0; border-radius: 10px; padding: 1.1rem 1.3rem; display: flex; gap: 0.8rem; align-items: flex-start; }
+  .fact-box .fact-label { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--green-ok); display: block; margin-bottom: 0.25rem; }
+  .fact-box p { font-size: 0.92rem; color: #065F46; line-height: 1.6; }
+  .fact-box svg { flex-shrink: 0; margin-top: 0.1rem; }
+
+  /* ============ FIELD FIGURE ============ */
+  .field-fig { margin: 1.2rem 0 0; }
+  .field-fig svg { width: 100%; height: auto; display: block; border: 1px solid var(--hair); border-radius: 10px; }
+  .field-fig figcaption { font-size: 0.75rem; color: var(--muted); margin-top: 0.6rem; }
+
+  /* ============ NEWS ============ */
+  .news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr)); gap: 1.2rem; max-width: 58rem; margin-bottom: 2.2rem; }
+  .news-card {
+    background: var(--card); border: 1px solid var(--hair); border-radius: 12px;
+    box-shadow: var(--shadow); padding: 1.4rem 1.5rem;
+    text-decoration: none; display: flex; flex-direction: column; gap: 0.55rem;
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+  }
+  .news-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lift); border-color: #CBD5E1; }
+  .news-card .meta { display: flex; align-items: center; gap: 0.6rem; font-size: 0.72rem; color: var(--muted); }
+  .news-card .cat-chip { font-size: 0.66rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; background: var(--blue-wash); color: var(--blue-deep); border-radius: 999px; padding: 0.2rem 0.65rem; }
+  .news-card h3 { font-family: var(--sans); font-size: 1rem; font-weight: 600; color: var(--ink); line-height: 1.4; }
+  .news-card p { font-size: 0.85rem; color: var(--muted); line-height: 1.6; flex: 1; }
+  .news-card .src { font-size: 0.75rem; font-weight: 500; color: var(--blue-deep); }
+
+  .res-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 1.2rem; max-width: 58rem; }
+  .res-card {
+    display: block; background: var(--tint); border: 1px solid var(--hair); border-radius: 10px;
+    padding: 1.1rem 1.3rem; text-decoration: none;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .band--tint .res-card { background: var(--card); }
+  .res-card:hover { border-color: var(--blue); }
+  .res-card h4 { font-family: var(--sans); font-size: 0.92rem; font-weight: 600; color: var(--ink); margin-bottom: 0.25rem; }
+  .res-card p { font-size: 0.8rem; color: var(--muted); line-height: 1.55; }
+
+  /* ============ CAREERS ============ */
+  .career-meta { display: flex; flex-wrap: wrap; gap: 0.5rem 1.4rem; margin-top: 0.5rem; font-size: 0.8rem; color: var(--muted); }
+  .career-meta strong { color: var(--ink); font-weight: 600; }
+
+  /* ============ STUDENTS PATHWAY ============ */
+  .pathway { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.2rem; max-width: 60rem; margin-bottom: 3rem; counter-reset: stage; }
+  .stage { background: var(--card); border: 1px solid var(--hair); border-radius: 12px; box-shadow: var(--shadow); padding: 1.4rem 1.4rem 1.5rem; counter-increment: stage; position: relative; }
+  .stage h3 { font-family: var(--sans); font-size: 0.95rem; font-weight: 600; margin: 0.4rem 0 0.7rem; }
+  .stage::before {
+    content: counter(stage);
+    display: flex; align-items: center; justify-content: center;
+    width: 1.8rem; height: 1.8rem; border-radius: 50%;
+    background: var(--blue-wash); color: var(--blue-deep);
+    font-size: 0.85rem; font-weight: 700;
+  }
+  .stage ul { list-style: none; }
+  .stage li { font-size: 0.82rem; color: var(--muted); line-height: 1.5; padding-left: 1rem; position: relative; margin-bottom: 0.45rem; }
+  .stage li::before { content: ''; position: absolute; left: 0; top: 0.55em; width: 5px; height: 5px; border-radius: 50%; background: var(--faint); }
+
+  /* ============ SCHOOLS ============ */
+  .sub-head { font-family: var(--sans); font-size: 1.05rem; font-weight: 600; color: var(--ink); margin: 2.6rem 0 1.2rem; }
+  .school-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); gap: 1rem; max-width: 60rem; margin-bottom: 1rem; }
+  .school-card { background: var(--card); border: 1px solid var(--hair); border-radius: 10px; padding: 1rem 1.2rem; }
+  .school-card h4 { font-family: var(--sans); font-size: 0.92rem; font-weight: 600; color: var(--ink); margin-bottom: 0.2rem; }
+  .school-card .prog { font-size: 0.78rem; color: var(--muted); line-height: 1.5; display: block; }
+  .school-card .loc { font-size: 0.72rem; color: var(--faint); display: block; margin-top: 0.3rem; }
+  .school-note { font-size: 0.8rem; color: var(--muted); max-width: 46rem; margin-bottom: 2.6rem; }
+
+  /* ============ CLOSING ============ */
+  .closing-band { padding: 5.5rem 0; }
+  .closing-band h2 { color: #fff; font-size: clamp(1.8rem, 4.2vw, 2.8rem); line-height: 1.12; max-width: 22ch; margin-bottom: 1.1rem; }
+  .closing-band p { color: #CBD5E1; max-width: 40rem; font-size: 1rem; }
+
+  /* ============ ABOUT ============ */
+  .about-grid { display: grid; grid-template-columns: auto 1fr; gap: 2rem; align-items: start; max-width: 50rem; }
+  .about-mark {
+    width: 76px; height: 76px; border-radius: 50%;
+    background: var(--tint); border: 1px solid var(--hair);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--serif); font-weight: 600; font-size: 1.6rem; color: var(--ink);
+    flex-shrink: 0;
+  }
+  .about-grid h3 { font-size: 1.5rem; margin-bottom: 0.7rem; }
+  .about-contact { margin-top: 1.2rem; font-size: 0.92rem; }
+
+  /* ============ FOOTER ============ */
+  footer { background: var(--navy); color: #CBD5E1; padding: 4.5rem 0 2.5rem; }
+  footer h2 { color: #fff; font-size: 1.8rem; margin-bottom: 2.2rem; }
+  .src-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 1.8rem 2.6rem; margin-bottom: 3rem; }
+  .src-col h3 { font-family: var(--sans); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--faint); margin-bottom: 0.8rem; }
+  .src-col p { font-size: 0.85rem; line-height: 1.65; }
+  .src-note { font-size: 0.78rem; color: var(--faint); max-width: 42rem; margin-bottom: 2.6rem; font-style: italic; }
+  .foot-base { border-top: 1px solid rgba(255,255,255,0.15); padding-top: 1.6rem; display: flex; flex-wrap: wrap; gap: 0.6rem 2rem; justify-content: space-between; font-size: 0.78rem; color: var(--faint); }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width: 980px) {
+    .pathway { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 900px) {
+    .principles { grid-template-columns: 1fr; max-width: 26rem; gap: 1.8rem; }
+    .tiles { grid-template-columns: 1fr; max-width: 24rem; }
+    .duo, .incident-cols, .perception { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 640px) {
+    .band { padding: 4.2rem 0; }
+    .hero { padding: 8rem 0 4.5rem; }
+    .crow { grid-template-columns: 6.4rem 1fr !important; gap: 0.6rem; }
+    .crow__label { font-size: 0.72rem; }
+    .crow__val { font-size: 0.72rem; }
+    .about-grid { grid-template-columns: 1fr; }
+    .chart-card { padding: 1.3rem 1.1rem 1rem; }
+    .pathway { grid-template-columns: 1fr; }
+    .incident-panel { padding: 1.3rem; }
+  }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<nav class="nav" aria-label="Main">
+  <a class="nav__brand" href="#top">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <circle cx="12" cy="12" r="2.4" fill="currentColor"/>
+      <path d="M12 3a9 9 0 0 1 7.8 4.5l-5.2 3a3 3 0 0 0-2.6-1.5V3Z" fill="currentColor"/>
+      <path d="M4.2 7.5l5.2 3A3 3 0 0 0 9.4 12H3a9 9 0 0 1 1.2-4.5Z" fill="currentColor"/>
+      <path d="M9.4 13.5a3 3 0 0 0 1.3 1.3l-3 5.2A9 9 0 0 1 3.6 15l5.8-1.5Z" fill="currentColor"/>
+    </svg>
+    Radiant
+  </a>
+  <div class="nav__links" id="nav-links">
+    <a href="#top">Overview</a>
+    <a href="#case">The Case</a>
+    <a href="#how">The Plant</a>
+    <a href="#data">Safety</a>
+    <a href="#capacity">Capacity</a>
+    <a href="#costs">Costs</a>
+    <a href="#incidents">Incidents</a>
+    <a href="#exposure">Exposure</a>
+    <a href="#myths">Myths</a>
+    <a href="#news">News</a>
+    <a href="#careers">Careers</a>
+    <a href="#students">Students</a>
+    <a href="#about">Info</a>
+  </div>
+</nav>
+
+<main id="main">
+
+<!-- ================= OVERVIEW ================= -->
+<header class="hero" id="top">
+  <div class="wrap">
+    <span class="overline reveal">Radiant · Evidence-based advocacy</span>
+    <h1 class="reveal">The case for nuclear energy</h1>
+    <p class="hero__lede reveal">Bringing data-driven clarity to a conversation that has been governed by fear for half a century.</p>
+    <p class="hero__byline reveal">An advocacy project by Desmond Wong</p>
+
+    <div class="hero__cta reveal">
+      <a class="btn" href="#data">See the data</a>
+      <a class="btn btn--link" href="#how">How a plant works →</a>
+    </div>
+
+    <div class="principles">
+      <div class="principle reveal">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21h18"/><path d="M6 21V10"/><path d="M12 21V4"/><path d="M18 21v-8"/></svg>
+        <h3>Evidence over emotion</h3>
+        <p>Energy policy should follow the data, not the loudest fear in the room.</p>
+      </div>
+      <div class="principle reveal">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-9 8.35 8.5 8.5 0 0 1-3.4-.65L3 21l1.8-5.6a8.38 8.38 0 0 1-.65-3.4 8.5 8.5 0 1 1 16.85-.5Z"/><path d="M8 10h8"/><path d="M8 13.5h5"/></svg>
+        <h3>Clarity over jargon</h3>
+        <p>Complex science deserves plain language, accessible without being dumbed down.</p>
+      </div>
+      <div class="principle reveal">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2 4 5.5v5.6c0 4.9 3.4 9.5 8 10.9 4.6-1.4 8-6 8-10.9V5.5L12 2Z"/><path d="m8.8 12 2.2 2.2 4.2-4.6"/></svg>
+        <h3>Honesty over hype</h3>
+        <p>Nuclear isn't perfect. The goal is an accurate picture, not a sales pitch.</p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ================= 01 THE CASE ================= -->
+<section class="band band--tint" id="case" aria-labelledby="h-case">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="overline"><span class="n">01</span>The Case</span>
+      <h2 id="h-case">The argument in one page</h2>
+      <p class="lede">For half a century, the single most effective tool humanity has built for reliable, low-carbon electricity is the one we have spent decades shutting down. Applied evenly, the evidence is hard to avoid.</p>
+    </div>
+
+    <div class="tiles">
+      <div class="tile reveal">
+        <div class="tile__label">Lifecycle carbon</div>
+        <div class="tile__value"><span data-count="12">0</span><span class="unit">g CO₂/kWh</span></div>
+        <p class="tile__desc">Over a plant's lifetime: on par with wind, and a fraction of natural gas or coal.</p>
+      </div>
+      <div class="tile reveal">
+        <div class="tile__label">France's grid, powered by nuclear</div>
+        <div class="tile__value">≈<span data-count="70">0</span><span class="unit">%</span></div>
+        <p class="tile__desc">A decades-long, real-world demonstration that a modern nation can decarbonize its grid with nuclear at its core.</p>
+      </div>
+      <div class="tile reveal">
+        <div class="tile__label">Deaths per TWh</div>
+        <div class="tile__value">0.03</div>
+        <p class="tile__desc">Nuclear sits beside wind (0.04) and solar (0.02), and roughly 820 times below coal.</p>
+      </div>
+    </div>
+
+    <div class="verdicts">
+      <div class="verdict reveal">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2563EB"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <p>It is <strong>as safe as wind and solar</strong>, and hundreds of times safer than the fossil fuels we burn without a second thought.</p>
+      </div>
+      <div class="verdict reveal">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2563EB"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <p>It is <strong>as clean as wind</strong> over its lifetime, and uniquely able to deliver that clean power <strong>reliably, around the clock</strong>.</p>
+      </div>
+      <div class="verdict reveal">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2563EB"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <p>Its <strong>waste is small, contained, and controlled</strong>: a managed problem, not a mythical one.</p>
+      </div>
+      <div class="verdict reveal">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2563EB"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <p>Its <strong>next generation fails safe by design</strong>, and its energy density means clean power from a <strong>remarkably small footprint of land</strong>.</p>
+      </div>
+    </div>
+
+    <p class="pull reveal">When the question becomes how much ground clean power actually needs, nuclear's compactness is a <mark>quiet but decisive advantage.</mark></p>
+  </div>
+</section>
+
+<!-- ================= 02 THE PLANT ================= -->
+<section class="band" id="how" aria-labelledby="h-how">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="overline"><span class="n">02</span>How it works</span>
+      <h2 id="h-how">Inside a nuclear power plant</h2>
+      <p class="lede">No mystery and no green goo. A fission plant is, at heart, a steam engine running on an extraordinarily dense fuel.</p>
+    </div>
+
+    <figure class="plant-fig reveal">
+      <svg viewBox="0 0 920 430" role="img" aria-label="Simplified diagram of a nuclear power plant: fission in the reactor heats water, steam spins a turbine, the generator makes electricity, a transformer sends it to the grid, and cooling towers release water vapor.">
+        <line x1="24" y1="370" x2="896" y2="370" stroke="#334155" stroke-width="2.5"/>
+        <path d="M 52 370 L 52 205 Q 52 122 131 122 Q 210 122 210 205 L 210 370 Z" fill="#E2E8F0" stroke="#334155" stroke-width="2.5"/>
+        <rect x="96" y="212" width="70" height="122" rx="8" fill="#FFFFFF" stroke="#334155" stroke-width="2.5"/>
+        <rect x="116" y="192" width="30" height="20" fill="#E2E8F0" stroke="#334155" stroke-width="2"/>
+        <rect x="106" y="242" width="10" height="72" fill="#F59E0B" stroke="#334155" stroke-width="1.5"/>
+        <rect x="126" y="242" width="10" height="72" fill="#F59E0B" stroke="#334155" stroke-width="1.5"/>
+        <rect x="146" y="242" width="10" height="72" fill="#F59E0B" stroke="#334155" stroke-width="1.5"/>
+        <path d="M 166 238 H 306" stroke="#334155" stroke-width="2.5" fill="none"/>
+        <path d="M 300 231 L 312 238 L 300 245 Z" fill="#334155"/>
+        <polygon points="312,232 412,206 412,276 312,254" fill="#E2E8F0" stroke="#334155" stroke-width="2.5"/>
+        <line x1="412" y1="241" x2="452" y2="241" stroke="#334155" stroke-width="4"/>
+        <rect x="452" y="206" width="108" height="70" rx="6" fill="#FFFFFF" stroke="#334155" stroke-width="2.5"/>
+        <g stroke="#334155" stroke-width="2" opacity="0.3">
+          <line x1="472" y1="214" x2="472" y2="268"/><line x1="488" y1="214" x2="488" y2="268"/><line x1="504" y1="214" x2="504" y2="268"/>
+        </g>
+        <polygon points="536,218 522,246 532,246 524,264 546,236 534,236" fill="#F59E0B" stroke="#334155" stroke-width="1.5" stroke-linejoin="round"/>
+        <line x1="560" y1="241" x2="602" y2="241" stroke="#334155" stroke-width="2.5"/>
+        <rect x="602" y="226" width="48" height="60" fill="#E2E8F0" stroke="#334155" stroke-width="2.5"/>
+        <line x1="614" y1="226" x2="614" y2="210" stroke="#334155" stroke-width="2"/><circle cx="614" cy="207" r="3.5" fill="#334155"/>
+        <line x1="638" y1="226" x2="638" y2="210" stroke="#334155" stroke-width="2"/><circle cx="638" cy="207" r="3.5" fill="#334155"/>
+        <polygon points="706,370 730,370 721,152 715,152" fill="none" stroke="#334155" stroke-width="2"/>
+        <line x1="690" y1="178" x2="746" y2="178" stroke="#334155" stroke-width="2"/>
+        <line x1="694" y1="214" x2="742" y2="214" stroke="#334155" stroke-width="2"/>
+        <path d="M 650 241 H 700" stroke="#334155" stroke-width="2.5" fill="none"/>
+        <path d="M 746 178 Q 830 208 896 192" stroke="#334155" stroke-width="1.5" fill="none"/>
+        <path d="M 742 214 Q 826 244 896 228" stroke="#334155" stroke-width="1.5" fill="none"/>
+        <path d="M 788 370 C 800 306 796 262 810 216 L 852 216 C 866 262 862 306 874 370 Z" fill="#E2E8F0" stroke="#334155" stroke-width="2.5"/>
+        <circle cx="820" cy="192" r="14" fill="#F1F5F9"/><circle cx="842" cy="176" r="18" fill="#F1F5F9"/><circle cx="824" cy="152" r="22" fill="#F1F5F9"/>
+        <path d="M 362 276 V 340 H 788" stroke="#334155" stroke-width="2" fill="none" opacity="0.45"/>
+        <g font-family="'Public Sans', sans-serif" font-size="12.5" font-weight="500" fill="#64748B" letter-spacing="1.5">
+          <text x="131" y="398" text-anchor="middle">REACTOR</text>
+          <text x="362" y="398" text-anchor="middle">TURBINE</text>
+          <text x="506" y="398" text-anchor="middle">GENERATOR</text>
+          <text x="718" y="398" text-anchor="middle">GRID</text>
+          <text x="831" y="398" text-anchor="middle">COOLING</text>
+        </g>
+        <g font-family="'Public Sans', sans-serif" font-size="15" font-weight="600" fill="#FFFFFF">
+          <circle cx="131" cy="88" r="15" fill="#0F172A"/><text x="131" y="93.5" text-anchor="middle">1</text>
+          <circle cx="362" cy="172" r="15" fill="#0F172A"/><text x="362" y="177.5" text-anchor="middle">2</text>
+          <circle cx="506" cy="172" r="15" fill="#0F172A"/><text x="506" y="177.5" text-anchor="middle">3</text>
+          <circle cx="626" cy="172" r="15" fill="#0F172A"/><text x="626" y="177.5" text-anchor="middle">4</text>
+          <circle cx="874" cy="134" r="15" fill="#0F172A"/><text x="874" y="139.5" text-anchor="middle">5</text>
+        </g>
+      </svg>
+      <figcaption>Simplified schematic of one common design (pressurized systems separate the reactor loop from the turbine loop).</figcaption>
+    </figure>
+
+    <ol class="plant-steps">
+      <li class="reveal"><strong>Fission heats water.</strong> Splitting uranium atoms in the reactor core releases heat, with no burning, no smoke, and no CO₂.</li>
+      <li class="reveal"><strong>Steam spins a turbine.</strong> That heat boils water into high-pressure steam, which drives the turbine blades.</li>
+      <li class="reveal"><strong>The generator makes electricity.</strong> The spinning shaft turns a generator, the same principle used in coal, gas, and hydro plants.</li>
+      <li class="reveal"><strong>Power flows to the grid.</strong> A transformer steps up the voltage and sends it down the transmission lines.</li>
+      <li class="reveal"><strong>The towers release water vapor.</strong> The famous white plume is not smoke and not radioactive. It is the same vapor as a boiling kettle.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================= 03 SAFETY ================= -->
+<section class="band band--tint" id="data" aria-labelledby="h-data">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="overline"><span class="n">03</span>Safety</span>
+      <h2 id="h-data">The numbers the headlines leave out</h2>
+      <p class="lede">The most powerful argument for nuclear energy is also the most counterintuitive: it is among the safest ways to generate electricity ever devised.</p>
+    </div>
+
+    <div class="chart-card reveal" id="deaths-card">
+      <div class="chart-card__head">
+        <div class="chart-card__title">Death rates from energy production</div>
+        <div class="chart-card__unit">deaths per TWh · accidents + air pollution</div>
+      </div>
+      <div class="chart-card__legend" aria-hidden="true">
+        <span class="key"><span class="swatch" style="background:#2563EB"></span>Nuclear</span>
+        <span class="key"><span class="swatch" style="background:#94A3B8"></span>All other sources</span>
+      </div>
+      <div id="deaths-chart"><div class="chart-plot"><div class="chart-rows"></div><div class="chart-tip" role="status"></div></div></div>
+      <div id="deaths-table" hidden></div>
+      <div class="chart-card__foot">
+        <p class="chart-card__src">Source: Our World in Data, based on Markandya &amp; Wilkinson (2007) and Sovacool et&nbsp;al. (2016). Deaths include accidents and the chronic toll of air pollution.</p>
+        <button class="table-toggle" data-chart="deaths" aria-pressed="false">View as table</button>
+      </div>
+    </div>
+
+    <div class="callout reveal">
+      <div class="callout__big">≈<span data-count="820">0</span>× deadlier
+        <small>Coal vs. nuclear, per unit of energy produced</small>
+      </div>
+    </div>
+
+    <div class="prose reveal">
+      <p>Read that chart again. Coal is roughly 820 times deadlier than nuclear per unit of energy, <strong>yet it is nuclear that carries the public fear.</strong> The deaths caused by coal are invisible because they are diffuse: thousands of cases of respiratory and cardiovascular disease spread across a population, never attributed to a single dramatic event. Nuclear's rare accidents are visible, named, and televised.</p>
+      <p>Our perception of risk tracks <em>visibility</em>, not <em>body count</em>, and that single cognitive bias has shaped a generation of energy policy.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 04 CAPACITY ================= -->
+<section class="band" id="capacity" aria-labelledby="h-capacity">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="overline"><span class="n">04</span>Capacity</span>
+      <h2 id="h-capacity">How often does each source actually produce power?</h2>
+      <p class="lede">Capacity factor is the share of the year a plant spends generating at full power. Nuclear runs at roughly 92%, around the clock, in every season. No other major source comes close.</p>
+    </div>
+
+    <div class="chart-card reveal" id="capacity-card">
+      <div class="chart-card__head">
+        <div class="chart-card__title">Average capacity factor by energy source</div>
+        <div class="chart-card__unit">% of the year at full power</div>
+      </div>
+      <div class="chart-card__legend" aria-hidden="true">
+        <span class="key"><span class="swatch" style="background:#2563EB"></span>Nuclear</span>
+        <span class="key"><span class="swatch" style="background:#94A3B8"></span>All other sources</span>
+      </div>
+      <div id="capacity-chart"><div class="chart-plot"><div class="chart-rows"></div><div class="chart-tip" role="status"></div></div></div>
+      <div id="capacity-table" hidden></div>
+      <div class="chart-card__foot">
+        <p class="chart-card__src">Source: U.S. Energy Information Administration.</p>
+        <button class="table-toggle" data-chart="capacity" aria-pressed="false">View as table</button>
+      </div>
+    </div>
+
+    <div class="duo">
+      <div class="info-card reveal">
+        <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="12 6 12 12 16 14"/><circle cx="12" cy="12" r="10"/></svg>Baseload sources</h3>
+        <p><strong>Nuclear, geothermal, coal, gas.</strong> Can run continuously, providing reliable power 24/7 regardless of weather.</p>
+      </div>
+      <div class="info-card reveal">
+        <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.5 19a4.5 4.5 0 1 0 0-9h-1.8a7 7 0 1 0-11.2 6"/></svg>Intermittent sources</h3>
+        <p><strong>Solar, wind, hydro (seasonal).</strong> Depend on the weather, so they need backup power or storage to fill the gaps.</p>
+      </div>
+    </div>
+
+    <div class="prose reveal">
+      <p>Wind and solar are essential and growing, but they are <em>variable</em>. A grid built entirely on weather-dependent sources needs something to fill the gaps when the weather doesn't cooperate. That "firm" clean power is exactly what nuclear provides, <strong>and the alternative gap-filler, today, is almost always natural gas.</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 05 COSTS ================= -->
+<section class="band band--tint" id="costs" aria-labelledby="h-costs">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="overline"><span class="n">05</span>Costs</span>
+      <h2 id="h-costs">The cheapest baseload power to run</h2>
+      <p class="lede">Building a nuclear plant is expensive. Running one is not, and plants run for 60+ years.</p>
+    </div>
+
+    <div class="chart-card reveal" id="costs-card">
+      <div class="chart-card__head">
+        <div class="chart-card__title">Operating costs by energy source</div>
+        <div class="chart-card__unit">$ per MWh · fuel + O&amp;M + waste disposal</div>
+      </div>
+      <div class="chart-card__legend" aria-hidden="true">
+        <span class="key"><span class="swatch" style="background:#2563EB"></span>Nuclear</span>
+        <span class="key"><span class="swatch" style="background:#94A3B8"></span>All other sources</span>
+      </div>
+      <div id="costs-chart"><div class="chart-plot"><div class="chart-rows"></div><div class="chart-tip" role="status"></div></div></div>
+      <div id="costs-table" hidden></div>
+      <div class="chart-card__foot">
+        <p class="chart-card__src">Source: U.S. Energy Information Administration, 2024. Operating costs include fuel, operations &amp; maintenance, and waste disposal.</p>
+        <button class="table-toggle" data-chart="costs" aria-pressed="false">View as table</button>
+      </div>
+    </div>
+
+    <div class="callout reveal">
+      <div class="callout__big">≈<span data-count="32">0</span>% cheaper
+        <small>Nuclear vs. coal, cost per MWh generated</small>
+      </div>
+    </div>
+
+    <div class="prose reveal">
+      <p>Nuclear's high capacity factor compounds the advantage: because a plant is actually generating 92% of the hours in a year, its costs are spread over far more delivered electricity, <strong>further reducing the effective cost per useful MWh.</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 06 INCIDENTS ================= -->
+<section class="band" id="incidents" aria-labelledby="h-incidents">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="overline"><span class="n">06</span>Incidents</span>
+      <h2 id="h-incidents">Facts vs. perception</h2>
+      <p class="lede">Even the disasters tell a more measured story than memory suggests. Select an incident to compare what people feared with what the evidence found.</p>
+    </div>
+
+    <div class="tabs reveal" role="tablist" aria-label="Nuclear incidents" id="incident-tabs"></div>
+    <div class="incident-panel reveal" id="incident-panel" role="tabpanel"></div>
+
+    <div class="callout reveal" style="margin-top:2.4rem">
+      <div class="callout__big" style="font-size:clamp(1.3rem,3vw,1.8rem)">Coal-related air pollution causes an estimated 800,000+ deaths every year.
+        <small>Even with all three incidents combined, nuclear remains the safest major source per TWh</small>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 07 EXPOSURE ================= -->
+<section class="band band--tint" id="exposure" aria-labelledby="h-exposure">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="overline"><span class="n">07</span>Exposure</span>
+      <h2 id="h-exposure">Radiation, in everyday context</h2>
+      <p class="lede">You are exposed to radiation every day, from rocks, the sky, and your own food. The question is never "is there radiation?" but "how much?"</p>
+    </div>
+
+    <div class="duo">
+      <div class="info-card reveal">
+        <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>What is a millisievert?</h3>
+        <p>A millisievert (mSv) measures radiation dose. The average person receives about <strong>3 mSv per year</strong> from natural background radiation: cosmic rays, radon, and radioactive elements in soil and rock.</p>
+      </div>
+      <div class="info-card reveal">
+        <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2 4 5.5v5.6c0 4.9 3.4 9.5 8 10.9 4.6-1.4 8-6 8-10.9V5.5L12 2Z"/></svg>The key insight</h3>
+        <p>Living beside a nuclear plant adds <strong>0.01 mSv a year</strong>, about 1/300th of natural background. A single cross-country flight gives you four times more.</p>
+      </div>
+    </div>
+
+    <div class="chart-card reveal" id="exposure-card">
+      <div class="chart-card__head">
+        <div class="chart-card__title">Everyday radiation doses, compared</div>
+        <div class="chart-card__unit">millisieverts (mSv)</div>
+      </div>
+      <div class="chart-card__legend" aria-hidden="true">
+        <span class="key"><span class="swatch" style="background:#2563EB"></span>Living near a nuclear plant</span>
+        <span class="key"><span class="swatch" style="background:#94A3B8"></span>Everything else</span>
+      </div>
+      <div id="exposure-chart"><div class="chart-plot"><div class="chart-rows"></div><div class="chart-tip" role="status"></div></div></div>
+      <div id="exposure-table" hidden></div>
+      <div class="chart-card__foot">
+        <p class="chart-card__src">Sources: U.S. Nuclear Regulatory Commission, EPA, CDC. Bars drawn to a linear scale; the plant's near-invisible bar is the point.</p>
+        <button class="table-toggle" data-chart="exposure" aria-pressed="false">View as table</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 08 MYTHS ================= -->
+<section class="band" id="myths" aria-labelledby="h-myths">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="overline"><span class="n">08</span>Myths</span>
+      <h2 id="h-myths">Myths vs. facts</h2>
+      <p class="lede">Common misconceptions about nuclear energy, corrected with evidence. Tap a myth to see what the data says.</p>
+    </div>
+
+    <div id="myth-list">
+      <div class="acc reveal">
+        <button class="acc-head" aria-expanded="false">
+          <svg class="acc-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke="#DC2626" stroke-width="2"/><path d="M15 9l-6 6M9 9l6 6" stroke="#DC2626" stroke-width="2" stroke-linecap="round"/></svg>
+          <span class="acc-title">
+            <span class="acc-kicker">Myth</span>
+            <span class="acc-text">"Nuclear waste is uncontrollable, dangerous for 10,000 years, and there's nowhere to put it."</span>
+          </span>
+          <svg class="acc-caret" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="acc-panel"><div><div class="acc-body">
+          <div class="fact-box">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#047857"/><path d="M8 12.5l2.8 2.8L16.5 9" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <p><span class="fact-label">Fact</span>The entire 70-year history of U.S. commercial nuclear power has produced about 90,000 metric tons of used fuel, all of it solid, tracked, and stored safely on-site in dry casks. Stacked together, it fits within the area of a single football field. Unlike fossil-fuel waste, it never leaves human control.</p>
+          </div>
+          <figure class="field-fig">
+            <svg viewBox="0 0 860 400" role="img" aria-label="Illustration of a football field: all spent fuel ever produced by commercial nuclear power would fit, stacked, within its area.">
+              <rect x="0" y="0" width="860" height="400" fill="#F8FAFC"/>
+              <rect x="30" y="28" width="800" height="344" fill="#FFFFFF" stroke="#334155" stroke-width="2.5"/>
+              <rect x="30" y="28" width="64" height="344" fill="#F1F5F9" stroke="#334155" stroke-width="1.5"/>
+              <rect x="766" y="28" width="64" height="344" fill="#F1F5F9" stroke="#334155" stroke-width="1.5"/>
+              <g stroke="#CBD5E1" stroke-width="1.5">
+                <line x1="161" y1="28" x2="161" y2="372"/><line x1="228" y1="28" x2="228" y2="372"/><line x1="295" y1="28" x2="295" y2="372"/><line x1="362" y1="28" x2="362" y2="372"/><line x1="430" y1="28" x2="430" y2="372"/><line x1="498" y1="28" x2="498" y2="372"/><line x1="565" y1="28" x2="565" y2="372"/><line x1="632" y1="28" x2="632" y2="372"/><line x1="699" y1="28" x2="699" y2="372"/>
+              </g>
+              <rect x="340" y="128" width="180" height="144" fill="#F59E0B" stroke="#334155" stroke-width="2.5" rx="4"/>
+              <g stroke="#334155" stroke-width="1.5" opacity="0.45">
+                <line x1="340" y1="164" x2="520" y2="164"/><line x1="340" y1="200" x2="520" y2="200"/><line x1="340" y1="236" x2="520" y2="236"/><line x1="385" y1="128" x2="385" y2="272"/><line x1="430" y1="128" x2="430" y2="272"/><line x1="475" y1="128" x2="475" y2="272"/>
+              </g>
+              <text x="430" y="98" text-anchor="middle" font-family="'Public Sans', sans-serif" font-weight="700" font-size="24" fill="#0F172A" letter-spacing="1">ALL OF IT. EVER.</text>
+              <text x="430" y="318" text-anchor="middle" font-family="'Public Sans', sans-serif" font-weight="500" font-size="14" fill="#64748B" letter-spacing="1">one football field</text>
+            </svg>
+            <figcaption>All the spent fuel ever produced by commercial nuclear power would fit, stacked, within the area of a single football field. (Illustrative, not to scale.)</figcaption>
+          </figure>
+        </div></div></div>
+      </div>
+
+      <div class="acc reveal">
+        <button class="acc-head" aria-expanded="false">
+          <svg class="acc-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke="#DC2626" stroke-width="2"/><path d="M15 9l-6 6M9 9l6 6" stroke="#DC2626" stroke-width="2" stroke-linecap="round"/></svg>
+          <span class="acc-title">
+            <span class="acc-kicker">Myth</span>
+            <span class="acc-text">"Living near a nuclear plant is dangerous."</span>
+          </span>
+          <svg class="acc-caret" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="acc-panel"><div><div class="acc-body">
+          <div class="fact-box">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#047857"/><path d="M8 12.5l2.8 2.8L16.5 9" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <p><span class="fact-label">Fact</span>You receive more radiation from one cross-country flight (0.04 mSv) than from living next to a nuclear plant for an entire year (0.01 mSv), and both are a tiny fraction of the ~3 mSv everyone receives annually from natural background radiation.</p>
+          </div>
+        </div></div></div>
+      </div>
+
+      <div class="acc reveal">
+        <button class="acc-head" aria-expanded="false">
+          <svg class="acc-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke="#DC2626" stroke-width="2"/><path d="M15 9l-6 6M9 9l6 6" stroke="#DC2626" stroke-width="2" stroke-linecap="round"/></svg>
+          <span class="acc-title">
+            <span class="acc-kicker">Myth</span>
+            <span class="acc-text">"Nuclear plants can explode like a bomb."</span>
+          </span>
+          <svg class="acc-caret" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="acc-panel"><div><div class="acc-body">
+          <div class="fact-box">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#047857"/><path d="M8 12.5l2.8 2.8L16.5 9" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <p><span class="fact-label">Fact</span>A reactor physically cannot detonate like a nuclear weapon. The fuel is nowhere near enriched enough, and the physics are fundamentally different. Weapons require precise configurations that a power reactor cannot produce by accident.</p>
+          </div>
+        </div></div></div>
+      </div>
+
+      <div class="acc reveal">
+        <button class="acc-head" aria-expanded="false">
+          <svg class="acc-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke="#DC2626" stroke-width="2"/><path d="M15 9l-6 6M9 9l6 6" stroke="#DC2626" stroke-width="2" stroke-linecap="round"/></svg>
+          <span class="acc-title">
+            <span class="acc-kicker">Myth</span>
+            <span class="acc-text">"Nuclear technology is stuck in the 1970s."</span>
+          </span>
+          <svg class="acc-caret" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="acc-panel"><div><div class="acc-body">
+          <div class="fact-box">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#047857"/><path d="M8 12.5l2.8 2.8L16.5 9" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <p><span class="fact-label">Fact</span>A new generation of designs, including small modular reactors and molten-salt reactors, is engineered around one principle: <strong>walking away is the safety feature.</strong> They shut themselves down through the laws of physics, failing <em>safe</em> instead of failing <em>loud</em>. The fear that froze nuclear development in the 20th century is being engineered out of the 21st.</p>
+          </div>
+        </div></div></div>
+      </div>
+
+      <div class="acc reveal">
+        <button class="acc-head" aria-expanded="false">
+          <svg class="acc-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke="#DC2626" stroke-width="2"/><path d="M15 9l-6 6M9 9l6 6" stroke="#DC2626" stroke-width="2" stroke-linecap="round"/></svg>
+          <span class="acc-title">
+            <span class="acc-kicker">Myth</span>
+            <span class="acc-text">"Nuclear fuel will run out; it isn't renewable."</span>
+          </span>
+          <svg class="acc-caret" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="acc-panel"><div><div class="acc-body">
+          <div class="fact-box">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#047857"/><path d="M8 12.5l2.8 2.8L16.5 9" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <p><span class="fact-label">Fact</span>Advanced reactors can reuse spent fuel, and thorium, an alternative fuel, is virtually inexhaustible. Between recycling and new fuel cycles, nuclear's fuel supply is measured in centuries, not decades.</p>
+          </div>
+        </div></div></div>
+      </div>
+    </div>
+
+    <div class="prose reveal" style="margin-top:2rem">
+      <p><strong>Why do these myths persist?</strong> Decades of Cold War association, high-profile accidents taken out of context, and a public understanding of radiation shaped more by movies than by measurement. The data tells a different story.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 09 NEWS ================= -->
+<section class="band band--tint" id="news" aria-labelledby="h-news">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="overline"><span class="n">09</span>News</span>
+      <h2 id="h-news">The field is moving</h2>
+      <p class="lede">Curated highlights from the American Nuclear Society, as of spring 2026.</p>
+    </div>
+
+    <div class="news-grid" id="news-grid"></div>
+
+    <div class="res-row">
+      <a class="res-card reveal" href="https://www.ans.org/news/" target="_blank" rel="noopener noreferrer">
+        <h4>Nuclear News Magazine ↗</h4>
+        <p>Monthly publication covering the latest developments in nuclear science and technology.</p>
+      </a>
+      <a class="res-card reveal" href="https://www.ans.org/news/cafe/" target="_blank" rel="noopener noreferrer">
+        <h4>ANS Nuclear Cafe ↗</h4>
+        <p>News, analysis, and discussion on nuclear energy topics.</p>
+      </a>
+      <a class="res-card reveal" href="https://www.ans.org/members/" target="_blank" rel="noopener noreferrer">
+        <h4>ANS Member Resources ↗</h4>
+        <p>Journals, technical publications, and member-exclusive content.</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 10 CAREERS ================= -->
+<section class="band" id="careers" aria-labelledby="h-careers">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="overline"><span class="n">10</span>Careers</span>
+      <h2 id="h-careers">Working in nuclear</h2>
+      <p class="lede">A field with deep job security, national importance, and six-figure median pay. Tap a role to see what it involves.</p>
+    </div>
+
+    <div class="tiles">
+      <div class="tile reveal">
+        <div class="tile__label">U.S. nuclear industry jobs</div>
+        <div class="tile__value"><span data-count="100000">0</span>+</div>
+        <p class="tile__desc">Across plants, national labs, regulators, and suppliers.</p>
+      </div>
+      <div class="tile reveal">
+        <div class="tile__label">Average annual salary</div>
+        <div class="tile__value">$<span data-count="100000">0</span></div>
+        <p class="tile__desc">Source: U.S. Bureau of Labor Statistics.</p>
+      </div>
+      <div class="tile reveal">
+        <div class="tile__label">Average job tenure</div>
+        <div class="tile__value"><span data-count="20">0</span>+<span class="unit">years</span></div>
+        <p class="tile__desc">Among the most stable careers in the energy sector.</p>
+      </div>
+    </div>
+
+    <div id="career-list"></div>
+  </div>
+</section>
+
+<!-- ================= 11 STUDENTS ================= -->
+<section class="band band--tint" id="students" aria-labelledby="h-students">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="overline"><span class="n">11</span>Students</span>
+      <h2 id="h-students">Your pathway into nuclear energy</h2>
+      <p class="lede">From a high-school classroom to a national laboratory, the route is well marked, and much of it is funded.</p>
+    </div>
+
+    <div class="tiles">
+      <div class="tile reveal">
+        <div class="tile__label">Universities with nuclear programs</div>
+        <div class="tile__value"><span data-count="70">0</span>+</div>
+        <p class="tile__desc">Accredited nuclear engineering programs across the U.S.</p>
+      </div>
+      <div class="tile reveal">
+        <div class="tile__label">Scholarships available annually</div>
+        <div class="tile__value">$<span data-count="5000">0</span>+</div>
+        <p class="tile__desc">ANS undergraduate awards alone, before fellowships.</p>
+      </div>
+      <div class="tile reveal">
+        <div class="tile__label">Job placement for graduates</div>
+        <div class="tile__value"><span data-count="95">0</span>%+</div>
+        <p class="tile__desc">Nuclear engineering graduates find work fast.</p>
+      </div>
+    </div>
+
+    <div class="pathway">
+      <div class="stage reveal">
+        <h3>High school</h3>
+        <ul>
+          <li>Excel in physics, chemistry, and calculus</li>
+          <li>Join science clubs or robotics teams</li>
+          <li>Research university nuclear engineering programs</li>
+        </ul>
+      </div>
+      <div class="stage reveal">
+        <h3>Undergraduate</h3>
+        <ul>
+          <li>Major in nuclear engineering, physics, or related STEM</li>
+          <li>Join your campus ANS student chapter</li>
+          <li>Intern at national labs or utilities</li>
+        </ul>
+      </div>
+      <div class="stage reveal">
+        <h3>Graduate school <span style="font-weight:400;color:var(--muted)">(optional)</span></h3>
+        <ul>
+          <li>MS or PhD for research and specialized roles</li>
+          <li>NRC Graduate Fellowship or NEUP funding</li>
+          <li>Thesis research at national laboratories</li>
+        </ul>
+      </div>
+      <div class="stage reveal">
+        <h3>Early career</h3>
+        <ul>
+          <li>Join NAYGN for professional development</li>
+          <li>Pursue certifications (PE, CHP)</li>
+          <li>Consider NRC licensing for reactor operations</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3 class="sub-head reveal">Where to study</h3>
+    <div class="school-grid">
+      <div class="school-card reveal"><h4>MIT</h4><span class="prog">Nuclear Science &amp; Engineering</span><span class="loc">Cambridge, MA</span></div>
+      <div class="school-card reveal"><h4>University of Michigan</h4><span class="prog">Nuclear Engineering &amp; Radiological Sciences</span><span class="loc">Ann Arbor, MI</span></div>
+      <div class="school-card reveal"><h4>UC Berkeley</h4><span class="prog">Nuclear Engineering</span><span class="loc">Berkeley, CA</span></div>
+      <div class="school-card reveal"><h4>Texas A&amp;M University</h4><span class="prog">Nuclear Engineering</span><span class="loc">College Station, TX</span></div>
+      <div class="school-card reveal"><h4>Penn State</h4><span class="prog">Nuclear Engineering</span><span class="loc">University Park, PA</span></div>
+      <div class="school-card reveal"><h4>Georgia Tech</h4><span class="prog">Nuclear &amp; Radiological Engineering</span><span class="loc">Atlanta, GA</span></div>
+      <div class="school-card reveal"><h4>University of Wisconsin</h4><span class="prog">Nuclear Engineering</span><span class="loc">Madison, WI</span></div>
+      <div class="school-card reveal"><h4>University of Tennessee</h4><span class="prog">Nuclear Engineering</span><span class="loc">Knoxville, TN</span></div>
+      <div class="school-card reveal"><h4>North Carolina State</h4><span class="prog">Nuclear Engineering</span><span class="loc">Raleigh, NC</span></div>
+      <div class="school-card reveal"><h4>Purdue University</h4><span class="prog">Nuclear Engineering</span><span class="loc">West Lafayette, IN</span></div>
+      <div class="school-card reveal"><h4>Oregon State</h4><span class="prog">Radiation Health Physics</span><span class="loc">Corvallis, OR</span></div>
+      <div class="school-card reveal"><h4>National lab partnerships</h4><span class="prog">PhD programs partnered with Oak Ridge, Argonne, and Idaho National Laboratories</span></div>
+    </div>
+    <p class="school-note reveal">A sampling of the best-known programs. More than 70 accredited nuclear engineering programs exist across the U.S., and most offer bachelor's through PhD degrees.</p>
+
+    <div class="res-row">
+      <a class="res-card reveal" href="https://science.osti.gov/wdts/suli" target="_blank" rel="noopener noreferrer">
+        <h4>DOE SULI internships ↗</h4>
+        <p>10-week paid internships at DOE national laboratories for STEM undergraduates.</p>
+      </a>
+      <a class="res-card reveal" href="https://neup.inl.gov" target="_blank" rel="noopener noreferrer">
+        <h4>NEUP research funding ↗</h4>
+        <p>DOE-funded research and internship opportunities for undergraduate and graduate students.</p>
+      </a>
+      <a class="res-card reveal" href="https://www.ans.org/honors/scholarships/" target="_blank" rel="noopener noreferrer">
+        <h4>ANS scholarships ↗</h4>
+        <p>Up to $5,000 for students pursuing nuclear-related degrees.</p>
+      </a>
+      <a class="res-card reveal" href="https://www.ans.org/students/" target="_blank" rel="noopener noreferrer">
+        <h4>ANS student chapters ↗</h4>
+        <p>Network with peers and professionals, attend conferences, enter design competitions.</p>
+      </a>
+      <a class="res-card reveal" href="https://www.naygn.org" target="_blank" rel="noopener noreferrer">
+        <h4>NAYGN ↗</h4>
+        <p>North American Young Generation in Nuclear, for students and early-career professionals.</p>
+      </a>
+      <a class="res-card reveal" href="https://www.winus.org" target="_blank" rel="noopener noreferrer">
+        <h4>Women in Nuclear ↗</h4>
+        <p>Support network, scholarships, and professional development for women in nuclear fields.</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CLOSING ================= -->
+<section class="band band--navy closing-band" aria-label="Closing statement">
+  <div class="wrap">
+    <h2 class="reveal">Make the truth impossible to ignore</h2>
+    <p class="reveal">For too long, public fear has drowned out the evidence. The numbers belong back at the center of the conversation. Not to win a debate with louder claims, but to put the data front and center.</p>
+  </div>
+</section>
+
+<!-- ================= INFO ================= -->
+<section class="band" id="about" aria-labelledby="h-about">
+  <div class="wrap">
+    <div class="section-head reveal" style="margin-bottom:2rem">
+      <span class="overline"><span class="n">12</span>Info · About the author</span>
+    </div>
+    <div class="about-grid reveal">
+      <div class="about-mark" aria-hidden="true">DW</div>
+      <div>
+        <h3 id="h-about">Desmond Wong</h3>
+        <div class="prose">
+          <p>Desmond Wong is an 11th-grade student and aspiring nuclear engineer from California, attending Diamond Bar High School (Class of 2027). After years of watching public fear override scientific evidence in energy debates, he created <strong>Radiant</strong> to put the data front and center.</p>
+        </div>
+        <p class="about-contact">Contact: <a href="mailto:wongdesmond414@gmail.com">wongdesmond414@gmail.com</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ================= FOOTER / SOURCES ================= -->
+<footer id="sources">
+  <div class="wrap">
+    <h2>Sources</h2>
+    <div class="src-grid">
+      <div class="src-col">
+        <h3>Safety &amp; mortality data</h3>
+        <p>Our World in Data: death rates from energy production per TWh, synthesizing Markandya &amp; Wilkinson (2007, <em>The Lancet</em>) and Sovacool et&nbsp;al. (2016). WHO air-pollution statistics.</p>
+      </div>
+      <div class="src-col">
+        <h3>Reliability, costs &amp; emissions</h3>
+        <p>U.S. Energy Information Administration (capacity factors, operating costs, 2024); IEA (France generation share); IPCC and UNECE lifecycle assessments.</p>
+      </div>
+      <div class="src-col">
+        <h3>Incidents &amp; radiation</h3>
+        <p>UNSCEAR 2008 &amp; 2013 reports; U.S. NRC; WHO; IAEA; EPA and CDC radiation-exposure guidance.</p>
+      </div>
+      <div class="src-col">
+        <h3>Careers &amp; education</h3>
+        <p>U.S. Bureau of Labor Statistics; American Nuclear Society; U.S. DOE workforce programs (SULI, NEUP); Nuclear Energy Institute.</p>
+      </div>
+    </div>
+    <p class="src-note">Before formal publication, each specific statistic should be cited to its primary source and checked against the most recent year available.</p>
+    <div class="foot-base">
+      <span>Radiant · an evidence-based educational resource</span>
+      <span>© 2026 Desmond Wong</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+  var REDUCE = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ============ GENERIC BAR CHART ============ */
+  var CHARTS = {
+    deaths: {
+      unit: 'deaths / TWh', labelW: '8.5rem',
+      caption: 'Death rates from energy production, per terawatt-hour of electricity',
+      cols: ['Energy source', 'Deaths per TWh', 'Category'],
+      data: [
+        { name: 'Coal',       v: 24.6, cat: 'Fossil',     note: '≈820× the death rate of nuclear' },
+        { name: 'Oil',        v: 18.4, cat: 'Fossil',     note: '≈613× the death rate of nuclear' },
+        { name: 'Gas',        v: 2.8,  cat: 'Fossil',     note: '≈93× the death rate of nuclear' },
+        { name: 'Hydropower', v: 1.3,  cat: 'Low-carbon', note: '≈43× the death rate of nuclear' },
+        { name: 'Wind',       v: 0.04, cat: 'Low-carbon', note: '≈1.3× the death rate of nuclear' },
+        { name: 'Nuclear',    v: 0.03, cat: 'Low-carbon', note: 'the benchmark', hero: true },
+        { name: 'Solar',      v: 0.02, cat: 'Low-carbon', note: '≈0.7× the death rate of nuclear' }
+      ],
+      fmt: function (v) { return v < 0.1 ? v.toFixed(2) : String(v); }
+    },
+    capacity: {
+      unit: '% of the year at full power', labelW: '8.5rem',
+      caption: 'Average capacity factor by energy source (U.S. EIA)',
+      cols: ['Energy source', 'Capacity factor'],
+      data: [
+        { name: 'Nuclear',     v: 92, note: 'full power ~335 days a year', hero: true },
+        { name: 'Geothermal',  v: 75, note: 'baseload, geography-limited' },
+        { name: 'Natural Gas', v: 50, note: 'often throttled to follow demand' },
+        { name: 'Coal',        v: 48, note: 'baseload, increasingly retired' },
+        { name: 'Hydropower',  v: 40, note: 'seasonal water levels' },
+        { name: 'Wind',        v: 35, note: 'runs when the wind blows' },
+        { name: 'Solar',       v: 25, note: 'runs when the sun shines' }
+      ],
+      fmt: function (v) { return v + '%'; }
+    },
+    costs: {
+      unit: '$ / MWh', labelW: '8.5rem',
+      caption: 'Operating costs by energy source, $ per MWh (U.S. EIA, 2024)',
+      cols: ['Energy source', 'Operating cost ($/MWh)'],
+      data: [
+        { name: 'Nuclear',     v: 29.12, note: 'the cheapest baseload to run', hero: true },
+        { name: 'Solar',       v: 36.10, note: '≈24% above nuclear' },
+        { name: 'Natural Gas', v: 38.50, note: '≈32% above nuclear' },
+        { name: 'Wind',        v: 40.19, note: '≈38% above nuclear' },
+        { name: 'Coal',        v: 42.78, note: '≈47% above nuclear' }
+      ],
+      fmt: function (v) { return '$' + v.toFixed(2); }
+    },
+    exposure: {
+      unit: 'mSv', labelW: '13rem',
+      caption: 'Everyday radiation doses in millisieverts (NRC, EPA, CDC)',
+      cols: ['Source of dose', 'Dose (mSv)'],
+      data: [
+        { name: 'Eating a banana',                 v: 0.0001, note: 'potassium-40 (yes, really)' },
+        { name: 'Living near a nuclear plant',     v: 0.01,   note: 'per year, within 50 miles', hero: true },
+        { name: 'Flight, NYC to LA round-trip',    v: 0.04,   note: 'cosmic rays at altitude' },
+        { name: 'Chest X-ray',                     v: 0.1,    note: 'one diagnostic image' },
+        { name: 'Natural background',              v: 3.0,    note: 'per year: soil, radon, cosmic rays' }
+      ],
+      fmt: function (v) { return v < 0.001 ? '0.0001' : String(v); }
+    }
+  };
+
+  Object.keys(CHARTS).forEach(function (key) {
+    var cfg = CHARTS[key];
+    var chartWrap = document.getElementById(key + '-chart');
+    if (!chartWrap) return;
+    var plot = chartWrap.querySelector('.chart-plot');
+    var rows = chartWrap.querySelector('.chart-rows');
+    var tip = chartWrap.querySelector('.chart-tip');
+    var max = Math.max.apply(null, cfg.data.map(function (d) { return d.v; }));
+
+    cfg.data.forEach(function (d) {
+      var row = document.createElement('div');
+      row.className = 'crow' + (d.hero ? ' crow--hero' : '');
+      row.tabIndex = 0;
+      row.style.setProperty('--label-w', cfg.labelW);
+
+      var label = document.createElement('div');
+      label.className = 'crow__label';
+      label.appendChild(document.createTextNode(d.name));
+      if (d.cat) {
+        var cat = document.createElement('span');
+        cat.className = 'cat';
+        cat.textContent = d.cat;
+        label.appendChild(cat);
+      }
+
+      var track = document.createElement('div');
+      track.className = 'crow__track';
+      var bar = document.createElement('div');
+      bar.className = 'crow__bar';
+      // linear scale at 86% of track so tip labels fit; 0.5% floor keeps
+      // the smallest bars visible; their tininess IS the story
+      bar.dataset.w = Math.max((d.v / max) * 86, 0.5);
+      var val = document.createElement('span');
+      val.className = 'crow__val';
+      val.textContent = cfg.fmt(d.v);
+      track.appendChild(bar);
+      track.appendChild(val);
+
+      row.appendChild(label);
+      row.appendChild(track);
+      row.setAttribute('aria-label', d.name + ': ' + cfg.fmt(d.v) + ' ' + cfg.unit + (d.note ? ', ' + d.note : ''));
+      rows.appendChild(row);
+
+      function showTip(clientX, clientY) {
+        while (tip.firstChild) tip.removeChild(tip.firstChild);
+        var strong = document.createElement('strong');
+        strong.textContent = cfg.fmt(d.v) + ' ' + cfg.unit;
+        var name = document.createElement('span');
+        name.className = 'tipname';
+        name.textContent = d.name + (d.note ? ' · ' + d.note : '');
+        tip.appendChild(strong);
+        tip.appendChild(name);
+        tip.style.display = 'block';
+        var pr = plot.getBoundingClientRect();
+        var x = clientX - pr.left + 14;
+        var y = clientY - pr.top - 10;
+        if (x + tip.offsetWidth > pr.width - 4) x = pr.width - tip.offsetWidth - 4;
+        tip.style.left = Math.max(0, x) + 'px';
+        tip.style.top = y + 'px';
+      }
+      row.addEventListener('pointermove', function (e) { showTip(e.clientX, e.clientY); });
+      row.addEventListener('pointerleave', function () { tip.style.display = 'none'; });
+      row.addEventListener('focus', function () {
+        var r = row.getBoundingClientRect();
+        showTip(r.left + Math.min(r.width * 0.4, 260), r.top + 4);
+      });
+      row.addEventListener('blur', function () { tip.style.display = 'none'; });
+    });
+
+    // table twin
+    var tableWrap = document.getElementById(key + '-table');
+    var table = document.createElement('table');
+    table.className = 'data-table';
+    var capEl = document.createElement('caption');
+    capEl.textContent = cfg.caption;
+    table.appendChild(capEl);
+    var thead = document.createElement('thead');
+    var hr = document.createElement('tr');
+    cfg.cols.forEach(function (c, i) {
+      var th = document.createElement('th');
+      th.scope = 'col';
+      th.textContent = c;
+      if (i === 1) th.className = 'num';
+      hr.appendChild(th);
+    });
+    thead.appendChild(hr);
+    table.appendChild(thead);
+    var tbody = document.createElement('tbody');
+    cfg.data.forEach(function (d) {
+      var tr = document.createElement('tr');
+      if (d.hero) tr.className = 'hero-row';
+      var td1 = document.createElement('td'); td1.textContent = d.name;
+      var td2 = document.createElement('td'); td2.className = 'num'; td2.textContent = cfg.fmt(d.v);
+      tr.appendChild(td1); tr.appendChild(td2);
+      if (cfg.cols.length > 2) {
+        var td3 = document.createElement('td'); td3.textContent = d.cat || '';
+        tr.appendChild(td3);
+      }
+      tbody.appendChild(tr);
+    });
+    table.appendChild(tbody);
+    tableWrap.appendChild(table);
+
+    // grow bars on scroll into view
+    function setWidths() {
+      rows.querySelectorAll('.crow__bar').forEach(function (b) { b.style.width = b.dataset.w + '%'; });
+    }
+    if (REDUCE || !('IntersectionObserver' in window)) {
+      setWidths();
+    } else {
+      var seen = false;
+      new IntersectionObserver(function (entries, obs) {
+        if (!seen && entries[0].isIntersecting) { seen = true; setWidths(); obs.disconnect(); }
+      }, { threshold: 0.25 }).observe(rows);
+    }
+    cfg._setWidths = setWidths;
+  });
+
+  // chart/table toggles
+  document.querySelectorAll('.table-toggle').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var key = btn.dataset.chart;
+      var chartWrap = document.getElementById(key + '-chart');
+      var tableWrap = document.getElementById(key + '-table');
+      var showTable = tableWrap.hidden;
+      tableWrap.hidden = !showTable;
+      chartWrap.hidden = showTable;
+      btn.setAttribute('aria-pressed', String(showTable));
+      btn.textContent = showTable ? 'View as chart' : 'View as table';
+      if (showTable) CHARTS[key]._setWidths();
+    });
+  });
+
+  /* ============ INCIDENT TABS ============ */
+  var INCIDENTS = [
+    {
+      year: 1979, name: 'Three Mile Island', location: 'Pennsylvania, USA', severity: 'INES Level 5',
+      description: 'Partial meltdown of the reactor core. The containment structure did its job and prevented radiation release.',
+      feared: 'Thousands feared', confirmed: '0', dose: 'Max public exposure: 0.01 mSv, about a chest X-ray',
+      happened: [
+        'Equipment malfunction and operator confusion led to a partial core meltdown',
+        'The containment building successfully prevented radiation release',
+        'A small amount of gas was vented, with less exposure than a chest X-ray'
+      ],
+      longterm: [
+        'Zero confirmed deaths or injuries from radiation',
+        'Long-term studies found no increase in cancer rates',
+        'Led to major improvements in operator training and control-room design'
+      ]
+    },
+    {
+      year: 1986, name: 'Chernobyl', location: 'Ukraine, USSR', severity: 'INES Level 7',
+      description: 'Steam explosion and fire at a flawed Soviet RBMK reactor during a mishandled safety test. The worst nuclear accident in history.',
+      feared: 'Hundreds of thousands', confirmed: '31 direct', dose: 'UNSCEAR estimates ~4,000 eventual deaths from radiation exposure',
+      happened: [
+        'A safety test was run with critical safety systems disabled',
+        'The RBMK design flaw made the reactor unstable at low power',
+        'No containment structure existed; the design was never used in the West'
+      ],
+      longterm: [
+        '31 direct deaths among workers and firefighters; ~4,000 eventual deaths estimated by UNSCEAR',
+        'Most evacuees received doses in the medical X-ray range',
+        'RBMK reactors were phased out or heavily modified worldwide'
+      ]
+    },
+    {
+      year: 2011, name: 'Fukushima Daiichi', location: 'Japan', severity: 'INES Level 7',
+      description: 'A magnitude-9.1 earthquake and 15-meter tsunami flooded backup generators, disabling reactor cooling.',
+      feared: 'Thousands', confirmed: '0 from radiation', dose: 'Most evacuees received less radiation than a CT scan',
+      happened: [
+        'Reactors shut down automatically and safely when the earthquake hit',
+        'The tsunami overwhelmed the seawall and flooded backup power',
+        'Hydrogen explosions damaged buildings, not the containment vessels'
+      ],
+      longterm: [
+        'Zero confirmed deaths from radiation exposure (UNSCEAR)',
+        '~2,300 deaths attributed to evacuation stress, mostly among the elderly; the evacuation itself was the greater harm',
+        'Passive cooling systems are now standard in new designs'
+      ]
+    }
+  ];
+
+  var tabsEl = document.getElementById('incident-tabs');
+  var panelEl = document.getElementById('incident-panel');
+
+  function renderIncident(inc) {
+    while (panelEl.firstChild) panelEl.removeChild(panelEl.firstChild);
+
+    var head = document.createElement('div');
+    head.className = 'incident-panel__head';
+    var h3 = document.createElement('h3');
+    h3.textContent = inc.name + ' · ' + inc.year;
+    var chip = document.createElement('span');
+    chip.className = 'chip';
+    chip.textContent = inc.severity;
+    head.appendChild(h3); head.appendChild(chip);
+    panelEl.appendChild(head);
+
+    var desc = document.createElement('p');
+    desc.style.fontSize = '0.95rem';
+    desc.textContent = inc.description;
+    panelEl.appendChild(desc);
+
+    var perc = document.createElement('div');
+    perc.className = 'perception';
+    var pBox = document.createElement('div');
+    var pl = document.createElement('div'); pl.className = 'p-label'; pl.textContent = 'Public perception';
+    var pv = document.createElement('div'); pv.className = 'p-value'; pv.textContent = inc.feared;
+    pBox.appendChild(pl); pBox.appendChild(pv);
+    var cBox = document.createElement('div');
+    cBox.className = 'confirmed';
+    var cl = document.createElement('div'); cl.className = 'p-label'; cl.textContent = 'Confirmed deaths from radiation';
+    var cv = document.createElement('div'); cv.className = 'p-value'; cv.textContent = inc.confirmed;
+    cBox.appendChild(cl); cBox.appendChild(cv);
+    perc.appendChild(pBox); perc.appendChild(cBox);
+    panelEl.appendChild(perc);
+
+    var doseP = document.createElement('p');
+    doseP.style.fontSize = '0.85rem';
+    doseP.style.color = 'var(--muted)';
+    doseP.textContent = inc.dose + '.';
+    panelEl.appendChild(doseP);
+
+    var cols = document.createElement('div');
+    cols.className = 'incident-cols';
+    [['What happened', inc.happened], ['Long-term reality', inc.longterm]].forEach(function (pair) {
+      var col = document.createElement('div');
+      var h4 = document.createElement('h4');
+      h4.textContent = pair[0];
+      col.appendChild(h4);
+      var ul = document.createElement('ul');
+      pair[1].forEach(function (item) {
+        var li = document.createElement('li');
+        li.textContent = item;
+        ul.appendChild(li);
+      });
+      col.appendChild(ul);
+      cols.appendChild(col);
+    });
+    panelEl.appendChild(cols);
+  }
+
+  INCIDENTS.forEach(function (inc, i) {
+    var tab = document.createElement('button');
+    tab.className = 'tab';
+    tab.setAttribute('role', 'tab');
+    tab.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
+    var strong = document.createElement('span');
+    strong.textContent = inc.name;
+    var small = document.createElement('small');
+    small.textContent = inc.year + ' · ' + inc.location;
+    tab.appendChild(strong); tab.appendChild(small);
+    tab.addEventListener('click', function () {
+      tabsEl.querySelectorAll('.tab').forEach(function (t) { t.setAttribute('aria-selected', 'false'); });
+      tab.setAttribute('aria-selected', 'true');
+      renderIncident(inc);
+    });
+    tabsEl.appendChild(tab);
+  });
+  renderIncident(INCIDENTS[0]);
+
+  /* ============ NEWS CARDS ============ */
+  var NEWS = [
+    { title: 'Advanced nuclear reactors receive federal support', date: 'Apr 20, 2026', source: 'ANS Nuclear News', cat: 'Policy', url: 'https://www.ans.org/news/', summary: 'DOE announces continued funding for small modular reactor development and deployment projects across the nation.' },
+    { title: 'Nuclear energy essential for grid reliability', date: 'Apr 18, 2026', source: 'ANS Nuclear Cafe', cat: 'Research', url: 'https://www.ans.org/news/cafe/', summary: 'New study confirms nuclear power’s critical role in keeping grids stable as renewable sources expand.' },
+    { title: 'Global nuclear capacity continues growth', date: 'Apr 15, 2026', source: 'ANS Nuclear News', cat: 'Industry', url: 'https://www.ans.org/news/', summary: 'IAEA reports 60+ new reactors under construction worldwide as nations pursue carbon-neutral energy goals.' },
+    { title: 'Next-generation nuclear fuels advance', date: 'Apr 12, 2026', source: 'ANS Publications', cat: 'Technology', url: 'https://www.ans.org/pubs/', summary: 'Accident-tolerant fuels demonstrate enhanced safety characteristics in national laboratory testing.' },
+    { title: 'Nuclear workforce programs expand', date: 'Apr 8, 2026', source: 'ANS Nuclear News', cat: 'Education', url: 'https://www.ans.org/news/', summary: 'Universities and national labs partner to create new pathways for students entering nuclear careers.' },
+    { title: 'Fusion research reaches new milestones', date: 'Apr 5, 2026', source: 'ANS Nuclear Cafe', cat: 'Research', url: 'https://www.ans.org/news/cafe/', summary: 'Recent breakthroughs bring commercial fusion energy a step closer to reality.' }
+  ];
+  var newsGrid = document.getElementById('news-grid');
+  NEWS.forEach(function (n) {
+    var a = document.createElement('a');
+    a.className = 'news-card reveal';
+    a.href = n.url; a.target = '_blank'; a.rel = 'noopener noreferrer';
+    var meta = document.createElement('div');
+    meta.className = 'meta';
+    var chip = document.createElement('span');
+    chip.className = 'cat-chip'; chip.textContent = n.cat;
+    var date = document.createElement('span'); date.textContent = n.date;
+    meta.appendChild(chip); meta.appendChild(date);
+    var h3 = document.createElement('h3'); h3.textContent = n.title;
+    var p = document.createElement('p'); p.textContent = n.summary;
+    var src = document.createElement('span'); src.className = 'src'; src.textContent = n.source + ' ↗';
+    a.appendChild(meta); a.appendChild(h3); a.appendChild(p); a.appendChild(src);
+    newsGrid.appendChild(a);
+  });
+
+  /* ============ CAREER ACCORDIONS ============ */
+  var CAREERS = [
+    {
+      title: 'Nuclear Engineer', salary: '$95,000 to $150,000', education: 'Bachelor’s in nuclear engineering', outlook: 'Growing with clean-energy demand',
+      detail: 'Nuclear engineers research, design, and maintain reactors, radiation shielding, safety systems, and power generation processes.',
+      points: ['Design reactor and power-plant systems', 'Run safety analysis and risk assessments', 'Work in plants, national labs, government, and consulting']
+    },
+    {
+      title: 'Reactor Operator', salary: '$80,000 to $130,000', education: 'Associate’s degree + NRC license', outlook: 'Excellent job security',
+      detail: 'Reactor operators control the reactor itself: monitoring instrumentation, adjusting power levels, and responding to any irregularity from the control room.',
+      points: ['Monitor and control reactor systems', 'Highly regulated, shift-based work', 'Advancement to senior operator and shift supervisor']
+    },
+    {
+      title: 'Radiation Safety Officer', salary: '$75,000 to $120,000', education: 'Bachelor’s in health physics', outlook: 'Growing regulatory field',
+      detail: 'RSOs protect workers, the public, and the environment by building safety programs, monitoring exposure, and ensuring NRC compliance.',
+      points: ['Develop radiation safety programs and training', 'Monitor worker exposure levels', 'Work spans plants, hospitals, and research institutions']
+    },
+    {
+      title: 'Nuclear Physicist', salary: '$90,000 to $160,000', education: 'PhD in nuclear physics', outlook: 'Strong demand at national labs',
+      detail: 'Nuclear physicists study nuclei, reactions, and fundamental particles, driving research in energy, medicine, materials, and security.',
+      points: ['Run experiments at accelerators and detectors', 'Publish research and lead investigations', 'Work at Los Alamos, Oak Ridge, Argonne, and universities']
+    }
+  ];
+  var careerList = document.getElementById('career-list');
+  CAREERS.forEach(function (c) {
+    var acc = document.createElement('div');
+    acc.className = 'acc reveal';
+    var head = document.createElement('button');
+    head.className = 'acc-head';
+    head.setAttribute('aria-expanded', 'false');
+    var title = document.createElement('span');
+    title.className = 'acc-title';
+    var text = document.createElement('span');
+    text.className = 'acc-text'; text.textContent = c.title;
+    var sub = document.createElement('span');
+    sub.className = 'acc-sub';
+    sub.textContent = c.salary + ' · ' + c.education + ' · ' + c.outlook;
+    title.appendChild(text); title.appendChild(sub);
+    var caret = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    caret.setAttribute('class', 'acc-caret'); caret.setAttribute('width', '18'); caret.setAttribute('height', '18');
+    caret.setAttribute('viewBox', '0 0 24 24'); caret.setAttribute('fill', 'none'); caret.setAttribute('aria-hidden', 'true');
+    var poly = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+    poly.setAttribute('points', '6 9 12 15 18 9');
+    poly.setAttribute('stroke', 'currentColor'); poly.setAttribute('stroke-width', '2.2');
+    poly.setAttribute('stroke-linecap', 'round'); poly.setAttribute('stroke-linejoin', 'round');
+    caret.appendChild(poly);
+    head.appendChild(title); head.appendChild(caret);
+
+    var panel = document.createElement('div');
+    panel.className = 'acc-panel';
+    var inner = document.createElement('div');
+    var bodyDiv = document.createElement('div');
+    bodyDiv.className = 'acc-body';
+    var dp = document.createElement('p');
+    dp.style.fontSize = '0.92rem';
+    dp.textContent = c.detail;
+    bodyDiv.appendChild(dp);
+    var ul = document.createElement('ul');
+    ul.style.cssText = 'list-style:none;margin-top:0.8rem';
+    c.points.forEach(function (pt) {
+      var li = document.createElement('li');
+      li.style.cssText = 'font-size:0.86rem;color:var(--body);padding:0.25rem 0 0.25rem 1rem;border-left:2px solid var(--hair);margin-bottom:0.35rem';
+      li.textContent = pt;
+      ul.appendChild(li);
+    });
+    bodyDiv.appendChild(ul);
+    inner.appendChild(bodyDiv);
+    panel.appendChild(inner);
+    acc.appendChild(head); acc.appendChild(panel);
+    careerList.appendChild(acc);
+  });
+
+  /* ============ ACCORDION BEHAVIOR (myths + careers) ============ */
+  document.querySelectorAll('.acc-head').forEach(function (head) {
+    head.addEventListener('click', function () {
+      var acc = head.closest('.acc');
+      var open = acc.classList.toggle('open');
+      head.setAttribute('aria-expanded', String(open));
+    });
+  });
+
+  /* ============ REVEAL ON SCROLL ============ */
+  var reveals = document.querySelectorAll('.reveal');
+  if (REDUCE || !('IntersectionObserver' in window)) {
+    reveals.forEach(function (el) { el.classList.add('in'); });
+  } else {
+    var ro = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in');
+          ro.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -5% 0px' });
+    reveals.forEach(function (el, i) {
+      el.style.transitionDelay = (i % 4) * 70 + 'ms';
+      ro.observe(el);
+    });
+  }
+
+  /* ============ COUNT-UP NUMBERS ============ */
+  var counters = document.querySelectorAll('[data-count]');
+  function runCount(el) {
+    var target = parseFloat(el.dataset.count);
+    if (REDUCE) { el.textContent = target.toLocaleString('en-US'); return; }
+    var dur = 1100, t0 = null;
+    function step(ts) {
+      if (!t0) t0 = ts;
+      var p = Math.min((ts - t0) / dur, 1);
+      var eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(target * eased).toLocaleString('en-US');
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  if (!('IntersectionObserver' in window)) {
+    counters.forEach(function (el) { el.textContent = parseFloat(el.dataset.count).toLocaleString('en-US'); });
+  } else {
+    var co = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) { runCount(entry.target); co.unobserve(entry.target); }
+      });
+    }, { threshold: 0.6 });
+    counters.forEach(function (el) { co.observe(el); });
+  }
+
+  /* ============ NAV SCROLLSPY ============ */
+  var navLinks = document.querySelectorAll('#nav-links a');
+  var sectionsById = {};
+  navLinks.forEach(function (a) {
+    var id = a.getAttribute('href').slice(1);
+    var sec = document.getElementById(id);
+    if (sec) sectionsById[id] = a;
+  });
+  if ('IntersectionObserver' in window) {
+    var so = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          var link = sectionsById[entry.target.id];
+          if (!link) return;
+          navLinks.forEach(function (a) { a.classList.remove('active'); });
+          link.classList.add('active');
+          link.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+        }
+      });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    Object.keys(sectionsById).forEach(function (id) { so.observe(document.getElementById(id)); });
+  }
+})();
+</script>
+</body>
+</html>
