@@ -37,6 +37,19 @@ root. No build configuration needed.
 12. **Students**: pathway, schools with nuclear engineering programs, funded opportunities
 13. **Info**: about the author and sources
 
+## Auto-updating news
+
+The News section reads [news.json](news.json), which a scheduled GitHub Action
+([.github/workflows/update-news.yml](.github/workflows/update-news.yml)) refreshes
+every 6 hours by running [scripts/update_news.py](scripts/update_news.py). The
+script pulls headlines from World Nuclear News and Google News, dedupes them,
+and commits the file only when something changed. If the fetch ever fails, the
+page falls back to a baked-in set of headlines, so it never breaks.
+
+You can also refresh manually: repo → Actions → "Update news" → Run workflow.
+Note that GitHub pauses scheduled workflows after about 60 days without commits;
+one click on the Actions tab re-enables them.
+
 ## Sources
 
 Safety figures from Our World in Data (Markandya & Wilkinson 2007; Sovacool et

@@ -937,10 +937,11 @@
     <div class="section-head reveal">
       <span class="overline"><span class="n">09</span>News</span>
       <h2 id="h-news">The field is moving</h2>
-      <p class="lede">Curated highlights from the American Nuclear Society, as of spring 2026.</p>
+      <p class="lede">The latest nuclear energy headlines, pulled from World Nuclear News and Google News.</p>
     </div>
 
     <div class="news-grid" id="news-grid"></div>
+    <p class="school-note" id="news-updated" style="margin-bottom:2.2rem">Headlines refresh automatically several times a day.</p>
 
     <div class="res-row">
       <a class="res-card reveal" href="https://www.ans.org/news/" target="_blank" rel="noopener noreferrer">
@@ -1484,7 +1485,8 @@
   renderIncident(INCIDENTS[0]);
 
   /* ============ NEWS CARDS ============ */
-  var NEWS = [
+  // Baked-in fallback: shown if news.json is missing or unreachable
+  var FALLBACK_NEWS = [
     { title: 'Advanced nuclear reactors receive federal support', date: 'Apr 20, 2026', source: 'ANS Nuclear News', cat: 'Policy', url: 'https://www.ans.org/news/', summary: 'DOE announces continued funding for small modular reactor development and deployment projects across the nation.' },
     { title: 'Nuclear energy essential for grid reliability', date: 'Apr 18, 2026', source: 'ANS Nuclear Cafe', cat: 'Research', url: 'https://www.ans.org/news/cafe/', summary: 'New study confirms nuclear power’s critical role in keeping grids stable as renewable sources expand.' },
     { title: 'Global nuclear capacity continues growth', date: 'Apr 15, 2026', source: 'ANS Nuclear News', cat: 'Industry', url: 'https://www.ans.org/news/', summary: 'IAEA reports 60+ new reactors under construction worldwide as nations pursue carbon-neutral energy goals.' },
@@ -1493,22 +1495,39 @@
     { title: 'Fusion research reaches new milestones', date: 'Apr 5, 2026', source: 'ANS Nuclear Cafe', cat: 'Research', url: 'https://www.ans.org/news/cafe/', summary: 'Recent breakthroughs bring commercial fusion energy a step closer to reality.' }
   ];
   var newsGrid = document.getElementById('news-grid');
-  NEWS.forEach(function (n) {
-    var a = document.createElement('a');
-    a.className = 'news-card reveal';
-    a.href = n.url; a.target = '_blank'; a.rel = 'noopener noreferrer';
-    var meta = document.createElement('div');
-    meta.className = 'meta';
-    var chip = document.createElement('span');
-    chip.className = 'cat-chip'; chip.textContent = n.cat;
-    var date = document.createElement('span'); date.textContent = n.date;
-    meta.appendChild(chip); meta.appendChild(date);
-    var h3 = document.createElement('h3'); h3.textContent = n.title;
-    var p = document.createElement('p'); p.textContent = n.summary;
-    var src = document.createElement('span'); src.className = 'src'; src.textContent = n.source + ' ↗';
-    a.appendChild(meta); a.appendChild(h3); a.appendChild(p); a.appendChild(src);
-    newsGrid.appendChild(a);
-  });
+  function renderNews(items) {
+    while (newsGrid.firstChild) newsGrid.removeChild(newsGrid.firstChild);
+    items.forEach(function (n) {
+      var a = document.createElement('a');
+      a.className = 'news-card reveal in';
+      a.href = n.url; a.target = '_blank'; a.rel = 'noopener noreferrer';
+      var meta = document.createElement('div');
+      meta.className = 'meta';
+      var chip = document.createElement('span');
+      chip.className = 'cat-chip'; chip.textContent = n.cat;
+      var date = document.createElement('span'); date.textContent = n.date;
+      meta.appendChild(chip); meta.appendChild(date);
+      var h3 = document.createElement('h3'); h3.textContent = n.title;
+      var p = document.createElement('p'); p.textContent = n.summary || '';
+      var src = document.createElement('span'); src.className = 'src'; src.textContent = n.source + ' ↗';
+      a.appendChild(meta); a.appendChild(h3); a.appendChild(p); a.appendChild(src);
+      newsGrid.appendChild(a);
+    });
+  }
+  renderNews(FALLBACK_NEWS);
+  fetch('news.json', { cache: 'no-store' })
+    .then(function (r) { if (!r.ok) throw new Error('no news.json'); return r.json(); })
+    .then(function (d) {
+      if (d && d.items && d.items.length) {
+        renderNews(d.items);
+        var upd = document.getElementById('news-updated');
+        if (upd && d.generated_at) {
+          var when = new Date(d.generated_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+          upd.textContent = 'Headlines refresh automatically several times a day. Last updated ' + when + '.';
+        }
+      }
+    })
+    .catch(function () { /* fallback cards already rendered */ });
 
   /* ============ CAREER ACCORDIONS ============ */
   var CAREERS = [
