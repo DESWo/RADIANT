@@ -425,6 +425,9 @@
   .src-col h3 { font-family: var(--sans); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--faint); margin-bottom: 0.8rem; }
   .src-col p { font-size: 0.85rem; line-height: 1.65; }
   .src-note { font-size: 0.78rem; color: var(--faint); max-width: 42rem; margin-bottom: 2.6rem; font-style: italic; }
+  .ref-list { list-style: decimal; padding-left: 1.5rem; max-width: 56rem; margin-bottom: 2.6rem; }
+  .ref-list li { font-size: 0.82rem; line-height: 1.6; margin-bottom: 0.55rem; }
+  footer a { color: #93C5FD; }
   .foot-base { border-top: 1px solid rgba(255,255,255,0.15); padding-top: 1.6rem; display: flex; flex-wrap: wrap; gap: 0.6rem 2rem; justify-content: space-between; font-size: 0.78rem; color: var(--faint); }
 
   /* ============ RESPONSIVE ============ */
@@ -472,6 +475,7 @@
     <a href="#incidents">Incidents</a>
     <a href="#exposure">Exposure</a>
     <a href="#myths">Myths</a>
+    <a href="#limits">Limits</a>
     <a href="#news">News</a>
     <a href="#careers">Careers</a>
     <a href="#students">Students</a>
@@ -480,6 +484,12 @@
 </nav>
 
 <main id="main">
+
+<noscript>
+  <p style="max-width:65rem;margin:5.5rem auto 0;padding:1rem 1.5rem;background:#FEF3C7;border:1px solid #F59E0B;border-radius:8px;font-size:0.9rem">
+    The interactive charts on this page require JavaScript. All key figures also appear in the surrounding text, and every number is cited in the Sources section at the bottom of the page.
+  </p>
+</noscript>
 
 <!-- ================= OVERVIEW ================= -->
 <header class="hero" id="top">
@@ -520,24 +530,24 @@
     <div class="section-head reveal">
       <span class="overline"><span class="n">01</span>The Case</span>
       <h2 id="h-case">The argument in one page</h2>
-      <p class="lede">For half a century, the single most effective tool humanity has built for reliable, low-carbon electricity is the one we have spent decades shutting down. Applied evenly, the evidence is hard to avoid.</p>
+      <p class="lede">For half a century, one of the most proven tools for producing reliable, low-carbon electricity at scale is the one we have spent decades shutting down. Applied evenly, the evidence is hard to avoid.</p>
     </div>
 
     <div class="tiles">
       <div class="tile reveal">
-        <div class="tile__label">Lifecycle carbon</div>
-        <div class="tile__value"><span data-count="12">0</span><span class="unit">g CO₂/kWh</span></div>
-        <p class="tile__desc">Over a plant's lifetime: on par with wind, and a fraction of natural gas or coal.</p>
+        <div class="tile__label">Lifecycle carbon, median estimate</div>
+        <div class="tile__value"><span data-count="12">12</span><span class="unit">g CO₂/kWh</span></div>
+        <p class="tile__desc">IPCC median over a plant's lifetime (reported range 3.7 to 110), on par with wind and a small fraction of gas or coal. A newer UNECE analysis finds 5 to 6 g. <a href="https://www.ipcc.ch/site/assets/uploads/2018/02/ipcc_wg3_ar5_annex-iii.pdf" target="_blank" rel="noopener noreferrer">Source: IPCC AR5, Annex III</a></p>
       </div>
       <div class="tile reveal">
-        <div class="tile__label">France's grid, powered by nuclear</div>
-        <div class="tile__value">≈<span data-count="70">0</span><span class="unit">%</span></div>
-        <p class="tile__desc">A decades-long, real-world demonstration that a modern nation can decarbonize its grid with nuclear at its core.</p>
+        <div class="tile__label">France's 2024 nuclear share</div>
+        <div class="tile__value">≈<span data-count="67">67</span><span class="unit">%</span></div>
+        <p class="tile__desc">About two-thirds of French electricity, the highest share of any country. IAEA reports 67% for 2024; France's grid operator reports closer to 65%. <a href="https://pris.iaea.org/PRIS/CountryStatistics/CountryDetails.aspx?current=FR" target="_blank" rel="noopener noreferrer">Source: IAEA PRIS</a></p>
       </div>
       <div class="tile reveal">
         <div class="tile__label">Deaths per TWh</div>
         <div class="tile__value">0.03</div>
-        <p class="tile__desc">Nuclear sits beside wind (0.04) and solar (0.02), and roughly 820 times below coal.</p>
+        <p class="tile__desc">Nuclear sits beside wind (0.04) and solar (0.02), and roughly 820 times below coal. <a href="https://ourworldindata.org/safest-sources-of-energy" target="_blank" rel="noopener noreferrer">Source: Our World in Data</a></p>
       </div>
     </div>
 
@@ -574,60 +584,109 @@
     </div>
 
     <figure class="plant-fig reveal">
-      <svg viewBox="0 0 920 430" role="img" aria-label="Simplified diagram of a nuclear power plant: fission in the reactor heats water, steam spins a turbine, the generator makes electricity, a transformer sends it to the grid, and cooling towers release water vapor.">
-        <line x1="24" y1="370" x2="896" y2="370" stroke="#334155" stroke-width="2.5"/>
-        <path d="M 52 370 L 52 205 Q 52 122 131 122 Q 210 122 210 205 L 210 370 Z" fill="#E2E8F0" stroke="#334155" stroke-width="2.5"/>
-        <rect x="96" y="212" width="70" height="122" rx="8" fill="#FFFFFF" stroke="#334155" stroke-width="2.5"/>
-        <rect x="116" y="192" width="30" height="20" fill="#E2E8F0" stroke="#334155" stroke-width="2"/>
-        <rect x="106" y="242" width="10" height="72" fill="#F59E0B" stroke="#334155" stroke-width="1.5"/>
-        <rect x="126" y="242" width="10" height="72" fill="#F59E0B" stroke="#334155" stroke-width="1.5"/>
-        <rect x="146" y="242" width="10" height="72" fill="#F59E0B" stroke="#334155" stroke-width="1.5"/>
-        <path d="M 166 238 H 306" stroke="#334155" stroke-width="2.5" fill="none"/>
-        <path d="M 300 231 L 312 238 L 300 245 Z" fill="#334155"/>
-        <polygon points="312,232 412,206 412,276 312,254" fill="#E2E8F0" stroke="#334155" stroke-width="2.5"/>
-        <line x1="412" y1="241" x2="452" y2="241" stroke="#334155" stroke-width="4"/>
-        <rect x="452" y="206" width="108" height="70" rx="6" fill="#FFFFFF" stroke="#334155" stroke-width="2.5"/>
+      <svg viewBox="0 0 960 470" role="img" aria-label="Simplified pressurized-water reactor diagram: the reactor heats pressurized water in a primary loop, a steam generator boils water in a separate secondary loop, steam spins a turbine and generator, a condenser and cooling towers reject waste heat, and a transformer sends power to the grid.">
+        <!-- ground -->
+        <line x1="28" y1="400" x2="932" y2="400" stroke="#334155" stroke-width="2.5"/>
+
+        <!-- containment building -->
+        <path d="M 46 400 L 46 215 Q 46 112 190 112 Q 334 112 334 215 L 334 400 Z" fill="#E2E8F0" stroke="#334155" stroke-width="2.5"/>
+
+        <!-- reactor vessel with control rods and fuel -->
+        <rect x="72" y="230" width="64" height="135" rx="8" fill="#FFFFFF" stroke="#334155" stroke-width="2.5"/>
+        <rect x="86" y="204" width="36" height="26" fill="#E2E8F0" stroke="#334155" stroke-width="2"/>
+        <rect x="90" y="230" width="4" height="52" fill="#334155"/>
+        <rect x="102" y="230" width="4" height="52" fill="#334155"/>
+        <rect x="114" y="230" width="4" height="52" fill="#334155"/>
+        <rect x="86" y="295" width="9" height="58" fill="#F59E0B" stroke="#334155" stroke-width="1.5"/>
+        <rect x="100" y="295" width="9" height="58" fill="#F59E0B" stroke="#334155" stroke-width="1.5"/>
+        <rect x="114" y="295" width="9" height="58" fill="#F59E0B" stroke="#334155" stroke-width="1.5"/>
+
+        <!-- pressurizer -->
+        <rect x="152" y="170" width="26" height="52" rx="9" fill="#FFFFFF" stroke="#334155" stroke-width="2"/>
+        <line x1="165" y1="222" x2="165" y2="250" stroke="#F59E0B" stroke-width="3"/>
+
+        <!-- primary loop (amber): hot leg + cold leg -->
+        <path d="M 136 252 H 232" stroke="#F59E0B" stroke-width="3.5" fill="none"/>
+        <polygon points="196,246 208,252 196,258" fill="#F59E0B"/>
+        <path d="M 232 340 H 136" stroke="#F59E0B" stroke-width="3.5" fill="none"/>
+        <polygon points="184,334 172,340 184,346" fill="#F59E0B"/>
+
+        <!-- steam generator with tube-bundle hint -->
+        <rect x="232" y="168" width="58" height="200" rx="16" fill="#FFFFFF" stroke="#334155" stroke-width="2.5"/>
+        <path d="M 244 300 V 215 Q 261 193 278 215 V 300" stroke="#F59E0B" stroke-width="2" fill="none" opacity="0.55"/>
+
+        <!-- secondary steam loop (blue) to turbine, condensate return -->
+        <path d="M 261 168 V 138 H 396 V 208" stroke="#2563EB" stroke-width="3" fill="none"/>
+        <polygon points="334,132 346,138 334,144" fill="#2563EB"/>
+        <path d="M 436 285 V 322" stroke="#2563EB" stroke-width="2.5" fill="none"/>
+        <path d="M 406 350 H 302 V 362 H 290" stroke="#2563EB" stroke-width="2" fill="none"/>
+
+        <!-- turbine -->
+        <polygon points="396,238 486,208 486,292 396,266" fill="#E2E8F0" stroke="#334155" stroke-width="2.5"/>
+        <line x1="486" y1="250" x2="520" y2="250" stroke="#334155" stroke-width="4"/>
+
+        <!-- generator -->
+        <rect x="520" y="215" width="100" height="70" rx="6" fill="#FFFFFF" stroke="#334155" stroke-width="2.5"/>
         <g stroke="#334155" stroke-width="2" opacity="0.3">
-          <line x1="472" y1="214" x2="472" y2="268"/><line x1="488" y1="214" x2="488" y2="268"/><line x1="504" y1="214" x2="504" y2="268"/>
+          <line x1="538" y1="223" x2="538" y2="277"/><line x1="554" y1="223" x2="554" y2="277"/><line x1="570" y1="223" x2="570" y2="277"/>
         </g>
-        <polygon points="536,218 522,246 532,246 524,264 546,236 534,236" fill="#F59E0B" stroke="#334155" stroke-width="1.5" stroke-linejoin="round"/>
-        <line x1="560" y1="241" x2="602" y2="241" stroke="#334155" stroke-width="2.5"/>
-        <rect x="602" y="226" width="48" height="60" fill="#E2E8F0" stroke="#334155" stroke-width="2.5"/>
-        <line x1="614" y1="226" x2="614" y2="210" stroke="#334155" stroke-width="2"/><circle cx="614" cy="207" r="3.5" fill="#334155"/>
-        <line x1="638" y1="226" x2="638" y2="210" stroke="#334155" stroke-width="2"/><circle cx="638" cy="207" r="3.5" fill="#334155"/>
-        <polygon points="706,370 730,370 721,152 715,152" fill="none" stroke="#334155" stroke-width="2"/>
-        <line x1="690" y1="178" x2="746" y2="178" stroke="#334155" stroke-width="2"/>
-        <line x1="694" y1="214" x2="742" y2="214" stroke="#334155" stroke-width="2"/>
-        <path d="M 650 241 H 700" stroke="#334155" stroke-width="2.5" fill="none"/>
-        <path d="M 746 178 Q 830 208 896 192" stroke="#334155" stroke-width="1.5" fill="none"/>
-        <path d="M 742 214 Q 826 244 896 228" stroke="#334155" stroke-width="1.5" fill="none"/>
-        <path d="M 788 370 C 800 306 796 262 810 216 L 852 216 C 866 262 862 306 874 370 Z" fill="#E2E8F0" stroke="#334155" stroke-width="2.5"/>
-        <circle cx="820" cy="192" r="14" fill="#F1F5F9"/><circle cx="842" cy="176" r="18" fill="#F1F5F9"/><circle cx="824" cy="152" r="22" fill="#F1F5F9"/>
-        <path d="M 362 276 V 340 H 788" stroke="#334155" stroke-width="2" fill="none" opacity="0.45"/>
+        <polygon points="600,228 588,252 596,252 590,268 608,242 598,242" fill="#F59E0B" stroke="#334155" stroke-width="1.5" stroke-linejoin="round"/>
+
+        <!-- condenser -->
+        <rect x="406" y="322" width="104" height="44" rx="6" fill="#E2E8F0" stroke="#334155" stroke-width="2.5"/>
+
+        <!-- cooling-water loop (gray) to tower -->
+        <path d="M 510 334 H 796" stroke="#64748B" stroke-width="2.5" fill="none"/>
+        <path d="M 510 354 H 788" stroke="#64748B" stroke-width="2.5" fill="none"/>
+
+        <!-- cooling tower + vapor -->
+        <path d="M 792 400 C 803 348 800 310 812 268 L 858 268 C 870 310 867 348 878 400 Z" fill="#E2E8F0" stroke="#334155" stroke-width="2.5"/>
+        <circle cx="824" cy="244" r="13" fill="#F1F5F9"/>
+        <circle cx="846" cy="228" r="16" fill="#F1F5F9"/>
+        <circle cx="830" cy="206" r="19" fill="#F1F5F9"/>
+
+        <!-- transformer + grid -->
+        <line x1="620" y1="250" x2="656" y2="250" stroke="#334155" stroke-width="2.5"/>
+        <rect x="656" y="232" width="44" height="54" fill="#E2E8F0" stroke="#334155" stroke-width="2.5"/>
+        <line x1="666" y1="232" x2="666" y2="216" stroke="#334155" stroke-width="2"/><circle cx="666" cy="213" r="3" fill="#334155"/>
+        <line x1="682" y1="232" x2="682" y2="216" stroke="#334155" stroke-width="2"/><circle cx="682" cy="213" r="3" fill="#334155"/>
+        <line x1="700" y1="258" x2="715" y2="258" stroke="#334155" stroke-width="2.5"/>
+        <polygon points="712,400 736,400 727,180 721,180" fill="none" stroke="#334155" stroke-width="2"/>
+        <line x1="698" y1="205" x2="750" y2="205" stroke="#334155" stroke-width="2"/>
+        <line x1="702" y1="238" x2="746" y2="238" stroke="#334155" stroke-width="2"/>
+        <path d="M 750 205 Q 850 232 932 216" stroke="#334155" stroke-width="1.5" fill="none"/>
+        <path d="M 746 238 Q 848 264 932 250" stroke="#334155" stroke-width="1.5" fill="none"/>
+
+        <!-- captions -->
         <g font-family="'Public Sans', sans-serif" font-size="12.5" font-weight="500" fill="#64748B" letter-spacing="1.5">
-          <text x="131" y="398" text-anchor="middle">REACTOR</text>
-          <text x="362" y="398" text-anchor="middle">TURBINE</text>
-          <text x="506" y="398" text-anchor="middle">GENERATOR</text>
-          <text x="718" y="398" text-anchor="middle">GRID</text>
-          <text x="831" y="398" text-anchor="middle">COOLING</text>
+          <text x="190" y="428" text-anchor="middle">CONTAINMENT</text>
+          <text x="470" y="428" text-anchor="middle">TURBINE HALL</text>
+          <text x="724" y="428" text-anchor="middle">GRID</text>
+          <text x="835" y="428" text-anchor="middle">COOLING</text>
         </g>
+
+        <!-- step badges -->
         <g font-family="'Public Sans', sans-serif" font-size="15" font-weight="600" fill="#FFFFFF">
-          <circle cx="131" cy="88" r="15" fill="#0F172A"/><text x="131" y="93.5" text-anchor="middle">1</text>
-          <circle cx="362" cy="172" r="15" fill="#0F172A"/><text x="362" y="177.5" text-anchor="middle">2</text>
-          <circle cx="506" cy="172" r="15" fill="#0F172A"/><text x="506" y="177.5" text-anchor="middle">3</text>
-          <circle cx="626" cy="172" r="15" fill="#0F172A"/><text x="626" y="177.5" text-anchor="middle">4</text>
-          <circle cx="874" cy="134" r="15" fill="#0F172A"/><text x="874" y="139.5" text-anchor="middle">5</text>
+          <circle cx="58" cy="250" r="15" fill="#0F172A"/><text x="58" y="255.5" text-anchor="middle">1</text>
+          <circle cx="261" cy="146" r="15" fill="#0F172A"/><text x="261" y="151.5" text-anchor="middle">2</text>
+          <circle cx="441" cy="180" r="15" fill="#0F172A"/><text x="441" y="185.5" text-anchor="middle">3</text>
+          <circle cx="570" cy="188" r="15" fill="#0F172A"/><text x="570" y="193.5" text-anchor="middle">4</text>
+          <circle cx="458" cy="383" r="15" fill="#0F172A"/><text x="458" y="388.5" text-anchor="middle">5</text>
+          <circle cx="678" cy="192" r="15" fill="#0F172A"/><text x="678" y="197.5" text-anchor="middle">6</text>
+          <circle cx="840" cy="172" r="15" fill="#0F172A"/><text x="840" y="177.5" text-anchor="middle">7</text>
         </g>
       </svg>
-      <figcaption>Simplified schematic of one common design (pressurized systems separate the reactor loop from the turbine loop).</figcaption>
+      <figcaption>Simplified schematic of a pressurized-water reactor (PWR), the most common design in the U.S. and worldwide; boiling-water reactors and other designs differ. Amber: primary coolant loop. Blue: secondary steam loop. Gray: cooling-water loop. Not to scale.</figcaption>
     </figure>
 
     <ol class="plant-steps">
-      <li class="reveal"><strong>Fission heats water.</strong> Splitting uranium atoms in the reactor core releases heat, with no burning, no smoke, and no CO₂.</li>
-      <li class="reveal"><strong>Steam spins a turbine.</strong> That heat boils water into high-pressure steam, which drives the turbine blades.</li>
+      <li class="reveal"><strong>Fission heats pressurized water.</strong> Splitting uranium atoms heats the primary loop, which stays liquid under about 150 atmospheres. Control rods in the reactor vessel set the reaction rate; a pressurizer holds the pressure.</li>
+      <li class="reveal"><strong>A steam generator transfers the heat.</strong> Hot primary water passes through thousands of tubes and boils water in a separate secondary loop into steam. The two loops never mix.</li>
+      <li class="reveal"><strong>Steam spins the turbine.</strong> High-pressure steam from the secondary loop drives the turbine blades.</li>
       <li class="reveal"><strong>The generator makes electricity.</strong> The spinning shaft turns a generator, the same principle used in coal, gas, and hydro plants.</li>
-      <li class="reveal"><strong>Power flows to the grid.</strong> A transformer steps up the voltage and sends it down the transmission lines.</li>
-      <li class="reveal"><strong>The towers release water vapor.</strong> The famous white plume is not smoke and not radioactive. It is the same vapor as a boiling kettle.</li>
+      <li class="reveal"><strong>A condenser closes the loop.</strong> Cooling water condenses the used steam back into feedwater, which returns to the steam generator.</li>
+      <li class="reveal"><strong>A transformer sends power to the grid.</strong> It steps up the voltage for the transmission lines.</li>
+      <li class="reveal"><strong>Cooling towers release water vapor.</strong> The white plume is water from the separate cooling loop. It is not smoke and not radioactive.</li>
     </ol>
   </div>
 </section>
@@ -653,13 +712,13 @@
       <div id="deaths-chart"><div class="chart-plot"><div class="chart-rows"></div><div class="chart-tip" role="status"></div></div></div>
       <div id="deaths-table" hidden></div>
       <div class="chart-card__foot">
-        <p class="chart-card__src">Source: Our World in Data, based on Markandya &amp; Wilkinson (2007) and Sovacool et&nbsp;al. (2016). Deaths include accidents and the chronic toll of air pollution.</p>
+        <p class="chart-card__src"><a href="https://ourworldindata.org/safest-sources-of-energy" target="_blank" rel="noopener noreferrer">Source: Our World in Data (2020)</a>, based on Markandya &amp; Wilkinson (2007, <em>The Lancet</em>) and Sovacool et&nbsp;al. (2016). How to read this: figures include accidents plus air pollution; nuclear includes modeled long-term Chernobyl estimates, not just direct deaths. Per-TWh values depend on modeling assumptions. Accessed Jul 14, 2026.</p>
         <button class="table-toggle" data-chart="deaths" aria-pressed="false">View as table</button>
       </div>
     </div>
 
     <div class="callout reveal">
-      <div class="callout__big">≈<span data-count="820">0</span>× deadlier
+      <div class="callout__big">≈<span data-count="820">820</span>× deadlier
         <small>Coal vs. nuclear, per unit of energy produced</small>
       </div>
     </div>
@@ -677,13 +736,13 @@
     <div class="section-head reveal">
       <span class="overline"><span class="n">04</span>Capacity</span>
       <h2 id="h-capacity">How often does each source actually produce power?</h2>
-      <p class="lede">Capacity factor is the share of the year a plant spends generating at full power. Nuclear runs at roughly 92%, around the clock, in every season. No other major source comes close.</p>
+      <p class="lede">Capacity factor is the share of the year a plant spends generating at full power. U.S. nuclear plants ran at 90.8% in 2024, around the clock, in every season. In recent U.S. data, that is the highest average of any major source.</p>
     </div>
 
     <div class="chart-card reveal" id="capacity-card">
       <div class="chart-card__head">
         <div class="chart-card__title">Average capacity factor by energy source</div>
-        <div class="chart-card__unit">% of the year at full power</div>
+        <div class="chart-card__unit">% of the year at full power · U.S., 2024</div>
       </div>
       <div class="chart-card__legend" aria-hidden="true">
         <span class="key"><span class="swatch" style="background:#2563EB"></span>Nuclear</span>
@@ -692,7 +751,7 @@
       <div id="capacity-chart"><div class="chart-plot"><div class="chart-rows"></div><div class="chart-tip" role="status"></div></div></div>
       <div id="capacity-table" hidden></div>
       <div class="chart-card__foot">
-        <p class="chart-card__src">Source: U.S. Energy Information Administration.</p>
+        <p class="chart-card__src"><a href="https://www.eia.gov/electricity/monthly/epm_table_grapher.php?t=epmt_6_07_b" target="_blank" rel="noopener noreferrer">Source: U.S. EIA, Electric Power Monthly, Tables 6.07.A and 6.07.B</a>. Annual 2024 values, U.S. utility-scale generators. Capacity factor compares actual generation with the maximum possible. Accessed Jul 14, 2026.</p>
         <button class="table-toggle" data-chart="capacity" aria-pressed="false">View as table</button>
       </div>
     </div>
@@ -709,7 +768,7 @@
     </div>
 
     <div class="prose reveal">
-      <p>Wind and solar are essential and growing, but they are <em>variable</em>. A grid built entirely on weather-dependent sources needs something to fill the gaps when the weather doesn't cooperate. That "firm" clean power is exactly what nuclear provides, <strong>and the alternative gap-filler, today, is almost always natural gas.</strong></p>
+      <p>Wind and solar are essential and growing, but they are <em>variable</em>. A grid built heavily on weather-dependent sources needs something to fill the gaps when the weather doesn't cooperate. That "firm" clean power is what nuclear provides. <strong>In many power systems today, natural gas supplies much of that firm capacity</strong>, though hydropower, storage, transmission, geothermal, and demand response also contribute.</p>
     </div>
   </div>
 </section>
@@ -719,14 +778,14 @@
   <div class="wrap">
     <div class="section-head reveal">
       <span class="overline"><span class="n">05</span>Costs</span>
-      <h2 id="h-costs">The cheapest baseload power to run</h2>
-      <p class="lede">Building a nuclear plant is expensive. Running one is not, and plants run for 60+ years.</p>
+      <h2 id="h-costs">What existing plants cost to run</h2>
+      <p class="lede">Running costs and building costs are different questions. Existing nuclear plants are inexpensive to operate; new construction is where nuclear struggles (see Limitations).</p>
     </div>
 
     <div class="chart-card reveal" id="costs-card">
       <div class="chart-card__head">
-        <div class="chart-card__title">Operating costs by energy source</div>
-        <div class="chart-card__unit">$ per MWh · fuel + O&amp;M + waste disposal</div>
+        <div class="chart-card__title">Operating expenses of existing plants</div>
+        <div class="chart-card__unit">$ per MWh · fuel + operation + maintenance · U.S., 2024</div>
       </div>
       <div class="chart-card__legend" aria-hidden="true">
         <span class="key"><span class="swatch" style="background:#2563EB"></span>Nuclear</span>
@@ -735,19 +794,20 @@
       <div id="costs-chart"><div class="chart-plot"><div class="chart-rows"></div><div class="chart-tip" role="status"></div></div></div>
       <div id="costs-table" hidden></div>
       <div class="chart-card__foot">
-        <p class="chart-card__src">Source: U.S. Energy Information Administration, 2024. Operating costs include fuel, operations &amp; maintenance, and waste disposal.</p>
+        <p class="chart-card__src"><a href="https://www.eia.gov/electricity/annual/html/epa_08_04.html" target="_blank" rel="noopener noreferrer">Source: U.S. EIA, Electric Power Annual, Table 8.4</a>. 2024 operating expenses for major investor-owned utilities. How to read this: running costs only. Excludes capital, financing, transmission, and decommissioning; wind and solar are not in this table. New-build economics differ greatly. Accessed Jul 14, 2026.</p>
         <button class="table-toggle" data-chart="costs" aria-pressed="false">View as table</button>
       </div>
     </div>
 
     <div class="callout reveal">
-      <div class="callout__big">≈<span data-count="32">0</span>% cheaper
-        <small>Nuclear vs. coal, cost per MWh generated</small>
+      <div class="callout__big">≈$<span data-count="23">23</span> per MWh to run
+        <small>U.S. nuclear fleet average operating expense, 2024: fuel plus operations and maintenance (EIA)</small>
       </div>
     </div>
 
     <div class="prose reveal">
-      <p>Nuclear's high capacity factor compounds the advantage: because a plant is actually generating 92% of the hours in a year, its costs are spread over far more delivered electricity, <strong>further reducing the effective cost per useful MWh.</strong></p>
+      <p>Two caveats keep this honest. First, these are operating expenses only. Counting more cost categories, the industry's own analysis (NEI, <em>Nuclear Costs in Context</em>, 2024 data) puts average total generating costs at <strong>$31.88 per MWh for multi-unit plants and $41.88 for single-unit plants</strong>. Second, none of this describes new construction, where high capital costs and financing risk are nuclear's real economic challenge.</p>
+      <p>Nuclear's high capacity factor still works in its favor: because a plant actually generates about 91% of the hours in a year, <strong>its costs are spread across far more delivered electricity.</strong></p>
     </div>
   </div>
 </section>
@@ -763,10 +823,11 @@
 
     <div class="tabs reveal" role="tablist" aria-label="Nuclear incidents" id="incident-tabs"></div>
     <div class="incident-panel reveal" id="incident-panel" role="tabpanel"></div>
+    <p class="school-note reveal" style="margin-bottom:0">How these numbers are counted: "confirmed" means direct radiation deaths documented in UNSCEAR and WHO assessments. Modeled long-term projections, evacuation-related deaths, displacement, and cleanup costs are listed separately because institutions count these categories differently, and an accident's full impact is much more than its death toll. Sources: UNSCEAR 2008 and 2013 reports; WHO; U.S. NRC.</p>
 
     <div class="callout reveal" style="margin-top:2.4rem">
-      <div class="callout__big" style="font-size:clamp(1.3rem,3vw,1.8rem)">Coal-related air pollution causes an estimated 800,000+ deaths every year.
-        <small>Even with all three incidents combined, nuclear remains the safest major source per TWh</small>
+      <div class="callout__big" style="font-size:clamp(1.3rem,3vw,1.8rem)">Studies attribute hundreds of thousands to over a million premature deaths to coal air pollution, every single year.
+        <small>Even counting all three accidents, nuclear remains among the safest major sources per TWh. Sources: GBD MAPS (McDuffie et al., 2021); Lelieveld et al. (2023)</small>
       </div>
     </div>
   </div>
@@ -788,7 +849,7 @@
       </div>
       <div class="info-card reveal">
         <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2 4 5.5v5.6c0 4.9 3.4 9.5 8 10.9 4.6-1.4 8-6 8-10.9V5.5L12 2Z"/></svg>The key insight</h3>
-        <p>Living beside a nuclear plant adds <strong>0.01 mSv a year</strong>, about 1/300th of natural background. A single cross-country flight gives you four times more.</p>
+        <p>The NRC estimates that living near a U.S. nuclear plant adds about <strong>0.001 mSv a year</strong>, a few thousandths of natural background. One cross-country flight gives you roughly 40 times more.</p>
       </div>
     </div>
 
@@ -804,7 +865,7 @@
       <div id="exposure-chart"><div class="chart-plot"><div class="chart-rows"></div><div class="chart-tip" role="status"></div></div></div>
       <div id="exposure-table" hidden></div>
       <div class="chart-card__foot">
-        <p class="chart-card__src">Sources: U.S. Nuclear Regulatory Commission, EPA, CDC. Bars drawn to a linear scale; the plant's near-invisible bar is the point.</p>
+        <p class="chart-card__src"><a href="https://www.nrc.gov/about-nrc/radiation/around-us/doses-daily-lives" target="_blank" rel="noopener noreferrer">Source: U.S. NRC, "Doses in Our Daily Lives"</a>; EPA. How to read this: effective-dose estimates; simple comparisons do not capture every contextual difference between dose types. Linear scale; the plant's near-invisible bar is the point. Accessed Jul 14, 2026.</p>
         <button class="table-toggle" data-chart="exposure" aria-pressed="false">View as table</button>
       </div>
     </div>
@@ -833,7 +894,7 @@
         <div class="acc-panel"><div><div class="acc-body">
           <div class="fact-box">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#047857"/><path d="M8 12.5l2.8 2.8L16.5 9" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            <p><span class="fact-label">Fact</span>The entire 70-year history of U.S. commercial nuclear power has produced about 90,000 metric tons of used fuel, all of it solid, tracked, and stored safely on-site in dry casks. Stacked together, it fits within the area of a single football field. Unlike fossil-fuel waste, it never leaves human control.</p>
+            <p><span class="fact-label">Fact</span>Since the 1950s, U.S. commercial reactors have produced roughly 90,000 metric tons of used fuel, growing by about 2,000 tons a year. It is solid and tracked: stored first in water-filled pools at reactor sites, then moved into sealed dry casks after it cools. Per the <a href="https://www.energy.gov/ne/articles/5-fast-facts-about-spent-nuclear-fuel" target="_blank" rel="noopener noreferrer">U.S. Department of Energy</a>, if all of it were stacked it would cover a single football field to a depth of less than 10 yards. That counts the fuel assemblies themselves, not packaging or spacing, and used fuel is distinct from lower-level wastes, which are handled separately. The unsolved part is political, not technical: the U.S. still has no permanent geological repository, while Finland is completing the world's first.</p>
           </div>
           <figure class="field-fig">
             <svg viewBox="0 0 860 400" role="img" aria-label="Illustration of a football field: all spent fuel ever produced by commercial nuclear power would fit, stacked, within its area.">
@@ -849,9 +910,9 @@
                 <line x1="340" y1="164" x2="520" y2="164"/><line x1="340" y1="200" x2="520" y2="200"/><line x1="340" y1="236" x2="520" y2="236"/><line x1="385" y1="128" x2="385" y2="272"/><line x1="430" y1="128" x2="430" y2="272"/><line x1="475" y1="128" x2="475" y2="272"/>
               </g>
               <text x="430" y="98" text-anchor="middle" font-family="'Public Sans', sans-serif" font-weight="700" font-size="24" fill="#0F172A" letter-spacing="1">ALL OF IT. EVER.</text>
-              <text x="430" y="318" text-anchor="middle" font-family="'Public Sans', sans-serif" font-weight="500" font-size="14" fill="#64748B" letter-spacing="1">one football field</text>
+              <text x="430" y="318" text-anchor="middle" font-family="'Public Sans', sans-serif" font-weight="500" font-size="14" fill="#64748B" letter-spacing="1">one football field, stacked under 10 yards deep</text>
             </svg>
-            <figcaption>All the spent fuel ever produced by commercial nuclear power would fit, stacked, within the area of a single football field. (Illustrative, not to scale.)</figcaption>
+            <figcaption>DOE: all U.S. spent fuel, stacked, would cover one football field to a depth of less than 10 yards. Fuel assemblies only; packaging, spacing, and shielding not included. (Illustrative, not to scale.)</figcaption>
           </figure>
         </div></div></div>
       </div>
@@ -868,7 +929,7 @@
         <div class="acc-panel"><div><div class="acc-body">
           <div class="fact-box">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#047857"/><path d="M8 12.5l2.8 2.8L16.5 9" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            <p><span class="fact-label">Fact</span>You receive more radiation from one cross-country flight (0.04 mSv) than from living next to a nuclear plant for an entire year (0.01 mSv), and both are a tiny fraction of the ~3 mSv everyone receives annually from natural background radiation.</p>
+            <p><span class="fact-label">Fact</span>One cross-country flight (about 0.04 mSv) exposes you to roughly 40 times more radiation than the NRC estimates for living near a nuclear plant for an entire year (about 0.001 mSv). Both are tiny next to the roughly 3 mSv everyone receives annually from natural background radiation.</p>
           </div>
         </div></div></div>
       </div>
@@ -902,7 +963,7 @@
         <div class="acc-panel"><div><div class="acc-body">
           <div class="fact-box">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#047857"/><path d="M8 12.5l2.8 2.8L16.5 9" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            <p><span class="fact-label">Fact</span>A new generation of designs, including small modular reactors and molten-salt reactors, is engineered around one principle: <strong>walking away is the safety feature.</strong> They shut themselves down through the laws of physics, failing <em>safe</em> instead of failing <em>loud</em>. The fear that froze nuclear development in the 20th century is being engineered out of the 21st.</p>
+            <p><span class="fact-label">Fact</span>A new generation of designs, including small modular reactors and molten-salt concepts, is built around <strong>passive safety</strong>: mechanisms that rely on physical properties such as natural circulation, gravity, and negative temperature feedback rather than powered equipment and operator action. The U.S. NRC certified its first small modular design in 2023. These designs are engineered to fail safe instead of failing loud, though most remain to be proven in commercial operation.</p>
           </div>
         </div></div></div>
       </div>
@@ -919,7 +980,7 @@
         <div class="acc-panel"><div><div class="acc-body">
           <div class="fact-box">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#047857"/><path d="M8 12.5l2.8 2.8L16.5 9" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            <p><span class="fact-label">Fact</span>Advanced reactors can reuse spent fuel, and thorium, an alternative fuel, is virtually inexhaustible. Between recycling and new fuel cycles, nuclear's fuel supply is measured in centuries, not decades.</p>
+            <p><span class="fact-label">Fact</span>Known uranium resources cover many decades at current consumption, and advanced reactors could stretch that much further by reusing spent fuel. Thorium is relatively abundant too, though commercially viable thorium fuel cycles still face technical, regulatory, and economic hurdles. The fuel-supply question is real but long-horizon, not imminent.</p>
           </div>
         </div></div></div>
       </div>
@@ -931,11 +992,37 @@
   </div>
 </section>
 
-<!-- ================= 09 NEWS ================= -->
+<!-- ================= 09 LIMITATIONS ================= -->
+<section class="band band--tint" id="limits" aria-labelledby="h-limits">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="overline"><span class="n">09</span>Limitations</span>
+      <h2 id="h-limits">The honest cost column</h2>
+      <p class="lede">"Honesty over hype" means naming the problems, not just the strengths. These are real, and any serious case for nuclear has to carry them.</p>
+    </div>
+
+    <div class="school-grid" style="max-width:56rem">
+      <div class="school-card reveal"><h4>Construction cost and time</h4><span class="prog">Recent Western builds have run far over budget and schedule. Georgia's Vogtle units 3 and 4 arrived roughly seven years late at about $35 billion, more than double the estimate. Korea, China, and the UAE have built much faster, so the problem is not physics, but it is real.</span></div>
+      <div class="school-card reveal"><h4>Financing risk</h4><span class="prog">Billions must be committed a decade before the first kilowatt-hour is sold. That uncertainty raises the cost of every borrowed dollar and scares off investors.</span></div>
+      <div class="school-card reveal"><h4>Waste disposal politics</h4><span class="prog">Interim storage works today, but the U.S. still has no permanent geological repository after decades of trying. Finland's Onkalo repository will be the world's first.</span></div>
+      <div class="school-card reveal"><h4>Rare but severe accidents</h4><span class="prog">Accidents are extremely infrequent, but when they happen the displacement, cleanup costs, land restrictions, and fear last for decades, well beyond the direct casualties.</span></div>
+      <div class="school-card reveal"><h4>Mining, water, and heat</h4><span class="prog">Uranium mining disturbs land and has a poor historical record near some communities. Plants also need large volumes of cooling water and discharge waste heat.</span></div>
+      <div class="school-card reveal"><h4>Proliferation and security</h4><span class="prog">Enrichment and reprocessing technology overlaps with weapons capability. That is why international safeguards and inspections exist, and they must stay strong.</span></div>
+      <div class="school-card reveal"><h4>Workforce and supply chain</h4><span class="prog">Decades with few new builds thinned out the specialized workforce and supplier base. Rebuilding that capacity takes years, not months.</span></div>
+      <div class="school-card reveal"><h4>SMR uncertainty</h4><span class="prog">Small modular reactors are promising but mostly unbuilt. Their cost and timeline figures are projections, not track records, and first-of-a-kind projects have already seen cancellations.</span></div>
+    </div>
+
+    <div class="prose reveal" style="margin-top:2rem">
+      <p><strong>Why make the case anyway?</strong> Keeping an existing plant running and building a new one are very different economic decisions, and the evidence for the first is much stronger than the fear suggests, while the second is hard but improving. Every energy source has a cost column. Nuclear's problems are mostly economic and political, and those are solvable. The harm from burning fossil fuels is physical and ongoing, and it is not.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 10 NEWS ================= -->
 <section class="band band--tint" id="news" aria-labelledby="h-news">
   <div class="wrap">
     <div class="section-head reveal">
-      <span class="overline"><span class="n">09</span>News</span>
+      <span class="overline"><span class="n">10</span>News</span>
       <h2 id="h-news">The field is moving</h2>
       <p class="lede">The latest nuclear energy headlines, pulled from World Nuclear News and Google News.</p>
     </div>
@@ -964,30 +1051,31 @@
 <section class="band" id="careers" aria-labelledby="h-careers">
   <div class="wrap">
     <div class="section-head reveal">
-      <span class="overline"><span class="n">10</span>Careers</span>
+      <span class="overline"><span class="n">11</span>Careers</span>
       <h2 id="h-careers">Working in nuclear</h2>
       <p class="lede">A field with deep job security, national importance, and six-figure median pay. Tap a role to see what it involves.</p>
     </div>
 
     <div class="tiles">
       <div class="tile reveal">
-        <div class="tile__label">U.S. nuclear industry jobs</div>
-        <div class="tile__value"><span data-count="100000">0</span>+</div>
-        <p class="tile__desc">Across plants, national labs, regulators, and suppliers.</p>
+        <div class="tile__label">Median pay, nuclear engineers</div>
+        <div class="tile__value">$<span data-count="127520">127,520</span></div>
+        <p class="tile__desc">U.S. median annual wage, May 2024. <a href="https://www.bls.gov/ooh/architecture-and-engineering/nuclear-engineers.htm" target="_blank" rel="noopener noreferrer">Source: BLS Occupational Outlook Handbook</a></p>
       </div>
       <div class="tile reveal">
-        <div class="tile__label">Average annual salary</div>
-        <div class="tile__value">$<span data-count="100000">0</span></div>
-        <p class="tile__desc">Source: U.S. Bureau of Labor Statistics.</p>
+        <div class="tile__label">Projected openings per year</div>
+        <div class="tile__value"><span data-count="800">800</span></div>
+        <p class="tile__desc">For nuclear engineers through 2034, mostly replacing retirements. <a href="https://www.bls.gov/ooh/architecture-and-engineering/nuclear-engineers.htm" target="_blank" rel="noopener noreferrer">Source: BLS</a></p>
       </div>
       <div class="tile reveal">
-        <div class="tile__label">Average job tenure</div>
-        <div class="tile__value"><span data-count="20">0</span>+<span class="unit">years</span></div>
-        <p class="tile__desc">Among the most stable careers in the energy sector.</p>
+        <div class="tile__label">Operating U.S. power reactors</div>
+        <div class="tile__value"><span data-count="94">94</span></div>
+        <p class="tile__desc">At 54 plants across 28 states. <a href="https://www.nrc.gov/reactors/operating/list-power-reactor-units.html" target="_blank" rel="noopener noreferrer">Source: U.S. NRC</a></p>
       </div>
     </div>
 
     <div id="career-list"></div>
+    <p class="school-note reveal" style="margin-top:1.2rem;margin-bottom:0">Salary ranges in the role cards are indicative; see the <a href="https://www.bls.gov/ooh/" target="_blank" rel="noopener noreferrer">BLS Occupational Outlook Handbook</a> for current medians by occupation.</p>
   </div>
 </section>
 
@@ -995,27 +1083,9 @@
 <section class="band band--tint" id="students" aria-labelledby="h-students">
   <div class="wrap">
     <div class="section-head reveal">
-      <span class="overline"><span class="n">11</span>Students</span>
+      <span class="overline"><span class="n">12</span>Students</span>
       <h2 id="h-students">Your pathway into nuclear energy</h2>
       <p class="lede">From a high-school classroom to a national laboratory, the route is well marked, and much of it is funded.</p>
-    </div>
-
-    <div class="tiles">
-      <div class="tile reveal">
-        <div class="tile__label">Universities with nuclear programs</div>
-        <div class="tile__value"><span data-count="70">0</span>+</div>
-        <p class="tile__desc">Accredited nuclear engineering programs across the U.S.</p>
-      </div>
-      <div class="tile reveal">
-        <div class="tile__label">Scholarships available annually</div>
-        <div class="tile__value">$<span data-count="5000">0</span>+</div>
-        <p class="tile__desc">ANS undergraduate awards alone, before fellowships.</p>
-      </div>
-      <div class="tile reveal">
-        <div class="tile__label">Job placement for graduates</div>
-        <div class="tile__value"><span data-count="95">0</span>%+</div>
-        <p class="tile__desc">Nuclear engineering graduates find work fast.</p>
-      </div>
     </div>
 
     <div class="pathway">
@@ -1068,7 +1138,7 @@
       <div class="school-card reveal"><h4>Oregon State</h4><span class="prog">Radiation Health Physics</span><span class="loc">Corvallis, OR</span></div>
       <div class="school-card reveal"><h4>National lab partnerships</h4><span class="prog">PhD programs partnered with Oak Ridge, Argonne, and Idaho National Laboratories</span></div>
     </div>
-    <p class="school-note reveal">A sampling of the best-known programs. More than 70 accredited nuclear engineering programs exist across the U.S., and most offer bachelor's through PhD degrees.</p>
+    <p class="school-note reveal">A sampling of well-known programs; many more U.S. universities offer nuclear engineering and related degrees, most from bachelor's through PhD. The <a href="https://www.ans.org/students/" target="_blank" rel="noopener noreferrer">American Nuclear Society</a> maintains student resources and program listings.</p>
 
     <div class="res-row">
       <a class="res-card reveal" href="https://science.osti.gov/wdts/suli" target="_blank" rel="noopener noreferrer">
@@ -1111,7 +1181,7 @@
 <section class="band" id="about" aria-labelledby="h-about">
   <div class="wrap">
     <div class="section-head reveal" style="margin-bottom:2rem">
-      <span class="overline"><span class="n">12</span>Info · About the author</span>
+      <span class="overline"><span class="n">13</span>Info · About the author</span>
     </div>
     <div class="about-grid reveal">
       <div class="about-mark" aria-hidden="true">DW</div>
@@ -1132,25 +1202,24 @@
 <footer id="sources">
   <div class="wrap">
     <h2>Sources</h2>
-    <div class="src-grid">
-      <div class="src-col">
-        <h3>Safety &amp; mortality data</h3>
-        <p>Our World in Data: death rates from energy production per TWh, synthesizing Markandya &amp; Wilkinson (2007, <em>The Lancet</em>) and Sovacool et&nbsp;al. (2016). WHO air-pollution statistics.</p>
-      </div>
-      <div class="src-col">
-        <h3>Reliability, costs &amp; emissions</h3>
-        <p>U.S. Energy Information Administration (capacity factors, operating costs, 2024); IEA (France generation share); IPCC and UNECE lifecycle assessments.</p>
-      </div>
-      <div class="src-col">
-        <h3>Incidents &amp; radiation</h3>
-        <p>UNSCEAR 2008 &amp; 2013 reports; U.S. NRC; WHO; IAEA; EPA and CDC radiation-exposure guidance.</p>
-      </div>
-      <div class="src-col">
-        <h3>Careers &amp; education</h3>
-        <p>U.S. Bureau of Labor Statistics; American Nuclear Society; U.S. DOE workforce programs (SULI, NEUP); Nuclear Energy Institute.</p>
-      </div>
-    </div>
-    <p class="src-note">Before formal publication, each specific statistic should be cited to its primary source and checked against the most recent year available.</p>
+    <ol class="ref-list">
+      <li>Our World in Data (2020, updated). <a href="https://ourworldindata.org/safest-sources-of-energy" target="_blank" rel="noopener noreferrer">"What are the safest and cleanest sources of energy?"</a> Death rates per TWh: coal 24.6, oil 18.4, gas 2.8, hydro 1.3, wind 0.04, nuclear 0.03, solar 0.02.</li>
+      <li>Markandya, A. &amp; Wilkinson, P. (2007). "Electricity generation and health." <em>The Lancet</em> 370(9591). Basis for the fossil-fuel death rates above.</li>
+      <li>Sovacool, B. et&nbsp;al. (2016). "Balancing safety with sustainability." <em>Journal of Cleaner Production</em> 112. Basis for low-carbon accident rates above.</li>
+      <li>IPCC (2014). <a href="https://www.ipcc.ch/site/assets/uploads/2018/02/ipcc_wg3_ar5_annex-iii.pdf" target="_blank" rel="noopener noreferrer">AR5 WG3, Annex III, Table A.III.2</a>. Median lifecycle emissions: nuclear 12 gCO₂eq/kWh (range 3.7 to 110), wind 11, coal 820, gas 490.</li>
+      <li>UNECE (2021). <a href="https://unece.org/sed/documents/2021/10/reports/life-cycle-assessment-electricity-generation-options" target="_blank" rel="noopener noreferrer">Lifecycle Assessment of Electricity Generation Options</a>. Finds nuclear at 5.1 to 6.4 gCO₂eq/kWh.</li>
+      <li>U.S. EIA. <a href="https://www.eia.gov/electricity/monthly/epm_table_grapher.php?t=epmt_6_07_b" target="_blank" rel="noopener noreferrer">Electric Power Monthly, Tables 6.07.A and 6.07.B</a>. 2024 annual capacity factors used in the Capacity chart.</li>
+      <li>U.S. EIA. <a href="https://www.eia.gov/electricity/annual/html/epa_08_04.html" target="_blank" rel="noopener noreferrer">Electric Power Annual, Table 8.4</a>. 2024 operating expenses per MWh used in the Costs chart.</li>
+      <li>Nuclear Energy Institute (2026). <a href="https://www.nei.org/resources/reports-briefs/nuclear-costs-in-context" target="_blank" rel="noopener noreferrer">Nuclear Costs in Context</a>. 2024 total generating costs: $31.88/MWh multi-unit, $41.88/MWh single-unit.</li>
+      <li>IAEA PRIS, <a href="https://pris.iaea.org/PRIS/CountryStatistics/CountryDetails.aspx?current=FR" target="_blank" rel="noopener noreferrer">France country profile</a>; RTE, 2024 Annual Electricity Review. France's 2024 nuclear share: about 65 to 67%.</li>
+      <li>U.S. NRC. <a href="https://www.nrc.gov/about-nrc/radiation/around-us/doses-daily-lives" target="_blank" rel="noopener noreferrer">"Doses in Our Daily Lives"</a>; EPA radiation resources. Everyday dose comparisons in the Exposure chart.</li>
+      <li>U.S. DOE, Office of Nuclear Energy. <a href="https://www.energy.gov/ne/articles/5-fast-facts-about-spent-nuclear-fuel" target="_blank" rel="noopener noreferrer">"5 Fast Facts about Spent Nuclear Fuel"</a>. About 90,000 metric tons total, growing ~2,000 t/yr; football-field comparison at under 10 yards deep.</li>
+      <li>UNSCEAR (2008, 2013). Reports on the health effects of Chernobyl and Fukushima. Basis for the Incidents section.</li>
+      <li>McDuffie, E. et&nbsp;al. (2021). <em>Nature Communications</em> (GBD MAPS); Lelieveld, J. et&nbsp;al. (2023). <em>BMJ</em>. Coal and fossil-fuel air-pollution mortality estimates.</li>
+      <li>U.S. BLS. <a href="https://www.bls.gov/ooh/architecture-and-engineering/nuclear-engineers.htm" target="_blank" rel="noopener noreferrer">Occupational Outlook Handbook, Nuclear Engineers</a>. Median wage $127,520 (May 2024); ~800 projected annual openings.</li>
+      <li>U.S. NRC. <a href="https://www.nrc.gov/reactors/operating/list-power-reactor-units.html" target="_blank" rel="noopener noreferrer">Operating power reactor list</a>. 94 licensed operating reactors at 54 plants.</li>
+    </ol>
+    <p class="src-note">Every figure on this page was checked against these sources on July 14, 2026. Estimates carry uncertainty, and where major sources disagree, ranges are shown. Found an error? Use the contact email above; corrections are welcome.</p>
     <div class="foot-base">
       <span>Radiant · an evidence-based educational resource</span>
       <span>© 2026 Desmond Wong</span>
@@ -1162,6 +1231,44 @@
 (function () {
   'use strict';
   var REDUCE = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* Visibility helper: IntersectionObserver for snappy triggering, plus a
+     scroll/interval sweep so effects fail OPEN if the observer is throttled
+     (background tabs, embedded browsers, unusual user agents). Content must
+     never stay hidden because an animation hook didn't fire. */
+  var VIS = [], VIS_IO = null, VIS_TIMER = null;
+  function fireFor(el) {
+    VIS.forEach(function (v) {
+      if (v.el === el && !v.done) {
+        v.done = true;
+        v.fire();
+        if (VIS_IO) VIS_IO.unobserve(el);
+      }
+    });
+  }
+  function sweepVisible() {
+    var vh = window.innerHeight, pending = false;
+    VIS.forEach(function (v) {
+      if (v.done) return;
+      var r = v.el.getBoundingClientRect();
+      if (r.top < vh * 0.95 && r.bottom > 0) { fireFor(v.el); } else { pending = true; }
+    });
+    if (!pending && VIS_TIMER) { clearInterval(VIS_TIMER); VIS_TIMER = null; }
+  }
+  function whenVisible(el, fire) {
+    if (REDUCE || !('IntersectionObserver' in window)) { fire(); return; }
+    if (!VIS_IO) {
+      VIS_IO = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) fireFor(entry.target);
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -5% 0px' });
+      window.addEventListener('scroll', sweepVisible, { passive: true });
+      VIS_TIMER = setInterval(sweepVisible, 1000);
+    }
+    VIS.push({ el: el, fire: fire, done: false });
+    VIS_IO.observe(el);
+  }
 
   /* ============ GENERIC BAR CHART ============ */
   var CHARTS = {
@@ -1181,45 +1288,44 @@
       fmt: function (v) { return v < 0.1 ? v.toFixed(2) : String(v); }
     },
     capacity: {
-      unit: '% of the year at full power', labelW: '8.5rem',
-      caption: 'Average capacity factor by energy source (U.S. EIA)',
+      unit: '% of the year at full power', labelW: '9.5rem',
+      caption: 'Average capacity factor by energy source, U.S. 2024 (EIA, Electric Power Monthly, Tables 6.07.A/B)',
       cols: ['Energy source', 'Capacity factor'],
       data: [
-        { name: 'Nuclear',     v: 92, note: 'full power ~335 days a year', hero: true },
-        { name: 'Geothermal',  v: 75, note: 'baseload, geography-limited' },
-        { name: 'Natural Gas', v: 50, note: 'often throttled to follow demand' },
-        { name: 'Coal',        v: 48, note: 'baseload, increasingly retired' },
-        { name: 'Hydropower',  v: 40, note: 'seasonal water levels' },
-        { name: 'Wind',        v: 35, note: 'runs when the wind blows' },
-        { name: 'Solar',       v: 25, note: 'runs when the sun shines' }
+        { name: 'Nuclear',              v: 90.8, note: 'about 332 days a year at full power', hero: true },
+        { name: 'Geothermal',           v: 64.6, note: 'baseload, geography-limited' },
+        { name: 'Gas (combined cycle)', v: 60.5, note: 'often throttled to follow demand' },
+        { name: 'Coal',                 v: 42.6, note: 'baseload, increasingly retired' },
+        { name: 'Hydropower',           v: 34.6, note: 'seasonal water levels' },
+        { name: 'Wind',                 v: 34.0, note: 'runs when the wind blows' },
+        { name: 'Solar (PV)',           v: 23.2, note: 'runs when the sun shines' }
       ],
-      fmt: function (v) { return v + '%'; }
+      fmt: function (v) { return v.toFixed(1) + '%'; }
     },
     costs: {
-      unit: '$ / MWh', labelW: '8.5rem',
-      caption: 'Operating costs by energy source, $ per MWh (U.S. EIA, 2024)',
-      cols: ['Energy source', 'Operating cost ($/MWh)'],
+      unit: '$ / MWh', labelW: '11rem',
+      caption: 'Operating expenses (fuel + operation + maintenance), major U.S. investor-owned utilities, 2024 (EIA, Electric Power Annual, Table 8.4)',
+      cols: ['Plant type', 'Operating expense ($/MWh)'],
       data: [
-        { name: 'Nuclear',     v: 29.12, note: 'the cheapest baseload to run', hero: true },
-        { name: 'Solar',       v: 36.10, note: '≈24% above nuclear' },
-        { name: 'Natural Gas', v: 38.50, note: '≈32% above nuclear' },
-        { name: 'Wind',        v: 40.19, note: '≈38% above nuclear' },
-        { name: 'Coal',        v: 42.78, note: '≈47% above nuclear' }
+        { name: 'Hydroelectric',            v: 15.07, note: 'cheapest to run where geography allows' },
+        { name: 'Gas turbine, small scale', v: 22.95, note: 'fuel is most of the cost, and prices swing' },
+        { name: 'Nuclear',                  v: 23.08, note: 'low and stable; fuel is only about a quarter of it', hero: true },
+        { name: 'Fossil steam',             v: 41.32, note: 'mostly coal; fuel dominates the cost' }
       ],
       fmt: function (v) { return '$' + v.toFixed(2); }
     },
     exposure: {
       unit: 'mSv', labelW: '13rem',
-      caption: 'Everyday radiation doses in millisieverts (NRC, EPA, CDC)',
+      caption: 'Everyday radiation doses in millisieverts, effective-dose estimates (U.S. NRC, Doses in Our Daily Lives; EPA)',
       cols: ['Source of dose', 'Dose (mSv)'],
       data: [
         { name: 'Eating a banana',                 v: 0.0001, note: 'potassium-40 (yes, really)' },
-        { name: 'Living near a nuclear plant',     v: 0.01,   note: 'per year, within 50 miles', hero: true },
-        { name: 'Flight, NYC to LA round-trip',    v: 0.04,   note: 'cosmic rays at altitude' },
+        { name: 'Living near a nuclear plant',     v: 0.001,  note: 'per year; NRC estimate for nearby residents', hero: true },
+        { name: 'Flight, NYC to LA round-trip',    v: 0.04,   note: 'cosmic rays; varies with route and altitude' },
         { name: 'Chest X-ray',                     v: 0.1,    note: 'one diagnostic image' },
-        { name: 'Natural background',              v: 3.0,    note: 'per year: soil, radon, cosmic rays' }
+        { name: 'Natural background',              v: 3.0,    note: 'per year: radon, soil, cosmic rays' }
       ],
-      fmt: function (v) { return v < 0.001 ? '0.0001' : String(v); }
+      fmt: function (v) { return String(v); }
     }
   };
 
@@ -1326,18 +1432,11 @@
     table.appendChild(tbody);
     tableWrap.appendChild(table);
 
-    // grow bars on scroll into view
+    // grow bars on scroll into view (fails open via whenVisible)
     function setWidths() {
       rows.querySelectorAll('.crow__bar').forEach(function (b) { b.style.width = b.dataset.w + '%'; });
     }
-    if (REDUCE || !('IntersectionObserver' in window)) {
-      setWidths();
-    } else {
-      var seen = false;
-      new IntersectionObserver(function (entries, obs) {
-        if (!seen && entries[0].isIntersecting) { seen = true; setWidths(); obs.disconnect(); }
-      }, { threshold: 0.25 }).observe(rows);
-    }
+    whenVisible(rows, setWidths);
     cfg._setWidths = setWidths;
   });
 
@@ -1360,8 +1459,8 @@
   var INCIDENTS = [
     {
       year: 1979, name: 'Three Mile Island', location: 'Pennsylvania, USA', severity: 'INES Level 5',
-      description: 'Partial meltdown of the reactor core. The containment structure did its job and prevented radiation release.',
-      feared: 'Thousands feared', confirmed: '0', dose: 'Max public exposure: 0.01 mSv, about a chest X-ray',
+      description: 'Partial meltdown of a pressurized-water reactor core. The containment structure did its job and prevented significant radiation release.',
+      feared: 'Thousands feared', confirmed: '0', dose: 'Average dose to nearby residents: about 0.01 mSv, roughly a tenth of a chest X-ray (NRC)',
       happened: [
         'Equipment malfunction and operator confusion led to a partial core meltdown',
         'The containment building successfully prevented radiation release',
@@ -1390,7 +1489,7 @@
     },
     {
       year: 2011, name: 'Fukushima Daiichi', location: 'Japan', severity: 'INES Level 7',
-      description: 'A magnitude-9.1 earthquake and 15-meter tsunami flooded backup generators, disabling reactor cooling.',
+      description: 'A magnitude-9.1 earthquake and 15-meter tsunami flooded backup generators at six boiling-water reactors, disabling cooling.',
       feared: 'Thousands', confirmed: '0 from radiation', dose: 'Most evacuees received less radiation than a CT scan',
       happened: [
         'Reactors shut down automatically and safely when the earthquake hit',
@@ -1611,23 +1710,10 @@
   });
 
   /* ============ REVEAL ON SCROLL ============ */
-  var reveals = document.querySelectorAll('.reveal');
-  if (REDUCE || !('IntersectionObserver' in window)) {
-    reveals.forEach(function (el) { el.classList.add('in'); });
-  } else {
-    var ro = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('in');
-          ro.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.12, rootMargin: '0px 0px -5% 0px' });
-    reveals.forEach(function (el, i) {
-      el.style.transitionDelay = (i % 4) * 70 + 'ms';
-      ro.observe(el);
-    });
-  }
+  document.querySelectorAll('.reveal').forEach(function (el, i) {
+    el.style.transitionDelay = (i % 4) * 70 + 'ms';
+    whenVisible(el, function () { el.classList.add('in'); });
+  });
 
   /* ============ COUNT-UP NUMBERS ============ */
   var counters = document.querySelectorAll('[data-count]');
@@ -1644,16 +1730,9 @@
     }
     requestAnimationFrame(step);
   }
-  if (!('IntersectionObserver' in window)) {
-    counters.forEach(function (el) { el.textContent = parseFloat(el.dataset.count).toLocaleString('en-US'); });
-  } else {
-    var co = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) { runCount(entry.target); co.unobserve(entry.target); }
-      });
-    }, { threshold: 0.6 });
-    counters.forEach(function (el) { co.observe(el); });
-  }
+  counters.forEach(function (el) {
+    whenVisible(el, function () { runCount(el); });
+  });
 
   /* ============ NAV SCROLLSPY ============ */
   var navLinks = document.querySelectorAll('#nav-links a');
