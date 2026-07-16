@@ -275,6 +275,35 @@
     display: flex; align-items: center; justify-content: center;
   }
 
+  /* ============ GRID SIMULATOR ============ */
+  .sim-card {
+    background: var(--card);
+    border: 1px solid var(--hair); border-radius: 12px;
+    box-shadow: var(--shadow);
+    padding: 1.8rem 1.8rem 1.4rem;
+    max-width: 54rem; margin: 0 0 2rem;
+  }
+  .sim-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.8rem; }
+  .sim-row label { font-size: 0.88rem; font-weight: 500; color: var(--body); min-width: 6.5rem; }
+  .sim-row input[type="range"] { flex: 1; accent-color: var(--blue); min-height: 28px; cursor: pointer; }
+  .sim-row output { font-size: 0.88rem; font-weight: 600; color: var(--ink); min-width: 3rem; text-align: right; font-variant-numeric: tabular-nums; }
+  .sim-gas { font-size: 0.82rem; color: var(--muted); margin: 0.2rem 0 1.6rem; }
+  .sim-gas strong { color: var(--ink); }
+  .sim-tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.8rem; }
+  .sim-tile { background: var(--tint); border-radius: 10px; padding: 1rem 1.1rem; }
+  .sim-tile .lbl { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.4rem; }
+  .sim-tile .val { font-family: var(--sans); font-size: 1.6rem; font-weight: 700; color: var(--ink); line-height: 1.1; }
+  .sim-tile .sub { font-size: 0.72rem; color: var(--muted); margin-top: 0.35rem; line-height: 1.45; }
+  .sim-bars-title { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.9rem; }
+  .sim-notes { border-top: 1px solid var(--hair); margin-top: 1.6rem; font-size: 0.85rem; color: var(--muted); }
+  .sim-notes summary { cursor: pointer; font-weight: 600; color: var(--body); padding: 1rem 0; list-style: none; display: flex; align-items: center; gap: 0.5rem; min-height: 44px; }
+  .sim-notes summary::before { content: '▸'; font-size: 0.8rem; transition: transform 0.2s; }
+  .sim-notes[open] summary::before { transform: rotate(90deg); }
+  .sim-notes ul { list-style: none; padding-bottom: 1rem; }
+  .sim-notes li { padding: 0.25rem 0 0.25rem 1rem; border-left: 2px solid var(--hair); margin-bottom: 0.5rem; line-height: 1.6; }
+  .sim-notes code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.8em; background: var(--tint); padding: 0.1em 0.4em; border-radius: 4px; color: var(--ink); }
+  @media (max-width: 900px) { .sim-tiles { grid-template-columns: 1fr; } }
+
   /* ============ INFO CARDS (baseload etc.) ============ */
   .duo { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; max-width: 54rem; margin-bottom: 2.4rem; }
   .info-card { background: var(--card); border: 1px solid var(--hair); border-radius: 12px; box-shadow: var(--shadow); padding: 1.5rem 1.6rem; }
@@ -471,6 +500,7 @@
     <a href="#how">The Plant</a>
     <a href="#data">Safety</a>
     <a href="#capacity">Capacity</a>
+    <a href="#simulator">Simulator</a>
     <a href="#costs">Costs</a>
     <a href="#incidents">Incidents</a>
     <a href="#exposure">Exposure</a>
@@ -773,11 +803,83 @@
   </div>
 </section>
 
-<!-- ================= 05 COSTS ================= -->
+<!-- ================= 05 SIMULATOR ================= -->
+<section class="band" id="simulator" aria-labelledby="h-sim">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="overline"><span class="n">05</span>Interactive model</span>
+      <h2 id="h-sim">Build your own grid</h2>
+      <p class="lede">Power a city that needs 1,000 MW around the clock. Choose the mix, and the model computes the carbon, the hardware, and the reliability picture from the same cited data used across this site.</p>
+    </div>
+
+    <div class="sim-card reveal">
+      <div class="sim-row">
+        <label for="sim-nuclear">Nuclear</label>
+        <input type="range" id="sim-nuclear" min="0" max="100" step="1" value="30">
+        <output id="sim-nuclear-out" for="sim-nuclear">30%</output>
+      </div>
+      <div class="sim-row">
+        <label for="sim-solar">Solar</label>
+        <input type="range" id="sim-solar" min="0" max="100" step="1" value="15">
+        <output id="sim-solar-out" for="sim-solar">15%</output>
+      </div>
+      <div class="sim-row">
+        <label for="sim-wind">Wind</label>
+        <input type="range" id="sim-wind" min="0" max="100" step="1" value="15">
+        <output id="sim-wind-out" for="sim-wind">15%</output>
+      </div>
+      <div class="sim-row">
+        <label for="sim-hydro">Hydropower</label>
+        <input type="range" id="sim-hydro" min="0" max="100" step="1" value="10">
+        <output id="sim-hydro-out" for="sim-hydro">10%</output>
+      </div>
+      <p class="sim-gas">Natural gas fills whatever share is left: <strong id="sim-gas">30%</strong>. Slide a source up and gas gives way.</p>
+
+      <div class="sim-tiles" role="status" aria-live="off">
+        <div class="sim-tile">
+          <div class="lbl">Grid carbon intensity</div>
+          <div class="val" id="sim-co2">162 g/kWh</div>
+          <div class="sub">U.S. grid today: about 370. France's nuclear-heavy grid: about 56.</div>
+        </div>
+        <div class="sim-tile">
+          <div class="lbl">Capacity you must build</div>
+          <div class="val" id="sim-cap">2,203 MW</div>
+          <div class="sub" id="sim-cap-sub">to reliably average 1,000 MW, because nothing runs all the time</div>
+        </div>
+        <div class="sim-tile">
+          <div class="lbl">Firm share</div>
+          <div class="val" id="sim-firm">70%</div>
+          <div class="sub" id="sim-firm-sub">supply that does not depend on the weather</div>
+        </div>
+      </div>
+
+      <div class="sim-bars-title">Installed capacity needed, by source</div>
+      <div class="chart-rows" id="sim-rows" style="margin-bottom:0.4rem"></div>
+
+      <details class="sim-notes">
+        <summary>Assumptions and equations</summary>
+        <ul>
+          <li>Demand is a constant 1,000 MW (8,760 GWh per year). Real demand varies by hour and season; ignoring timing flatters variable sources, because storage and curtailment are not modeled.</li>
+          <li>Capacity factors are U.S. 2024 annual averages from EIA (reference 6): nuclear 90.8%, gas combined cycle 60.5%, hydro 34.6%, wind 34.0%, solar 23.2%.</li>
+          <li>Lifecycle emissions are IPCC AR5 medians (reference 4): nuclear 12, wind 11, hydro 24, solar 48, gas 490 gCO₂eq/kWh.</li>
+          <li>Capacity per source: <code>MW = share × 1,000 ÷ capacity factor</code>. Carbon intensity: <code>g/kWh = Σ share × emission factor</code>. Firm share: <code>nuclear + hydro + gas</code>.</li>
+          <li>Grid references (U.S. about 370, France about 56 gCO₂/kWh in 2023) are from Ember via Our World in Data (reference 16).</li>
+          <li>This is an educational model, not a grid-planning tool. Real planning models hourly weather, transmission, reserve margins, storage, and cost.</li>
+        </ul>
+      </details>
+    </div>
+
+    <div class="prose reveal">
+      <p>Try it: slide solar toward 80% and watch the buildout number climb while the firm share collapses. Then slide nuclear up and watch carbon intensity fall toward France's levels with a fraction of the hardware. <strong>That trade-off, in one toy model, is the argument of this site.</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 06 COSTS ================= -->
 <section class="band band--tint" id="costs" aria-labelledby="h-costs">
   <div class="wrap">
     <div class="section-head reveal">
-      <span class="overline"><span class="n">05</span>Costs</span>
+      <span class="overline"><span class="n">06</span>Costs</span>
       <h2 id="h-costs">What existing plants cost to run</h2>
       <p class="lede">Running costs and building costs are different questions. Existing nuclear plants are inexpensive to operate; new construction is where nuclear struggles (see Limitations).</p>
     </div>
@@ -816,7 +918,7 @@
 <section class="band" id="incidents" aria-labelledby="h-incidents">
   <div class="wrap">
     <div class="section-head reveal">
-      <span class="overline"><span class="n">06</span>Incidents</span>
+      <span class="overline"><span class="n">07</span>Incidents</span>
       <h2 id="h-incidents">Facts vs. perception</h2>
       <p class="lede">Even the disasters tell a more measured story than memory suggests. Select an incident to compare what people feared with what the evidence found.</p>
     </div>
@@ -837,7 +939,7 @@
 <section class="band band--tint" id="exposure" aria-labelledby="h-exposure">
   <div class="wrap">
     <div class="section-head reveal">
-      <span class="overline"><span class="n">07</span>Exposure</span>
+      <span class="overline"><span class="n">08</span>Exposure</span>
       <h2 id="h-exposure">Radiation, in everyday context</h2>
       <p class="lede">You are exposed to radiation every day, from rocks, the sky, and your own food. The question is never "is there radiation?" but "how much?"</p>
     </div>
@@ -876,7 +978,7 @@
 <section class="band" id="myths" aria-labelledby="h-myths">
   <div class="wrap">
     <div class="section-head reveal">
-      <span class="overline"><span class="n">08</span>Myths</span>
+      <span class="overline"><span class="n">09</span>Myths</span>
       <h2 id="h-myths">Myths vs. facts</h2>
       <p class="lede">Common misconceptions about nuclear energy, corrected with evidence. Tap a myth to see what the data says.</p>
     </div>
@@ -996,7 +1098,7 @@
 <section class="band band--tint" id="limits" aria-labelledby="h-limits">
   <div class="wrap">
     <div class="section-head reveal">
-      <span class="overline"><span class="n">09</span>Limitations</span>
+      <span class="overline"><span class="n">10</span>Limitations</span>
       <h2 id="h-limits">The honest cost column</h2>
       <p class="lede">"Honesty over hype" means naming the problems, not just the strengths. These are real, and any serious case for nuclear has to carry them.</p>
     </div>
@@ -1022,7 +1124,7 @@
 <section class="band band--tint" id="news" aria-labelledby="h-news">
   <div class="wrap">
     <div class="section-head reveal">
-      <span class="overline"><span class="n">10</span>News</span>
+      <span class="overline"><span class="n">11</span>News</span>
       <h2 id="h-news">The field is moving</h2>
       <p class="lede">The latest nuclear energy headlines, pulled from World Nuclear News and Google News.</p>
     </div>
@@ -1051,7 +1153,7 @@
 <section class="band" id="careers" aria-labelledby="h-careers">
   <div class="wrap">
     <div class="section-head reveal">
-      <span class="overline"><span class="n">11</span>Careers</span>
+      <span class="overline"><span class="n">12</span>Careers</span>
       <h2 id="h-careers">Working in nuclear</h2>
       <p class="lede">A field with deep job security, national importance, and six-figure median pay. Tap a role to see what it involves.</p>
     </div>
@@ -1083,7 +1185,7 @@
 <section class="band band--tint" id="students" aria-labelledby="h-students">
   <div class="wrap">
     <div class="section-head reveal">
-      <span class="overline"><span class="n">12</span>Students</span>
+      <span class="overline"><span class="n">13</span>Students</span>
       <h2 id="h-students">Your pathway into nuclear energy</h2>
       <p class="lede">From a high-school classroom to a national laboratory, the route is well marked, and much of it is funded.</p>
     </div>
@@ -1181,7 +1283,7 @@
 <section class="band" id="about" aria-labelledby="h-about">
   <div class="wrap">
     <div class="section-head reveal" style="margin-bottom:2rem">
-      <span class="overline"><span class="n">13</span>Info · About the author</span>
+      <span class="overline"><span class="n">14</span>Info · About the author</span>
     </div>
     <div class="about-grid reveal">
       <div class="about-mark" aria-hidden="true">DW</div>
@@ -1218,6 +1320,7 @@
       <li>McDuffie, E. et&nbsp;al. (2021). <em>Nature Communications</em> (GBD MAPS); Lelieveld, J. et&nbsp;al. (2023). <em>BMJ</em>. Coal and fossil-fuel air-pollution mortality estimates.</li>
       <li>U.S. BLS. <a href="https://www.bls.gov/ooh/architecture-and-engineering/nuclear-engineers.htm" target="_blank" rel="noopener noreferrer">Occupational Outlook Handbook, Nuclear Engineers</a>. Median wage $127,520 (May 2024); ~800 projected annual openings.</li>
       <li>U.S. NRC. <a href="https://www.nrc.gov/reactors/operating/list-power-reactor-units.html" target="_blank" rel="noopener noreferrer">Operating power reactor list</a>. 94 licensed operating reactors at 54 plants.</li>
+      <li>Ember, via Our World in Data. <a href="https://ourworldindata.org/grapher/carbon-intensity-electricity" target="_blank" rel="noopener noreferrer">"Carbon intensity of electricity generation"</a>. 2023 grid averages used in the simulator: United States about 370 gCO₂/kWh, France about 56.</li>
     </ol>
     <p class="src-note">Every figure on this page was checked against these sources on July 14, 2026. Estimates carry uncertainty, and where major sources disagree, ranges are shown. Found an error? Use the contact email above; corrections are welcome.</p>
     <div class="foot-base">
@@ -1699,6 +1802,110 @@
     acc.appendChild(head); acc.appendChild(panel);
     careerList.appendChild(acc);
   });
+
+  /* ============ GRID-MIX SIMULATOR ============ */
+  (function () {
+    var DEMAND = 1000; // MW, constant
+    var SOURCES = [
+      { id: 'nuclear', label: 'Nuclear',     cf: 0.908, ef: 12,  slider: true, hero: true },
+      { id: 'solar',   label: 'Solar',       cf: 0.232, ef: 48,  slider: true },
+      { id: 'wind',    label: 'Wind',        cf: 0.340, ef: 11,  slider: true },
+      { id: 'hydro',   label: 'Hydropower',  cf: 0.346, ef: 24,  slider: true },
+      { id: 'gas',     label: 'Natural gas', cf: 0.605, ef: 490 }
+    ];
+    var simRows = document.getElementById('sim-rows');
+    if (!simRows) return;
+
+    var rowEls = {};
+    SOURCES.forEach(function (s) {
+      var row = document.createElement('div');
+      row.className = 'crow' + (s.hero ? ' crow--hero' : '');
+      row.style.setProperty('--label-w', '9.5rem');
+      var label = document.createElement('div');
+      label.className = 'crow__label';
+      label.textContent = s.label;
+      var cat = document.createElement('span');
+      cat.className = 'cat';
+      label.appendChild(cat);
+      var track = document.createElement('div');
+      track.className = 'crow__track';
+      var bar = document.createElement('div');
+      bar.className = 'crow__bar';
+      var val = document.createElement('span');
+      val.className = 'crow__val';
+      track.appendChild(bar);
+      track.appendChild(val);
+      row.appendChild(label);
+      row.appendChild(track);
+      simRows.appendChild(row);
+      rowEls[s.id] = { row: row, bar: bar, val: val, cat: cat };
+    });
+
+    function el(id) { return document.getElementById(id); }
+
+    function update(movedId) {
+      var shares = {}, sliderSum = 0;
+      SOURCES.forEach(function (s) {
+        if (!s.slider) return;
+        shares[s.id] = parseInt(el('sim-' + s.id).value, 10);
+        sliderSum += shares[s.id];
+      });
+      if (sliderSum > 100) {
+        // honor the slider being moved; squeeze the others proportionally
+        var excess = sliderSum - 100;
+        var othersSum = sliderSum - (movedId ? shares[movedId] : 0);
+        SOURCES.forEach(function (s) {
+          if (!s.slider || s.id === movedId) return;
+          var cut = othersSum > 0 ? Math.floor(shares[s.id] * (othersSum - excess) / othersSum) : 0;
+          shares[s.id] = Math.max(0, cut);
+          el('sim-' + s.id).value = shares[s.id];
+        });
+        if (movedId && shares[movedId] > 100) {
+          shares[movedId] = 100;
+          el('sim-' + movedId).value = 100;
+        }
+        sliderSum = 0;
+        SOURCES.forEach(function (s) { if (s.slider) sliderSum += shares[s.id]; });
+      }
+      shares.gas = 100 - sliderSum;
+
+      var co2 = 0, totalCap = 0, caps = {};
+      SOURCES.forEach(function (s) {
+        var share = shares[s.id] / 100;
+        co2 += share * s.ef;
+        caps[s.id] = share * DEMAND / s.cf;
+        totalCap += caps[s.id];
+      });
+      var firm = shares.nuclear + shares.hydro + shares.gas;
+
+      SOURCES.forEach(function (s) {
+        if (s.slider) el('sim-' + s.id + '-out').textContent = shares[s.id] + '%';
+      });
+      el('sim-gas').textContent = shares.gas + '%';
+      el('sim-co2').textContent = Math.round(co2) + ' g/kWh';
+      el('sim-cap').textContent = Math.round(totalCap).toLocaleString('en-US') + ' MW';
+      el('sim-firm').textContent = firm + '%';
+      el('sim-firm-sub').textContent = firm < 40
+        ? 'low: a real grid this weather-dependent needs major storage or backup'
+        : 'supply that does not depend on the weather';
+
+      var maxCap = 1;
+      SOURCES.forEach(function (s) { if (caps[s.id] > maxCap) maxCap = caps[s.id]; });
+      SOURCES.forEach(function (s) {
+        var r = rowEls[s.id];
+        r.bar.style.width = Math.max((caps[s.id] / maxCap) * 86, shares[s.id] > 0 ? 0.5 : 0) + '%';
+        r.val.textContent = Math.round(caps[s.id]).toLocaleString('en-US') + ' MW';
+        r.cat.textContent = shares[s.id] + '% of demand';
+        r.row.setAttribute('aria-label', s.label + ': ' + shares[s.id] + '% of demand, needs ' + Math.round(caps[s.id]).toLocaleString('en-US') + ' MW installed');
+      });
+    }
+
+    SOURCES.forEach(function (s) {
+      if (!s.slider) return;
+      el('sim-' + s.id).addEventListener('input', function () { update(s.id); });
+    });
+    update(null);
+  })();
 
   /* ============ ACCORDION BEHAVIOR (myths + careers) ============ */
   document.querySelectorAll('.acc-head').forEach(function (head) {

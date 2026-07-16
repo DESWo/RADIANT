@@ -41,15 +41,16 @@ reproducible calculations, an original model, and automated testing).
 3. **The Plant**: an annotated diagram of a fission plant, reactor to grid
 4. **Safety**: death rates per TWh (interactive chart + table view)
 5. **Capacity**: capacity factors by source (interactive chart)
-6. **Costs**: operating costs by source (interactive chart)
-7. **Incidents**: TMI, Chernobyl, Fukushima in a tabbed facts-vs-perception panel
-8. **Exposure**: everyday radiation doses in context (interactive chart)
-9. **Myths**: five myths vs. facts in expandable panels
-10. **Limitations**: the honest cost column, from construction overruns to proliferation
-11. **News**: auto-updating headlines and resources
-12. **Careers**: BLS-sourced stats and four expandable career profiles
-13. **Students**: pathway, schools with nuclear engineering programs, funded opportunities
-14. **Info**: about the author and sources
+6. **Simulator**: an original grid-mix model; pick a mix, see carbon intensity, required capacity, and firm share, with assumptions and equations shown
+7. **Costs**: operating costs by source (interactive chart)
+8. **Incidents**: TMI, Chernobyl, Fukushima in a tabbed facts-vs-perception panel
+9. **Exposure**: everyday radiation doses in context (interactive chart)
+10. **Myths**: five myths vs. facts in expandable panels
+11. **Limitations**: the honest cost column, from construction overruns to proliferation
+12. **News**: auto-updating headlines and resources
+13. **Careers**: BLS-sourced stats and four expandable career profiles
+14. **Students**: pathway, schools with nuclear engineering programs, funded opportunities
+15. **Info**: about the author and sources
 
 ## Auto-updating news
 

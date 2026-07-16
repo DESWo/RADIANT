@@ -16,8 +16,8 @@ removal of unverifiable statistics.
 - [ ] Add reproducible Python calculations (mortality ratios, generation at
       different capacity factors, waste volume) with inputs, equations,
       assumptions, and sensitivity checks
-- [ ] Build one original interactive model (leading candidate: an educational
-      grid-mix simulator; alternatives: decay-heat curve, radioactive decay
+- [x] Build one original interactive model: the grid-mix simulator shipped
+      July 16, 2026 (next candidates: decay-heat curve, radioactive decay
       calculator, fuel energy-density comparison)
 - [ ] Add uncertainty ranges to lifecycle-emissions and cost figures
 
