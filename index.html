@@ -300,29 +300,20 @@
     .fuel { animation: fuelglow 2.6s ease-in-out infinite; }
     @keyframes fuelglow { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
   }
-  #ctrl-rods { transition: transform 0.7s ease; }
-  .rods-in #ctrl-rods { transform: translateY(20px); }
-  .rods-in .fuel { opacity: 0.32 !important; animation: none !important; }
-  .reactor-hit { cursor: pointer; }
-  .reactor-hit:focus-visible { outline: 2px solid var(--blue); }
-  .badge { cursor: pointer; }
-  .badge:focus-visible { outline: 2px solid var(--blue); }
-  .plant-steps li { transition: background 0.4s; border-radius: 8px; }
-  .plant-steps li.step-flash { background: var(--blue-wash); }
-  .plant-steps li.step-flash::before { background: var(--blue); }
-
-  /* ============ PLANT DIAGRAM ============ */
-  .plant-fig {
-    max-width: 56rem; margin: 0 0 2.4rem;
+  /* ============ PLANT WALKTHROUGH (cinematic) ============ */
+  /* Base (no JS) and reduced-motion: static diagram on a card + step list. */
+  .plant-cam {
+    max-width: 56rem; margin: 1.6rem auto 0;
     background: var(--card); border: 1px solid var(--hair); border-radius: 12px;
-    box-shadow: var(--shadow); padding: 1.6rem 1.4rem 1.2rem;
+    box-shadow: var(--shadow); padding: 1.4rem;
   }
-  .plant-fig svg { width: 100%; height: auto; display: block; }
-  .plant-fig figcaption { font-size: 0.78rem; color: var(--muted); margin-top: 0.9rem; }
+  .plant-cam svg { width: 100%; height: auto; display: block; }
+  .plant-scroll, .plant-hud, .plant-rail, .plant-railcount { display: none; }
+  .hl { opacity: 0; }
   .plant-steps {
     list-style: none; counter-reset: step;
     display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
-    gap: 1.4rem 1.8rem; max-width: 56rem;
+    gap: 1.4rem 1.8rem; max-width: 56rem; margin: 1.8rem auto 0;
   }
   .plant-steps li { counter-increment: step; position: relative; padding-left: 2.5rem; font-size: 0.88rem; color: var(--muted); line-height: 1.6; }
   .plant-steps li strong { color: var(--ink); font-weight: 600; }
@@ -333,6 +324,82 @@
     background: var(--ink); color: #fff; border-radius: 50%;
     font-size: 0.8rem; font-weight: 600;
     display: flex; align-items: center; justify-content: center;
+  }
+  .plant-fallnote { font-size: 0.78rem; color: var(--muted); max-width: 56rem; margin: 1.4rem auto 0; }
+
+  /* CINEMA MODE: JS on and motion allowed */
+  .js:not(.reduced) .plant-cinema { padding: 0; border-top: none; background: var(--navy); }
+  .js:not(.reduced) .plant-vp {
+    position: sticky; top: 0; height: 100vh; height: 100svh;
+    overflow: clip; display: flex; align-items: center; justify-content: center;
+    background: radial-gradient(125% 90% at 50% 12%, #182a4d 0%, #0F172A 58%, #080d1a 100%);
+  }
+  .js:not(.reduced) .plant-cam {
+    width: min(94vw, 1180px); max-width: none; margin: 0; padding: 0;
+    background: none; border: none; box-shadow: none;
+    transform-origin: center center; will-change: transform;
+  }
+  .js:not(.reduced) .plant-cam svg { filter: drop-shadow(0 20px 55px rgba(0,0,0,0.5)); }
+  .js:not(.reduced) .plant-cam .hl { transition: opacity 0.45s ease; stroke: currentColor; stroke-width: 4; fill: none; filter: drop-shadow(0 0 7px currentColor); }
+  .js:not(.reduced) .plant-cam svg[data-stage="1"] .hl-1,
+  .js:not(.reduced) .plant-cam svg[data-stage="2"] .hl-2,
+  .js:not(.reduced) .plant-cam svg[data-stage="3"] .hl-3,
+  .js:not(.reduced) .plant-cam svg[data-stage="4"] .hl-4,
+  .js:not(.reduced) .plant-cam svg[data-stage="5"] .hl-5,
+  .js:not(.reduced) .plant-cam svg[data-stage="6"] .hl-6 { opacity: 1; }
+
+  .js:not(.reduced) .plant-intro {
+    position: absolute; inset: 0; z-index: 5; margin: 0; pointer-events: none;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 1.5rem; background: rgba(8,13,26,0.4);
+  }
+  .js:not(.reduced) .plant-intro .overline { color: var(--faint); }
+  .js:not(.reduced) .plant-intro h2 { color: #fff; font-size: clamp(2rem, 5.4vw, 3.6rem); }
+  .js:not(.reduced) .plant-intro .lede { color: #CBD5E1; max-width: 34rem; }
+  .js:not(.reduced) .plant-scroll {
+    display: inline-flex; align-items: center; gap: 0.5rem; margin-top: 1.7rem;
+    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--faint);
+    animation: scrollnudge 1.8s ease-in-out infinite;
+  }
+  @keyframes scrollnudge { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
+
+  .js:not(.reduced) .plant-hud {
+    display: block; position: absolute; left: clamp(1.2rem, 5vw, 4rem); bottom: clamp(1.6rem, 8vh, 4.5rem);
+    z-index: 6; max-width: min(27rem, 80vw); pointer-events: none;
+    transition: opacity 0.28s ease, transform 0.28s ease;
+  }
+  .js:not(.reduced) .plant-hud.swap { opacity: 0; transform: translateY(8px); }
+  .plant-pill {
+    display: inline-flex; align-items: center; gap: 0.55rem;
+    font-family: var(--sans); font-size: 0.74rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+    color: #fff; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 999px; padding: 0.5rem 0.95rem; backdrop-filter: blur(6px);
+  }
+  .plant-pill .plus { color: var(--acc, #60A5FA); font-size: 1.15em; line-height: 0; transition: color 0.4s; }
+  .plant-para { margin-top: 0.9rem; color: #E9EEF6; font-family: var(--serif); font-size: clamp(1.05rem, 1.7vw, 1.35rem); line-height: 1.5; }
+
+  .js:not(.reduced) .plant-rail {
+    display: flex; flex-direction: column; gap: 0.8rem;
+    position: absolute; right: clamp(1rem, 3vw, 2.4rem); top: 50%; transform: translateY(-50%); z-index: 6;
+  }
+  .plant-rail button {
+    width: 12px; height: 12px; border-radius: 50%; padding: 0; cursor: pointer;
+    background: rgba(255,255,255,0.24); border: 1px solid rgba(255,255,255,0.3);
+    transition: background 0.25s, transform 0.25s, border-color 0.25s;
+  }
+  .plant-rail button:hover { background: rgba(255,255,255,0.5); }
+  .plant-rail button[aria-current="true"] { background: var(--acc, #60A5FA); border-color: var(--acc, #60A5FA); transform: scale(1.4); }
+  .js:not(.reduced) .plant-railcount {
+    display: block; position: absolute; right: clamp(1rem, 3vw, 2.4rem); bottom: clamp(1.6rem, 8vh, 4.5rem); z-index: 6;
+    font-family: var(--sans); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em; color: var(--faint);
+  }
+  .js:not(.reduced) .plant-railcount .cur { color: #fff; }
+  /* cinema: keep steps + note in the DOM for a11y and no-JS, but out of view */
+  .js:not(.reduced) .plant-steps,
+  .js:not(.reduced) .plant-fallnote { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+  @media (max-width: 640px) {
+    .js:not(.reduced) .plant-para { font-size: 1rem; }
+    .js:not(.reduced) .plant-hud { max-width: 86vw; }
   }
 
   /* ============ GRID SIMULATOR ============ */
@@ -668,123 +735,112 @@
 </section>
 
 <!-- ================= 02 THE PLANT ================= -->
-<section class="band" id="how" aria-labelledby="h-how">
-  <div class="wrap">
-    <div class="section-head reveal">
-      <span class="overline"><span class="n">02</span>How it works</span>
-      <h2 id="h-how">Inside a nuclear power plant</h2>
-      <p class="lede">No mystery and no green goo. A fission plant is, at heart, a steam engine running on an extraordinarily dense fuel.</p>
+<section class="band plant-cinema" id="how" aria-labelledby="h-how" data-stages="6">
+  <div class="plant-track">
+    <div class="plant-vp">
+      <div class="plant-intro">
+        <span class="overline"><span class="n">02</span>How it works</span>
+        <h2 id="h-how">Inside a nuclear power plant</h2>
+        <p class="lede">Follow the energy from a uranium atom to the power line. Scroll to move through the plant, one stage at a time.</p>
+        <span class="plant-scroll">Scroll to explore
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14"/><path d="m6 13 6 6 6-6"/></svg>
+        </span>
+      </div>
+
+      <div class="plant-cam">
+        <svg viewBox="-46 -34 1052 548" role="img" aria-label="Simplified pressurized-water reactor schematic: fission heats a primary water loop, a steam generator boils a separate secondary loop into steam, a turbine and generator make electricity, a condenser and cooling tower reject waste heat, and a transformer sends power to the grid.">
+          <rect x="-46" y="-34" width="1052" height="548" rx="20" fill="#F8FAFC"/>
+          <!-- ground -->
+          <line x1="28" y1="400" x2="932" y2="400" stroke="#334155" stroke-width="2.5"/>
+          <!-- containment building -->
+          <path d="M 46 400 L 46 215 Q 46 112 190 112 Q 334 112 334 215 L 334 400 Z" fill="#E2E8F0" stroke="#334155" stroke-width="2.5"/>
+          <!-- reactor vessel, control rods, fuel -->
+          <rect x="72" y="230" width="64" height="135" rx="8" fill="#FFFFFF" stroke="#334155" stroke-width="2.5"/>
+          <rect x="86" y="204" width="36" height="26" fill="#E2E8F0" stroke="#334155" stroke-width="2"/>
+          <rect x="90" y="230" width="4" height="52" fill="#334155"/><rect x="102" y="230" width="4" height="52" fill="#334155"/><rect x="114" y="230" width="4" height="52" fill="#334155"/>
+          <rect class="fuel" x="86" y="295" width="9" height="58" fill="#F59E0B" stroke="#334155" stroke-width="1.5"/>
+          <rect class="fuel" x="100" y="295" width="9" height="58" fill="#F59E0B" stroke="#334155" stroke-width="1.5"/>
+          <rect class="fuel" x="114" y="295" width="9" height="58" fill="#F59E0B" stroke="#334155" stroke-width="1.5"/>
+          <!-- pressurizer -->
+          <rect x="152" y="170" width="26" height="52" rx="9" fill="#FFFFFF" stroke="#334155" stroke-width="2"/>
+          <line x1="165" y1="222" x2="165" y2="250" stroke="#F59E0B" stroke-width="3"/>
+          <!-- primary loop -->
+          <path class="flow" d="M 136 252 H 232" stroke="#F59E0B" stroke-width="3.5" fill="none"/>
+          <polygon points="196,246 208,252 196,258" fill="#F59E0B"/>
+          <path class="flow" d="M 232 340 H 136" stroke="#F59E0B" stroke-width="3.5" fill="none"/>
+          <polygon points="184,334 172,340 184,346" fill="#F59E0B"/>
+          <!-- steam generator -->
+          <rect x="232" y="168" width="58" height="200" rx="16" fill="#FFFFFF" stroke="#334155" stroke-width="2.5"/>
+          <path d="M 244 300 V 215 Q 261 193 278 215 V 300" stroke="#F59E0B" stroke-width="2" fill="none" opacity="0.55"/>
+          <!-- secondary steam loop -->
+          <path class="flow" d="M 261 168 V 138 H 396 V 208" stroke="#2563EB" stroke-width="3" fill="none"/>
+          <polygon points="334,132 346,138 334,144" fill="#2563EB"/>
+          <path class="flow" d="M 436 285 V 322" stroke="#2563EB" stroke-width="2.5" fill="none"/>
+          <path class="flow" d="M 406 350 H 302 V 362 H 290" stroke="#2563EB" stroke-width="2" fill="none"/>
+          <!-- turbine -->
+          <polygon points="396,238 486,208 486,292 396,266" fill="#E2E8F0" stroke="#334155" stroke-width="2.5"/>
+          <line x1="486" y1="250" x2="520" y2="250" stroke="#334155" stroke-width="4"/>
+          <!-- generator -->
+          <rect x="520" y="215" width="100" height="70" rx="6" fill="#FFFFFF" stroke="#334155" stroke-width="2.5"/>
+          <g stroke="#334155" stroke-width="2" opacity="0.3"><line x1="538" y1="223" x2="538" y2="277"/><line x1="554" y1="223" x2="554" y2="277"/><line x1="570" y1="223" x2="570" y2="277"/></g>
+          <polygon points="600,228 588,252 596,252 590,268 608,242 598,242" fill="#F59E0B" stroke="#334155" stroke-width="1.5" stroke-linejoin="round"/>
+          <!-- condenser -->
+          <rect x="406" y="322" width="104" height="44" rx="6" fill="#E2E8F0" stroke="#334155" stroke-width="2.5"/>
+          <!-- cooling-water loop -->
+          <path class="flow flow-slow" d="M 510 334 H 796" stroke="#64748B" stroke-width="2.5" fill="none"/>
+          <path class="flow flow-slow" d="M 510 354 H 788" stroke="#64748B" stroke-width="2.5" fill="none"/>
+          <!-- cooling tower + vapor -->
+          <path d="M 792 400 C 803 348 800 310 812 268 L 858 268 C 870 310 867 348 878 400 Z" fill="#E2E8F0" stroke="#334155" stroke-width="2.5"/>
+          <circle class="puff" cx="824" cy="244" r="13" fill="#F1F5F9"/>
+          <circle class="puff puff2" cx="846" cy="228" r="16" fill="#F1F5F9"/>
+          <circle class="puff puff3" cx="830" cy="206" r="19" fill="#F1F5F9"/>
+          <!-- transformer + grid -->
+          <line x1="620" y1="250" x2="656" y2="250" stroke="#334155" stroke-width="2.5"/>
+          <rect x="656" y="232" width="44" height="54" fill="#E2E8F0" stroke="#334155" stroke-width="2.5"/>
+          <line x1="666" y1="232" x2="666" y2="216" stroke="#334155" stroke-width="2"/><circle cx="666" cy="213" r="3" fill="#334155"/>
+          <line x1="682" y1="232" x2="682" y2="216" stroke="#334155" stroke-width="2"/><circle cx="682" cy="213" r="3" fill="#334155"/>
+          <line x1="700" y1="258" x2="715" y2="258" stroke="#334155" stroke-width="2.5"/>
+          <polygon points="712,400 736,400 727,180 721,180" fill="none" stroke="#334155" stroke-width="2"/>
+          <line x1="698" y1="205" x2="750" y2="205" stroke="#334155" stroke-width="2"/>
+          <line x1="702" y1="238" x2="746" y2="238" stroke="#334155" stroke-width="2"/>
+          <path d="M 750 205 Q 850 232 932 216" stroke="#334155" stroke-width="1.5" fill="none"/>
+          <path d="M 746 238 Q 848 264 932 250" stroke="#334155" stroke-width="1.5" fill="none"/>
+          <!-- component labels -->
+          <g font-family="'Public Sans', sans-serif" font-size="12.5" font-weight="500" fill="#64748B" letter-spacing="1.5">
+            <text x="190" y="428" text-anchor="middle">CONTAINMENT</text>
+            <text x="470" y="428" text-anchor="middle">TURBINE HALL</text>
+            <text x="724" y="428" text-anchor="middle">GRID</text>
+            <text x="835" y="428" text-anchor="middle">COOLING</text>
+          </g>
+          <!-- highlight overlays (cinema) -->
+          <rect class="hl hl-1" x="60" y="196" width="128" height="176" rx="12"/>
+          <rect class="hl hl-2" x="224" y="160" width="74" height="216" rx="12"/>
+          <rect class="hl hl-3" x="388" y="200" width="240" height="94" rx="12"/>
+          <rect class="hl hl-4" x="398" y="316" width="120" height="58" rx="10"/>
+          <rect class="hl hl-5" x="648" y="176" width="96" height="118" rx="12"/>
+          <rect class="hl hl-6" x="784" y="256" width="102" height="150" rx="14"/>
+        </svg>
+      </div>
+
+      <div class="plant-hud">
+        <span class="plant-pill"><span class="plus">+</span> <span class="plant-pill-label"></span></span>
+        <p class="plant-para"></p>
+      </div>
+
+      <nav class="plant-rail" aria-label="Jump to a stage"></nav>
+      <div class="plant-railcount"><span class="cur">01</span> / 06</div>
     </div>
-
-    <figure class="plant-fig reveal">
-      <svg viewBox="0 0 960 470" role="img" aria-label="Simplified pressurized-water reactor diagram: the reactor heats pressurized water in a primary loop, a steam generator boils water in a separate secondary loop, steam spins a turbine and generator, a condenser and cooling towers reject waste heat, and a transformer sends power to the grid.">
-        <!-- ground -->
-        <line x1="28" y1="400" x2="932" y2="400" stroke="#334155" stroke-width="2.5"/>
-
-        <!-- containment building -->
-        <path d="M 46 400 L 46 215 Q 46 112 190 112 Q 334 112 334 215 L 334 400 Z" fill="#E2E8F0" stroke="#334155" stroke-width="2.5"/>
-
-        <!-- reactor vessel with control rods and fuel -->
-        <rect x="72" y="230" width="64" height="135" rx="8" fill="#FFFFFF" stroke="#334155" stroke-width="2.5"/>
-        <rect x="86" y="204" width="36" height="26" fill="#E2E8F0" stroke="#334155" stroke-width="2"/>
-        <g id="ctrl-rods">
-          <rect x="90" y="230" width="4" height="52" fill="#334155"/>
-          <rect x="102" y="230" width="4" height="52" fill="#334155"/>
-          <rect x="114" y="230" width="4" height="52" fill="#334155"/>
-        </g>
-        <rect class="fuel" x="86" y="295" width="9" height="58" fill="#F59E0B" stroke="#334155" stroke-width="1.5"/>
-        <rect class="fuel" x="100" y="295" width="9" height="58" fill="#F59E0B" stroke="#334155" stroke-width="1.5"/>
-        <rect class="fuel" x="114" y="295" width="9" height="58" fill="#F59E0B" stroke="#334155" stroke-width="1.5"/>
-
-        <!-- pressurizer -->
-        <rect x="152" y="170" width="26" height="52" rx="9" fill="#FFFFFF" stroke="#334155" stroke-width="2"/>
-        <line x1="165" y1="222" x2="165" y2="250" stroke="#F59E0B" stroke-width="3"/>
-
-        <!-- primary loop (amber): hot leg + cold leg -->
-        <path class="flow" d="M 136 252 H 232" stroke="#F59E0B" stroke-width="3.5" fill="none"/>
-        <polygon points="196,246 208,252 196,258" fill="#F59E0B"/>
-        <path class="flow" d="M 232 340 H 136" stroke="#F59E0B" stroke-width="3.5" fill="none"/>
-        <polygon points="184,334 172,340 184,346" fill="#F59E0B"/>
-
-        <!-- steam generator with tube-bundle hint -->
-        <rect x="232" y="168" width="58" height="200" rx="16" fill="#FFFFFF" stroke="#334155" stroke-width="2.5"/>
-        <path d="M 244 300 V 215 Q 261 193 278 215 V 300" stroke="#F59E0B" stroke-width="2" fill="none" opacity="0.55"/>
-
-        <!-- secondary steam loop (blue) to turbine, condensate return -->
-        <path class="flow" d="M 261 168 V 138 H 396 V 208" stroke="#2563EB" stroke-width="3" fill="none"/>
-        <polygon points="334,132 346,138 334,144" fill="#2563EB"/>
-        <path class="flow" d="M 436 285 V 322" stroke="#2563EB" stroke-width="2.5" fill="none"/>
-        <path class="flow" d="M 406 350 H 302 V 362 H 290" stroke="#2563EB" stroke-width="2" fill="none"/>
-
-        <!-- turbine -->
-        <polygon points="396,238 486,208 486,292 396,266" fill="#E2E8F0" stroke="#334155" stroke-width="2.5"/>
-        <line x1="486" y1="250" x2="520" y2="250" stroke="#334155" stroke-width="4"/>
-
-        <!-- generator -->
-        <rect x="520" y="215" width="100" height="70" rx="6" fill="#FFFFFF" stroke="#334155" stroke-width="2.5"/>
-        <g stroke="#334155" stroke-width="2" opacity="0.3">
-          <line x1="538" y1="223" x2="538" y2="277"/><line x1="554" y1="223" x2="554" y2="277"/><line x1="570" y1="223" x2="570" y2="277"/>
-        </g>
-        <polygon points="600,228 588,252 596,252 590,268 608,242 598,242" fill="#F59E0B" stroke="#334155" stroke-width="1.5" stroke-linejoin="round"/>
-
-        <!-- condenser -->
-        <rect x="406" y="322" width="104" height="44" rx="6" fill="#E2E8F0" stroke="#334155" stroke-width="2.5"/>
-
-        <!-- cooling-water loop (gray) to tower -->
-        <path class="flow flow-slow" d="M 510 334 H 796" stroke="#64748B" stroke-width="2.5" fill="none"/>
-        <path class="flow flow-slow" d="M 510 354 H 788" stroke="#64748B" stroke-width="2.5" fill="none"/>
-
-        <!-- cooling tower + vapor -->
-        <path d="M 792 400 C 803 348 800 310 812 268 L 858 268 C 870 310 867 348 878 400 Z" fill="#E2E8F0" stroke="#334155" stroke-width="2.5"/>
-        <circle class="puff" cx="824" cy="244" r="13" fill="#F1F5F9"/>
-        <circle class="puff puff2" cx="846" cy="228" r="16" fill="#F1F5F9"/>
-        <circle class="puff puff3" cx="830" cy="206" r="19" fill="#F1F5F9"/>
-
-        <!-- transformer + grid -->
-        <line x1="620" y1="250" x2="656" y2="250" stroke="#334155" stroke-width="2.5"/>
-        <rect x="656" y="232" width="44" height="54" fill="#E2E8F0" stroke="#334155" stroke-width="2.5"/>
-        <line x1="666" y1="232" x2="666" y2="216" stroke="#334155" stroke-width="2"/><circle cx="666" cy="213" r="3" fill="#334155"/>
-        <line x1="682" y1="232" x2="682" y2="216" stroke="#334155" stroke-width="2"/><circle cx="682" cy="213" r="3" fill="#334155"/>
-        <line x1="700" y1="258" x2="715" y2="258" stroke="#334155" stroke-width="2.5"/>
-        <polygon points="712,400 736,400 727,180 721,180" fill="none" stroke="#334155" stroke-width="2"/>
-        <line x1="698" y1="205" x2="750" y2="205" stroke="#334155" stroke-width="2"/>
-        <line x1="702" y1="238" x2="746" y2="238" stroke="#334155" stroke-width="2"/>
-        <path d="M 750 205 Q 850 232 932 216" stroke="#334155" stroke-width="1.5" fill="none"/>
-        <path d="M 746 238 Q 848 264 932 250" stroke="#334155" stroke-width="1.5" fill="none"/>
-
-        <!-- captions -->
-        <g font-family="'Public Sans', sans-serif" font-size="12.5" font-weight="500" fill="#64748B" letter-spacing="1.5">
-          <text x="190" y="428" text-anchor="middle">CONTAINMENT</text>
-          <text x="470" y="428" text-anchor="middle">TURBINE HALL</text>
-          <text x="724" y="428" text-anchor="middle">GRID</text>
-          <text x="835" y="428" text-anchor="middle">COOLING</text>
-        </g>
-
-        <!-- step badges -->
-        <g font-family="'Public Sans', sans-serif" font-size="15" font-weight="600" fill="#FFFFFF">
-          <g class="badge" data-step="1" tabindex="0" role="button" aria-label="Highlight step 1 in the list below"><circle cx="58" cy="250" r="15" fill="#0F172A"/><text x="58" y="255.5" text-anchor="middle">1</text></g>
-          <g class="badge" data-step="2" tabindex="0" role="button" aria-label="Highlight step 2 in the list below"><circle cx="261" cy="146" r="15" fill="#0F172A"/><text x="261" y="151.5" text-anchor="middle">2</text></g>
-          <g class="badge" data-step="3" tabindex="0" role="button" aria-label="Highlight step 3 in the list below"><circle cx="441" cy="180" r="15" fill="#0F172A"/><text x="441" y="185.5" text-anchor="middle">3</text></g>
-          <g class="badge" data-step="4" tabindex="0" role="button" aria-label="Highlight step 4 in the list below"><circle cx="570" cy="188" r="15" fill="#0F172A"/><text x="570" y="193.5" text-anchor="middle">4</text></g>
-          <g class="badge" data-step="5" tabindex="0" role="button" aria-label="Highlight step 5 in the list below"><circle cx="458" cy="383" r="15" fill="#0F172A"/><text x="458" y="388.5" text-anchor="middle">5</text></g>
-          <g class="badge" data-step="6" tabindex="0" role="button" aria-label="Highlight step 6 in the list below"><circle cx="678" cy="192" r="15" fill="#0F172A"/><text x="678" y="197.5" text-anchor="middle">6</text></g>
-          <g class="badge" data-step="7" tabindex="0" role="button" aria-label="Highlight step 7 in the list below"><circle cx="840" cy="172" r="15" fill="#0F172A"/><text x="840" y="177.5" text-anchor="middle">7</text></g>
-        </g>
-        <rect class="reactor-hit" x="58" y="192" width="128" height="180" fill="transparent" tabindex="0" role="button" aria-pressed="false" aria-label="Control rods: press to insert or withdraw them and watch the fission rate respond"/>
-      </svg>
-      <figcaption>Simplified schematic of a pressurized-water reactor (PWR), the most common design in the U.S. and worldwide; boiling-water reactors and other designs differ. Amber: primary coolant loop. Blue: secondary steam loop. Gray: cooling-water loop. Not to scale. Try it: click the reactor vessel to slide the control rods, and click a numbered badge to highlight its step.</figcaption>
-    </figure>
-
-    <ol class="plant-steps">
-      <li class="reveal"><strong>Fission heats pressurized water.</strong> Splitting uranium atoms heats the primary loop, which stays liquid under about 150 atmospheres. Control rods in the reactor vessel set the reaction rate; a pressurizer holds the pressure.</li>
-      <li class="reveal"><strong>A steam generator transfers the heat.</strong> Hot primary water passes through thousands of tubes and boils water in a separate secondary loop into steam. The two loops never mix.</li>
-      <li class="reveal"><strong>Steam spins the turbine.</strong> High-pressure steam from the secondary loop drives the turbine blades.</li>
-      <li class="reveal"><strong>The generator makes electricity.</strong> The spinning shaft turns a generator, the same principle used in coal, gas, and hydro plants.</li>
-      <li class="reveal"><strong>A condenser closes the loop.</strong> Cooling water condenses the used steam back into feedwater, which returns to the steam generator.</li>
-      <li class="reveal"><strong>A transformer sends power to the grid.</strong> It steps up the voltage for the transmission lines.</li>
-      <li class="reveal"><strong>Cooling towers release water vapor.</strong> The white plume is water from the separate cooling loop. It is not smoke and not radioactive.</li>
-    </ol>
   </div>
+
+  <ol class="plant-steps">
+      <li data-pill="The reactor" data-para="Splitting uranium atoms releases heat. No fire, no smoke, just fission, and control rods set the pace."><strong>Fission heats pressurized water.</strong> Splitting uranium atoms heats the primary loop, which stays liquid under about 150 atmospheres. Control rods set the reaction rate; a pressurizer holds the pressure.</li>
+      <li data-pill="The steam generator" data-para="Hot pressurized water boils a separate water loop into steam. The two loops never mix."><strong>A steam generator transfers the heat.</strong> Hot primary water passes through thousands of tubes and boils a separate secondary loop into steam. The two loops never mix, so the radioactive water stays sealed on one side.</li>
+      <li data-pill="The turbine hall" data-para="High-pressure steam spins the turbine, and the shaft turns a generator into electricity."><strong>The turbine and generator make electricity.</strong> High-pressure steam spins the turbine, and the shaft turns a generator, the same principle used in coal, gas, and hydro plants.</li>
+      <li data-pill="The condenser" data-para="Cooling water turns the spent steam back into water, ready to boil again."><strong>A condenser closes the loop.</strong> Cooling water condenses the used steam back into feedwater, which returns to the steam generator to be boiled again.</li>
+      <li data-pill="The switchyard" data-para="A transformer steps the voltage up and sends the power out to the grid."><strong>A transformer sends power to the grid.</strong> A transformer steps the voltage up for the long-distance transmission lines that carry power to homes and businesses.</li>
+      <li data-pill="The cooling tower" data-para="Only warm water vapor leaves. Not smoke, not radioactive, the same as a boiling kettle."><strong>Cooling towers release water vapor.</strong> The white plume is warm water from the separate cooling loop. It is not smoke and it is not radioactive, the same vapor as a boiling kettle.</li>
+  </ol>
+  <p class="plant-fallnote">Simplified schematic of a pressurized-water reactor (PWR), the most common design in the U.S. and worldwide; boiling-water reactors and other designs differ. Amber: primary coolant loop. Blue: secondary steam loop. Gray: cooling-water loop. Not to scale.</p>
 </section>
 
 <!-- ================= 03 SAFETY ================= -->
@@ -1400,6 +1456,7 @@
 (function () {
   'use strict';
   var REDUCE = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (REDUCE) document.documentElement.classList.add('reduced'); // engage static fallbacks
 
   /* Visibility helper: IntersectionObserver for snappy triggering, plus a
      scroll/interval sweep so effects fail OPEN if the observer is throttled
@@ -2096,35 +2153,120 @@
     requestAnimationFrame(loop);
   })();
 
-  /* ============ PLANT DIAGRAM INTERACTIVITY ============ */
+  /* ============ PLANT WALKTHROUGH (scroll camera) ============ */
   (function () {
-    var fig = document.querySelector('.plant-fig svg');
-    if (!fig) return;
-    var hit = fig.querySelector('.reactor-hit');
-    if (hit) {
-      var toggleRods = function () {
-        var on = fig.classList.toggle('rods-in');
-        hit.setAttribute('aria-pressed', String(on));
-      };
-      hit.addEventListener('click', toggleRods);
-      hit.addEventListener('keydown', function (e) {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleRods(); }
-      });
+    var section = document.querySelector('.plant-cinema[data-stages]');
+    if (!section || REDUCE) return; // fallback CSS shows the static diagram + steps
+
+    var N = parseInt(section.dataset.stages, 10);          // component stages (6)
+    var track = section.querySelector('.plant-track');
+    var vp = section.querySelector('.plant-vp');
+    var cam = section.querySelector('.plant-cam');
+    var svg = cam.querySelector('svg');
+    var intro = section.querySelector('.plant-intro');
+    var hud = section.querySelector('.plant-hud');
+    var pillLabel = section.querySelector('.plant-pill-label');
+    var para = section.querySelector('.plant-para');
+    var railCur = section.querySelector('.plant-railcount .cur');
+    var steps = [].slice.call(section.querySelectorAll('.plant-steps li'));
+
+    // viewBox and per-stage camera keyframes (focus centre + zoom, viewBox coords)
+    var VBX = -46, VBY = -34, VBW = 1052, VBH = 548;
+    var KEY = [
+      { cx: 480, cy: 235, z: 1 },    // 0 intro: whole plant
+      { cx: 122, cy: 288, z: 2.3 },  // 1 reactor
+      { cx: 261, cy: 268, z: 2.3 },  // 2 steam generator
+      { cx: 508, cy: 248, z: 1.85 }, // 3 turbine hall
+      { cx: 458, cy: 344, z: 2.5 },  // 4 condenser
+      { cx: 700, cy: 232, z: 2.2 },  // 5 switchyard
+      { cx: 835, cy: 305, z: 2.15 }  // 6 cooling tower
+    ];
+    var ACC = ['#60A5FA', '#FBBF24', '#FB923C', '#60A5FA', '#38BDF8', '#818CF8', '#A78BFA'];
+
+    // build the progress rail (one dot per component stage)
+    var rail = section.querySelector('.plant-rail');
+    var dots = [];
+    for (var k = 1; k <= N; k++) {
+      (function (stage) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.setAttribute('aria-label', 'Go to ' + steps[stage - 1].dataset.pill);
+        b.addEventListener('click', function () {
+          var total = track.offsetHeight - vp.clientHeight;
+          var top = track.getBoundingClientRect().top + window.scrollY;
+          window.scrollTo({ top: top + (stage / N) * total, behavior: 'smooth' });
+        });
+        rail.appendChild(b);
+        dots.push(b);
+      })(k);
     }
-    var steps = document.querySelectorAll('.plant-steps li');
-    fig.querySelectorAll('.badge').forEach(function (b) {
-      var go = function () {
-        var li = steps[parseInt(b.dataset.step, 10) - 1];
-        if (!li) return;
-        li.scrollIntoView({ block: 'center', behavior: REDUCE ? 'auto' : 'smooth' });
-        li.classList.add('step-flash');
-        setTimeout(function () { li.classList.remove('step-flash'); }, 1600);
-      };
-      b.addEventListener('click', go);
-      b.addEventListener('keydown', function (e) {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); }
-      });
-    });
+
+    // size the scroll track: ~88vh of scroll per screen (intro + N stages)
+    function sizeTrack() { track.style.height = ((N + 1) * 88) + 'vh'; }
+    sizeTrack();
+
+    function ease(t) { return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; }
+    function lerp(a, b, t) { return a + (b - a) * t; }
+
+    var lastActive = -1, capTimer = null, pad2 = function (n) { return n < 10 ? '0' + n : '' + n; };
+
+    function render() {
+      var vh = vp.clientHeight;
+      var total = track.offsetHeight - vh;
+      var scrolled = -track.getBoundingClientRect().top;
+      var p = Math.max(0, Math.min(scrolled / total, 1));
+      var sf = p * N;                       // 0 .. N
+      var base = Math.min(Math.floor(sf), N - 1);
+      var frac = ease(sf - base);
+      var a = KEY[base], b = KEY[base + 1];
+      var cx = lerp(a.cx, b.cx, frac), cy = lerp(a.cy, b.cy, frac), z = lerp(a.z, b.z, frac);
+
+      var camW = cam.clientWidth, camH = cam.clientHeight;
+      var px = ((cx - VBX) / VBW) * camW;
+      var py = ((cy - VBY) / VBH) * camH;
+      var tx = (camW / 2 - px) * z;
+      var ty = (camH / 2 - py) * z;
+      cam.style.transform = 'translate(' + tx.toFixed(1) + 'px,' + ty.toFixed(1) + 'px) scale(' + z.toFixed(3) + ')';
+
+      var active = Math.round(sf);          // 0 .. N
+      var acc = ACC[active];
+      svg.setAttribute('data-stage', active);
+      svg.style.color = acc;
+      vp.style.setProperty('--acc', acc);
+      intro.style.opacity = Math.max(0, 1 - sf * 1.5);
+
+      if (active !== lastActive) {
+        lastActive = active;
+        clearTimeout(capTimer); // drop any stale caption swap in flight
+        hud.classList.add('swap');
+        if (active > 0) {
+          railCur.textContent = pad2(active);
+          capTimer = setTimeout(function (cur) {
+            var li = steps[cur - 1];
+            pillLabel.textContent = li.dataset.pill;
+            para.textContent = li.dataset.para;
+            hud.classList.remove('swap');
+          }, 180, active);
+        }
+        dots.forEach(function (d, idx) {
+          if (idx === active - 1) d.setAttribute('aria-current', 'true');
+          else d.removeAttribute('aria-current');
+        });
+      }
+    }
+
+    var ticking = false;
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(function () { render(); ticking = false; });
+    }
+    // seed the first caption so it is not blank before the first scroll
+    pillLabel.textContent = steps[0].dataset.pill;
+    para.textContent = steps[0].dataset.para;
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', function () { sizeTrack(); render(); });
+    render();
   })();
 
   /* ============ NAV SCROLLSPY ============ */
