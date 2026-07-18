@@ -24,7 +24,7 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230F172A'/><circle cx='50' cy='50' r='12' fill='%23F59E0B'/><g fill='%23F59E0B'><path d='M50 14a36 36 0 0 1 31 18l-21 12a12 12 0 0 0-10-6V14Z'/><path d='M19 32l21 12a12 12 0 0 0 0 12L19 68a36 36 0 0 1 0-36Z'/><path d='M50 86a36 36 0 0 0 31-18L60 56a12 12 0 0 1-10 6v24Z'/></g></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,500;1,9..144,600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&family=Public+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script>document.documentElement.classList.add('js');</script>
 <style>
   :root {
@@ -41,8 +41,11 @@
     --amber: #F59E0B;      /* small accents only, never text */
     --navy: #0F172A;
     --green-ok: #047857;
+    --display: 'Fraunces', 'Newsreader', Georgia, serif;
     --serif: 'Newsreader', Georgia, serif;
     --sans: 'Public Sans', system-ui, -apple-system, sans-serif;
+    --paper: #FBFAF7;   /* warm off-white, less clinical than pure #fff */
+    --ink-line: #E7E3DA; /* warm hairline */
     --shadow: 0 1px 2px rgba(15,23,42,0.05), 0 8px 24px rgba(15,23,42,0.06);
     --shadow-lift: 0 2px 4px rgba(15,23,42,0.06), 0 14px 34px rgba(15,23,42,0.10);
   }
@@ -58,11 +61,18 @@
   body {
     font-family: var(--sans);
     font-size: 1.0625rem; line-height: 1.7;
-    background: #FFFFFF; color: var(--body);
+    background: var(--paper); color: var(--body);
     overflow-x: clip;
   }
+  /* faint film grain so surfaces don't read as flat template white */
+  body::before {
+    content: ''; position: fixed; inset: 0; z-index: 1; pointer-events: none; opacity: 0.5;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+    mix-blend-mode: multiply;
+  }
+  main, footer, nav { position: relative; z-index: 2; }
 
-  h1, h2, h3 { font-family: var(--serif); font-weight: 500; color: var(--ink); }
+  h1, h2, h3 { font-family: var(--display); font-weight: 500; color: var(--ink); }
   a { color: var(--blue-deep); }
   ::selection { background: rgba(245,158,11,0.3); }
   :focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; border-radius: 2px; }
@@ -76,7 +86,7 @@
 
   /* ============ REVEAL ANIMATION ============ */
   @media (prefers-reduced-motion: no-preference) {
-    .js .reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.55s ease, transform 0.55s ease; }
+    .js .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1); }
     .js .reveal.in { opacity: 1; transform: none; }
   }
 
@@ -108,69 +118,90 @@
 
   /* ============ LAYOUT ============ */
   .wrap { max-width: 68rem; margin: 0 auto; padding: 0 1.5rem; }
-  .band { padding: 5.5rem 0; border-top: 1px solid var(--hair); }
+  .band { padding: 6rem 0; border-top: 1px solid var(--ink-line); }
   .band--tint { background: var(--tint); }
   .band--navy { background: var(--navy); border-top: none; }
 
   .overline {
-    display: block; font-size: 0.75rem; font-weight: 600;
-    letter-spacing: 0.14em; text-transform: uppercase;
-    color: var(--muted); margin-bottom: 1.1rem;
+    display: inline-flex; align-items: center; gap: 0.65rem;
+    font-family: var(--sans); font-size: 0.72rem; font-weight: 700;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 1.4rem;
   }
-  .overline .n { color: var(--amber); margin-right: 0.35rem; }
+  .overline .n {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 1.7rem; height: 1.7rem; padding: 0 0.45rem; margin: 0;
+    background: var(--ink); color: var(--paper); border-radius: 7px;
+    font-size: 0.82rem; font-weight: 800; letter-spacing: 0;
+  }
+  .band--navy .overline .n { background: var(--amber); color: var(--ink); }
 
-  .section-head { max-width: 46rem; margin-bottom: 2.8rem; }
-  .section-head h2 { font-size: clamp(1.9rem, 4vw, 2.7rem); line-height: 1.12; margin-bottom: 0.9rem; letter-spacing: -0.01em; }
-  .lede { font-family: var(--serif); font-size: 1.22rem; line-height: 1.55; color: var(--muted); }
+  .section-head { max-width: 48rem; margin-bottom: 3rem; }
+  .section-head h2 {
+    font-family: var(--display); font-optical-sizing: auto;
+    font-weight: 500; font-size: clamp(2.1rem, 5.2vw, 3.6rem);
+    line-height: 1.03; letter-spacing: -0.02em; margin-bottom: 1rem;
+  }
+  .lede { font-family: var(--serif); font-style: italic; font-size: clamp(1.15rem, 1.8vw, 1.42rem); line-height: 1.5; color: var(--muted); max-width: 40rem; }
 
   p + p { margin-top: 1.1rem; }
   .prose { max-width: 42rem; font-size: 1rem; }
   .prose strong { font-weight: 600; color: var(--ink); }
 
-  /* ============ HERO ============ */
+  /* ============ HERO (asymmetric editorial) ============ */
   .hero {
     position: relative; overflow: clip;
-    min-height: min(92vh, 62rem);
-    display: flex; align-items: center;
-    padding: 7.5rem 0 4.5rem;
-    text-align: center;
+    min-height: min(96vh, 64rem);
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 7rem 0 0;
   }
   #hero-bg { position: absolute; inset: 0; z-index: 0; }
   .hero__veil {
     position: absolute; inset: 0; z-index: 1; pointer-events: none;
-    background: linear-gradient(180deg, rgba(255,255,255,0.42), rgba(255,255,255,0.66) 62%, #FFFFFF 96%);
+    background:
+      linear-gradient(95deg, var(--paper) 26%, rgba(251,250,247,0.6) 56%, rgba(251,250,247,0.05) 100%),
+      linear-gradient(0deg, var(--paper), rgba(251,250,247,0) 34%);
   }
   .hero .wrap { position: relative; z-index: 2; }
-  .hero .overline { margin-bottom: 1.4rem; }
-  .hero h1 { font-size: clamp(2.7rem, 7vw, 4.7rem); line-height: 1.04; letter-spacing: -0.015em; max-width: 17ch; margin: 0 auto 1.4rem; }
-  .hero__lede { font-family: var(--serif); font-size: clamp(1.15rem, 2.4vw, 1.4rem); line-height: 1.5; color: var(--muted); max-width: 36rem; margin: 0 auto 1rem; }
-  .hero__byline { font-size: 0.9rem; color: var(--muted); margin-bottom: 2.4rem; }
-  .hero__cta { display: flex; gap: 1rem; justify-content: center; align-items: center; flex-wrap: wrap; margin-bottom: 4.5rem; }
+  .hero__grid { flex: 1; display: flex; align-items: center; padding: 2rem 0; }
+  .hero__lead { max-width: 42rem; }
+  .hero .overline { margin-bottom: 1.7rem; }
+  .hero h1 {
+    font-family: var(--display); font-optical-sizing: auto; font-weight: 500;
+    font-size: clamp(3rem, 8.5vw, 6.2rem); line-height: 0.96;
+    letter-spacing: -0.03em; margin-bottom: 1.7rem;
+  }
+  .hero h1 em { font-style: italic; font-weight: 500; color: var(--blue-deep); }
+  .hero__lede {
+    font-family: var(--serif); font-style: italic;
+    font-size: clamp(1.2rem, 2.2vw, 1.5rem); line-height: 1.45;
+    color: var(--muted); max-width: 34rem; margin-bottom: 2rem;
+  }
+  .hero__cta { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; margin-bottom: 1.5rem; }
+  .hero__byline { font-size: 0.9rem; color: var(--muted); }
 
   .hero-stats {
-    display: flex; justify-content: center; align-items: stretch;
-    gap: 0; max-width: 58rem; margin: 0 auto 2.2rem;
+    position: relative; z-index: 2;
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid var(--ink-line);
   }
   .hstat {
-    flex: 1; text-decoration: none; padding: 0.4rem 2rem;
-    display: flex; flex-direction: column; gap: 0.45rem;
-    transition: transform 0.25s ease;
+    text-decoration: none; padding: 1.7rem 1.9rem 2rem;
+    display: flex; flex-direction: column; gap: 0.5rem;
+    transition: background 0.25s;
   }
-  .hstat + .hstat { border-left: 1px solid var(--hair); }
+  .hstat + .hstat { border-left: 1px solid var(--ink-line); }
+  .hstat:hover { background: rgba(37,99,235,0.045); }
+  .hstat .idx { font-family: var(--sans); font-size: 0.66rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint); white-space: nowrap; }
   .hstat .n {
-    font-family: var(--sans); font-weight: 700;
-    font-size: clamp(2.1rem, 5vw, 3.4rem); line-height: 1;
-    color: var(--ink); letter-spacing: -0.02em;
+    font-family: var(--display); font-weight: 600;
+    font-size: clamp(2.2rem, 4.6vw, 3.3rem); line-height: 1;
+    color: var(--ink); letter-spacing: -0.02em; margin-top: 0.2rem;
     transition: color 0.25s;
   }
-  .hstat .n .u { font-size: 0.5em; font-weight: 600; color: var(--muted); }
-  .hstat .l { font-size: 0.8rem; color: var(--muted); line-height: 1.5; }
-  .hstat:hover { transform: translateY(-3px); }
+  .hstat .n .u { font-family: var(--sans); font-size: 0.42em; font-weight: 600; color: var(--muted); }
+  .hstat .l { font-size: 0.82rem; color: var(--muted); line-height: 1.5; }
   .hstat:hover .n { color: var(--blue-deep); }
-  .hero-principles {
-    font-size: 0.75rem; font-weight: 600; letter-spacing: 0.14em;
-    text-transform: uppercase; color: var(--faint);
-  }
 
   .btn {
     display: inline-flex; align-items: center; gap: 0.5rem;
@@ -263,16 +294,40 @@
 
   /* ============ PULL STAT / CALLOUT ============ */
   .callout { max-width: 54rem; border-left: 4px solid var(--amber); padding: 0.4rem 0 0.4rem 1.8rem; margin-bottom: 2.6rem; }
-  .callout__big { font-family: var(--serif); font-weight: 500; font-size: clamp(2.2rem, 6vw, 3.8rem); line-height: 1.05; color: var(--ink); letter-spacing: -0.01em; }
+  .callout__big { font-family: var(--display); font-weight: 600; font-size: clamp(2.3rem, 6vw, 4rem); line-height: 1.02; color: var(--ink); letter-spacing: -0.02em; }
   .callout__big small { display: block; font-family: var(--sans); font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-top: 0.8rem; }
 
   /* ============ STAT TILES ============ */
   .tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; max-width: 58rem; margin-bottom: 2.8rem; }
-  .tile { background: var(--card); border: 1px solid var(--hair); border-radius: 12px; box-shadow: var(--shadow); padding: 1.5rem 1.5rem 1.6rem; }
+  .tile { background: var(--card); border: 1px solid var(--hair); border-radius: 14px; box-shadow: var(--shadow); padding: 1.5rem 1.5rem 1.6rem; }
   .tile__label { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.9rem; }
-  .tile__value { font-family: var(--sans); font-weight: 700; font-size: clamp(2rem, 4.5vw, 2.7rem); line-height: 1; color: var(--ink); letter-spacing: -0.02em; }
-  .tile__value .unit { font-size: 0.42em; font-weight: 600; color: var(--muted); margin-left: 0.15em; }
+  .tile__value { font-family: var(--display); font-weight: 600; font-size: clamp(2.1rem, 4.5vw, 2.9rem); line-height: 1; color: var(--ink); letter-spacing: -0.02em; }
+  .tile__value .unit { font-family: var(--sans); font-size: 0.4em; font-weight: 600; color: var(--muted); margin-left: 0.15em; }
   .tile__desc { font-size: 0.85rem; color: var(--muted); margin-top: 0.9rem; line-height: 1.6; }
+
+  /* ============ BENTO (The Case) ============ */
+  .bento { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; max-width: 60rem; margin-bottom: 2.8rem; }
+  .bento > * { border: 1px solid var(--hair); border-radius: 16px; background: var(--card); box-shadow: var(--shadow); padding: 1.6rem 1.7rem; }
+  .bento .feature {
+    grid-column: span 2; grid-row: span 2; background: var(--navy); color: #fff; border-color: var(--navy);
+    display: flex; flex-direction: column; justify-content: space-between; gap: 1.4rem;
+  }
+  .bento .feature .big { font-family: var(--display); font-weight: 600; font-size: clamp(3.4rem, 9vw, 5.8rem); line-height: 0.88; letter-spacing: -0.03em; }
+  .bento .feature .big .u { display: block; font-family: var(--sans); font-size: 0.16em; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #93A9CE; margin-top: 0.9rem; }
+  .bento .feature p { font-family: var(--serif); font-size: clamp(1.05rem, 1.6vw, 1.25rem); line-height: 1.45; color: #E4EAF3; }
+  .bento .feature p strong { color: #fff; font-weight: 600; }
+  .bento .feature a { color: #93C5FD; font-size: 0.74rem; font-weight: 500; }
+  .b-stat .k { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+  .b-stat .v { font-family: var(--display); font-weight: 600; font-size: clamp(2rem, 4.5vw, 2.7rem); line-height: 1; color: var(--ink); letter-spacing: -0.02em; margin: 0.55rem 0 0.6rem; }
+  .b-stat .v .u { font-family: var(--sans); font-size: 0.4em; color: var(--muted); font-weight: 600; }
+  .b-stat p { font-size: 0.8rem; color: var(--muted); line-height: 1.5; }
+  .b-stat a { font-size: 0.72rem; }
+  .b-claim { display: flex; flex-direction: column; gap: 0.7rem; }
+  .b-claim svg { flex-shrink: 0; }
+  .b-claim p { font-size: 0.92rem; line-height: 1.5; }
+  .b-claim p strong { color: var(--ink); font-weight: 600; }
+  @media (max-width: 760px) { .bento { grid-template-columns: 1fr 1fr; } .bento .feature { grid-column: span 2; grid-row: auto; } }
+  @media (max-width: 460px) { .bento { grid-template-columns: 1fr; } .bento .feature { grid-column: auto; } }
 
   /* ============ PULL QUOTE ============ */
   .pull {
@@ -599,9 +654,9 @@
   @media (max-width: 900px) {
     .tiles { grid-template-columns: 1fr; max-width: 24rem; }
     .duo, .incident-cols, .perception { grid-template-columns: 1fr; }
-    .hero-stats { flex-direction: column; gap: 1.5rem; max-width: 22rem; }
-    .hstat { padding: 0; align-items: center; }
-    .hstat + .hstat { border-left: none; border-top: 1px solid var(--hair); padding-top: 1.5rem; }
+    .hero-stats { grid-template-columns: 1fr; }
+    .hstat { padding: 1.3rem 0.2rem; }
+    .hstat + .hstat { border-left: none; border-top: 1px solid var(--ink-line); }
   }
   @media (max-width: 640px) {
     .band { padding: 4.2rem 0; }
@@ -660,33 +715,36 @@
 <header class="hero" id="top">
   <canvas id="hero-bg" aria-hidden="true"></canvas>
   <div class="hero__veil" aria-hidden="true"></div>
-  <div class="wrap">
-    <span class="overline reveal">Radiant · Evidence-based advocacy</span>
-    <h1 class="reveal">The case for nuclear energy</h1>
-    <p class="hero__lede reveal">Bringing data-driven clarity to a conversation that has been governed by fear for half a century.</p>
-    <p class="hero__byline reveal">An advocacy project by Desmond Wong</p>
-
-    <div class="hero__cta reveal">
-      <a class="btn" href="#data">See the data</a>
-      <a class="btn btn--link" href="#how">How a plant works →</a>
+  <div class="wrap hero__grid">
+    <div class="hero__lead">
+      <span class="overline reveal">Radiant · Evidence-based advocacy</span>
+      <h1 class="reveal">The case for <em>nuclear</em> energy</h1>
+      <p class="hero__lede reveal">Bringing data-driven clarity to a conversation governed by fear for half a century.</p>
+      <div class="hero__cta reveal">
+        <a class="btn" href="#data">See the data</a>
+        <a class="btn btn--link" href="#how">Tour a power plant →</a>
+      </div>
+      <p class="hero__byline reveal">An advocacy project by Desmond Wong</p>
     </div>
-
+  </div>
+  <div class="wrap">
     <div class="hero-stats">
       <a class="hstat reveal" href="#data">
+        <span class="idx">01 / Safety</span>
         <span class="n"><span data-count="0.03" data-decimals="2">0.03</span></span>
         <span class="l">deaths per TWh, right beside wind and solar</span>
       </a>
       <a class="hstat reveal" href="#capacity">
+        <span class="idx">02 / Reliability</span>
         <span class="n"><span data-count="90.8" data-decimals="1">90.8</span><span class="u">%</span></span>
         <span class="l">of 2024 spent at full power, the highest of any major U.S. source</span>
       </a>
       <a class="hstat reveal" href="#case">
+        <span class="idx">03 / Climate</span>
         <span class="n"><span data-count="12">12</span><span class="u">g</span></span>
         <span class="l">of CO₂ per kWh over a lifetime, on par with wind</span>
       </a>
     </div>
-
-    <p class="hero-principles reveal">Evidence over emotion · Clarity over jargon · Honesty over hype</p>
   </div>
 </header>
 
@@ -699,40 +757,33 @@
       <p class="lede">For half a century, one of the most proven tools for producing reliable, low-carbon electricity at scale is the one we have spent decades shutting down. Applied evenly, the evidence is hard to avoid.</p>
     </div>
 
-    <div class="tiles">
-      <div class="tile reveal">
-        <div class="tile__label">Lifecycle carbon, median estimate</div>
-        <div class="tile__value"><span data-count="12">12</span><span class="unit">g CO₂/kWh</span></div>
-        <p class="tile__desc">IPCC median over a plant's lifetime (reported range 3.7 to 110), on par with wind and a small fraction of gas or coal. A newer UNECE analysis finds 5 to 6 g. <a href="https://www.ipcc.ch/site/assets/uploads/2018/02/ipcc_wg3_ar5_annex-iii.pdf" target="_blank" rel="noopener noreferrer">Source: IPCC AR5, Annex III</a></p>
+    <div class="bento">
+      <div class="feature reveal">
+        <div class="big">0.03<span class="u">Deaths per TWh</span></div>
+        <p><strong>As safe as wind and solar</strong>, and hundreds of times safer than the fossil fuels we burn without a second thought. Nuclear sits beside wind (0.04) and solar (0.02), roughly 820 times below coal.</p>
+        <a href="https://ourworldindata.org/safest-sources-of-energy" target="_blank" rel="noopener noreferrer">Source: Our World in Data ↗</a>
       </div>
-      <div class="tile reveal">
-        <div class="tile__label">France's 2024 nuclear share</div>
-        <div class="tile__value">≈<span data-count="67">67</span><span class="unit">%</span></div>
-        <p class="tile__desc">About two-thirds of French electricity, the highest share of any country. IAEA reports 67% for 2024; France's grid operator reports closer to 65%. <a href="https://pris.iaea.org/PRIS/CountryStatistics/CountryDetails.aspx?current=FR" target="_blank" rel="noopener noreferrer">Source: IAEA PRIS</a></p>
+      <div class="b-stat reveal">
+        <div class="k">France's 2024 nuclear share</div>
+        <div class="v">≈<span data-count="67">67</span><span class="u">%</span></div>
+        <p>About two-thirds of French electricity, the highest share of any country. <a href="https://pris.iaea.org/PRIS/CountryStatistics/CountryDetails.aspx?current=FR" target="_blank" rel="noopener noreferrer">IAEA PRIS ↗</a></p>
       </div>
-      <div class="tile reveal">
-        <div class="tile__label">Deaths per TWh</div>
-        <div class="tile__value">0.03</div>
-        <p class="tile__desc">Nuclear sits beside wind (0.04) and solar (0.02), and roughly 820 times below coal. <a href="https://ourworldindata.org/safest-sources-of-energy" target="_blank" rel="noopener noreferrer">Source: Our World in Data</a></p>
+      <div class="b-stat reveal">
+        <div class="k">Lifecycle carbon, median</div>
+        <div class="v"><span data-count="12">12</span><span class="u">g/kWh</span></div>
+        <p>IPCC median over a plant's lifetime, on par with wind; UNECE finds 5 to 6 g. <a href="https://www.ipcc.ch/site/assets/uploads/2018/02/ipcc_wg3_ar5_annex-iii.pdf" target="_blank" rel="noopener noreferrer">IPCC AR5 ↗</a></p>
       </div>
-    </div>
-
-    <div class="verdicts">
-      <div class="verdict reveal">
+      <div class="b-claim reveal">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2563EB"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <p>It is <strong>as safe as wind and solar</strong>, and hundreds of times safer than the fossil fuels we burn without a second thought.</p>
+        <p><strong>Clean and firm.</strong> As clean as wind over its lifetime, and uniquely able to deliver that power reliably, around the clock.</p>
       </div>
-      <div class="verdict reveal">
+      <div class="b-claim reveal">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2563EB"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <p>It is <strong>as clean as wind</strong> over its lifetime, and uniquely able to deliver that clean power <strong>reliably, around the clock</strong>.</p>
+        <p><strong>Waste is small and controlled.</strong> A managed problem, not a mythical one, and it never leaves human control.</p>
       </div>
-      <div class="verdict reveal">
+      <div class="b-claim reveal">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2563EB"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <p>Its <strong>waste is small, contained, and controlled</strong>: a managed problem, not a mythical one.</p>
-      </div>
-      <div class="verdict reveal">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2563EB"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <p>Its <strong>next generation fails safe by design</strong>, and its energy density means clean power from a <strong>remarkably small footprint of land</strong>.</p>
+        <p><strong>Next-gen fails safe by design</strong>, and its energy density means clean power from a remarkably small footprint of land.</p>
       </div>
     </div>
 
