@@ -308,7 +308,7 @@
     box-shadow: var(--shadow); padding: 1.4rem;
   }
   .plant-cam svg { width: 100%; height: auto; display: block; }
-  .plant-scroll, .plant-hud, .plant-rail, .plant-railcount { display: none; }
+  .plant-scroll, .plant-hud, .plant-rail { display: none; }
   .hl { opacity: 0; }
   .plant-steps {
     list-style: none; counter-reset: step;
@@ -376,7 +376,18 @@
     border-radius: 999px; padding: 0.5rem 0.95rem; backdrop-filter: blur(6px);
   }
   .plant-pill .plus { color: var(--acc, #60A5FA); font-size: 1.15em; line-height: 0; transition: color 0.4s; }
-  .plant-para { margin-top: 0.9rem; color: #E9EEF6; font-family: var(--serif); font-size: clamp(1.05rem, 1.7vw, 1.35rem); line-height: 1.5; }
+  .plant-stopnum { display: block; margin-bottom: 0.7rem; font-family: var(--sans); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--faint); }
+  .plant-stopnum .cur { color: var(--acc, #60A5FA); transition: color 0.4s; }
+  .plant-para { margin-top: 0.85rem; color: #E9EEF6; font-family: var(--serif); font-size: clamp(1rem, 1.5vw, 1.22rem); line-height: 1.55; }
+  .plant-nav { display: flex; gap: 0.6rem; margin-top: 1.2rem; pointer-events: auto; }
+  .plant-nav button {
+    font-family: var(--sans); font-size: 0.78rem; font-weight: 600; color: #E9EEF6;
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px;
+    padding: 0.5rem 0.95rem; min-height: 40px; cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, opacity 0.2s;
+  }
+  .plant-nav button:hover { background: rgba(255,255,255,0.16); border-color: rgba(255,255,255,0.35); }
+  .plant-nav button:disabled { opacity: 0.32; cursor: default; }
 
   .js:not(.reduced) .plant-rail {
     display: flex; flex-direction: column; gap: 0.8rem;
@@ -389,11 +400,6 @@
   }
   .plant-rail button:hover { background: rgba(255,255,255,0.5); }
   .plant-rail button[aria-current="true"] { background: var(--acc, #60A5FA); border-color: var(--acc, #60A5FA); transform: scale(1.4); }
-  .js:not(.reduced) .plant-railcount {
-    display: block; position: absolute; right: clamp(1rem, 3vw, 2.4rem); bottom: clamp(1.6rem, 8vh, 4.5rem); z-index: 6;
-    font-family: var(--sans); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em; color: var(--faint);
-  }
-  .js:not(.reduced) .plant-railcount .cur { color: #fff; }
   /* cinema: keep steps + note in the DOM for a11y and no-JS, but out of view */
   .js:not(.reduced) .plant-steps,
   .js:not(.reduced) .plant-fallnote { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
@@ -740,9 +746,9 @@
     <div class="plant-vp">
       <div class="plant-intro">
         <span class="overline"><span class="n">02</span>How it works</span>
-        <h2 id="h-how">Inside a nuclear power plant</h2>
-        <p class="lede">Follow the energy from a uranium atom to the power line. Scroll to move through the plant, one stage at a time.</p>
-        <span class="plant-scroll">Scroll to explore
+        <h2 id="h-how">Take a tour of a nuclear plant</h2>
+        <p class="lede">Come along with me. We will follow the energy from a single uranium atom all the way to the power line, one stop at a time.</p>
+        <span class="plant-scroll">Begin the tour
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14"/><path d="m6 13 6 6 6-6"/></svg>
         </span>
       </div>
@@ -823,23 +829,27 @@
       </div>
 
       <div class="plant-hud">
+        <span class="plant-stopnum">Stop <span class="cur">1</span> of 6</span>
         <span class="plant-pill"><span class="plus">+</span> <span class="plant-pill-label"></span></span>
         <p class="plant-para"></p>
+        <div class="plant-nav">
+          <button type="button" class="plant-prev" aria-label="Previous stop">← Back</button>
+          <button type="button" class="plant-next" aria-label="Next stop">Next →</button>
+        </div>
       </div>
 
-      <nav class="plant-rail" aria-label="Jump to a stage"></nav>
-      <div class="plant-railcount"><span class="cur">01</span> / 06</div>
+      <nav class="plant-rail" aria-label="Jump to a stop on the tour"></nav>
     </div>
   </div>
 
   <ol class="plant-steps">
-      <li data-pill="The reactor" data-para="Splitting uranium atoms releases heat. No fire, no smoke, just fission, and control rods set the pace."><strong>Fission heats pressurized water.</strong> Splitting uranium atoms heats the primary loop, which stays liquid under about 150 atmospheres. Control rods set the reaction rate; a pressurizer holds the pressure.</li>
-      <li data-pill="The steam generator" data-para="Hot pressurized water boils a separate water loop into steam. The two loops never mix."><strong>A steam generator transfers the heat.</strong> Hot primary water passes through thousands of tubes and boils a separate secondary loop into steam. The two loops never mix, so the radioactive water stays sealed on one side.</li>
-      <li data-pill="The turbine hall" data-para="High-pressure steam spins the turbine, and the shaft turns a generator into electricity."><strong>The turbine and generator make electricity.</strong> High-pressure steam spins the turbine, and the shaft turns a generator, the same principle used in coal, gas, and hydro plants.</li>
-      <li data-pill="The condenser" data-para="Cooling water turns the spent steam back into water, ready to boil again."><strong>A condenser closes the loop.</strong> Cooling water condenses the used steam back into feedwater, which returns to the steam generator to be boiled again.</li>
-      <li data-pill="The switchyard" data-para="A transformer steps the voltage up and sends the power out to the grid."><strong>A transformer sends power to the grid.</strong> A transformer steps the voltage up for the long-distance transmission lines that carry power to homes and businesses.</li>
-      <li data-pill="The cooling tower" data-para="Only warm water vapor leaves. Not smoke, not radioactive, the same as a boiling kettle."><strong>Cooling towers release water vapor.</strong> The white plume is warm water from the separate cooling loop. It is not smoke and it is not radioactive, the same vapor as a boiling kettle.</li>
-  </ol>
+      <li data-pill="The reactor core" data-para="This is where it all begins. Uranium atoms split apart and release heat, with no flame and no smoke, just the energy locked inside the atom. Control rods slide between the fuel rods to speed the reaction up or calm it down."><strong>The reactor core.</strong> This is where it all begins. Uranium atoms split apart and release heat, with no flame and no smoke, just the energy locked inside the atom. Control rods slide between the fuel rods to speed the reaction up or calm it down.</li>
+      <li data-pill="The steam generator" data-para="The hot, high-pressure water from the core runs through thousands of thin tubes and boils a completely separate loop of water into steam. The two loops never touch, so anything radioactive stays sealed on the reactor side."><strong>The steam generator.</strong> The hot, high-pressure water from the core runs through thousands of thin tubes and boils a completely separate loop of water into steam. The two loops never touch, so anything radioactive stays sealed on the reactor side.</li>
+      <li data-pill="The turbine hall" data-para="The steam rushes into the turbine and shoves its blades around thousands of times a minute. That spinning shaft drives a generator, the very same way coal, gas, and hydro plants make electricity. Only the heat source is different."><strong>The turbine hall.</strong> The steam rushes into the turbine and shoves its blades around thousands of times a minute. That spinning shaft drives a generator, the very same way coal, gas, and hydro plants make electricity. Only the heat source is different.</li>
+      <li data-pill="The condenser" data-para="Once the steam has done its job, it is cooled back into liquid water here. That water gets pumped straight back to the steam generator to be boiled again, around and around in a closed loop."><strong>The condenser.</strong> Once the steam has done its job, it is cooled back into liquid water here. That water gets pumped straight back to the steam generator to be boiled again, around and around in a closed loop.</li>
+      <li data-pill="The switchyard" data-para="The electricity leaves the generator and passes through a transformer that boosts its voltage. High voltage is what lets the power travel for miles down the transmission lines without losing much along the way."><strong>The switchyard.</strong> The electricity leaves the generator and passes through a transformer that boosts its voltage. High voltage is what lets the power travel for miles down the transmission lines without losing much along the way.</li>
+      <li data-pill="The cooling tower" data-para="Those giant curved towers release only warm water vapor. It is not smoke and it is not radioactive, it is the same cloud that rises off a boiling kettle, the plant quietly shedding its leftover heat."><strong>The cooling tower.</strong> Those giant curved towers release only warm water vapor. It is not smoke and it is not radioactive, it is the same cloud that rises off a boiling kettle, the plant quietly shedding its leftover heat.</li>
+    </ol>
   <p class="plant-fallnote">Simplified schematic of a pressurized-water reactor (PWR), the most common design in the U.S. and worldwide; boiling-water reactors and other designs differ. Amber: primary coolant loop. Blue: secondary steam loop. Gray: cooling-water loop. Not to scale.</p>
 </section>
 
@@ -2167,7 +2177,9 @@
     var hud = section.querySelector('.plant-hud');
     var pillLabel = section.querySelector('.plant-pill-label');
     var para = section.querySelector('.plant-para');
-    var railCur = section.querySelector('.plant-railcount .cur');
+    var stopCur = section.querySelector('.plant-stopnum .cur');
+    var prevBtn = section.querySelector('.plant-prev');
+    var nextBtn = section.querySelector('.plant-next');
     var steps = [].slice.call(section.querySelectorAll('.plant-steps li'));
 
     // viewBox and per-stage camera keyframes (focus centre + zoom, viewBox coords)
@@ -2183,23 +2195,29 @@
     ];
     var ACC = ['#60A5FA', '#FBBF24', '#FB923C', '#60A5FA', '#38BDF8', '#818CF8', '#A78BFA'];
 
-    // build the progress rail (one dot per component stage)
+    // scroll the page so the walkthrough lands on a given stop (1..N)
+    function goToStage(stage) {
+      stage = Math.max(1, Math.min(stage, N));
+      var total = track.offsetHeight - vp.clientHeight;
+      var top = track.getBoundingClientRect().top + window.scrollY;
+      window.scrollTo({ top: top + (stage / N) * total, behavior: 'smooth' });
+    }
+
+    // build the progress rail (one dot per stop)
     var rail = section.querySelector('.plant-rail');
     var dots = [];
     for (var k = 1; k <= N; k++) {
       (function (stage) {
         var b = document.createElement('button');
         b.type = 'button';
-        b.setAttribute('aria-label', 'Go to ' + steps[stage - 1].dataset.pill);
-        b.addEventListener('click', function () {
-          var total = track.offsetHeight - vp.clientHeight;
-          var top = track.getBoundingClientRect().top + window.scrollY;
-          window.scrollTo({ top: top + (stage / N) * total, behavior: 'smooth' });
-        });
+        b.setAttribute('aria-label', 'Go to stop ' + stage + ', ' + steps[stage - 1].dataset.pill);
+        b.addEventListener('click', function () { goToStage(stage); });
         rail.appendChild(b);
         dots.push(b);
       })(k);
     }
+    prevBtn.addEventListener('click', function () { goToStage((lastActive || 1) - 1); });
+    nextBtn.addEventListener('click', function () { goToStage((lastActive || 1) + 1); });
 
     // size the scroll track: ~88vh of scroll per screen (intro + N stages)
     function sizeTrack() { track.style.height = ((N + 1) * 88) + 'vh'; }
@@ -2208,7 +2226,7 @@
     function ease(t) { return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; }
     function lerp(a, b, t) { return a + (b - a) * t; }
 
-    var lastActive = -1, capTimer = null, pad2 = function (n) { return n < 10 ? '0' + n : '' + n; };
+    var lastActive = -1, capTimer = null;
 
     function render() {
       var vh = vp.clientHeight;
@@ -2240,7 +2258,9 @@
         clearTimeout(capTimer); // drop any stale caption swap in flight
         hud.classList.add('swap');
         if (active > 0) {
-          railCur.textContent = pad2(active);
+          stopCur.textContent = active;
+          prevBtn.disabled = active <= 1;
+          nextBtn.disabled = active >= N;
           capTimer = setTimeout(function (cur) {
             var li = steps[cur - 1];
             pillLabel.textContent = li.dataset.pill;
