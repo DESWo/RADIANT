@@ -329,6 +329,60 @@
   @media (max-width: 760px) { .bento { grid-template-columns: 1fr 1fr; } .bento .feature { grid-column: span 2; grid-row: auto; } }
   @media (max-width: 460px) { .bento { grid-template-columns: 1fr; } .bento .feature { grid-column: auto; } }
 
+  /* ============ SCROLL-SCRUBBED VIDEO ============ */
+  /* Base (no JS) and reduced-motion: a normal, playable video with controls. */
+  .videoscape { background: #060a14; color: #fff; padding: 4.5rem 0; border-top: none; }
+  .vs-vp { max-width: 60rem; margin: 0 auto; padding: 0 1.5rem; }
+  .vs-hud { text-align: center; margin-bottom: 1.6rem; }
+  .vs-hud .overline { color: var(--faint); justify-content: center; }
+  .vs-hud h2 { color: #fff; font-family: var(--display); font-weight: 500; font-size: clamp(2.2rem, 6vw, 4rem); line-height: 1; letter-spacing: -0.02em; }
+  .vs-hud p { color: #CBD5E1; font-family: var(--serif); font-style: italic; font-size: clamp(1.1rem, 2vw, 1.4rem); margin-top: 1rem; }
+  .vs-video { width: 100%; border-radius: 16px; display: block; background: #060a14; }
+  .vs-veil, .vs-scroll, .vs-progress { display: none; }
+  .vs-credit { text-align: center; margin-top: 1rem; font-size: 0.7rem; color: rgba(255,255,255,0.5); }
+  .vs-credit a { color: rgba(255,255,255,0.7); }
+
+  /* Cinema mode: pinned, full-bleed, scroll drives playback. */
+  .js:not(.reduced) .vs-track { position: relative; height: 240vh; }
+  .js:not(.reduced) .vs-vp {
+    position: sticky; top: 0; height: 100vh; height: 100svh; max-width: none; padding: 0;
+    overflow: clip; display: flex; align-items: center; justify-content: center;
+  }
+  .js:not(.reduced) .vs-video {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 0; z-index: 0;
+  }
+  .js:not(.reduced) .vs-veil {
+    display: block; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    background:
+      radial-gradient(70% 55% at 50% 46%, rgba(6,10,20,0.62), rgba(6,10,20,0) 75%),
+      linear-gradient(0deg, rgba(6,10,20,0.92), rgba(6,10,20,0) 42%),
+      linear-gradient(180deg, rgba(6,10,20,0.6), rgba(6,10,20,0) 32%);
+  }
+  .js:not(.reduced) .vs-hud {
+    position: relative; z-index: 2; margin: 0; padding: 1.5rem; max-width: 42rem;
+    transition: opacity 0.3s ease; text-shadow: 0 2px 28px rgba(0,0,0,0.55);
+  }
+  .js:not(.reduced) .vs-scroll {
+    display: inline-flex; align-items: center; gap: 0.5rem; margin-top: 1.7rem;
+    font-family: var(--sans); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--faint);
+    animation: scrollnudge 1.8s ease-in-out infinite;
+  }
+  .js:not(.reduced) .vs-credit {
+    position: absolute; bottom: 1rem; right: 1.2rem; z-index: 2; margin: 0; text-align: right; font-size: 0.66rem;
+  }
+  .js:not(.reduced) .vs-progress {
+    display: block; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; z-index: 3; background: rgba(255,255,255,0.14);
+  }
+  .js:not(.reduced) .vs-progress > span { display: block; height: 100%; width: 0; background: var(--amber); }
+
+  /* Seek unsupported: revert to a normal framed, playable video. */
+  .vs-nofx .vs-track { height: auto !important; }
+  .vs-nofx .vs-vp { position: static !important; height: auto !important; max-width: 60rem; margin: 0 auto; padding: 0 1.5rem; display: block; overflow: visible; }
+  .vs-nofx .vs-video { position: static !important; width: 100%; height: auto !important; object-fit: initial; border-radius: 16px; }
+  .vs-nofx .vs-veil, .vs-nofx .vs-scroll, .vs-nofx .vs-progress { display: none !important; }
+  .vs-nofx .vs-hud { position: static !important; margin: 0 0 1.6rem !important; padding: 0 !important; max-width: none; opacity: 1 !important; }
+  .vs-nofx .vs-credit { position: static !important; text-align: center; margin-top: 1rem; }
+
   /* ============ PULL QUOTE ============ */
   .pull {
     font-family: var(--serif); font-style: italic; font-weight: 500;
@@ -687,6 +741,7 @@
   <div class="nav__links" id="nav-links">
     <a href="#top">Overview</a>
     <a href="#case">The Case</a>
+    <a href="#reactor-motion">Watch</a>
     <a href="#how">The Plant</a>
     <a href="#data">Safety</a>
     <a href="#capacity">Capacity</a>
@@ -788,6 +843,29 @@
     </div>
 
     <p class="pull reveal">When the question becomes how much ground clean power actually needs, nuclear's compactness is a <mark>quiet but decisive advantage.</mark></p>
+  </div>
+</section>
+
+<!-- ================= INTERSTITIAL: REACTOR IN MOTION ================= -->
+<section class="band videoscape" id="reactor-motion" aria-labelledby="h-motion" data-videoscrub>
+  <div class="vs-track">
+    <div class="vs-vp">
+      <div class="vs-hud">
+        <span class="overline">In motion</span>
+        <h2 id="h-motion">Watch a reactor run</h2>
+        <p>The same pressurized-water reactor you are about to tour, from fission to power line.</p>
+        <span class="vs-scroll">Scroll to play
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14"/><path d="m6 13 6 6 6-6"/></svg>
+        </span>
+      </div>
+      <video class="vs-video" muted playsinline preload="auto" controls
+             aria-label="Animated cross-section of a pressurized-water reactor generating electricity, produced by the Tennessee Valley Authority.">
+        <source src="assets/pwr-animation.webm" type="video/webm">
+      </video>
+      <div class="vs-veil" aria-hidden="true"></div>
+      <p class="vs-credit">Animation: Tennessee Valley Authority · public domain, via <a href="https://commons.wikimedia.org/wiki/File:PWR_nuclear_power_plant_animation.webm" target="_blank" rel="noopener noreferrer">Wikimedia Commons</a></p>
+      <div class="vs-progress" aria-hidden="true"><span></span></div>
+    </div>
   </div>
 </section>
 
@@ -2338,6 +2416,66 @@
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', function () { sizeTrack(); render(); });
     render();
+  })();
+
+  /* ============ SCROLL-SCRUBBED VIDEO ============ */
+  (function () {
+    var sec = document.querySelector('[data-videoscrub]');
+    if (!sec || REDUCE) return; // fallback keeps native controls; user plays it
+    var track = sec.querySelector('.vs-track');
+    var vp = sec.querySelector('.vs-vp');
+    var video = sec.querySelector('.vs-video');
+    var hud = sec.querySelector('.vs-hud');
+    var bar = sec.querySelector('.vs-progress > span');
+    var dur = 0, targetT = 0, curT = 0, raf = null, active = false;
+
+    // If the browser can't play/seek this webm (some Safari builds) fall back
+    // to a normal, framed video with native controls instead of a black pin.
+    function disableScrub() {
+      active = false;
+      sec.classList.add('vs-nofx');
+      video.setAttribute('controls', '');
+      hud.style.opacity = '';
+    }
+    video.addEventListener('error', disableScrub);
+    video.addEventListener('loadedmetadata', function () { dur = video.duration || 0; });
+    video.addEventListener('loadeddata', function () {
+      // probe whether seeking actually works before committing to the effect
+      try { video.currentTime = 0.25; } catch (e) {}
+      setTimeout(function () {
+        if (dur && video.currentTime > 0.05) {
+          active = true; video.removeAttribute('controls'); video.pause(); render();
+        } else {
+          disableScrub();
+        }
+      }, 600);
+    });
+
+    function scrollProgress() {
+      var total = track.offsetHeight - vp.clientHeight;
+      if (total <= 0) return 0;
+      return Math.max(0, Math.min(-track.getBoundingClientRect().top / total, 1));
+    }
+    function tick() {
+      curT += (targetT - curT) * 0.16; // lerp so seeking reads as a smooth glide
+      if (Math.abs(targetT - curT) < 0.008) curT = targetT;
+      if (video.readyState >= 2) { try { video.currentTime = curT; } catch (e) {} }
+      raf = (Math.abs(targetT - curT) > 0.008) ? requestAnimationFrame(tick) : null;
+    }
+    function render() {
+      if (!active || !dur) return;
+      var p = scrollProgress();
+      targetT = p * (dur - 0.05);
+      hud.style.opacity = Math.max(0, 1 - p * 3.5);
+      if (bar) bar.style.width = (p * 100).toFixed(1) + '%';
+      if (!raf) tick();
+    }
+    var ticking = false;
+    window.addEventListener('scroll', function () {
+      if (ticking) return; ticking = true;
+      requestAnimationFrame(function () { render(); ticking = false; });
+    }, { passive: true });
+    window.addEventListener('resize', render);
   })();
 
   /* ============ NAV SCROLLSPY ============ */
