@@ -476,13 +476,37 @@
   }
   .plant-fallnote { font-size: 0.78rem; color: var(--muted); max-width: 56rem; margin: 1.4rem auto 0; }
 
-  /* CINEMA MODE: JS on and motion allowed */
+  /* ============ PLANT EXPLORER (clickable diagram) ============ */
+  .plant-explorer { display: grid; grid-template-columns: 1.55fr 1fr; gap: 1.4rem; align-items: start; margin-bottom: 1rem; }
+  .plant-fig { margin: 0; background: #0E1A2E; border: 1px solid var(--hair); border-radius: 14px; box-shadow: var(--shadow); padding: 0.6rem; }
+  .plant-fig svg { width: 100%; height: auto; display: block; border-radius: 10px; }
+  .plant-fig figcaption { font-size: 0.72rem; color: var(--muted); padding: 0.7rem 0.5rem 0.2rem; line-height: 1.5; }
+  .hotspot { cursor: pointer; }
+  .hotspot:focus-visible { outline: 2px solid var(--blue); outline-offset: 1px; }
+  #plant-svg .hl { stroke: #60A5FA; stroke-width: 4; fill: none; filter: drop-shadow(0 0 7px #60A5FA); transition: opacity 0.3s ease; }
+  #plant-svg[data-active="1"] .hl-1, #plant-svg[data-active="2"] .hl-2, #plant-svg[data-active="3"] .hl-3,
+  #plant-svg[data-active="4"] .hl-4, #plant-svg[data-active="5"] .hl-5, #plant-svg[data-active="6"] .hl-6 { opacity: 1; }
+  .plant-tabs { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1.1rem; }
+  .ptab { text-align: left; font-family: var(--sans); font-size: 0.9rem; font-weight: 600; color: var(--body); background: var(--card); border: 1px solid var(--hair); border-radius: 9px; padding: 0.6rem 0.9rem; min-height: 44px; cursor: pointer; transition: border-color 0.2s, background 0.2s, color 0.2s; }
+  .ptab:hover { border-color: #3a4a66; }
+  .ptab[aria-selected="true"] { border-color: var(--blue); background: var(--blue-wash); color: var(--blue-deep); }
+  .plant-detail { background: var(--card); border: 1px solid var(--hair); border-radius: 12px; padding: 1.3rem 1.4rem; }
+  .pd-step { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--faint); }
+  .pd-title { font-family: var(--display); font-size: 1.45rem; font-weight: 600; color: var(--ink); margin: 0.3rem 0 0.6rem; letter-spacing: -0.01em; }
+  .pd-text { font-size: 0.96rem; line-height: 1.6; color: var(--body); }
+  .plant-full { margin-top: 1.4rem; border-top: 1px solid var(--ink-line); }
+  .plant-full summary { cursor: pointer; font-weight: 600; color: var(--body); padding: 1.1rem 0; list-style: none; display: flex; align-items: center; gap: 0.5rem; min-height: 44px; }
+  .plant-full summary::marker, .plant-full summary::-webkit-details-marker { display: none; }
+  .plant-full summary::before { content: '▸'; font-size: 0.8rem; transition: transform 0.2s; }
+  .plant-full[open] summary::before { transform: rotate(90deg); }
+  .pstep-list { list-style: none; counter-reset: pstep; display: grid; gap: 0.85rem; padding-bottom: 1.2rem; max-width: 50rem; }
+  .pstep-list li { counter-increment: pstep; position: relative; padding-left: 2.4rem; font-size: 0.92rem; color: var(--muted); line-height: 1.6; }
+  .pstep-list li strong { color: var(--ink); font-weight: 600; }
+  .pstep-list li::before { content: counter(pstep); position: absolute; left: 0; top: 0.05rem; width: 1.6rem; height: 1.6rem; background: var(--blue-wash); color: var(--blue-deep); border-radius: 50%; font-size: 0.78rem; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+  @media (max-width: 820px) { .plant-explorer { grid-template-columns: 1fr; } }
+
+  /* CINEMA MODE (legacy, unused) */
   .js:not(.reduced) .plant-cinema { padding: 0; border-top: none; background: var(--navy); }
-  /* one scroll settles on one stop (scroll-snap, only while touring the plant) */
-  .js:not(.reduced)[data-view="how"] { scroll-snap-type: y mandatory; }
-  .js:not(.reduced) .plant-snaps { position: absolute; inset: 0; z-index: 0; display: flex; flex-direction: column; pointer-events: none; }
-  .js:not(.reduced) .plant-snap { flex: 1 0 0; scroll-snap-align: start; }
-  .plant-snaps { display: none; }
   .js:not(.reduced) .plant-vp {
     position: sticky; top: 0; height: 100vh; height: 100svh;
     overflow: clip; display: flex; align-items: center; justify-content: center;
@@ -947,23 +971,17 @@
 </section>
 
 <!-- ================= 02 THE PLANT ================= -->
-<section class="view band plant-cinema" id="how" aria-labelledby="h-how" data-stages="6">
-  <div class="plant-track">
-    <div class="plant-snaps" aria-hidden="true">
-      <div class="plant-snap"></div><div class="plant-snap"></div><div class="plant-snap"></div><div class="plant-snap"></div><div class="plant-snap"></div><div class="plant-snap"></div><div class="plant-snap"></div>
+<section class="view band" id="how" aria-labelledby="h-how">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="overline"><span class="n">02</span>How it works</span>
+      <h2 id="h-how">Inside a nuclear power plant</h2>
+      <p class="lede">No mystery and no green goo. Click any part of the plant to see what it does, and follow the energy from a uranium atom to the power line.</p>
     </div>
-    <div class="plant-vp">
-      <div class="plant-intro">
-        <span class="overline"><span class="n">02</span>How it works</span>
-        <h2 id="h-how">Take a tour of a nuclear plant</h2>
-        <p class="lede">Come along with me. We will follow the energy from a single uranium atom all the way to the power line, one stop at a time.</p>
-        <span class="plant-scroll">Begin the tour
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14"/><path d="m6 13 6 6 6-6"/></svg>
-        </span>
-      </div>
 
-      <div class="plant-cam">
-        <svg viewBox="-46 -34 1052 548" role="img" aria-label="Simplified pressurized-water reactor schematic: fission heats a primary water loop, a steam generator boils a separate secondary loop into steam, a turbine and generator make electricity, a condenser and cooling tower reject waste heat, and a transformer sends power to the grid.">
+    <div class="plant-explorer reveal">
+      <figure class="plant-fig">
+        <svg id="plant-svg" data-active="1" viewBox="-46 -34 1052 548" role="img" aria-label="Interactive schematic of a pressurized-water reactor. Click a part to learn what it does: the reactor core, steam generator, turbine hall, condenser, switchyard, and cooling tower.">
           <rect x="-46" y="-34" width="1052" height="548" rx="20" fill="#0E1A2E"/>
           <!-- ground -->
           <line x1="28" y1="400" x2="932" y2="400" stroke="#8FA3C2" stroke-width="2.5"/>
@@ -1034,32 +1052,45 @@
           <rect class="hl hl-4" x="398" y="316" width="120" height="58" rx="10"/>
           <rect class="hl hl-5" x="648" y="176" width="96" height="118" rx="12"/>
           <rect class="hl hl-6" x="784" y="256" width="102" height="150" rx="14"/>
+        
+          <rect class="hotspot" data-part="1" x="60" y="196" width="128" height="176" rx="12" fill="transparent" tabindex="0" role="button" aria-label="Reactor core"/>
+          <rect class="hotspot" data-part="2" x="224" y="160" width="74" height="216" rx="12" fill="transparent" tabindex="0" role="button" aria-label="Steam generator"/>
+          <rect class="hotspot" data-part="3" x="388" y="200" width="240" height="94" rx="12" fill="transparent" tabindex="0" role="button" aria-label="Turbine hall"/>
+          <rect class="hotspot" data-part="4" x="398" y="316" width="120" height="58" rx="12" fill="transparent" tabindex="0" role="button" aria-label="Condenser"/>
+          <rect class="hotspot" data-part="5" x="648" y="176" width="96" height="118" rx="12" fill="transparent" tabindex="0" role="button" aria-label="Switchyard"/>
+          <rect class="hotspot" data-part="6" x="784" y="256" width="102" height="150" rx="12" fill="transparent" tabindex="0" role="button" aria-label="Cooling tower"/>
         </svg>
-      </div>
-
-      <div class="plant-hud">
-        <span class="plant-stopnum">Stop <span class="cur">1</span> of 6</span>
-        <span class="plant-pill"><span class="plus">+</span> <span class="plant-pill-label"></span></span>
-        <p class="plant-para"></p>
-        <div class="plant-nav">
-          <button type="button" class="plant-prev" aria-label="Previous stop">← Back</button>
-          <button type="button" class="plant-next" aria-label="Next stop">Next →</button>
+        <figcaption>Pressurized-water reactor (PWR), the most common design worldwide; other designs differ. Amber: primary loop. Blue: secondary steam loop. Gray: cooling-water loop. Not to scale.</figcaption>
+      </figure>
+      <div class="plant-panel">
+        <div class="plant-tabs" role="tablist" aria-label="Parts of the plant">
+          <button class="ptab" data-part="1" role="tab" aria-selected="true">1 &middot; Reactor core</button>
+          <button class="ptab" data-part="2" role="tab" aria-selected="false">2 &middot; Steam generator</button>
+          <button class="ptab" data-part="3" role="tab" aria-selected="false">3 &middot; Turbine hall</button>
+          <button class="ptab" data-part="4" role="tab" aria-selected="false">4 &middot; Condenser</button>
+          <button class="ptab" data-part="5" role="tab" aria-selected="false">5 &middot; Switchyard</button>
+          <button class="ptab" data-part="6" role="tab" aria-selected="false">6 &middot; Cooling tower</button>
+        </div>
+        <div class="plant-detail" role="tabpanel" aria-live="polite">
+          <span class="pd-step">Step <span class="pd-n">1</span> of 6</span>
+          <h3 class="pd-title"></h3>
+          <p class="pd-text"></p>
         </div>
       </div>
-
-      <nav class="plant-rail" aria-label="Jump to a stop on the tour"></nav>
     </div>
-  </div>
 
-  <ol class="plant-steps">
-      <li data-pill="The reactor core" data-para="This is where it all begins. Uranium atoms split apart and release heat, with no flame and no smoke, just the energy locked inside the atom. Control rods slide between the fuel rods to speed the reaction up or calm it down."><strong>The reactor core.</strong> This is where it all begins. Uranium atoms split apart and release heat, with no flame and no smoke, just the energy locked inside the atom. Control rods slide between the fuel rods to speed the reaction up or calm it down.</li>
-      <li data-pill="The steam generator" data-para="The hot, high-pressure water from the core runs through thousands of thin tubes and boils a completely separate loop of water into steam. The two loops never touch, so anything radioactive stays sealed on the reactor side."><strong>The steam generator.</strong> The hot, high-pressure water from the core runs through thousands of thin tubes and boils a completely separate loop of water into steam. The two loops never touch, so anything radioactive stays sealed on the reactor side.</li>
-      <li data-pill="The turbine hall" data-para="The steam rushes into the turbine and shoves its blades around thousands of times a minute. That spinning shaft drives a generator, the very same way coal, gas, and hydro plants make electricity. Only the heat source is different."><strong>The turbine hall.</strong> The steam rushes into the turbine and shoves its blades around thousands of times a minute. That spinning shaft drives a generator, the very same way coal, gas, and hydro plants make electricity. Only the heat source is different.</li>
-      <li data-pill="The condenser" data-para="Once the steam has done its job, it is cooled back into liquid water here. That water gets pumped straight back to the steam generator to be boiled again, around and around in a closed loop."><strong>The condenser.</strong> Once the steam has done its job, it is cooled back into liquid water here. That water gets pumped straight back to the steam generator to be boiled again, around and around in a closed loop.</li>
-      <li data-pill="The switchyard" data-para="The electricity leaves the generator and passes through a transformer that boosts its voltage. High voltage is what lets the power travel for miles down the transmission lines without losing much along the way."><strong>The switchyard.</strong> The electricity leaves the generator and passes through a transformer that boosts its voltage. High voltage is what lets the power travel for miles down the transmission lines without losing much along the way.</li>
-      <li data-pill="The cooling tower" data-para="Those giant curved towers release only warm water vapor. It is not smoke and it is not radioactive, it is the same cloud that rises off a boiling kettle, the plant quietly shedding its leftover heat."><strong>The cooling tower.</strong> Those giant curved towers release only warm water vapor. It is not smoke and it is not radioactive, it is the same cloud that rises off a boiling kettle, the plant quietly shedding its leftover heat.</li>
-    </ol>
-  <p class="plant-fallnote">Simplified schematic of a pressurized-water reactor (PWR), the most common design in the U.S. and worldwide; boiling-water reactors and other designs differ. Amber: primary coolant loop. Blue: secondary steam loop. Gray: cooling-water loop. Not to scale.</p>
+    <details class="plant-full">
+      <summary>Read the whole process, start to finish</summary>
+      <ol class="pstep-list">
+      <li data-title="The reactor core"><strong>The reactor core.</strong> Uranium atoms split apart (nuclear fission), releasing intense heat with no flame and no smoke. Control rods slide between the fuel rods to speed the reaction up or slow it down. A pressurizer keeps this water liquid under about 150 times normal air pressure, even though it is hotter than 300&deg;C.</li>
+      <li data-title="The steam generator"><strong>The steam generator.</strong> The superheated, high-pressure water from the core flows through thousands of thin metal tubes, boiling a completely separate loop of water into steam. The two loops never mix, so the water that turns to steam never touches the reactor.</li>
+      <li data-title="The turbine hall"><strong>The turbine hall.</strong> The high-pressure steam blasts into the turbine and spins its blades thousands of times a minute, turning heat into motion. The spinning shaft drives a generator, which makes electricity by the same principle as coal, gas, and hydro plants. Only the heat source is different.</li>
+      <li data-title="The condenser"><strong>The condenser.</strong> After the steam has pushed the turbine, it is cooled back into liquid water here and pumped straight back to the steam generator to boil again, around and around in a sealed loop.</li>
+      <li data-title="The switchyard"><strong>The switchyard.</strong> The electricity leaves the generator and passes through a transformer that boosts its voltage. High voltage lets the power travel for miles down transmission lines with very little lost along the way.</li>
+      <li data-title="The cooling tower"><strong>The cooling tower.</strong> The leftover heat is carried away by a third water loop and released from the giant towers as warm water vapor. That famous white plume is not smoke and it is not radioactive; it is the same cloud that rises off a boiling kettle.</li>
+      </ol>
+    </details>
+  </div>
 </section>
 
 <!-- ================= 03 SAFETY ================= -->
@@ -2428,131 +2459,36 @@
     requestAnimationFrame(loop);
   })();
 
-  /* ============ PLANT WALKTHROUGH (scroll camera) ============ */
+  /* ============ PLANT EXPLORER (click a part of the diagram) ============ */
   (function () {
-    var section = document.querySelector('.plant-cinema[data-stages]');
-    if (!section || REDUCE) return; // fallback CSS shows the static diagram + steps
+    var svg = document.getElementById('plant-svg');
+    if (!svg) return;
+    var tabs = [].slice.call(document.querySelectorAll('.ptab'));
+    var steps = [].slice.call(document.querySelectorAll('.pstep-list li'));
+    var titleEl = document.querySelector('.pd-title');
+    var textEl = document.querySelector('.pd-text');
+    var nEl = document.querySelector('.pd-n');
 
-    var N = parseInt(section.dataset.stages, 10);          // component stages (6)
-    var track = section.querySelector('.plant-track');
-    var vp = section.querySelector('.plant-vp');
-    var cam = section.querySelector('.plant-cam');
-    var svg = cam.querySelector('svg');
-    var intro = section.querySelector('.plant-intro');
-    var hud = section.querySelector('.plant-hud');
-    var pillLabel = section.querySelector('.plant-pill-label');
-    var para = section.querySelector('.plant-para');
-    var stopCur = section.querySelector('.plant-stopnum .cur');
-    var prevBtn = section.querySelector('.plant-prev');
-    var nextBtn = section.querySelector('.plant-next');
-    var steps = [].slice.call(section.querySelectorAll('.plant-steps li'));
-
-    // viewBox and per-stage camera keyframes (focus centre + zoom, viewBox coords)
-    var VBX = -46, VBY = -34, VBW = 1052, VBH = 548;
-    var KEY = [
-      { cx: 480, cy: 235, z: 1 },    // 0 intro: whole plant
-      { cx: 122, cy: 288, z: 2.3 },  // 1 reactor
-      { cx: 261, cy: 268, z: 2.3 },  // 2 steam generator
-      { cx: 508, cy: 248, z: 1.85 }, // 3 turbine hall
-      { cx: 458, cy: 344, z: 2.5 },  // 4 condenser
-      { cx: 700, cy: 232, z: 2.2 },  // 5 switchyard
-      { cx: 835, cy: 305, z: 2.15 }  // 6 cooling tower
-    ];
-    var ACC = ['#60A5FA', '#FBBF24', '#FB923C', '#60A5FA', '#38BDF8', '#818CF8', '#A78BFA'];
-
-    // scroll the page so the walkthrough lands on a given stop (1..N)
-    function goToStage(stage) {
-      stage = Math.max(1, Math.min(stage, N));
-      var total = track.offsetHeight - vp.clientHeight;
-      var top = track.getBoundingClientRect().top + window.scrollY;
-      window.scrollTo({ top: top + (stage / N) * total, behavior: 'smooth' });
-    }
-
-    // build the progress rail (one dot per stop)
-    var rail = section.querySelector('.plant-rail');
-    var dots = [];
-    for (var k = 1; k <= N; k++) {
-      (function (stage) {
-        var b = document.createElement('button');
-        b.type = 'button';
-        b.setAttribute('aria-label', 'Go to stop ' + stage + ', ' + steps[stage - 1].dataset.pill);
-        b.addEventListener('click', function () { goToStage(stage); });
-        rail.appendChild(b);
-        dots.push(b);
-      })(k);
-    }
-    prevBtn.addEventListener('click', function () { goToStage((lastActive || 1) - 1); });
-    nextBtn.addEventListener('click', function () { goToStage((lastActive || 1) + 1); });
-
-    // size the scroll track: ~88vh of scroll per screen (intro + N stages)
-    function sizeTrack() { track.style.height = ((N + 1) * 100) + 'vh'; } /* 100vh/stage aligns snap points to stages */
-    sizeTrack();
-
-    function ease(t) { return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; }
-    function lerp(a, b, t) { return a + (b - a) * t; }
-
-    var lastActive = -1, capTimer = null;
-
-    function render() {
-      var vh = vp.clientHeight;
-      var total = track.offsetHeight - vh;
-      if (total <= 0) return; // section hidden (router) or not yet laid out
-      var scrolled = -track.getBoundingClientRect().top;
-      var p = Math.max(0, Math.min(scrolled / total, 1));
-      var sf = p * N;                       // 0 .. N
-      var base = Math.min(Math.floor(sf), N - 1);
-      var frac = ease(sf - base);
-      var a = KEY[base], b = KEY[base + 1];
-      var cx = lerp(a.cx, b.cx, frac), cy = lerp(a.cy, b.cy, frac), z = lerp(a.z, b.z, frac);
-
-      var camW = cam.clientWidth, camH = cam.clientHeight;
-      var px = ((cx - VBX) / VBW) * camW;
-      var py = ((cy - VBY) / VBH) * camH;
-      var tx = (camW / 2 - px) * z;
-      var ty = (camH / 2 - py) * z;
-      cam.style.transform = 'translate(' + tx.toFixed(1) + 'px,' + ty.toFixed(1) + 'px) scale(' + z.toFixed(3) + ')';
-
-      var active = Math.round(sf);          // 0 .. N
-      var acc = ACC[active];
-      svg.setAttribute('data-stage', active);
-      svg.style.color = acc;
-      vp.style.setProperty('--acc', acc);
-      intro.style.opacity = Math.max(0, 1 - sf * 1.5);
-
-      if (active !== lastActive) {
-        lastActive = active;
-        clearTimeout(capTimer); // drop any stale caption swap in flight
-        hud.classList.add('swap');
-        if (active > 0) {
-          stopCur.textContent = active;
-          prevBtn.disabled = active <= 1;
-          nextBtn.disabled = active >= N;
-          capTimer = setTimeout(function (cur) {
-            var li = steps[cur - 1];
-            pillLabel.textContent = li.dataset.pill;
-            para.textContent = li.dataset.para;
-            hud.classList.remove('swap');
-          }, 180, active);
-        }
-        dots.forEach(function (d, idx) {
-          if (idx === active - 1) d.setAttribute('aria-current', 'true');
-          else d.removeAttribute('aria-current');
-        });
+    function select(n) {
+      n = Math.max(1, Math.min(n, steps.length || 6));
+      svg.setAttribute('data-active', n);
+      tabs.forEach(function (t) { t.setAttribute('aria-selected', String(parseInt(t.dataset.part, 10) === n)); });
+      var li = steps[n - 1];
+      if (li) {
+        titleEl.textContent = li.dataset.title;
+        var strong = li.querySelector('strong');
+        textEl.textContent = li.textContent.replace(strong ? strong.textContent : '', '').trim();
       }
+      if (nEl) nEl.textContent = n;
     }
 
-    var ticking = false;
-    function onScroll() {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(function () { render(); ticking = false; });
-    }
-    // seed the first caption so it is not blank before the first scroll
-    pillLabel.textContent = steps[0].dataset.pill;
-    para.textContent = steps[0].dataset.para;
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', function () { sizeTrack(); render(); });
-    render();
+    tabs.forEach(function (t) { t.addEventListener('click', function () { select(parseInt(t.dataset.part, 10)); }); });
+    svg.querySelectorAll('.hotspot').forEach(function (h) {
+      var go = function () { select(parseInt(h.dataset.part, 10)); };
+      h.addEventListener('click', go);
+      h.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } });
+    });
+    select(1);
   })();
 
   /* ============ TOUR VIDEO (autoplay while in view) ============ */
