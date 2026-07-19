@@ -28,26 +28,29 @@
 <script>document.documentElement.classList.add('js');</script>
 <style>
   :root {
-    --ink: #0F172A;
-    --body: #334155;
-    --muted: #64748B;
-    --faint: #94A3B8;
-    --hair: #E2E8F0;
-    --tint: #F8FAFC;
-    --card: #FFFFFF;
-    --blue: #2563EB;       /* data accent, validated >=3:1 on white */
-    --blue-deep: #1D4ED8;
-    --blue-wash: #EFF6FF;
-    --amber: #F59E0B;      /* small accents only, never text */
-    --navy: #0F172A;
-    --green-ok: #047857;
+    /* ---- Cinematic dark / control-room theme ---- */
+    --ink: #F2F6FC;        /* headings & strong text (light) */
+    --body: #BFC9D9;       /* body text */
+    --muted: #8593A8;      /* secondary text */
+    --faint: #5C6A82;      /* faint labels & de-emphasis */
+    --hair: rgba(255,255,255,0.10);  /* borders */
+    --tint: #0E1522;       /* alternate band, one step up from page */
+    --card: #121B2B;       /* elevated surface */
+    --card-2: #16223500;   /* (reserved) */
+    --blue: #60A5FA;       /* glowing data accent on dark */
+    --blue-deep: #93C5FD;  /* links / accent text, readable on dark */
+    --blue-wash: rgba(96,165,250,0.14);
+    --amber: #FBBF24;      /* signal amber */
+    --navy: #070B14;       /* deepest surfaces */
+    --green-ok: #34D399;
     --display: 'Fraunces', 'Newsreader', Georgia, serif;
     --serif: 'Newsreader', Georgia, serif;
     --sans: 'Public Sans', system-ui, -apple-system, sans-serif;
-    --paper: #FBFAF7;   /* warm off-white, less clinical than pure #fff */
-    --ink-line: #E7E3DA; /* warm hairline */
-    --shadow: 0 1px 2px rgba(15,23,42,0.05), 0 8px 24px rgba(15,23,42,0.06);
-    --shadow-lift: 0 2px 4px rgba(15,23,42,0.06), 0 14px 34px rgba(15,23,42,0.10);
+    --paper: #0A0E17;   /* page background, near-black navy */
+    --ink-line: rgba(255,255,255,0.10);
+    --shadow: 0 1px 2px rgba(0,0,0,0.45), 0 14px 34px rgba(0,0,0,0.42);
+    --shadow-lift: 0 2px 6px rgba(0,0,0,0.5), 0 22px 50px rgba(0,0,0,0.55);
+    --glow-blue: 0 0 0 1px rgba(96,165,250,0.25), 0 0 34px rgba(96,165,250,0.16);
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -64,11 +67,15 @@
     background: var(--paper); color: var(--body);
     overflow-x: clip;
   }
-  /* faint film grain so surfaces don't read as flat template white */
+  /* faint film grain + a slow control-room vignette so dark surfaces feel lit */
   body::before {
-    content: ''; position: fixed; inset: 0; z-index: 1; pointer-events: none; opacity: 0.5;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
-    mix-blend-mode: multiply;
+    content: ''; position: fixed; inset: 0; z-index: 1; pointer-events: none; opacity: 0.55;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+    mix-blend-mode: soft-light;
+  }
+  body::after {
+    content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background: radial-gradient(120% 80% at 50% -10%, rgba(96,165,250,0.06), rgba(10,14,23,0) 60%);
   }
   main, footer, nav { position: relative; z-index: 2; }
 
@@ -79,7 +86,7 @@
 
   .skip-link {
     position: absolute; left: -9999px; top: 0;
-    background: var(--ink); color: #fff;
+    background: var(--amber); color: #0A0E17;
     padding: 0.6rem 1rem; z-index: 100; font-weight: 600; text-decoration: none;
   }
   .skip-link:focus { left: 0; }
@@ -93,7 +100,7 @@
   /* ============ NAV ============ */
   .nav {
     position: fixed; top: 0; left: 0; right: 0; z-index: 50;
-    background: rgba(255,255,255,0.88);
+    background: rgba(10,14,23,0.82);
     backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--hair);
     display: flex; align-items: center; gap: 1.25rem;
@@ -159,8 +166,8 @@
   .hero__veil {
     position: absolute; inset: 0; z-index: 1; pointer-events: none;
     background:
-      linear-gradient(95deg, var(--paper) 26%, rgba(251,250,247,0.6) 56%, rgba(251,250,247,0.05) 100%),
-      linear-gradient(0deg, var(--paper), rgba(251,250,247,0) 34%);
+      linear-gradient(95deg, var(--paper) 24%, rgba(10,14,23,0.62) 56%, rgba(10,14,23,0.05) 100%),
+      linear-gradient(0deg, var(--paper), rgba(10,14,23,0) 36%);
   }
   .hero .wrap { position: relative; z-index: 2; }
   .hero__grid { flex: 1; display: flex; align-items: center; padding: 2rem 0; }
@@ -206,8 +213,8 @@
   .btn {
     display: inline-flex; align-items: center; gap: 0.5rem;
     font-family: var(--sans); font-size: 0.92rem; font-weight: 600;
-    background: var(--ink); color: #fff;
-    border: none; border-radius: 10px;
+    background: var(--blue); color: #071426;
+    border: none; border-radius: 10px; box-shadow: 0 0 26px rgba(96,165,250,0.28);
     padding: 0.9rem 1.7rem; min-height: 48px;
     text-decoration: none; cursor: pointer;
     transition: background 0.2s;
@@ -264,7 +271,7 @@
   .chart-plot { position: relative; }
   .chart-tip {
     position: absolute; z-index: 20;
-    background: var(--ink); color: #fff;
+    background: #060a13; color: var(--ink); border: 1px solid rgba(255,255,255,0.12);
     padding: 0.6rem 0.85rem; font-size: 0.8rem; line-height: 1.45;
     border-radius: 8px; pointer-events: none; max-width: 16rem; display: none;
   }
@@ -430,7 +437,7 @@
     content: counter(step);
     position: absolute; left: 0; top: 0.1rem;
     width: 1.65rem; height: 1.65rem;
-    background: var(--ink); color: #fff; border-radius: 50%;
+    background: var(--blue); color: #071426; border-radius: 50%;
     font-size: 0.8rem; font-weight: 600;
     display: flex; align-items: center; justify-content: center;
   }
@@ -608,9 +615,9 @@
   .acc.open .acc-panel { grid-template-rows: 1fr; }
   .acc-panel > div { overflow: hidden; }
   .acc-body { padding: 0 1.5rem 1.5rem; }
-  .fact-box { background: #ECFDF5; border: 1px solid #A7F3D0; border-radius: 10px; padding: 1.1rem 1.3rem; display: flex; gap: 0.8rem; align-items: flex-start; }
+  .fact-box { background: rgba(52,211,153,0.09); border: 1px solid rgba(52,211,153,0.28); border-radius: 10px; padding: 1.1rem 1.3rem; display: flex; gap: 0.8rem; align-items: flex-start; }
   .fact-box .fact-label { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--green-ok); display: block; margin-bottom: 0.25rem; }
-  .fact-box p { font-size: 0.92rem; color: #065F46; line-height: 1.6; }
+  .fact-box p { font-size: 0.92rem; color: #BDEFD9; line-height: 1.6; }
   .fact-box svg { flex-shrink: 0; margin-top: 0.1rem; }
 
   /* ============ FIELD FIGURE ============ */
@@ -2236,15 +2243,15 @@
 
     function frame(t) {
       ctx.clearRect(0, 0, W, H);
-      // blueprint grid
-      ctx.strokeStyle = 'rgba(15,23,42,0.045)';
+      // blueprint grid (light lines on the dark stage)
+      ctx.strokeStyle = 'rgba(255,255,255,0.045)';
       ctx.lineWidth = 1;
       for (var x = 0.5; x < W; x += 56) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }
       for (var y = 0.5; y < H; y += 56) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
       // atom rings with gentle mouse parallax
       var px = (mx - 0.5) * 14, py = (my - 0.45) * 10;
       var cx = W * 0.74 + px, cy = H * 0.36 + py;
-      ctx.strokeStyle = 'rgba(37,99,235,0.07)';
+      ctx.strokeStyle = 'rgba(96,165,250,0.16)';
       ctx.lineWidth = 1.2;
       [H * 0.16, H * 0.24, H * 0.33].forEach(function (r, i) {
         ctx.beginPath();
@@ -2253,14 +2260,14 @@
       });
       // core glow
       var grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, H * 0.2);
-      grad.addColorStop(0, 'rgba(245,158,11,0.08)');
-      grad.addColorStop(1, 'rgba(245,158,11,0)');
+      grad.addColorStop(0, 'rgba(96,165,250,0.14)');
+      grad.addColorStop(1, 'rgba(96,165,250,0)');
       ctx.fillStyle = grad;
       ctx.fillRect(cx - H * 0.25, cy - H * 0.25, H * 0.5, H * 0.5);
       // drifting neutrons
       parts.forEach(function (p) {
-        var a = 0.16 + 0.13 * Math.sin(p.tw + t * 0.0012);
-        ctx.fillStyle = p.amber ? 'rgba(245,158,11,' + (a + 0.08).toFixed(3) + ')' : 'rgba(37,99,235,' + a.toFixed(3) + ')';
+        var a = 0.28 + 0.22 * Math.sin(p.tw + t * 0.0012);
+        ctx.fillStyle = p.amber ? 'rgba(251,191,36,' + (a + 0.1).toFixed(3) + ')' : 'rgba(125,185,255,' + a.toFixed(3) + ')';
         ctx.beginPath();
         ctx.arc(p.x * W + px * (p.r / 3), p.y * H + py * (p.r / 3), p.r, 0, Math.PI * 2);
         ctx.fill();
