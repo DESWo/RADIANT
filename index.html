@@ -79,6 +79,29 @@
   }
   main, footer, nav { position: relative; z-index: 2; }
 
+  /* ============ VIEW ROUTER (click to navigate; no-JS = full scroll) ============ */
+  .js .view:not(.is-active) { display: none !important; }
+  .js .closing-band { display: none; }
+  .js[data-view="top"] .closing-band { display: block; }
+  .js .view.is-active { animation: viewfade 0.4s ease both; }
+  @keyframes viewfade { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .js .view.is-active { animation: none; } }
+
+  /* Overview hub (landing directory) */
+  .hero-hub { position: relative; z-index: 2; padding-top: 3rem; margin-top: 2.5rem; border-top: 1px solid var(--ink-line); }
+  .hub-title { font-family: var(--sans); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-bottom: 1.4rem; }
+  .hub-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); gap: 0.9rem; }
+  .hub-card {
+    display: flex; flex-direction: column; gap: 0.25rem; text-decoration: none;
+    background: var(--card); border: 1px solid var(--hair); border-radius: 12px;
+    padding: 1.1rem 1.2rem; transition: border-color 0.2s, transform 0.2s, background 0.2s;
+  }
+  .hub-card:hover { border-color: var(--blue); transform: translateY(-3px); background: rgba(96,165,250,0.06); }
+  .hub-card .hc-n { font-family: var(--sans); font-size: 0.66rem; font-weight: 700; letter-spacing: 0.14em; color: var(--faint); }
+  .hub-card .hc-t { font-family: var(--display); font-size: 1.25rem; font-weight: 600; color: var(--ink); letter-spacing: -0.01em; }
+  .hub-card .hc-d { font-size: 0.82rem; color: var(--muted); line-height: 1.45; }
+  .hub-card:hover .hc-t { color: var(--blue-deep); }
+
   h1, h2, h3 { font-family: var(--display); font-weight: 500; color: var(--ink); }
   a { color: var(--blue-deep); }
   ::selection { background: rgba(245,158,11,0.3); }
@@ -158,9 +181,9 @@
   /* ============ HERO (asymmetric editorial) ============ */
   .hero {
     position: relative; overflow: clip;
-    min-height: min(96vh, 64rem);
-    display: flex; flex-direction: column; justify-content: flex-end;
-    padding: 7rem 0 0;
+    min-height: auto;
+    display: flex; flex-direction: column; justify-content: flex-start;
+    padding: 7rem 0 3.5rem;
   }
   #hero-bg { position: absolute; inset: 0; z-index: 0; }
   .hero__veil {
@@ -677,8 +700,11 @@
   /* ============ SCHOOLS ============ */
   .sub-head { font-family: var(--sans); font-size: 1.05rem; font-weight: 600; color: var(--ink); margin: 2.6rem 0 1.2rem; }
   .school-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); gap: 1rem; max-width: 60rem; margin-bottom: 1rem; }
-  .school-card { background: var(--card); border: 1px solid var(--hair); border-radius: 10px; padding: 1rem 1.2rem; }
-  .school-card h4 { font-family: var(--sans); font-size: 0.92rem; font-weight: 600; color: var(--ink); margin-bottom: 0.2rem; }
+  .school-card { display: block; text-decoration: none; background: var(--card); border: 1px solid var(--hair); border-radius: 10px; padding: 1rem 1.2rem; transition: border-color 0.2s, transform 0.2s, background 0.2s; }
+  a.school-card:hover { border-color: var(--blue); transform: translateY(-2px); background: rgba(96,165,250,0.06); }
+  .school-card h4 { font-family: var(--sans); font-size: 0.92rem; font-weight: 600; color: var(--ink); margin-bottom: 0.2rem; display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; }
+  .school-card h4 .go { color: var(--faint); font-weight: 400; transition: color 0.2s; }
+  a.school-card:hover h4 .go { color: var(--blue); }
   .school-card .prog { font-size: 0.78rem; color: var(--muted); line-height: 1.5; display: block; }
   .school-card .loc { font-size: 0.72rem; color: var(--faint); display: block; margin-top: 0.3rem; }
   .school-note { font-size: 0.8rem; color: var(--muted); max-width: 46rem; margin-bottom: 2.6rem; }
@@ -778,7 +804,7 @@
 </noscript>
 
 <!-- ================= OVERVIEW ================= -->
-<header class="hero" id="top">
+<header class="view hero" id="top">
   <canvas id="hero-bg" aria-hidden="true"></canvas>
   <div class="hero__veil" aria-hidden="true"></div>
   <div class="wrap hero__grid">
@@ -812,10 +838,31 @@
       </a>
     </div>
   </div>
+
+  <div class="wrap hero-hub">
+    <h2 class="hub-title">Choose where to start</h2>
+    <div class="hub-grid">
+      <a class="hub-card" href="#case"><span class="hc-n">01 · THE CASE</span><span class="hc-t">The argument</span><span class="hc-d">The whole case for nuclear, on one page.</span></a>
+      <a class="hub-card" href="#reactor-motion"><span class="hc-n">02 · WATCH</span><span class="hc-t">See a real plant</span><span class="hc-d">Aerial footage you zoom into by scrolling.</span></a>
+      <a class="hub-card" href="#how"><span class="hc-n">03 · THE PLANT</span><span class="hc-t">Take the tour</span><span class="hc-d">Walk through a reactor, stop by stop.</span></a>
+      <a class="hub-card" href="#data"><span class="hc-n">04 · SAFETY</span><span class="hc-t">The death-rate data</span><span class="hc-d">How nuclear compares, per unit of energy.</span></a>
+      <a class="hub-card" href="#capacity"><span class="hc-n">05 · CAPACITY</span><span class="hc-t">Round-the-clock power</span><span class="hc-d">Which sources actually run, and how often.</span></a>
+      <a class="hub-card" href="#simulator"><span class="hc-n">06 · SIMULATOR</span><span class="hc-t">Power a city</span><span class="hc-d">Build a grid mix and light up a city.</span></a>
+      <a class="hub-card" href="#costs"><span class="hc-n">07 · COSTS</span><span class="hc-t">What it costs to run</span><span class="hc-d">Operating costs, separated from build costs.</span></a>
+      <a class="hub-card" href="#incidents"><span class="hc-n">08 · INCIDENTS</span><span class="hc-t">Facts vs. fear</span><span class="hc-d">TMI, Chernobyl, Fukushima, counted honestly.</span></a>
+      <a class="hub-card" href="#exposure"><span class="hc-n">09 · EXPOSURE</span><span class="hc-t">Radiation in context</span><span class="hc-d">Bananas, flights, and living near a plant.</span></a>
+      <a class="hub-card" href="#myths"><span class="hc-n">10 · MYTHS</span><span class="hc-t">Myths vs. facts</span><span class="hc-d">Five misconceptions, corrected with evidence.</span></a>
+      <a class="hub-card" href="#limits"><span class="hc-n">11 · LIMITATIONS</span><span class="hc-t">The honest problems</span><span class="hc-d">Cost, waste, proliferation, and more.</span></a>
+      <a class="hub-card" href="#news"><span class="hc-n">12 · NEWS</span><span class="hc-t">Latest headlines</span><span class="hc-d">Auto-updating nuclear energy news.</span></a>
+      <a class="hub-card" href="#careers"><span class="hc-n">13 · CAREERS</span><span class="hc-t">Working in nuclear</span><span class="hc-d">Roles, pay, and what they involve.</span></a>
+      <a class="hub-card" href="#students"><span class="hc-n">14 · STUDENTS</span><span class="hc-t">Your pathway in</span><span class="hc-d">Schools, scholarships, and internships.</span></a>
+      <a class="hub-card" href="#about"><span class="hc-n">15 · INFO</span><span class="hc-t">About &amp; sources</span><span class="hc-d">Who made this, and every citation.</span></a>
+    </div>
+  </div>
 </header>
 
 <!-- ================= 01 THE CASE ================= -->
-<section class="band band--tint" id="case" aria-labelledby="h-case">
+<section class="view band band--tint" id="case" aria-labelledby="h-case">
   <div class="wrap">
     <div class="section-head reveal">
       <span class="overline"><span class="n">01</span>The Case</span>
@@ -858,7 +905,7 @@
 </section>
 
 <!-- ================= INTERSTITIAL: REACTOR IN MOTION ================= -->
-<section class="band videoscape" id="reactor-motion" aria-labelledby="h-motion" data-videoscrub>
+<section class="view band videoscape" id="reactor-motion" aria-labelledby="h-motion" data-videoscrub>
   <div class="vs-track">
     <div class="vs-vp">
       <div class="vs-hud">
@@ -880,7 +927,7 @@
 </section>
 
 <!-- ================= 02 THE PLANT ================= -->
-<section class="band plant-cinema" id="how" aria-labelledby="h-how" data-stages="6">
+<section class="view band plant-cinema" id="how" aria-labelledby="h-how" data-stages="6">
   <div class="plant-track">
     <div class="plant-vp">
       <div class="plant-intro">
@@ -993,7 +1040,7 @@
 </section>
 
 <!-- ================= 03 SAFETY ================= -->
-<section class="band band--tint" id="data" aria-labelledby="h-data">
+<section class="view band band--tint" id="data" aria-labelledby="h-data">
   <div class="wrap">
     <div class="section-head reveal">
       <span class="overline"><span class="n">03</span>Safety</span>
@@ -1032,7 +1079,7 @@
 </section>
 
 <!-- ================= 04 CAPACITY ================= -->
-<section class="band" id="capacity" aria-labelledby="h-capacity">
+<section class="view band" id="capacity" aria-labelledby="h-capacity">
   <div class="wrap">
     <div class="section-head reveal">
       <span class="overline"><span class="n">04</span>Capacity</span>
@@ -1075,7 +1122,7 @@
 </section>
 
 <!-- ================= 05 SIMULATOR ================= -->
-<section class="band" id="simulator" aria-labelledby="h-sim">
+<section class="view band" id="simulator" aria-labelledby="h-sim">
   <div class="wrap">
     <div class="section-head reveal">
       <span class="overline"><span class="n">05</span>Interactive model</span>
@@ -1147,7 +1194,7 @@
 </section>
 
 <!-- ================= 06 COSTS ================= -->
-<section class="band band--tint" id="costs" aria-labelledby="h-costs">
+<section class="view band band--tint" id="costs" aria-labelledby="h-costs">
   <div class="wrap">
     <div class="section-head reveal">
       <span class="overline"><span class="n">06</span>Costs</span>
@@ -1186,7 +1233,7 @@
 </section>
 
 <!-- ================= 06 INCIDENTS ================= -->
-<section class="band" id="incidents" aria-labelledby="h-incidents">
+<section class="view band" id="incidents" aria-labelledby="h-incidents">
   <div class="wrap">
     <div class="section-head reveal">
       <span class="overline"><span class="n">07</span>Incidents</span>
@@ -1207,7 +1254,7 @@
 </section>
 
 <!-- ================= 07 EXPOSURE ================= -->
-<section class="band band--tint" id="exposure" aria-labelledby="h-exposure">
+<section class="view band band--tint" id="exposure" aria-labelledby="h-exposure">
   <div class="wrap">
     <div class="section-head reveal">
       <span class="overline"><span class="n">08</span>Exposure</span>
@@ -1246,7 +1293,7 @@
 </section>
 
 <!-- ================= 08 MYTHS ================= -->
-<section class="band" id="myths" aria-labelledby="h-myths">
+<section class="view band" id="myths" aria-labelledby="h-myths">
   <div class="wrap">
     <div class="section-head reveal">
       <span class="overline"><span class="n">09</span>Myths</span>
@@ -1366,7 +1413,7 @@
 </section>
 
 <!-- ================= 09 LIMITATIONS ================= -->
-<section class="band band--tint" id="limits" aria-labelledby="h-limits">
+<section class="view band band--tint" id="limits" aria-labelledby="h-limits">
   <div class="wrap">
     <div class="section-head reveal">
       <span class="overline"><span class="n">10</span>Limitations</span>
@@ -1392,7 +1439,7 @@
 </section>
 
 <!-- ================= 10 NEWS ================= -->
-<section class="band band--tint" id="news" aria-labelledby="h-news">
+<section class="view band band--tint" id="news" aria-labelledby="h-news">
   <div class="wrap">
     <div class="section-head reveal">
       <span class="overline"><span class="n">11</span>News</span>
@@ -1421,7 +1468,7 @@
 </section>
 
 <!-- ================= 10 CAREERS ================= -->
-<section class="band" id="careers" aria-labelledby="h-careers">
+<section class="view band" id="careers" aria-labelledby="h-careers">
   <div class="wrap">
     <div class="section-head reveal">
       <span class="overline"><span class="n">12</span>Careers</span>
@@ -1453,7 +1500,7 @@
 </section>
 
 <!-- ================= 11 STUDENTS ================= -->
-<section class="band band--tint" id="students" aria-labelledby="h-students">
+<section class="view band band--tint" id="students" aria-labelledby="h-students">
   <div class="wrap">
     <div class="section-head reveal">
       <span class="overline"><span class="n">13</span>Students</span>
@@ -1498,18 +1545,19 @@
 
     <h3 class="sub-head reveal">Where to study</h3>
     <div class="school-grid">
-      <div class="school-card reveal"><h4>MIT</h4><span class="prog">Nuclear Science &amp; Engineering</span><span class="loc">Cambridge, MA</span></div>
-      <div class="school-card reveal"><h4>University of Michigan</h4><span class="prog">Nuclear Engineering &amp; Radiological Sciences</span><span class="loc">Ann Arbor, MI</span></div>
-      <div class="school-card reveal"><h4>UC Berkeley</h4><span class="prog">Nuclear Engineering</span><span class="loc">Berkeley, CA</span></div>
-      <div class="school-card reveal"><h4>Texas A&amp;M University</h4><span class="prog">Nuclear Engineering</span><span class="loc">College Station, TX</span></div>
-      <div class="school-card reveal"><h4>Penn State</h4><span class="prog">Nuclear Engineering</span><span class="loc">University Park, PA</span></div>
-      <div class="school-card reveal"><h4>Georgia Tech</h4><span class="prog">Nuclear &amp; Radiological Engineering</span><span class="loc">Atlanta, GA</span></div>
-      <div class="school-card reveal"><h4>University of Wisconsin</h4><span class="prog">Nuclear Engineering</span><span class="loc">Madison, WI</span></div>
-      <div class="school-card reveal"><h4>University of Tennessee</h4><span class="prog">Nuclear Engineering</span><span class="loc">Knoxville, TN</span></div>
-      <div class="school-card reveal"><h4>North Carolina State</h4><span class="prog">Nuclear Engineering</span><span class="loc">Raleigh, NC</span></div>
-      <div class="school-card reveal"><h4>Purdue University</h4><span class="prog">Nuclear Engineering</span><span class="loc">West Lafayette, IN</span></div>
-      <div class="school-card reveal"><h4>Oregon State</h4><span class="prog">Radiation Health Physics</span><span class="loc">Corvallis, OR</span></div>
-      <div class="school-card reveal"><h4>National lab partnerships</h4><span class="prog">PhD programs partnered with Oak Ridge, Argonne, and Idaho National Laboratories</span></div>
+      <a class="school-card reveal" href="https://www.mit.edu" target="_blank" rel="noopener noreferrer"><h4>MIT <span class="go">↗</span></h4><span class="prog">Nuclear Science &amp; Engineering</span><span class="loc">Cambridge, MA</span></a>
+      <a class="school-card reveal" href="https://umich.edu" target="_blank" rel="noopener noreferrer"><h4>University of Michigan <span class="go">↗</span></h4><span class="prog">Nuclear Engineering &amp; Radiological Sciences</span><span class="loc">Ann Arbor, MI</span></a>
+      <a class="school-card reveal" href="https://www.berkeley.edu" target="_blank" rel="noopener noreferrer"><h4>UC Berkeley <span class="go">↗</span></h4><span class="prog">Nuclear Engineering</span><span class="loc">Berkeley, CA</span></a>
+      <a class="school-card reveal" href="https://www.tamu.edu" target="_blank" rel="noopener noreferrer"><h4>Texas A&amp;M University <span class="go">↗</span></h4><span class="prog">Nuclear Engineering</span><span class="loc">College Station, TX</span></a>
+      <a class="school-card reveal" href="https://www.psu.edu" target="_blank" rel="noopener noreferrer"><h4>Penn State <span class="go">↗</span></h4><span class="prog">Nuclear Engineering</span><span class="loc">University Park, PA</span></a>
+      <a class="school-card reveal" href="https://www.gatech.edu" target="_blank" rel="noopener noreferrer"><h4>Georgia Tech <span class="go">↗</span></h4><span class="prog">Nuclear &amp; Radiological Engineering</span><span class="loc">Atlanta, GA</span></a>
+      <a class="school-card reveal" href="https://www.wisc.edu" target="_blank" rel="noopener noreferrer"><h4>University of Wisconsin <span class="go">↗</span></h4><span class="prog">Nuclear Engineering</span><span class="loc">Madison, WI</span></a>
+      <a class="school-card reveal" href="https://www.utk.edu" target="_blank" rel="noopener noreferrer"><h4>University of Tennessee <span class="go">↗</span></h4><span class="prog">Nuclear Engineering</span><span class="loc">Knoxville, TN</span></a>
+      <a class="school-card reveal" href="https://www.ncsu.edu" target="_blank" rel="noopener noreferrer"><h4>North Carolina State <span class="go">↗</span></h4><span class="prog">Nuclear Engineering</span><span class="loc">Raleigh, NC</span></a>
+      <a class="school-card reveal" href="https://www.purdue.edu" target="_blank" rel="noopener noreferrer"><h4>Purdue University <span class="go">↗</span></h4><span class="prog">Nuclear Engineering</span><span class="loc">West Lafayette, IN</span></a>
+      <a class="school-card reveal" href="https://oregonstate.edu" target="_blank" rel="noopener noreferrer"><h4>Oregon State <span class="go">↗</span></h4><span class="prog">Radiation Health Physics</span><span class="loc">Corvallis, OR</span></a>
+      <a class="school-card reveal" href="https://www.energy.gov/national-laboratories" target="_blank" rel="noopener noreferrer"><h4>National lab partnerships <span class="go">↗</span></h4><span class="prog">PhD programs partnered with Oak Ridge, Argonne, and Idaho National Laboratories</span></a>
+    </div>
     </div>
     <p class="school-note reveal">A sampling of well-known programs; many more U.S. universities offer nuclear engineering and related degrees, most from bachelor's through PhD. The <a href="https://www.ans.org/students/" target="_blank" rel="noopener noreferrer">American Nuclear Society</a> maintains student resources and program listings.</p>
 
@@ -1551,7 +1599,7 @@
 </section>
 
 <!-- ================= INFO ================= -->
-<section class="band" id="about" aria-labelledby="h-about">
+<section class="view band" id="about" aria-labelledby="h-about">
   <div class="wrap">
     <div class="section-head reveal" style="margin-bottom:2rem">
       <span class="overline"><span class="n">14</span>Info · About the author</span>
@@ -1561,7 +1609,7 @@
       <div>
         <h3 id="h-about">Desmond Wong</h3>
         <div class="prose">
-          <p>Desmond Wong is an 11th-grade student and aspiring nuclear engineer from California, attending Diamond Bar High School (Class of 2027). After years of watching public fear override scientific evidence in energy debates, he created <strong>Radiant</strong> to put the data front and center.</p>
+          <p>Desmond Wong is a 12th-grade student and aspiring nuclear engineer from California, attending Diamond Bar High School (Class of 2027). After years of watching public fear override scientific evidence in energy debates, he created <strong>Radiant</strong> to put the data front and center.</p>
         </div>
         <p class="about-contact">Contact: <a href="mailto:wongdesmond414@gmail.com">wongdesmond414@gmail.com</a></p>
       </div>
@@ -2370,6 +2418,7 @@
     function render() {
       var vh = vp.clientHeight;
       var total = track.offsetHeight - vh;
+      if (total <= 0) return; // section hidden (router) or not yet laid out
       var scrolled = -track.getBoundingClientRect().top;
       var p = Math.max(0, Math.min(scrolled / total, 1));
       var sf = p * N;                       // 0 .. N
@@ -2481,28 +2530,47 @@
     render();
   })();
 
-  /* ============ NAV SCROLLSPY ============ */
+  /* ============ VIEW ROUTER (click to navigate, one section at a time) ============ */
   var navLinks = document.querySelectorAll('#nav-links a');
-  var sectionsById = {};
-  navLinks.forEach(function (a) {
-    var id = a.getAttribute('href').slice(1);
-    var sec = document.getElementById(id);
-    if (sec) sectionsById[id] = a;
-  });
-  if ('IntersectionObserver' in window) {
-    var so = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          var link = sectionsById[entry.target.id];
-          if (!link) return;
-          navLinks.forEach(function (a) { a.classList.remove('active'); });
-          link.classList.add('active');
-          link.scrollIntoView({ block: 'nearest', inline: 'nearest' });
-        }
-      });
-    }, { rootMargin: '-45% 0px -50% 0px' });
-    Object.keys(sectionsById).forEach(function (id) { so.observe(document.getElementById(id)); });
+  var views = [].slice.call(document.querySelectorAll('.view'));
+  var htmlEl = document.documentElement;
+
+  function activateView(id) {
+    var target = document.getElementById(id);
+    if (!target || !target.classList.contains('view')) target = document.getElementById('top');
+    id = target.id;
+    views.forEach(function (v) { v.classList.toggle('is-active', v === target); });
+    htmlEl.setAttribute('data-view', id);
+    navLinks.forEach(function (a) {
+      var on = a.getAttribute('href') === '#' + id;
+      a.classList.toggle('active', on);
+      if (on) a.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    });
+    // make sure everything in the shown view is visible, then reset scroll
+    target.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('in'); });
+    window.scrollTo(0, 0);
+    window.dispatchEvent(new Event('scroll')); // re-sync scroll-driven sections
   }
+
+  function routeFromHash() {
+    activateView((location.hash || '#top').slice(1));
+  }
+
+  // intercept in-page links to views so they swap the view instead of scrolling
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest ? e.target.closest('a[href^="#"]') : null;
+    if (!a) return;
+    var href = a.getAttribute('href');
+    if (!href || href.length < 2) return;
+    var el = document.getElementById(href.slice(1));
+    if (el && el.classList.contains('view')) {
+      e.preventDefault();
+      if (location.hash !== href) location.hash = href.slice(1);
+      else activateView(href.slice(1));
+    }
+  });
+  window.addEventListener('hashchange', routeFromHash);
+  routeFromHash();
 })();
 </script>
 </body>
