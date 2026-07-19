@@ -350,25 +350,29 @@
   .vs-credit a { color: rgba(255,255,255,0.7); }
 
   /* Cinema mode: pinned, full-bleed, scroll drives playback. */
-  .js:not(.reduced) .vs-track { position: relative; height: 240vh; }
+  .js:not(.reduced) .vs-track { position: relative; height: 320vh; } /* long = gentle scroll */
   .js:not(.reduced) .vs-vp {
     position: sticky; top: 0; height: 100vh; height: 100svh; max-width: none; padding: 0;
     overflow: clip; display: flex; align-items: center; justify-content: center;
   }
   .js:not(.reduced) .vs-video {
     position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 0; z-index: 0;
+    transform-origin: 50% 44%; will-change: transform;
   }
   .js:not(.reduced) .vs-veil {
     display: block; position: absolute; inset: 0; z-index: 1; pointer-events: none;
     background:
-      radial-gradient(70% 55% at 50% 46%, rgba(6,10,20,0.62), rgba(6,10,20,0) 75%),
-      linear-gradient(0deg, rgba(6,10,20,0.92), rgba(6,10,20,0) 42%),
-      linear-gradient(180deg, rgba(6,10,20,0.6), rgba(6,10,20,0) 32%);
+      radial-gradient(60% 48% at 50% 47%, rgba(4,7,14,0.82), rgba(4,7,14,0.15) 78%),
+      linear-gradient(0deg, rgba(4,7,14,0.95), rgba(4,7,14,0) 44%),
+      linear-gradient(180deg, rgba(4,7,14,0.7), rgba(4,7,14,0) 34%);
   }
   .js:not(.reduced) .vs-hud {
-    position: relative; z-index: 2; margin: 0; padding: 1.5rem; max-width: 42rem;
-    transition: opacity 0.3s ease; text-shadow: 0 2px 28px rgba(0,0,0,0.55);
+    position: relative; z-index: 2; margin: 0; padding: 2rem 2.2rem; max-width: 40rem;
+    transition: opacity 0.3s ease;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.9), 0 2px 30px rgba(0,0,0,0.7);
   }
+  .js:not(.reduced) .vs-hud h2 { font-weight: 600; }
+  .js:not(.reduced) .vs-hud p { color: #EAF0F8; }
   .js:not(.reduced) .vs-scroll {
     display: inline-flex; align-items: center; gap: 0.5rem; margin-top: 1.7rem;
     font-family: var(--sans); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--faint);
@@ -858,20 +862,19 @@
   <div class="vs-track">
     <div class="vs-vp">
       <div class="vs-hud">
-        <span class="overline">In motion</span>
-        <h2 id="h-motion">Watch a reactor run</h2>
-        <p>The same pressurized-water reactor you are about to tour, from fission to power line.</p>
-        <span class="vs-scroll">Scroll to play
+        <span class="overline">On location</span>
+        <h2 id="h-motion">This is a nuclear plant</h2>
+        <p>Cooling towers venting nothing but water vapor. Scroll to zoom in, then step inside on the tour.</p>
+        <span class="vs-scroll">Scroll to zoom in
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14"/><path d="m6 13 6 6 6-6"/></svg>
         </span>
       </div>
-      <video class="vs-video" muted playsinline preload="auto" controls
-             aria-label="Animated cross-section of a pressurized-water reactor generating electricity, produced by the Tennessee Valley Authority.">
-        <source src="assets/pwr-animation.webm" type="video/webm">
+      <video class="vs-video" muted loop playsinline preload="auto" controls
+             aria-label="Aerial drone footage of a working nuclear power plant with cooling towers releasing steam.">
+        <source src="assets/plant-exterior.mp4" type="video/mp4">
       </video>
       <div class="vs-veil" aria-hidden="true"></div>
-      <p class="vs-credit">Animation: Tennessee Valley Authority · public domain, via <a href="https://commons.wikimedia.org/wiki/File:PWR_nuclear_power_plant_animation.webm" target="_blank" rel="noopener noreferrer">Wikimedia Commons</a></p>
-      <div class="vs-progress" aria-hidden="true"><span></span></div>
+      <p class="vs-credit">Drone footage via <a href="https://www.pexels.com/video/a-drone-shot-of-a-nuclear-power-plant-4188242/" target="_blank" rel="noopener noreferrer">Pexels</a></p>
     </div>
   </div>
 </section>
@@ -2433,49 +2436,41 @@
     var vp = sec.querySelector('.vs-vp');
     var video = sec.querySelector('.vs-video');
     var hud = sec.querySelector('.vs-hud');
-    var bar = sec.querySelector('.vs-progress > span');
-    var dur = 0, targetT = 0, curT = 0, raf = null, active = false;
 
-    // If the browser can't play/seek this webm (some Safari builds) fall back
-    // to a normal, framed video with native controls instead of a black pin.
-    function disableScrub() {
-      active = false;
+    video.removeAttribute('controls');
+    video.muted = true; video.loop = true; video.playsInline = true;
+
+    // if the clip can't load, degrade to a framed, playable video
+    video.addEventListener('error', function () {
       sec.classList.add('vs-nofx');
       video.setAttribute('controls', '');
       hud.style.opacity = '';
-    }
-    video.addEventListener('error', disableScrub);
-    video.addEventListener('loadedmetadata', function () { dur = video.duration || 0; });
-    video.addEventListener('loadeddata', function () {
-      // probe whether seeking actually works before committing to the effect
-      try { video.currentTime = 0.25; } catch (e) {}
-      setTimeout(function () {
-        if (dur && video.currentTime > 0.05) {
-          active = true; video.removeAttribute('controls'); video.pause(); render();
-        } else {
-          disableScrub();
-        }
-      }, 600);
+      video.style.transform = '';
     });
 
-    function scrollProgress() {
+    // autoplay the footage only while the section is on screen
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (es) {
+        es.forEach(function (e) {
+          if (e.isIntersecting) { video.play().catch(function () {}); }
+          else { video.pause(); }
+        });
+      }, { threshold: 0.02 }).observe(sec);
+    } else {
+      video.play().catch(function () {});
+    }
+
+    // scroll drives a smooth zoom into the plant (CSS transform, no seeking)
+    var MINZ = 1.06, MAXZ = 1.62;
+    function progress() {
       var total = track.offsetHeight - vp.clientHeight;
       if (total <= 0) return 0;
       return Math.max(0, Math.min(-track.getBoundingClientRect().top / total, 1));
     }
-    function tick() {
-      curT += (targetT - curT) * 0.16; // lerp so seeking reads as a smooth glide
-      if (Math.abs(targetT - curT) < 0.008) curT = targetT;
-      if (video.readyState >= 2) { try { video.currentTime = curT; } catch (e) {} }
-      raf = (Math.abs(targetT - curT) > 0.008) ? requestAnimationFrame(tick) : null;
-    }
     function render() {
-      if (!active || !dur) return;
-      var p = scrollProgress();
-      targetT = p * (dur - 0.05);
-      hud.style.opacity = Math.max(0, 1 - p * 3.5);
-      if (bar) bar.style.width = (p * 100).toFixed(1) + '%';
-      if (!raf) tick();
+      var p = progress();
+      video.style.transform = 'scale(' + (MINZ + (MAXZ - MINZ) * p).toFixed(4) + ')';
+      hud.style.opacity = Math.max(0, 1 - p * 1.7); // text stays legible well into the zoom
     }
     var ticking = false;
     window.addEventListener('scroll', function () {
@@ -2483,6 +2478,7 @@
       requestAnimationFrame(function () { render(); ticking = false; });
     }, { passive: true });
     window.addEventListener('resize', render);
+    render();
   })();
 
   /* ============ NAV SCROLLSPY ============ */
