@@ -359,7 +359,13 @@
   @media (max-width: 760px) { .bento { grid-template-columns: 1fr 1fr; } .bento .feature { grid-column: span 2; grid-row: auto; } }
   @media (max-width: 460px) { .bento { grid-template-columns: 1fr; } .bento .feature { grid-column: auto; } }
 
-  /* ============ SCROLL-SCRUBBED VIDEO ============ */
+  /* ============ TOUR VIDEO (framed, watchable) ============ */
+  .tour-figure { max-width: 62rem; margin: 0 0 1.6rem; }
+  .tour-frame { position: relative; border-radius: 16px; overflow: hidden; border: 1px solid var(--hair); box-shadow: var(--shadow); background: #0a1018; }
+  .tour-video { display: block; width: 100%; height: auto; }
+  .tour-figure figcaption { font-size: 0.78rem; color: var(--muted); margin-top: 0.85rem; }
+
+  /* ============ SCROLL-SCRUBBED VIDEO (legacy, unused) ============ */
   /* Base (no JS) and reduced-motion: a normal, playable video with controls. */
   .videoscape { background: #060a14; color: #fff; padding: 4.5rem 0; border-top: none; }
   .vs-vp { max-width: 60rem; margin: 0 auto; padding: 0 1.5rem; }
@@ -918,23 +924,24 @@
 </section>
 
 <!-- ================= INTERSTITIAL: REACTOR IN MOTION ================= -->
-<section class="view band videoscape" id="reactor-motion" aria-labelledby="h-motion" data-videoscrub>
-  <div class="vs-track">
-    <div class="vs-vp">
-      <div class="vs-hud">
-        <span class="overline">On location</span>
-        <h2 id="h-motion">This is a nuclear plant</h2>
-        <p>Cooling towers venting nothing but water vapor. Scroll to zoom in, then step inside on the tour.</p>
-        <span class="vs-scroll">Scroll to zoom in
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14"/><path d="m6 13 6 6 6-6"/></svg>
-        </span>
+<section class="view band" id="reactor-motion" aria-labelledby="h-motion">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="overline">On location</span>
+      <h2 id="h-motion">A real nuclear plant</h2>
+      <p class="lede">The Plant tour shows how one works on the inside. Here is a real one from the air, an aerial pass over the cooling towers.</p>
+    </div>
+    <figure class="tour-figure reveal">
+      <div class="tour-frame">
+        <video class="tour-video" muted loop playsinline controls preload="metadata"
+               aria-label="Aerial drone footage of a working nuclear power plant with cooling towers releasing steam.">
+          <source src="assets/plant-exterior.mp4" type="video/mp4">
+        </video>
       </div>
-      <video class="vs-video" muted loop playsinline preload="auto" controls
-             aria-label="Aerial drone footage of a working nuclear power plant with cooling towers releasing steam.">
-        <source src="assets/plant-exterior.mp4" type="video/mp4">
-      </video>
-      <div class="vs-veil" aria-hidden="true"></div>
-      <p class="vs-credit">Drone footage via <a href="https://www.pexels.com/video/a-drone-shot-of-a-nuclear-power-plant-4188242/" target="_blank" rel="noopener noreferrer">Pexels</a></p>
+      <figcaption>An aerial pass over a working nuclear plant. Drone footage via <a href="https://www.pexels.com/video/a-drone-shot-of-a-nuclear-power-plant-4188242/" target="_blank" rel="noopener noreferrer">Pexels</a>.</figcaption>
+    </figure>
+    <div class="prose reveal">
+      <p>Those towers are the most recognizable part of a nuclear plant, and the most misunderstood. The white plume is warm water vapor, not smoke and not radioactive. To see what happens underneath, <a href="#how">take the tour →</a></p>
     </div>
   </div>
 </section>
@@ -2548,57 +2555,22 @@
     render();
   })();
 
-  /* ============ SCROLL-SCRUBBED VIDEO ============ */
+  /* ============ TOUR VIDEO (autoplay while in view) ============ */
   (function () {
-    var sec = document.querySelector('[data-videoscrub]');
-    if (!sec || REDUCE) return; // fallback keeps native controls; user plays it
-    var track = sec.querySelector('.vs-track');
-    var vp = sec.querySelector('.vs-vp');
-    var video = sec.querySelector('.vs-video');
-    var hud = sec.querySelector('.vs-hud');
-
-    video.removeAttribute('controls');
-    video.muted = true; video.loop = true; video.playsInline = true;
-
-    // if the clip can't load, degrade to a framed, playable video
-    video.addEventListener('error', function () {
-      sec.classList.add('vs-nofx');
-      video.setAttribute('controls', '');
-      hud.style.opacity = '';
-      video.style.transform = '';
-    });
-
-    // autoplay the footage only while the section is on screen
+    var video = document.querySelector('.tour-video');
+    if (!video) return;
+    video.muted = true; video.playsInline = true;
+    if (REDUCE) return; // reduced motion: leave paused; user plays via controls
     if ('IntersectionObserver' in window) {
       new IntersectionObserver(function (es) {
         es.forEach(function (e) {
           if (e.isIntersecting) { video.play().catch(function () {}); }
           else { video.pause(); }
         });
-      }, { threshold: 0.02 }).observe(sec);
+      }, { threshold: 0.25 }).observe(video);
     } else {
       video.play().catch(function () {});
     }
-
-    // scroll drives a smooth zoom into the plant (CSS transform, no seeking)
-    var MINZ = 1.06, MAXZ = 1.62;
-    function progress() {
-      var total = track.offsetHeight - vp.clientHeight;
-      if (total <= 0) return 0;
-      return Math.max(0, Math.min(-track.getBoundingClientRect().top / total, 1));
-    }
-    function render() {
-      var p = progress();
-      video.style.transform = 'scale(' + (MINZ + (MAXZ - MINZ) * p).toFixed(4) + ')';
-      hud.style.opacity = Math.max(0, 1 - p * 1.7); // text stays legible well into the zoom
-    }
-    var ticking = false;
-    window.addEventListener('scroll', function () {
-      if (ticking) return; ticking = true;
-      requestAnimationFrame(function () { render(); ticking = false; });
-    }, { passive: true });
-    window.addEventListener('resize', render);
-    render();
   })();
 
   /* ============ VIEW ROUTER (click to navigate, one section at a time) ============ */
