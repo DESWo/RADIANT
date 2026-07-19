@@ -472,6 +472,11 @@
 
   /* CINEMA MODE: JS on and motion allowed */
   .js:not(.reduced) .plant-cinema { padding: 0; border-top: none; background: var(--navy); }
+  /* one scroll settles on one stop (scroll-snap, only while touring the plant) */
+  .js:not(.reduced)[data-view="how"] { scroll-snap-type: y mandatory; }
+  .js:not(.reduced) .plant-snaps { position: absolute; inset: 0; z-index: 0; display: flex; flex-direction: column; pointer-events: none; }
+  .js:not(.reduced) .plant-snap { flex: 1 0 0; scroll-snap-align: start; }
+  .plant-snaps { display: none; }
   .js:not(.reduced) .plant-vp {
     position: sticky; top: 0; height: 100vh; height: 100svh;
     overflow: clip; display: flex; align-items: center; justify-content: center;
@@ -571,6 +576,14 @@
   .sim-tile .val { font-family: var(--sans); font-size: 1.6rem; font-weight: 700; color: var(--ink); line-height: 1.1; }
   .sim-tile .sub { font-size: 0.72rem; color: var(--muted); margin-top: 0.35rem; line-height: 1.45; }
   .sim-bars-title { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.9rem; }
+  .sim-city-wrap { background: linear-gradient(180deg, #0b1729 0%, #0a1018 100%); border: 1px solid var(--hair); border-radius: 12px; padding: 0.5rem; margin-bottom: 0.9rem; overflow: hidden; }
+  #sim-city { width: 100%; height: auto; display: block; }
+  #sim-city .win { transition: fill 0.4s ease, opacity 0.3s ease; }
+  @media (prefers-reduced-motion: no-preference) { #sim-city .win-var { animation: winflicker 2.6s ease-in-out infinite; } }
+  @keyframes winflicker { 0%, 100% { opacity: 1; } 42% { opacity: 0.28; } 66% { opacity: 0.78; } }
+  .sim-legend { display: flex; flex-wrap: wrap; gap: 0.4rem 1.1rem; font-size: 0.76rem; color: var(--muted); margin-bottom: 0.4rem; }
+  .sim-legend .k { display: inline-flex; align-items: center; gap: 0.4rem; }
+  .sim-legend .sw { width: 11px; height: 11px; border-radius: 2px; display: inline-block; }
   .sim-notes { border-top: 1px solid var(--hair); margin-top: 1.6rem; font-size: 0.85rem; color: var(--muted); }
   .sim-notes summary { cursor: pointer; font-weight: 600; color: var(--body); padding: 1rem 0; list-style: none; display: flex; align-items: center; gap: 0.5rem; min-height: 44px; }
   .sim-notes summary::before { content: '▸'; font-size: 0.8rem; transition: transform 0.2s; }
@@ -929,6 +942,9 @@
 <!-- ================= 02 THE PLANT ================= -->
 <section class="view band plant-cinema" id="how" aria-labelledby="h-how" data-stages="6">
   <div class="plant-track">
+    <div class="plant-snaps" aria-hidden="true">
+      <div class="plant-snap"></div><div class="plant-snap"></div><div class="plant-snap"></div><div class="plant-snap"></div><div class="plant-snap"></div><div class="plant-snap"></div><div class="plant-snap"></div>
+    </div>
     <div class="plant-vp">
       <div class="plant-intro">
         <span class="overline"><span class="n">02</span>How it works</span>
@@ -1171,8 +1187,18 @@
         </div>
       </div>
 
-      <div class="sim-bars-title">Installed capacity needed, by source</div>
-      <div class="chart-rows" id="sim-rows" style="margin-bottom:0.4rem"></div>
+      <div class="sim-bars-title">Your grid, powering the city</div>
+      <div class="sim-city-wrap">
+        <svg id="sim-city" viewBox="0 0 640 250" role="img" aria-label="A city skyline whose lit windows are coloured by the energy source powering them; solar and wind windows flicker to show they are intermittent."></svg>
+      </div>
+      <div class="sim-legend">
+        <span class="k"><span class="sw" style="background:#60A5FA"></span>Nuclear</span>
+        <span class="k"><span class="sw" style="background:#FBBF24"></span>Solar</span>
+        <span class="k"><span class="sw" style="background:#38BDF8"></span>Wind</span>
+        <span class="k"><span class="sw" style="background:#34D399"></span>Hydro</span>
+        <span class="k"><span class="sw" style="background:#9AA6BC"></span>Gas</span>
+        <span class="k" style="color:var(--faint)">Flickering windows are intermittent (solar &amp; wind)</span>
+      </div>
 
       <details class="sim-notes">
         <summary>Assumptions and equations</summary>
@@ -2133,33 +2159,86 @@
       { id: 'hydro',   label: 'Hydropower',  cf: 0.346, ef: 24,  slider: true },
       { id: 'gas',     label: 'Natural gas', cf: 0.605, ef: 490 }
     ];
-    var simRows = document.getElementById('sim-rows');
-    if (!simRows) return;
+    var cityEl = document.getElementById('sim-city');
+    if (!cityEl) return;
 
-    var rowEls = {};
-    SOURCES.forEach(function (s) {
-      var row = document.createElement('div');
-      row.className = 'crow' + (s.hero ? ' crow--hero' : '');
-      row.style.setProperty('--label-w', '9.5rem');
-      var label = document.createElement('div');
-      label.className = 'crow__label';
-      label.textContent = s.label;
-      var cat = document.createElement('span');
-      cat.className = 'cat';
-      label.appendChild(cat);
-      var track = document.createElement('div');
-      track.className = 'crow__track';
-      var bar = document.createElement('div');
-      bar.className = 'crow__bar';
-      var val = document.createElement('span');
-      val.className = 'crow__val';
-      track.appendChild(bar);
-      track.appendChild(val);
-      row.appendChild(label);
-      row.appendChild(track);
-      simRows.appendChild(row);
-      rowEls[s.id] = { row: row, bar: bar, val: val, cat: cat };
-    });
+    var SVGNS = 'http://www.w3.org/2000/svg';
+    var COLORS = { nuclear: '#60A5FA', solar: '#FBBF24', wind: '#38BDF8', hydro: '#34D399', gas: '#9AA6BC' };
+    var VARIABLE = { solar: 1, wind: 1 };
+    var WIN_OFF = '#0c1626';
+
+    // build the skyline once; collect every window rect
+    var wins = [];
+    (function buildCity() {
+      var GROUND = 232;
+      var buildings = [
+        {x:16,w:66,h:150},{x:90,w:50,h:104},{x:148,w:62,h:196},{x:218,w:44,h:86},
+        {x:270,w:78,h:214},{x:356,w:52,h:126},{x:416,w:68,h:168},{x:492,w:46,h:98},
+        {x:546,w:44,h:140},{x:598,w:34,h:78}
+      ];
+      // faint stars
+      var seed = 7;
+      function rnd() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
+      for (var st = 0; st < 34; st++) {
+        var star = document.createElementNS(SVGNS, 'circle');
+        star.setAttribute('cx', (rnd() * 640).toFixed(0));
+        star.setAttribute('cy', (rnd() * 150).toFixed(0));
+        star.setAttribute('r', (0.4 + rnd() * 0.9).toFixed(2));
+        star.setAttribute('fill', '#233149');
+        cityEl.appendChild(star);
+      }
+      var winW = 8, winH = 10, gapX = 6, gapY = 7, pad = 8;
+      buildings.forEach(function (b) {
+        var body = document.createElementNS(SVGNS, 'rect');
+        body.setAttribute('x', b.x); body.setAttribute('y', GROUND - b.h);
+        body.setAttribute('width', b.w); body.setAttribute('height', b.h);
+        body.setAttribute('rx', 3);
+        body.setAttribute('fill', '#111d31'); body.setAttribute('stroke', '#26344c'); body.setAttribute('stroke-width', '1');
+        cityEl.appendChild(body);
+        var cols = Math.max(1, Math.floor((b.w - 2 * pad + gapX) / (winW + gapX)));
+        var rows = Math.max(1, Math.floor((b.h - 2 * pad + gapY) / (winH + gapY)));
+        var gridW = cols * (winW + gapX) - gapX;
+        var offx = b.x + (b.w - gridW) / 2;
+        for (var r = 0; r < rows; r++) for (var c = 0; c < cols; c++) {
+          var w = document.createElementNS(SVGNS, 'rect');
+          w.setAttribute('class', 'win');
+          w.setAttribute('x', (offx + c * (winW + gapX)).toFixed(1));
+          w.setAttribute('y', (GROUND - b.h + pad + r * (winH + gapY)).toFixed(1));
+          w.setAttribute('width', winW); w.setAttribute('height', winH); w.setAttribute('rx', 1);
+          w.setAttribute('fill', WIN_OFF);
+          cityEl.appendChild(w); wins.push(w);
+        }
+      });
+      var ground = document.createElementNS(SVGNS, 'rect');
+      ground.setAttribute('x', 0); ground.setAttribute('y', GROUND); ground.setAttribute('width', 640); ground.setAttribute('height', 250 - GROUND);
+      ground.setAttribute('fill', '#0a1220');
+      cityEl.appendChild(ground);
+    })();
+
+    // deterministic shuffle so each source's windows sprinkle across the city
+    var order = wins.map(function (_, i) { return i; });
+    (function () { var s = 4321; for (var i = order.length - 1; i > 0; i--) { s = (s * 9301 + 49297) % 233280; var j = Math.floor(s / 233280 * (i + 1)); var t = order[i]; order[i] = order[j]; order[j] = t; } })();
+
+    function paintCity(shares) {
+      var total = wins.length, seq = ['nuclear', 'solar', 'wind', 'hydro', 'gas'];
+      var counts = {}, assigned = 0;
+      seq.forEach(function (k, idx) {
+        if (idx === seq.length - 1) counts[k] = total - assigned;
+        else { counts[k] = Math.round((shares[k] || 0) / 100 * total); assigned += counts[k]; }
+      });
+      if (counts.gas < 0) counts.gas = 0;
+      var ptr = 0;
+      seq.forEach(function (k) {
+        for (var n = 0; n < counts[k] && ptr < total; n++) {
+          var w = wins[order[ptr++]];
+          w.setAttribute('fill', COLORS[k]);
+          w.style.filter = 'drop-shadow(0 0 3px ' + COLORS[k] + ')';
+          if (VARIABLE[k]) { w.classList.add('win-var'); w.style.animationDelay = (order[ptr] % 26) / 10 + 's'; }
+          else { w.classList.remove('win-var'); w.style.animationDelay = ''; }
+        }
+      });
+      for (; ptr < total; ptr++) { var wo = wins[order[ptr]]; wo.setAttribute('fill', WIN_OFF); wo.style.filter = 'none'; wo.classList.remove('win-var'); }
+    }
 
     function el(id) { return document.getElementById(id); }
 
@@ -2209,15 +2288,7 @@
         ? 'low: a real grid this weather-dependent needs major storage or backup'
         : 'supply that does not depend on the weather';
 
-      var maxCap = 1;
-      SOURCES.forEach(function (s) { if (caps[s.id] > maxCap) maxCap = caps[s.id]; });
-      SOURCES.forEach(function (s) {
-        var r = rowEls[s.id];
-        r.bar.style.width = Math.max((caps[s.id] / maxCap) * 86, shares[s.id] > 0 ? 0.5 : 0) + '%';
-        r.val.textContent = Math.round(caps[s.id]).toLocaleString('en-US') + ' MW';
-        r.cat.textContent = shares[s.id] + '% of demand';
-        r.row.setAttribute('aria-label', s.label + ': ' + shares[s.id] + '% of demand, needs ' + Math.round(caps[s.id]).toLocaleString('en-US') + ' MW installed');
-      });
+      paintCity(shares);
     }
 
     SOURCES.forEach(function (s) {
@@ -2407,7 +2478,7 @@
     nextBtn.addEventListener('click', function () { goToStage((lastActive || 1) + 1); });
 
     // size the scroll track: ~88vh of scroll per screen (intro + N stages)
-    function sizeTrack() { track.style.height = ((N + 1) * 88) + 'vh'; }
+    function sizeTrack() { track.style.height = ((N + 1) * 100) + 'vh'; } /* 100vh/stage aligns snap points to stages */
     sizeTrack();
 
     function ease(t) { return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; }
