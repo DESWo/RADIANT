@@ -586,6 +586,27 @@
     .js:not(.reduced) .plant-hud { max-width: 86vw; }
   }
 
+  /* ============ FISSION LAB ============ */
+  .fission-lab { display: grid; grid-template-columns: 1.6fr 1fr; gap: 1.3rem; align-items: start; margin-bottom: 1.8rem; }
+  .fz-stage { position: relative; background: #060c18; border: 1px solid var(--hair); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow); }
+  #fz-canvas { width: 100%; height: auto; display: block; }
+  .fz-readout { position: absolute; top: 0.8rem; left: 0.9rem; display: flex; gap: 0.7rem; align-items: center; font-family: var(--sans); font-size: 0.78rem; pointer-events: none; }
+  .fz-state { font-weight: 700; letter-spacing: 0.03em; padding: 0.25rem 0.65rem; border-radius: 999px; background: rgba(52,211,153,0.18); color: #6ee7b7; }
+  .fz-k { color: #93A4BE; }
+  .fz-k b { color: #fff; font-variant-numeric: tabular-nums; }
+  .fz-controls { display: flex; flex-direction: column; gap: 1.1rem; background: var(--card); border: 1px solid var(--hair); border-radius: 12px; padding: 1.3rem; }
+  .fz-btn { font-family: var(--sans); font-size: 0.9rem; font-weight: 600; background: var(--blue); color: #06121f; border: none; border-radius: 9px; padding: 0.75rem 1rem; min-height: 46px; cursor: pointer; transition: background 0.2s; }
+  .fz-btn:hover { background: #7cb6ff; }
+  .fz-btn--ghost { background: none; color: var(--blue-deep); border: 1px solid var(--hair); }
+  .fz-btn--ghost:hover { background: var(--tint); border-color: #3a4a66; }
+  .fz-slider label { display: block; font-size: 0.85rem; color: var(--body); margin-bottom: 0.55rem; }
+  .fz-slider label b { color: var(--ink); font-weight: 600; }
+  .fz-slider input { width: 100%; accent-color: var(--blue); min-height: 26px; cursor: pointer; }
+  .fz-scale { display: flex; justify-content: space-between; font-size: 0.66rem; color: var(--faint); margin-top: 0.3rem; }
+  .fz-stats { display: flex; gap: 1.3rem; font-size: 0.82rem; color: var(--muted); }
+  .fz-stats b { color: var(--ink); font-variant-numeric: tabular-nums; }
+  .fz-hint { font-size: 0.75rem; color: var(--faint); line-height: 1.5; margin: 0; }
+
   /* ============ GRID SIMULATOR ============ */
   .sim-card {
     background: var(--card);
@@ -823,6 +844,7 @@
     <a href="#case">The Case</a>
     <a href="#reactor-motion">Watch</a>
     <a href="#how">The Plant</a>
+    <a href="#fission">Fission</a>
     <a href="#data">Safety</a>
     <a href="#capacity">Capacity</a>
     <a href="#simulator">Simulator</a>
@@ -887,7 +909,8 @@
     <div class="hub-grid">
       <a class="hub-card" href="#case"><span class="hc-n">01 · THE CASE</span><span class="hc-t">The argument</span><span class="hc-d">The whole case for nuclear, on one page.</span></a>
       <a class="hub-card" href="#reactor-motion"><span class="hc-n">02 · WATCH</span><span class="hc-t">See a real plant</span><span class="hc-d">Aerial footage you zoom into by scrolling.</span></a>
-      <a class="hub-card" href="#how"><span class="hc-n">03 · THE PLANT</span><span class="hc-t">Take the tour</span><span class="hc-d">Walk through a reactor, stop by stop.</span></a>
+      <a class="hub-card" href="#how"><span class="hc-n">03 · THE PLANT</span><span class="hc-t">Take the tour</span><span class="hc-d">Click through a reactor, part by part.</span></a>
+      <a class="hub-card" href="#fission"><span class="hc-n">· FISSION</span><span class="hc-t">How fission works</span><span class="hc-d">Trigger a chain reaction and control it.</span></a>
       <a class="hub-card" href="#data"><span class="hc-n">04 · SAFETY</span><span class="hc-t">The death-rate data</span><span class="hc-d">How nuclear compares, per unit of energy.</span></a>
       <a class="hub-card" href="#capacity"><span class="hc-n">05 · CAPACITY</span><span class="hc-t">Round-the-clock power</span><span class="hc-d">Which sources actually run, and how often.</span></a>
       <a class="hub-card" href="#simulator"><span class="hc-n">06 · SIMULATOR</span><span class="hc-t">Power a city</span><span class="hc-d">Build a grid mix and light up a city.</span></a>
@@ -1090,6 +1113,53 @@
       <li data-title="The cooling tower"><strong>The cooling tower.</strong> The leftover heat is carried away by a third water loop and released from the giant towers as warm water vapor. That famous white plume is not smoke and it is not radioactive; it is the same cloud that rises off a boiling kettle.</li>
       </ol>
     </details>
+  </div>
+</section>
+
+<!-- ================= FISSION ================= -->
+<section class="view band band--tint" id="fission" aria-labelledby="h-fission">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="overline">The physics</span>
+      <h2 id="h-fission">How fission works</h2>
+      <p class="lede">All that heat comes from splitting atoms. Fire a neutron to start a chain reaction, then slide the control rods to see how a reactor holds it steady, and why a bomb is a different beast entirely.</p>
+    </div>
+
+    <div class="fission-lab reveal">
+      <div class="fz-stage">
+        <canvas id="fz-canvas" role="img" aria-label="Interactive chain-reaction simulation: neutrons split uranium nuclei, which release more neutrons. A control-rod slider sets whether the reaction dies out, holds steady, or runs away."></canvas>
+        <div class="fz-readout">
+          <span class="fz-state" id="fz-state">Steady</span>
+          <span class="fz-k">k&nbsp;=&nbsp;<b id="fz-k">1.0</b></span>
+        </div>
+      </div>
+      <div class="fz-controls">
+        <button type="button" id="fz-fire" class="fz-btn">Fire a neutron</button>
+        <div class="fz-slider">
+          <label for="fz-rods">Control rods: <b><span id="fz-rods-out">47</span>% inserted</b></label>
+          <input type="range" id="fz-rods" min="0" max="100" value="47">
+          <div class="fz-scale"><span>Runaway</span><span>Steady</span><span>Shut down</span></div>
+        </div>
+        <div class="fz-stats"><span>Splits: <b id="fz-fissions">0</b></span><span>Free neutrons: <b id="fz-neutrons">0</b></span></div>
+        <button type="button" id="fz-reset" class="fz-btn fz-btn--ghost">Reset the fuel</button>
+        <p class="fz-hint">k is the multiplication factor: how many of each split's neutrons go on to cause another split.</p>
+      </div>
+    </div>
+
+    <div class="duo">
+      <div class="info-card reveal">
+        <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18"/></svg>The split</h3>
+        <p>A slow neutron strikes the nucleus of a uranium-235 atom. The nucleus absorbs it, wobbles, and splits into two smaller atoms. A tiny bit of its mass turns directly into energy (E = mc²), which is why so little fuel gives off so much heat: one pellet the size of a fingertip holds about as much energy as a ton of coal.</p>
+      </div>
+      <div class="info-card reveal">
+        <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h4l2-6 4 12 2-6h4"/></svg>The chain reaction</h3>
+        <p>Each split also flings out two or three fresh neutrons. If those go on to split more nuclei, the reaction sustains itself. Left unchecked it doubles and doubles; the whole trick of a reactor is to hold it right at the edge, where each split triggers exactly one more.</p>
+      </div>
+    </div>
+
+    <div class="prose reveal">
+      <p><strong>The difference between a reactor and a bomb is control.</strong> Control rods soak up spare neutrons so the reaction stays at k = 1, steady and self-sustaining. Push the rods in and it dies down (k below 1); pull them out and it grows (k above 1). Crucially, reactor fuel is far too dilute to ever explode like a weapon. The worst case is overheating, and modern designs are built to shut themselves down through the laws of physics if that starts to happen.</p>
+    </div>
   </div>
 </section>
 
@@ -2489,6 +2559,105 @@
       h.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } });
     });
     select(1);
+  })();
+
+  /* ============ FISSION CHAIN-REACTION LAB ============ */
+  (function () {
+    var cv = document.getElementById('fz-canvas');
+    if (!cv || !cv.getContext) return;
+    var ctx = cv.getContext('2d');
+    var DPR = Math.min(window.devicePixelRatio || 1, 2);
+    var W = 0, H = 0, nuclei = [], neutrons = [], fissions = 0;
+    var rodEl = document.getElementById('fz-rods');
+    var kEl = document.getElementById('fz-k'), stateEl = document.getElementById('fz-state');
+    var fissEl = document.getElementById('fz-fissions'), neuEl = document.getElementById('fz-neutrons');
+    var rodOut = document.getElementById('fz-rods-out');
+
+    function size() {
+      var w = cv.clientWidth || 600, h = Math.round(Math.max(220, Math.min(w * 0.62, 340)));
+      cv.width = w * DPR; cv.height = h * DPR; cv.style.height = h + 'px';
+      ctx.setTransform(DPR, 0, 0, DPR, 0, 0); W = w; H = h; layout();
+    }
+    function layout() {
+      nuclei = []; var cols = 9, rows = 6, mx = W / (cols + 1), my = H / (rows + 1);
+      for (var r = 0; r < rows; r++) for (var c = 0; c < cols; c++) {
+        nuclei.push({ x: mx * (c + 1) + (Math.random() - 0.5) * mx * 0.5, y: my * (r + 1) + (Math.random() - 0.5) * my * 0.5, spent: false, flash: 0, refuel: 0 });
+      }
+    }
+    // rod 0 -> k 1.7 (runaway); rod 100 -> k 0.2 (shut down); ~47 -> k 1.0
+    function kValue() { return Math.max(0.15, 1.7 - (parseInt(rodEl.value, 10) / 100) * 1.5); }
+
+    function randomUnspent(not) {
+      var pool = nuclei.filter(function (n) { return !n.spent && n !== not; });
+      return pool.length ? pool[(Math.random() * pool.length) | 0] : null;
+    }
+    function makeNeutron(from, target) {
+      var ang = Math.random() * Math.PI * 2, sp = 1.4 + Math.random() * 0.8;
+      if (target) { var dx = target.x - from.x, dy = target.y - from.y, d = Math.hypot(dx, dy) || 1; return { x: from.x, y: from.y, vx: dx / d * sp, vy: dy / d * sp, target: target, life: 1 }; }
+      return { x: from.x, y: from.y, vx: Math.cos(ang) * sp, vy: Math.sin(ang) * sp, target: null, life: 1 };
+    }
+    function fission(n) {
+      if (n.spent) return;
+      n.spent = true; n.flash = 1; n.refuel = 260; fissions++;
+      var k = kValue(), cause = 0, i;
+      for (i = 0; i < 3; i++) if (Math.random() < k / 3) cause++;
+      for (i = 0; i < cause; i++) { var t = randomUnspent(n); if (t) neutrons.push(makeNeutron(n, t)); }
+      var waste = 1 + Math.round((1 - k / 1.7) * 2); // rods absorb more when inserted
+      for (i = 0; i < waste; i++) neutrons.push(makeNeutron(n, null));
+    }
+    function fire() { var t = randomUnspent(null); if (t) fission(t); updateStats(); if (REDUCE) { runStatic(); draw(); } }
+
+    function stepOnce() {
+      for (var i = neutrons.length - 1; i >= 0; i--) {
+        var p = neutrons[i]; p.x += p.vx; p.y += p.vy;
+        if (p.target) {
+          if (Math.hypot(p.target.x - p.x, p.target.y - p.y) < 9) { fission(p.target); neutrons.splice(i, 1); continue; }
+        } else { p.life -= 0.012; }
+        if (p.x < -20 || p.x > W + 20 || p.y < -20 || p.y > H + 20 || p.life <= 0) neutrons.splice(i, 1);
+      }
+      for (var j = 0; j < nuclei.length; j++) {
+        var nu = nuclei[j];
+        if (nu.flash > 0) nu.flash -= 0.04;
+        if (nu.spent && nu.refuel > 0 && --nu.refuel === 0) nu.spent = false;
+      }
+    }
+    function runStatic() { for (var s = 0; s < 400 && neutrons.length; s++) stepOnce(); }
+
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      for (var i = 0; i < nuclei.length; i++) {
+        var n = nuclei[i];
+        if (n.flash > 0) { ctx.fillStyle = 'rgba(251,191,36,' + (0.5 * n.flash) + ')'; ctx.beginPath(); ctx.arc(n.x, n.y, 16, 0, 6.283); ctx.fill(); }
+        ctx.beginPath(); ctx.arc(n.x, n.y, 6, 0, 6.283);
+        if (n.spent) { ctx.fillStyle = '#2a3750'; ctx.fill(); }
+        else { ctx.fillStyle = 'rgba(251,191,36,0.18)'; ctx.fill(); ctx.lineWidth = 1.6; ctx.strokeStyle = '#FBBF24'; ctx.stroke(); }
+      }
+      for (var m = 0; m < neutrons.length; m++) {
+        var p = neutrons[m]; ctx.fillStyle = p.target ? '#eaf2ff' : 'rgba(148,166,194,0.6)';
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.target ? 2.6 : 2, 0, 6.283); ctx.fill();
+      }
+    }
+    function updateStats() {
+      fissEl.textContent = fissions; neuEl.textContent = neutrons.length;
+      var k = kValue(); kEl.textContent = k.toFixed(1);
+      var label, bg, fg;
+      if (k < 0.95) { label = 'Subcritical'; bg = 'rgba(96,165,250,0.18)'; fg = '#93c5fd'; }
+      else if (k <= 1.06) { label = 'Steady'; bg = 'rgba(52,211,153,0.18)'; fg = '#6ee7b7'; }
+      else { label = 'Runaway'; bg = 'rgba(248,113,113,0.2)'; fg = '#fca5a5'; }
+      stateEl.textContent = label; stateEl.style.background = bg; stateEl.style.color = fg;
+      rodOut.textContent = rodEl.value;
+    }
+
+    var raf = null;
+    function loop() { stepOnce(); draw(); neuEl.textContent = neutrons.length; raf = requestAnimationFrame(loop); }
+
+    rodEl.addEventListener('input', updateStats);
+    document.getElementById('fz-fire').addEventListener('click', fire);
+    document.getElementById('fz-reset').addEventListener('click', function () { neutrons = []; fissions = 0; layout(); updateStats(); draw(); });
+    window.addEventListener('resize', function () { size(); draw(); });
+
+    size(); updateStats(); draw();
+    if (!REDUCE) { raf = requestAnimationFrame(loop); }
   })();
 
   /* ============ TOUR VIDEO (autoplay while in view) ============ */
