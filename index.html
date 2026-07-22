@@ -56,7 +56,7 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   html {
-    /* 112.5% = 18px base, so every rem below scales up for readability */
+    /* 118.75% = 19px base, so every rem below scales up for readability */
     font-size: 118.75%;
     scroll-behavior: smooth; scroll-padding-top: 5rem; overflow-x: clip;
   }
@@ -64,6 +64,16 @@
     html { scroll-behavior: auto; }
     *, *::before, *::after { animation: none !important; transition: none !important; }
   }
+
+  /* Lenis smooth scroll (vendored at assets/lenis.min.js). These are the
+     library's own required styles: it stamps classes on <html> while it
+     drives the scroll, including neutralizing the native smooth scrolling
+     above so the two never fight. When Lenis is absent (no JS, reduced
+     motion), none of these match and native behavior stands. */
+  html.lenis, html.lenis body { height: auto; }
+  .lenis.lenis-smooth { scroll-behavior: auto !important; }
+  .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+  .lenis.lenis-stopped { overflow: clip; }
 
   body {
     font-family: var(--sans);
@@ -921,7 +931,7 @@
     </svg>
     Radiant
   </a>
-  <div class="nav__links" id="nav-links">
+  <div class="nav__links" id="nav-links" data-lenis-prevent>
     <a href="#top">Overview</a>
     <a href="#case">The Case</a>
     <a href="#reactor-motion">Watch</a>
@@ -1865,11 +1875,35 @@
   </div>
 </footer>
 
+<!-- Vendored, MIT/free-licensed: Lenis 1.3.25 smooth scroll, GSAP 3.13 +
+     ScrollTrigger for scroll-scrubbed motion. Local copies keep the site
+     free of runtime third-party requests. -->
+<script src="assets/gsap.min.js"></script>
+<script src="assets/ScrollTrigger.min.js"></script>
+<script src="assets/lenis.min.js"></script>
+
 <script>
 (function () {
   'use strict';
   var REDUCE = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (REDUCE) document.documentElement.classList.add('reduced'); // engage static fallbacks
+
+  /* ============ SMOOTH SCROLL + SCROLL-SCRUB PLUMBING ============ */
+  /* Lenis owns wheel/touch inertia; GSAP's ticker drives Lenis so the two
+     share one clock, and ScrollTrigger re-reads scroll from Lenis events —
+     the documented pairing. Reduced motion never constructs any of it, and
+     if a vendored file fails to load the page scrolls natively. */
+  var lenis = null;
+  var HAS_GSAP = typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined';
+  if (!REDUCE && typeof Lenis === 'function') {
+    lenis = new Lenis({ autoRaf: !HAS_GSAP });
+    if (HAS_GSAP) {
+      gsap.registerPlugin(ScrollTrigger);
+      lenis.on('scroll', ScrollTrigger.update);
+      gsap.ticker.add(function (time) { lenis.raf(time * 1000); });
+      gsap.ticker.lagSmoothing(0);
+    }
+  }
 
   /* Visibility helper: IntersectionObserver for snappy triggering, plus a
      scroll/interval sweep so effects fail OPEN if the observer is throttled
@@ -2559,6 +2593,28 @@
     setProgress();
   }
 
+  /* ============ SCROLL-SCRUBBED ACCENTS (GSAP) ============ */
+  /* Two restrained scrubs, both tied directly to scroll position (they
+     hold still when the reader does). Skipped wholesale under reduced
+     motion or if the vendored libraries are missing. */
+  if (!REDUCE && HAS_GSAP) {
+    // The hero lead drifts up and thins out as the reader leaves it,
+    // giving the masthead a sense of depth against the fission field.
+    gsap.to('.hero__lead', {
+      yPercent: -12, opacity: 0.3, ease: 'none',
+      scrollTrigger: { trigger: '.hero', start: 'top top', end: '55% top', scrub: true }
+    });
+    // The plant footage settles from slightly recessed to full size as
+    // it enters, so the Watch section reads as a deliberate arrival.
+    var tourFrame = document.querySelector('.tour-frame');
+    if (tourFrame) {
+      gsap.fromTo(tourFrame, { scale: 0.96, opacity: 0.85 }, {
+        scale: 1, opacity: 1, ease: 'none',
+        scrollTrigger: { trigger: tourFrame, start: 'top 90%', end: 'top 45%', scrub: true }
+      });
+    }
+  }
+
   /* ============ COUNT-UP NUMBERS ============ */
   var counters = document.querySelectorAll('[data-count]');
   function runCount(el) {
@@ -2834,8 +2890,12 @@
     });
     // make sure everything in the shown view is visible, then reset scroll
     target.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('in'); });
-    window.scrollTo(0, 0);
+    if (lenis) lenis.scrollTo(0, { immediate: true });
+    else window.scrollTo(0, 0);
     window.dispatchEvent(new Event('scroll')); // re-sync scroll-driven sections
+    // view switches change which sections exist in layout, so scrub
+    // trigger positions measured against the old view are stale
+    if (HAS_GSAP) ScrollTrigger.refresh();
   }
 
   function routeFromHash() {
