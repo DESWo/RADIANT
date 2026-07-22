@@ -116,7 +116,7 @@
     --ink: #F2F6FC;        /* headings & strong text (light) */
     --body: #BFC9D9;       /* body text */
     --muted: #8593A8;      /* secondary text */
-    --faint: #5C6A82;      /* faint labels & de-emphasis */
+    --faint: #76849C;      /* faint labels & de-emphasis; lightened to clear WCAG AA 4.5:1 on card, tint and paper */
     --hair: rgba(255,255,255,0.16);  /* borders: carry structure now that shadows are flat */
     --tint: #0E1522;       /* alternate band, one step up from page */
     --card: #121B2B;       /* elevated surface */
@@ -788,7 +788,10 @@
   }
   .sim-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.8rem; }
   .sim-row label { font-size: 0.94rem; font-weight: 500; color: var(--body); min-width: 6.5rem; }
-  .sim-row input[type="range"] { flex: 1; accent-color: var(--blue); min-height: 28px; cursor: pointer; }
+  /* min-width: 0 defeats the flex default of min-width:auto, which would
+     otherwise hold the slider at its intrinsic width and shove the value
+     readout out of the row on narrow screens. */
+  .sim-row input[type="range"] { flex: 1; min-width: 0; accent-color: var(--blue); min-height: 44px; cursor: pointer; }
   .sim-row output { font-size: 0.94rem; font-weight: 600; color: var(--ink); min-width: 3rem; text-align: right; font-variant-numeric: tabular-nums; }
   .sim-gas { font-size: 0.9rem; color: var(--muted); margin: 0.2rem 0 1.6rem; }
   .sim-gas strong { color: var(--ink); }
@@ -994,6 +997,13 @@
     .chart-card { padding: 1.3rem 1.1rem 1rem; }
     .pathway { grid-template-columns: 1fr; }
     .incident-panel { padding: 1.3rem; }
+    /* Sliders: at this width a label + slider + readout on one line leaves
+       the slider ~30px wide. Put the name and its value on one line and give
+       the slider the full row beneath (order:3 moves it past the readout). */
+    .sim-row { flex-wrap: wrap; gap: 0.25rem 0.8rem; margin-bottom: 1.1rem; }
+    .sim-row label { min-width: 0; flex: 1 1 auto; }
+    .sim-row output { min-width: 0; }
+    .sim-row input[type="range"] { flex: 1 0 100%; order: 3; }
   }
 </style>
 </head>
