@@ -153,19 +153,15 @@
     .js .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1); }
     .js .reveal.in { opacity: 1; transform: none; }
 
-    /* Kinetic masthead: words lift from behind a baseline clip. The .mw
-       padding + negative margin keep italic overhangs and descenders from
-       being shaved by the clip box. */
-    .masthead .mw {
-      display: inline-block; overflow: clip;
-      padding: 0 0.06em 0.14em 0; margin: 0 -0.06em -0.14em 0;
+    /* Kinetic masthead: SplitText builds the word + mask elements itself and
+       leaves them unclassed, so target them structurally. Its clip box is
+       exactly the line box, which shaves this display face's descenders (the
+       "gy" in energy) and italic overhang. Pad the clip box out and pull the
+       layout back by the same amount, so nothing moves but nothing clips. */
+    .hero h1 > div, .hero h1 > em > div {
+      padding: 0 0.08em 0.16em 0;
+      margin: 0 -0.08em -0.16em 0;
     }
-    .masthead .mwi {
-      display: inline-block; transform: translateY(118%);
-      transition: transform 0.85s cubic-bezier(0.16,1,0.3,1);
-      transition-delay: var(--d, 0ms);
-    }
-    .masthead.run .mwi { transform: none; }
 
     /* Section rule: hidden only between JS boot and reveal, so it always
        ends visible even if the observer never fires (whenVisible fails open). */
@@ -1880,6 +1876,8 @@
      free of runtime third-party requests. -->
 <script src="assets/gsap.min.js"></script>
 <script src="assets/ScrollTrigger.min.js"></script>
+<script src="assets/SplitText.min.js"></script>
+<script src="assets/DrawSVGPlugin.min.js"></script>
 <script src="assets/lenis.min.js"></script>
 
 <script>
@@ -1904,6 +1902,8 @@
       gsap.ticker.lagSmoothing(0);
     }
   }
+  var HAS_DRAW = !REDUCE && typeof gsap !== 'undefined' && typeof DrawSVGPlugin !== 'undefined';
+  if (HAS_DRAW) gsap.registerPlugin(DrawSVGPlugin);
 
   /* Visibility helper: IntersectionObserver for snappy triggering, plus a
      scroll/interval sweep so effects fail OPEN if the observer is throttled
@@ -2546,37 +2546,26 @@
   });
 
   /* ============ KINETIC MASTHEAD ============ */
-  /* Wrap each hero-headline word in a clip mask and lift it in, keeping
-     whitespace as text nodes and descending into <em> so it keeps its
-     styling. Skipped entirely under reduced motion or no JS: the headline
-     is then plain text and never hidden. */
+  /* SplitText handles the word/mask splitting that used to be hand-rolled
+     here: it preserves the <em> styling, re-splits on resize (the headline
+     rewraps between 1 and 2 lines), and can revert cleanly. Skipped under
+     reduced motion or if the library is absent, leaving plain text that is
+     never hidden. */
   (function () {
     var h1 = document.querySelector('.hero h1');
-    if (!h1 || REDUCE) return;
-    var delay = 120, step = 70;
-    function wrapWords(node) {
-      Array.prototype.slice.call(node.childNodes).forEach(function (k) {
-        if (k.nodeType === 3) {
-          var frag = document.createDocumentFragment();
-          k.textContent.split(/(\s+)/).forEach(function (part) {
-            if (!part) return;
-            if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(part)); return; }
-            var mw = document.createElement('span'); mw.className = 'mw';
-            var mwi = document.createElement('span'); mwi.className = 'mwi';
-            mwi.textContent = part;
-            mwi.style.setProperty('--d', delay + 'ms');
-            delay += step;
-            mw.appendChild(mwi); frag.appendChild(mw);
-          });
-          node.replaceChild(frag, k);
-        } else if (k.nodeType === 1) wrapWords(k);
-      });
-    }
-    wrapWords(h1);
-    h1.classList.add('masthead');
-    function run() { h1.classList.add('run'); }
-    requestAnimationFrame(function () { requestAnimationFrame(run); });
-    setTimeout(run, 400); // rAF pauses in hidden/embedded panes; timers do not
+    if (!h1 || REDUCE || typeof SplitText === 'undefined') return;
+    gsap.registerPlugin(SplitText);
+    SplitText.create(h1, {
+      type: 'words',
+      mask: 'words',        // each word gets its own clip box
+      autoSplit: true,      // re-split when the font loads or the line wraps
+      onSplit: function (self) {
+        return gsap.from(self.words, {
+          yPercent: 118, duration: 0.85, stagger: 0.07,
+          ease: 'expo.out', delay: 0.12
+        });
+      }
+    });
   })();
 
   /* ============ READING PROGRESS ============ */
@@ -2744,6 +2733,26 @@
         textEl.textContent = li.textContent.replace(strong ? strong.textContent : '', '').trim();
       }
       if (nEl) nEl.textContent = n;
+
+      /* Trace the highlight along the part being explained instead of just
+         fading it in, so the eye follows the circuit. CSS opacity still does
+         the showing, and clearProps hands the stroke back afterwards, so a
+         half-finished tween can never leave a part permanently dashed. */
+      if (HAS_DRAW) {
+        var hl = svg.querySelectorAll('.hl-' + n);
+        if (hl.length) {
+          var undash = function () { gsap.set(hl, { clearProps: 'strokeDasharray,strokeDashoffset' }); };
+          gsap.fromTo(hl,
+            { drawSVG: '0%' },
+            { drawSVG: '100%', duration: 0.65, ease: 'power2.out', overwrite: 'auto', onComplete: undash }
+          );
+          /* Fail open, like the rest of the site: a stalled ticker (throttled
+             rAF, background tab) would strand the stroke at 0% and hide the
+             highlight entirely, so restore it unconditionally past the end. */
+          clearTimeout(select._t);
+          select._t = setTimeout(undash, 900);
+        }
+      }
     }
 
     tabs.forEach(function (t) { t.addEventListener('click', function () { select(parseInt(t.dataset.part, 10)); }); });
