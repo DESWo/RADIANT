@@ -1459,6 +1459,10 @@
       <div class="pin-stage pin-stage--line">
         <div class="pin-figure">
           <svg id="bd-svg" viewBox="0 0 900 470" role="img" aria-label="Outline animation of a nuclear power plant being built: the site is cleared and excavated, the base mat poured, containment walls rise, the dome is lifted on, the reactor installed, the turbine hall built, the cooling tower slip-formed upward, and the switchyard connected to the grid.">
+            <g id="bd-far" fill="none" stroke="#1E2C40" stroke-width="1.6">
+              <path d="M-60 348 Q120 314 300 336 Q470 356 640 326 Q800 300 960 330"/>
+              <path d="M-60 374 Q160 350 340 364 Q520 378 700 356 Q840 340 960 360" stroke="#182434"/>
+            </g>
             <g id="bd-cam">
               <!-- grade line and distant horizon -->
               <g id="bd-ground" fill="none" stroke="#31425C" stroke-width="2">
@@ -1537,7 +1541,12 @@
                 <path d="M804 192 Q818 158 800 132" stroke-width="1.6"/>
               </g>
             </g>
-          </svg>
+                        <!-- near ground: parallax foreground, closest to camera -->
+              <g id="bd-near" fill="none" stroke="#33455F" stroke-width="2">
+                <path d="M-60 448 Q180 436 420 446 Q680 456 960 442"/>
+                <path d="M40 448 L40 432 M92 450 L92 436 M786 446 L786 430 M858 444 L858 428" stroke-width="1.5" stroke="#2A3A50"/>
+              </g>
+            </svg>
         </div>
         <div class="pin-copy">
           <span class="pin-step" data-role="step">Stage 01 / 06</span>
@@ -3242,13 +3251,31 @@
          rising off the ground. It circles slowly and pulls back as the plant
          grows, ending wide on the finished site. */
       var cam = document.getElementById('bd-cam');
+      var far = document.getElementById('bd-far');
+      var near = document.getElementById('bd-near');
       var VB_CX = 450, VB_CY = 235;
-      var shot = { s: 1.7, cx: 326, cy: 400 };
+      var shot = { s: 1.7, cx: 326, cy: 400, drift: 0 };
+      /* Parallax: each layer responds to the same camera by its own depth
+         factor, so the far ridge slides slower than the plant and the near
+         ground slides faster. That difference is what reads as a drone
+         moving through real space rather than a picture being zoomed. */
+      var layer = function (el, depth) {
+        if (!el) return;
+        var s = 1 + (shot.s - 1) * depth;
+        var cx = VB_CX + (shot.cx - VB_CX) * depth + shot.drift * depth;
+        var cy = VB_CY + (shot.cy - VB_CY) * depth;
+        el.setAttribute('transform',
+          'translate(' + (VB_CX - s * cx) + ',' + (VB_CY - s * cy) + ') scale(' + s + ')');
+      };
       var applyCam = function () {
-        cam.setAttribute('transform',
-          'translate(' + (VB_CX - shot.s * shot.cx) + ',' + (VB_CY - shot.s * shot.cy) + ') scale(' + shot.s + ')');
+        layer(far, 0.42);
+        layer(cam, 1);
+        layer(near, 1.32);
       };
       applyCam();
+      /* A slow lateral drift running underneath the staged moves, so the
+         camera is always travelling even while a stage holds. */
+      tl.fromTo(shot, { drift: -26 }, { drift: 30, duration: 9, ease: 'none', onUpdate: applyCam }, 0);
       /* The camera only ever cranes up and pulls back, tracking whatever is
          tallest so far. It never swings sideways, which is what threw
          finished buildings out of frame before. The last two beats settle on
@@ -3274,16 +3301,21 @@
       tl.to('#bd-ground > *', { drawSVG: '100%', duration: 0.6, ease: 'power2.out', stagger: 0.1 }, 0);
 
       groups.forEach(function (g, i) {
-        var parts = document.querySelectorAll(g + ' > *');
+        // Select drawable leaf shapes, not direct children: several stages
+        // wrap their contents in a group to grow them, and DrawSVG cannot
+        // draw a <g>.
+        var parts = document.querySelectorAll(g + ' path, ' + g + ' ellipse, ' + g + ' rect, ' + g + ' circle, ' + g + ' line');
         gsap.set(parts, { drawSVG: '0%' });
         tl.to(parts, { drawSVG: '100%', duration: 0.7, ease: 'power2.out', stagger: 0.06 }, i + 0.14);
         tl.fromTo(g, { opacity: 0.7 }, { opacity: 1, duration: 0.3, ease: 'none', immediateRender: false }, i + 0.5);
       });
 
       /* Tall structures also grow upward off their own base, so the reader
-         watches them rise rather than just appear outlined. */
-      [['#bd-4-grow', 424, 3], ['#bd-7-grow', 392, 6], ['#bd-8-grow', 392, 7]].forEach(function (it) {
-        tl.fromTo(it[0], { scaleY: 0.04, transformOrigin: '50% ' + it[1] + 'px' },
+         watches them rise rather than just appear outlined. svgOrigin takes
+         user-space coordinates, which is what these are; transformOrigin
+         with a px value does not mean the same thing inside an SVG. */
+      [['#bd-4-grow', '326 424', 3], ['#bd-7-grow', '540 392', 6], ['#bd-8-grow', '770 392', 7]].forEach(function (it) {
+        tl.fromTo(it[0], { scaleY: 0.04, svgOrigin: it[1] },
           { scaleY: 1, duration: 0.85, ease: 'power2.out', immediateRender: false }, it[2] + 0.14);
       });
       // the dome is craned down onto the walls
