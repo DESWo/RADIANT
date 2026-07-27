@@ -648,6 +648,10 @@
     min-height: 100svh;
   }
   .js .pin-scene:not(.is-live) .pin-stage { min-height: 0; padding: 1.1rem; border: 1px solid var(--hair); }
+  /* The construction scene is line art, so it gets a plain dark ground
+     rather than a photographic plate. */
+  .pin-stage--line { background: #080D16; }
+  .build-head { margin-top: 3.4rem; }
   /* Real drone footage of a working plant sits behind the schematic, heavily
      darkened so it reads as atmosphere rather than decoration. It is the same
      Pexels clip already credited in the Watch section, so nothing new is
@@ -681,7 +685,9 @@
   .pin-text { font-size: 0.98rem; color: var(--muted); line-height: 1.6; }
   .pin-rail { display: flex; gap: 6px; margin-top: 1.2rem; }
   .pin-rail span { flex: 1; height: 3px; background: var(--ink-line); position: relative; overflow: hidden; }
-  .pin-rail span::after { content: ''; position: absolute; inset: 0; background: var(--blue); transform: scaleX(0); transform-origin: 0 50%; }
+  /* --fill is written continuously from the scroll position, so the rail
+     slides with the reader rather than snapping one segment at a time. */
+  .pin-rail span::after { content: ''; position: absolute; inset: 0; background: var(--blue); transform: scaleX(var(--fill, 0)); transform-origin: 0 50%; }
   .pin-rail span.done::after { transform: scaleX(1); }
   .pin-hint { font-size: 0.84rem; color: var(--faint); margin-top: 1rem; display: flex; align-items: center; gap: 0.5rem; }
   @media (max-width: 860px) {
@@ -1389,6 +1395,80 @@
       <li data-title="The cooling tower"><strong>The cooling tower.</strong> The leftover heat is carried away by a third water loop and released from the giant towers as warm water vapor. That famous white plume is not smoke and it is not radioactive; it is the same cloud that rises off a boiling kettle.</li>
       </ol>
     </details>
+
+    <!-- Construction timelapse: outline only, drawn in stage by stage. -->
+    <div class="section-head reveal build-head">
+      <span class="overline">Construction</span>
+      <h2 id="h-build">How one gets built</h2>
+      <p class="lede">A plant is a decade-long civil engineering project before it is ever a power station. Scroll to watch one go up, from bedrock to first power.</p>
+    </div>
+
+    <div class="pin-scene" id="build-scene" data-scene="build">
+      <div class="pin-sticky">
+      <div class="pin-stage pin-stage--line">
+        <div class="pin-figure">
+          <svg id="bd-svg" viewBox="0 0 900 460" role="img" aria-label="Outline animation of nuclear plant construction: excavation to bedrock, the base mat, containment walls rising, the steel liner and dome, the turbine hall, and finally the cooling tower and grid connection.">
+            <!-- ground reference, always present -->
+            <line id="bd-ground" x1="30" y1="372" x2="870" y2="372" stroke="#41536F" stroke-width="2"/>
+
+            <!-- 1 · excavation -->
+            <g id="bd-1" fill="none" stroke="#60A5FA" stroke-width="2.4" stroke-linejoin="round">
+              <path d="M175 372 L205 442 L455 442 L485 372"/>
+              <path d="M215 400 L445 400" stroke-width="1.4" stroke-dasharray="7 7" stroke="#3E5D8A"/>
+              <path d="M120 372 L150 352 M760 372 L790 352" stroke-width="1.6" stroke="#3E5D8A"/>
+            </g>
+            <!-- 2 · base mat -->
+            <g id="bd-2" fill="none" stroke="#60A5FA" stroke-width="2.4" stroke-linejoin="round">
+              <path d="M205 442 L205 414 L455 414 L455 442"/>
+              <path d="M225 414 L225 442 M265 414 L265 442 M305 414 L305 442 M345 414 L345 442 M385 414 L385 442 M425 414 L425 442" stroke-width="1.2" stroke="#3E5D8A"/>
+            </g>
+            <!-- 3 · containment walls rise -->
+            <g id="bd-3" fill="none" stroke="#60A5FA" stroke-width="2.4" stroke-linejoin="round">
+              <path d="M235 414 L235 236"/>
+              <path d="M425 414 L425 236"/>
+              <path d="M235 320 L425 320 M235 272 L425 272" stroke-width="1.2" stroke="#3E5D8A"/>
+            </g>
+            <!-- 4 · dome + reactor -->
+            <g id="bd-4" fill="none" stroke="#60A5FA" stroke-width="2.4" stroke-linejoin="round">
+              <path d="M235 236 Q330 138 425 236"/>
+              <rect x="298" y="300" width="64" height="96" rx="6"/>
+              <path d="M312 300 L312 276 M330 300 L330 276 M348 300 L348 276" stroke-width="1.6"/>
+            </g>
+            <!-- 5 · turbine hall -->
+            <g id="bd-5" fill="none" stroke="#60A5FA" stroke-width="2.4" stroke-linejoin="round">
+              <path d="M470 372 L470 296 L672 296 L672 372"/>
+              <path d="M470 296 L571 268 L672 296" stroke-width="2"/>
+              <rect x="516" y="326" width="110" height="30" rx="4" stroke-width="1.6" stroke="#3E5D8A"/>
+            </g>
+            <!-- 6 · cooling tower + grid -->
+            <g id="bd-6" fill="none" stroke="#60A5FA" stroke-width="2.4" stroke-linejoin="round">
+              <path d="M712 372 C726 300 726 262 736 214 L806 214 C816 262 816 300 830 372 Z"/>
+              <path d="M736 214 Q771 196 806 214" stroke-width="1.6"/>
+              <path d="M700 340 L672 340" stroke-width="1.6" stroke="#3E5D8A"/>
+              <path d="M560 268 L560 176 M540 196 L580 196 M544 216 L576 216" stroke-width="1.8"/>
+              <path d="M560 186 Q640 168 720 182" stroke-width="1.4" stroke="#3E5D8A"/>
+            </g>
+            <!-- steam, only at the end -->
+            <g id="bd-steam" fill="none" stroke="#93C5FD" stroke-width="2" opacity="0">
+              <path d="M752 206 Q744 176 762 156 Q778 138 770 118"/>
+              <path d="M786 206 Q796 178 782 158 Q770 140 780 120"/>
+            </g>
+          </svg>
+        </div>
+        <div class="pin-copy">
+          <span class="pin-step" data-role="step">Stage 01 / 06</span>
+          <h3 class="pin-title" data-role="title">Excavation</h3>
+          <p class="pin-text" data-role="text"></p>
+          <div class="pin-rail" data-role="rail" aria-hidden="true"></div>
+          <p class="pin-hint">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
+            Keep scrolling to build it
+          </p>
+        </div>
+      </div>
+      </div>
+    </div>
+    <ol class="pin-steps" id="build-scene-steps"></ol>
   </div>
 </section>
 
@@ -2160,7 +2240,10 @@
   var lenis = null;
   var HAS_GSAP = typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined';
   if (!REDUCE && typeof Lenis === 'function') {
-    lenis = new Lenis({ autoRaf: !HAS_GSAP });
+    /* Heavier, longer glide than the default. A low lerp keeps the page
+       coasting after the wheel stops, which is what makes scroll-scrubbed
+       motion feel continuous instead of stepped. */
+    lenis = new Lenis({ autoRaf: !HAS_GSAP, lerp: 0.075, wheelMultiplier: 0.95, syncTouch: true });
     if (HAS_GSAP) {
       gsap.registerPlugin(ScrollTrigger);
       lenis.on('scroll', ScrollTrigger.update);
@@ -2898,9 +2981,19 @@
     { title: 'Holding it steady', text: 'Control rods soak up the spare neutrons so exactly one from each split goes on to cause another. That balance point, k = 1, is a reactor. Reactor fuel is far too dilute to ever behave like a weapon.' }
   ];
 
+  var BUILD_STEPS = [
+    { title: 'Excavation', text: 'Everything starts by digging out to solid bedrock, often 20 metres down. The rock has to be sound enough to carry the whole plant and to hold it steady through an earthquake.' },
+    { title: 'The base mat', text: 'A single thick raft of reinforced concrete is poured across the pit in one continuous operation. Every building above is anchored to this one slab.' },
+    { title: 'Containment walls', text: 'Metre-thick reinforced concrete walls climb around a sealed steel liner. This is the outer shell built to keep everything inside, whatever happens within.' },
+    { title: 'Reactor and dome', text: 'The pressure vessel is lifted in and the dome closes over the top. From here the work moves inside: piping, steam generators, and thousands of kilometres of cable.' },
+    { title: 'The turbine hall', text: 'The conventional half of the plant goes up alongside: turbine, generator, condenser. This part is much the same as any thermal power station.' },
+    { title: 'Cooling and the grid', text: 'The cooling tower and the switchyard finish the picture. After years of commissioning and regulator sign-off, the plant synchronises to the grid and starts delivering power.' }
+  ];
+
   (function () {
     var scenes = [
       { el: document.getElementById('plant-scene'), steps: PLANT_STEPS, listId: 'plant-scene-steps', build: buildPlantTl },
+      { el: document.getElementById('build-scene'), steps: BUILD_STEPS, listId: 'build-scene-steps', build: buildBuildTl },
       { el: document.getElementById('fission-scene'), steps: FISSION_STEPS, listId: 'fission-scene-steps', build: buildFissionTl }
     ];
 
@@ -2975,14 +3068,33 @@
           scrub: 0.85,
           invalidateOnRefresh: true,
           onUpdate: function (self) {
-            var i = Math.max(0, Math.min(n - 1, Math.floor(self.progress * n - 0.0001)));
-            if (i === shown) return;
-            shown = i;
-            setCaption(sc.el, sc.steps, i);
-            if (rail) for (var j = 0; j < rail.children.length; j++) rail.children[j].classList.toggle('done', j <= i);
+            // The rail tracks continuously so it slides with the scroll
+            // rather than snapping a segment at a time.
+            if (rail) {
+              var p = self.progress * n;
+              for (var j = 0; j < rail.children.length; j++) {
+                var fill = Math.max(0, Math.min(1, p - j));
+                rail.children[j].style.setProperty('--fill', fill);
+              }
+            }
           }
         }
       });
+      /* Caption changes live inside the scrubbed timeline so they cross
+         dissolve under the reader's thumb instead of snapping at a
+         boundary. onComplete/onReverseComplete swap the text at the
+         midpoint of the fade, so it is never swapped while visible. */
+      var copy = sc.el.querySelector('.pin-copy');
+      var swapTo = function (i) { return function () { setCaption(sc.el, sc.steps, i); }; };
+      for (var i = 1; i < n; i++) {
+        tl.to(copy, { opacity: 0, y: -16, duration: 0.26, ease: 'power2.in',
+          onComplete: swapTo(i), onReverseComplete: swapTo(i - 1) }, i - 0.34);
+        // immediateRender:false, or the "from" state would paint at build
+        // time and leave the first caption invisible before any scrolling.
+        tl.fromTo(copy, { opacity: 0, y: 18 },
+          { opacity: 1, y: 0, duration: 0.34, ease: 'power2.out', immediateRender: false }, i - 0.06);
+      }
+
       sc.build(tl, sc.steps);
       tl.set({}, {}, n); // normalize total duration so progress maps to steps
     });
@@ -3019,7 +3131,41 @@
           }, i - 0.25);
           tl.to(plates[i - 1], { opacity: 0, duration: 0.55, ease: 'none' }, i - 0.25);
         }
+        // Slow continuous push on each plate while its step is on screen.
+        // Nothing is ever completely still, which is what sells the scroll.
+        if (plates[i]) {
+          tl.fromTo(plates[i],
+            { scale: 1.04, xPercent: i % 2 ? 1.2 : -1.2 },
+            { scale: 1.13, xPercent: i % 2 ? -1.2 : 1.2, duration: 1.4, ease: 'none',
+              immediateRender: i === 0 },
+            Math.max(0, i - 0.4));
+        }
       });
+    }
+
+    /* Construction timelapse: each stage draws its own outline in and then
+       stays, so the plant accumulates on screen the way it does on site.
+       Falls back to a fully drawn diagram if DrawSVG is unavailable. */
+    function buildBuildTl (tl) {
+      if (!document.getElementById('bd-svg')) return;
+      var groups = ['#bd-1', '#bd-2', '#bd-3', '#bd-4', '#bd-5', '#bd-6'];
+      if (!HAS_DRAW) { gsap.set(groups.join(',') + ',#bd-steam', { opacity: 1 }); return; }
+
+      gsap.set('#bd-ground', { drawSVG: '0%' });
+      tl.to('#bd-ground', { drawSVG: '100%', duration: 0.4, ease: 'power2.out' }, 0);
+
+      groups.forEach(function (g, i) {
+        var parts = document.querySelectorAll(g + ' > *');
+        gsap.set(parts, { drawSVG: '0%' });
+        tl.to(parts, {
+          drawSVG: '100%', duration: 0.72, ease: 'power2.out', stagger: 0.07
+        }, i + 0.12);
+        // a light settle so the finished stage reads as placed, not drawn
+        tl.fromTo(g, { opacity: 0.75 }, { opacity: 1, duration: 0.3, ease: 'none', immediateRender: false }, i + 0.5);
+      });
+      // steam only once the tower and grid exist
+      tl.fromTo('#bd-steam', { opacity: 0, y: 12 },
+        { opacity: 0.9, y: 0, duration: 0.6, ease: 'power2.out', immediateRender: false }, 5.4);
     }
 
     function buildFissionTl (tl) {
