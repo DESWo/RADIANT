@@ -620,32 +620,56 @@
     .fuel { animation: fuelglow 2.6s ease-in-out infinite; }
     @keyframes fuelglow { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
   }
-  /* ============ PLANT WALKTHROUGH (cinematic) ============ */
-  /* Base (no JS) and reduced-motion: static diagram on a card + step list. */
-  .plant-cam {
-    max-width: 56rem; margin: 1.6rem auto 0;
-    background: var(--card); border: 1px solid var(--hair); border-radius: 0;
-    box-shadow: var(--shadow); padding: 1.4rem;
+  /* ============ PINNED SCROLL SCENES ============ */
+  /* Used by the plant walkthrough and the fission story. The section pins
+     while the scroll position scrubs a timeline: the stage stays put and the
+     captions advance. Everything degrades to a plain diagram + caption list,
+     so no-JS and reduced-motion readers lose the motion, never the content. */
+  .pin-scene { margin: 2rem 0 1rem; }
+  .pin-stage {
+    position: relative;
+    background: #0B1422; border: 1px solid var(--hair);
+    padding: 1.1rem 1.1rem 1.3rem;
+    display: grid; grid-template-columns: 1.5fr 1fr; gap: 1.4rem; align-items: center;
   }
-  .plant-cam svg { width: 100%; height: auto; display: block; }
-  .plant-scroll, .plant-hud, .plant-rail { display: none; }
+  .pin-figure { position: relative; overflow: hidden; }
+  .pin-figure svg { width: 100%; height: auto; display: block; }
+  .pin-copy { display: flex; flex-direction: column; justify-content: center; min-height: 12rem; }
+  .pin-step {
+    font-family: var(--sans); font-size: 0.78rem; font-weight: 800;
+    letter-spacing: 0.18em; text-transform: uppercase; color: var(--blue);
+    display: block; margin-bottom: 0.6rem;
+  }
+  .pin-title { font-family: var(--display); font-weight: 600; font-size: clamp(1.4rem, 2.6vw, 2rem); line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 0.7rem; }
+  .pin-text { font-size: 0.98rem; color: var(--muted); line-height: 1.6; }
+  .pin-rail { display: flex; gap: 6px; margin-top: 1.2rem; }
+  .pin-rail span { flex: 1; height: 3px; background: var(--ink-line); position: relative; overflow: hidden; }
+  .pin-rail span::after { content: ''; position: absolute; inset: 0; background: var(--blue); transform: scaleX(0); transform-origin: 0 50%; }
+  .pin-rail span.done::after { transform: scaleX(1); }
+  .pin-hint { font-size: 0.84rem; color: var(--faint); margin-top: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+  @media (max-width: 860px) {
+    .pin-stage { grid-template-columns: 1fr; }
+    .pin-copy { min-height: 9rem; }
+  }
+  /* Static fallback list: shown when the scene cannot animate. */
+  .pin-steps { list-style: none; counter-reset: pstep2; display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 1.3rem 1.8rem; margin-top: 1.6rem; }
+  .pin-steps li { counter-increment: pstep2; position: relative; padding-left: 2.4rem; font-size: 0.94rem; color: var(--muted); line-height: 1.6; }
+  .pin-steps li strong { color: var(--ink); font-weight: 600; }
+  .pin-steps li::before { content: counter(pstep2); position: absolute; left: 0; top: 0.1rem; width: 1.6rem; height: 1.6rem; background: var(--blue); color: #071426; font-size: 0.86rem; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+  /* When JS drives the scene, the fallback list is redundant. */
+  .js .pin-scene.is-live + .pin-steps { display: none; }
+  .js .pin-scene:not(.is-live) .pin-rail,
+  .js .pin-scene:not(.is-live) .pin-hint { display: none; }
+  .reduced .pin-rail, .reduced .pin-hint { display: none; }
+
+  /* Highlights start hidden in every copy of the diagram; the explorer's
+     [data-active] rules and the scene's timeline each fade in one at a time. */
   .hl { opacity: 0; }
-  .plant-steps {
-    list-style: none; counter-reset: step;
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
-    gap: 1.4rem 1.8rem; max-width: 56rem; margin: 1.8rem auto 0;
-  }
-  .plant-steps li { counter-increment: step; position: relative; padding-left: 2.5rem; font-size: 0.94rem; color: var(--muted); line-height: 1.6; }
-  .plant-steps li strong { color: var(--ink); font-weight: 600; }
-  .plant-steps li::before {
-    content: counter(step);
-    position: absolute; left: 0; top: 0.1rem;
-    width: 1.65rem; height: 1.65rem;
-    background: var(--blue); color: #071426; border-radius: 0;
-    font-size: 0.88rem; font-weight: 600;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .plant-fallnote { font-size: 0.86rem; color: var(--muted); max-width: 56rem; margin: 1.4rem auto 0; }
+  #plant-cam-svg .hl { stroke: #60A5FA; stroke-width: 5; fill: none; filter: drop-shadow(0 0 9px #60A5FA); }
+
+  /* fission scene bits */
+  #fs-svg .fs-label { font-family: var(--sans); font-size: 15px; font-weight: 700; letter-spacing: 0.06em; }
+  #fs-svg .fs-nlabel { font-family: var(--sans); font-size: 13px; font-weight: 600; fill: #93C5FD; }
 
   /* ============ PLANT EXPLORER (clickable diagram) ============ */
   .plant-explorer { display: grid; grid-template-columns: 1.55fr 1fr; gap: 1.4rem; align-items: start; margin-bottom: 1rem; }
@@ -1181,8 +1205,27 @@
     <div class="section-head reveal">
       <span class="overline"><span class="n">02</span>How it works</span>
       <h2 id="h-how">Inside a nuclear power plant</h2>
-      <p class="lede">No mystery and no green goo. Click any part of the plant to see what it does, and follow the energy from a uranium atom to the power line.</p>
+      <p class="lede">No mystery and no green goo. Scroll to follow the energy from a uranium atom to the power line, then click any part of the plant to explore it yourself.</p>
     </div>
+
+    <!-- Cinematic pass: the camera follows the energy through the plant.
+         The diagram is cloned from #plant-svg below so the two never drift. -->
+    <div class="pin-scene reveal" id="plant-scene" data-scene="plant">
+      <div class="pin-stage">
+        <div class="pin-figure" id="plant-scene-fig" aria-hidden="true"></div>
+        <div class="pin-copy">
+          <span class="pin-step" data-role="step">Step 01 / 06</span>
+          <h3 class="pin-title" data-role="title">The reactor core</h3>
+          <p class="pin-text" data-role="text"></p>
+          <div class="pin-rail" data-role="rail" aria-hidden="true"></div>
+          <p class="pin-hint">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
+            Keep scrolling to follow the energy
+          </p>
+        </div>
+      </div>
+    </div>
+    <ol class="pin-steps" id="plant-scene-steps"></ol>
 
     <div class="plant-explorer reveal">
       <figure class="plant-fig">
@@ -1304,8 +1347,84 @@
     <div class="section-head reveal">
       <span class="overline">The physics</span>
       <h2 id="h-fission">How fission works</h2>
-      <p class="lede">All that heat comes from splitting atoms. Fire a neutron to start a chain reaction, then slide the control rods to see how a reactor holds it steady, and why a bomb is a different beast entirely.</p>
+      <p class="lede">All that heat comes from splitting atoms. Scroll to watch a single split become a chain reaction, then fire your own neutrons below and slide the control rods to see why a reactor holds steady and a bomb is a different beast entirely.</p>
     </div>
+
+    <!-- Cinematic pass: one fission event, told in six beats. -->
+    <div class="pin-scene reveal" id="fission-scene" data-scene="fission">
+      <div class="pin-stage">
+        <div class="pin-figure">
+          <svg id="fs-svg" viewBox="0 0 900 460" role="img" aria-label="Animated diagram of nuclear fission: a free neutron strikes a uranium-235 nucleus, which absorbs it, splits into two fragments while releasing energy and two or three fresh neutrons, and those neutrons go on to split further nuclei until control rods absorb the spares.">
+            <defs>
+              <radialGradient id="fsAmber"><stop offset="0" stop-color="#FDE68A"/><stop offset="0.55" stop-color="#FBBF24"/><stop offset="1" stop-color="#B45309"/></radialGradient>
+              <radialGradient id="fsBlue"><stop offset="0" stop-color="#DBEAFE"/><stop offset="0.6" stop-color="#60A5FA"/><stop offset="1" stop-color="#1D4ED8"/></radialGradient>
+              <radialGradient id="fsHalo"><stop offset="0" stop-color="#FBBF24" stop-opacity="0.55"/><stop offset="1" stop-color="#FBBF24" stop-opacity="0"/></radialGradient>
+              <radialGradient id="fsGreen"><stop offset="0" stop-color="#A7F3D0"/><stop offset="0.6" stop-color="#34D399"/><stop offset="1" stop-color="#047857"/></radialGradient>
+            </defs>
+
+            <!-- second-generation nuclei, waiting -->
+            <g id="fs-gen2">
+              <g class="fs-g2" transform="translate(716,104)"><circle r="30" fill="url(#fsAmber)" opacity="0.5"/><circle r="30" fill="none" stroke="#FBBF24" stroke-opacity="0.5" stroke-width="1.5"/></g>
+              <g class="fs-g2" transform="translate(760,236)"><circle r="30" fill="url(#fsAmber)" opacity="0.5"/><circle r="30" fill="none" stroke="#FBBF24" stroke-opacity="0.5" stroke-width="1.5"/></g>
+              <g class="fs-g2" transform="translate(716,366)"><circle r="30" fill="url(#fsAmber)" opacity="0.5"/><circle r="30" fill="none" stroke="#FBBF24" stroke-opacity="0.5" stroke-width="1.5"/></g>
+            </g>
+
+            <!-- energy burst -->
+            <circle id="fs-halo" cx="400" cy="236" r="120" fill="url(#fsHalo)" opacity="0"/>
+            <circle id="fs-ring" cx="400" cy="236" r="52" fill="none" stroke="#FDE68A" stroke-width="3" opacity="0"/>
+
+            <!-- the U-235 nucleus -->
+            <g id="fs-nuc" transform="translate(400,236)">
+              <circle r="54" fill="url(#fsAmber)"/>
+              <circle r="54" fill="none" stroke="#FDE68A" stroke-width="2" stroke-opacity="0.75"/>
+              <circle cx="-18" cy="-14" r="9" fill="#B45309" opacity="0.5"/>
+              <circle cx="16" cy="6" r="11" fill="#B45309" opacity="0.45"/>
+              <circle cx="-6" cy="22" r="7" fill="#B45309" opacity="0.5"/>
+              <text class="fs-label" x="0" y="86" text-anchor="middle" fill="#FBBF24">URANIUM-235</text>
+            </g>
+
+            <!-- fission fragments (hidden until the split) -->
+            <g id="fs-fa" transform="translate(400,236)" opacity="0">
+              <circle r="34" fill="url(#fsGreen)"/><circle r="34" fill="none" stroke="#A7F3D0" stroke-width="2" stroke-opacity="0.7"/>
+              <text class="fs-label" x="0" y="-48" text-anchor="middle" fill="#34D399">BARIUM</text>
+            </g>
+            <g id="fs-fb" transform="translate(400,236)" opacity="0">
+              <circle r="30" fill="url(#fsGreen)"/><circle r="30" fill="none" stroke="#A7F3D0" stroke-width="2" stroke-opacity="0.7"/>
+              <text class="fs-label" x="0" y="52" text-anchor="middle" fill="#34D399">KRYPTON</text>
+            </g>
+
+            <!-- incoming neutron -->
+            <g id="fs-n0" transform="translate(70,236)">
+              <circle r="13" fill="url(#fsBlue)"/>
+              <text class="fs-nlabel" x="0" y="-24" text-anchor="middle">neutron</text>
+            </g>
+
+            <!-- released neutrons -->
+            <circle id="fs-r1" cx="400" cy="236" r="12" fill="url(#fsBlue)" opacity="0"/>
+            <circle id="fs-r2" cx="400" cy="236" r="12" fill="url(#fsBlue)" opacity="0"/>
+            <circle id="fs-r3" cx="400" cy="236" r="12" fill="url(#fsBlue)" opacity="0"/>
+
+            <!-- control rod -->
+            <g id="fs-rod" opacity="0">
+              <rect x="596" y="-150" width="26" height="300" fill="#94A3B8"/>
+              <rect x="596" y="-150" width="26" height="300" fill="none" stroke="#CBD5E1" stroke-width="1.5"/>
+              <text class="fs-label" x="609" y="176" text-anchor="middle" fill="#94A3B8">CONTROL ROD</text>
+            </g>
+          </svg>
+        </div>
+        <div class="pin-copy">
+          <span class="pin-step" data-role="step">Step 01 / 06</span>
+          <h3 class="pin-title" data-role="title">A free neutron</h3>
+          <p class="pin-text" data-role="text"></p>
+          <div class="pin-rail" data-role="rail" aria-hidden="true"></div>
+          <p class="pin-hint">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
+            Keep scrolling to split the atom
+          </p>
+        </div>
+      </div>
+    </div>
+    <ol class="pin-steps" id="fission-scene-steps"></ol>
 
     <div class="fission-lab reveal">
       <div class="fz-stage">
@@ -2696,6 +2815,179 @@
         scrollTrigger: { trigger: tourFrame, start: 'top 90%', end: 'top 45%', scrub: true }
       });
     }
+  }
+
+  /* ============ PINNED SCROLL SCENES ============ */
+  /* The stage pins while scroll scrubs a timeline, so the reader drives the
+     narration. Each scene's copy also renders as a plain numbered list that
+     shows whenever the scene cannot animate (no JS, reduced motion, or a
+     missing library), so the explanation never depends on the effect. */
+  var PLANT_STEPS = [
+    { title: 'The reactor core', cx: 124, cy: 284, s: 2.15,
+      text: 'Uranium atoms split apart, releasing intense heat with no flame and no smoke. Control rods slide between the fuel rods to speed the reaction up or slow it down.' },
+    { title: 'The steam generator', cx: 261, cy: 268, s: 2.15,
+      text: 'That superheated water runs through thousands of thin tubes, boiling a completely separate loop into steam. The two loops never mix, so the water that boils never touches the reactor.' },
+    { title: 'The turbine hall', cx: 508, cy: 247, s: 1.8,
+      text: 'High-pressure steam blasts into the turbine and spins it thousands of times a minute. The shaft drives a generator exactly as it would in a coal or gas plant. Only the heat source is different.' },
+    { title: 'The condenser', cx: 458, cy: 345, s: 2.3,
+      text: 'Spent steam is cooled back into liquid water and pumped straight to the steam generator to boil again, around and around in a sealed loop.' },
+    { title: 'The switchyard', cx: 696, cy: 235, s: 2.3,
+      text: 'A transformer boosts the voltage on the way out. High voltage lets the power travel for miles down the transmission lines with very little lost along the way.' },
+    { title: 'The cooling tower', cx: 835, cy: 331, s: 2.0,
+      text: 'Leftover heat leaves through a third water loop as warm water vapour. That famous white plume is not smoke and it is not radioactive; it is the same cloud that rises off a boiling kettle.' }
+  ];
+  var FISSION_STEPS = [
+    { title: 'A free neutron', text: 'It starts with one loose neutron drifting through the fuel. Slow neutrons work best: a fast one tends to glance off, while a slow one lingers long enough to be caught.' },
+    { title: 'The nucleus absorbs it', text: 'A uranium-235 nucleus swallows the neutron and becomes uranium-236 for an instant. The extra energy makes it wobble and stretch like a droplet about to break.' },
+    { title: 'The split', text: 'It tears in two. A little of its mass converts straight into energy (E = mc²), which is why a fuel pellet the size of a fingertip holds roughly as much energy as a ton of coal.' },
+    { title: 'Two or three more neutrons', text: 'The split also flings out fresh neutrons. This is the part that matters: the reaction has just produced the very thing that started it.' },
+    { title: 'The chain reaction', text: 'Those neutrons find more nuclei and split them too. Each generation can double the last, which is what makes fission self-sustaining rather than a one-off event.' },
+    { title: 'Holding it steady', text: 'Control rods soak up the spare neutrons so exactly one from each split goes on to cause another. That balance point, k = 1, is a reactor. Reactor fuel is far too dilute to ever behave like a weapon.' }
+  ];
+
+  (function () {
+    var scenes = [
+      { el: document.getElementById('plant-scene'), steps: PLANT_STEPS, listId: 'plant-scene-steps', build: buildPlantTl },
+      { el: document.getElementById('fission-scene'), steps: FISSION_STEPS, listId: 'fission-scene-steps', build: buildFissionTl }
+    ];
+
+    scenes.forEach(function (sc) {
+      if (!sc.el) return;
+      // always render the plain-list fallback from the same copy
+      var list = document.getElementById(sc.listId);
+      if (list) {
+        sc.steps.forEach(function (st) {
+          var li = document.createElement('li');
+          var b = document.createElement('strong'); b.textContent = st.title + '. ';
+          li.appendChild(b); li.appendChild(document.createTextNode(st.text));
+          list.appendChild(li);
+        });
+      }
+      // seed the first caption so the static stage still reads correctly
+      setCaption(sc.el, sc.steps, 0);
+    });
+
+    if (REDUCE || !HAS_GSAP) return; // static diagram + list is the whole experience
+
+    // clone the plant diagram into the scene so the two can never drift apart
+    (function () {
+      var src = document.getElementById('plant-svg');
+      var fig = document.getElementById('plant-scene-fig');
+      if (!src || !fig) return;
+      var clone = src.cloneNode(true);
+      clone.id = 'plant-cam-svg';
+      clone.removeAttribute('data-active');
+      clone.removeAttribute('role');
+      clone.removeAttribute('aria-label');
+      clone.setAttribute('aria-hidden', 'true');
+      // drop interactive hotspots and every duplicated id
+      Array.prototype.forEach.call(clone.querySelectorAll('.hotspot'), function (n) { n.parentNode.removeChild(n); });
+      Array.prototype.forEach.call(clone.querySelectorAll('[id]'), function (n) { n.removeAttribute('id'); });
+      var g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      g.setAttribute('id', 'plant-cam-g');
+      while (clone.firstChild) g.appendChild(clone.firstChild);
+      clone.appendChild(g);
+      fig.appendChild(clone);
+    })();
+
+    scenes.forEach(function (sc) {
+      if (!sc.el) return;
+      if (sc.steps === PLANT_STEPS && !document.getElementById('plant-cam-svg')) return; // clone failed; keep the list
+      sc.el.classList.add('is-live');
+
+      var rail = sc.el.querySelector('[data-role="rail"]');
+      if (rail) { rail.innerHTML = ''; sc.steps.forEach(function () { rail.appendChild(document.createElement('span')); }); }
+
+      var n = sc.steps.length, shown = -1;
+      var tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sc.el,
+          start: 'top 14%',
+          end: '+=' + (n * 420),
+          scrub: 0.85,
+          pin: sc.el.querySelector('.pin-stage'),
+          pinSpacing: true,
+          invalidateOnRefresh: true,
+          onUpdate: function (self) {
+            var i = Math.max(0, Math.min(n - 1, Math.floor(self.progress * n - 0.0001)));
+            if (i === shown) return;
+            shown = i;
+            setCaption(sc.el, sc.steps, i);
+            if (rail) for (var j = 0; j < rail.children.length; j++) rail.children[j].classList.toggle('done', j <= i);
+          }
+        }
+      });
+      sc.build(tl, sc.steps);
+      tl.set({}, {}, n); // normalize total duration so progress maps to steps
+    });
+
+    function buildPlantTl (tl, steps) {
+      var cam = document.getElementById('plant-cam-g');
+      if (!cam) return;
+      var VB_CX = 480, VB_CY = 240;                 // centre of viewBox "-46 -34 1052 548"
+      var state = { s: 1, cx: VB_CX, cy: VB_CY };
+      var apply = function () {
+        cam.setAttribute('transform',
+          'translate(' + (VB_CX - state.s * state.cx) + ',' + (VB_CY - state.s * state.cy) + ') scale(' + state.s + ')');
+      };
+      apply();
+      steps.forEach(function (st, i) {
+        tl.to(state, { s: st.s, cx: st.cx, cy: st.cy, duration: 0.8, ease: 'power2.inOut', onUpdate: apply }, i);
+        tl.to('#plant-cam-svg .hl-' + (i + 1), { opacity: 1, duration: 0.3 }, i + 0.2);
+        if (i < steps.length - 1) tl.to('#plant-cam-svg .hl-' + (i + 1), { opacity: 0, duration: 0.25 }, i + 0.82);
+      });
+    }
+
+    function buildFissionTl (tl) {
+      if (!document.getElementById('fs-svg')) return;
+      var hidden = '#fs-fa, #fs-fb, #fs-r1, #fs-r2, #fs-r3, #fs-rod, #fs-halo, #fs-ring';
+      gsap.set(hidden, { opacity: 0 });
+      gsap.set('#fs-nuc', { opacity: 1 });
+
+      /* NOTE: these groups carry a translate() in their transform attribute.
+         GSAP folds that into its own x/y, so every tween below must use
+         absolute user-space coordinates (the element's own origin), not 0,
+         or the element jumps to the top-left corner. */
+      // 0 · the neutron drifts in (origin x = 70)
+      tl.fromTo('#fs-n0', { x: 70 }, { x: 320, duration: 0.95, ease: 'none' }, 0);
+      // 1 · absorbed; the nucleus swells and wobbles
+      tl.to('#fs-n0', { x: 392, duration: 0.35, ease: 'power2.in' }, 1);
+      tl.to('#fs-n0', { opacity: 0, duration: 0.2 }, 1.3);
+      tl.to('#fs-nuc', { scale: 1.16, duration: 0.4, ease: 'power2.out', svgOrigin: '400 236' }, 1.2);
+      tl.to('#fs-nuc', { scaleX: 1.3, scaleY: 0.88, duration: 0.45, ease: 'sine.inOut', svgOrigin: '400 236' }, 1.55);
+      // 2 · the split
+      tl.to('#fs-nuc', { opacity: 0, duration: 0.2 }, 2.05);
+      tl.fromTo('#fs-ring', { opacity: 0.95, scale: 0.6 }, { opacity: 0, scale: 3.4, duration: 0.8, ease: 'power2.out', svgOrigin: '400 236' }, 2);
+      tl.fromTo('#fs-halo', { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1.4, duration: 0.5, ease: 'power2.out', svgOrigin: '400 236' }, 2);
+      tl.to('#fs-halo', { opacity: 0.35, duration: 0.5 }, 2.5);
+      tl.fromTo('#fs-fa', { opacity: 0, x: 400, y: 236 }, { opacity: 1, x: 282, y: 132, duration: 0.75, ease: 'power2.out' }, 2.15);
+      tl.fromTo('#fs-fb', { opacity: 0, x: 400, y: 236 }, { opacity: 1, x: 296, y: 348, duration: 0.75, ease: 'power2.out' }, 2.15);
+      // 3 · fresh neutrons leave
+      tl.fromTo('#fs-r1', { opacity: 0, x: 0, y: 0 }, { opacity: 1, x: 120, y: -70, duration: 0.7, ease: 'power1.out' }, 3);
+      tl.fromTo('#fs-r2', { opacity: 0, x: 0, y: 0 }, { opacity: 1, x: 140, y: 4, duration: 0.7, ease: 'power1.out' }, 3.1);
+      tl.fromTo('#fs-r3', { opacity: 0, x: 0, y: 0 }, { opacity: 1, x: 118, y: 78, duration: 0.7, ease: 'power1.out' }, 3.2);
+      tl.to('#fs-halo', { opacity: 0, duration: 0.4 }, 3.2);
+      // 4 · they reach the next nuclei, which light up
+      tl.to('#fs-r1', { x: 300, y: -128, duration: 0.7, ease: 'none' }, 4);
+      tl.to('#fs-r2', { x: 344, y: 0, duration: 0.7, ease: 'none' }, 4);
+      tl.to('#fs-r3', { x: 300, y: 126, duration: 0.7, ease: 'none' }, 4);
+      tl.to('#fs-gen2 .fs-g2', { opacity: 1, scale: 1.12, duration: 0.45, stagger: 0.08, ease: 'power2.out', svgOrigin: '740 236' }, 4.5);
+      // 5 · control rods take up the slack
+      tl.fromTo('#fs-rod', { opacity: 0, y: 0 }, { opacity: 1, y: 168, duration: 0.75, ease: 'power2.out' }, 5);
+      tl.to('#fs-r2', { opacity: 0.25, duration: 0.4 }, 5.4);
+      tl.to('#fs-gen2 .fs-g2', { opacity: 0.55, duration: 0.4 }, 5.5);
+    }
+  })();
+
+  function setCaption (sceneEl, steps, i) {
+    var st = steps[i];
+    var pad = function (v) { return (v < 10 ? '0' : '') + v; };
+    var stepEl = sceneEl.querySelector('[data-role="step"]');
+    var titleEl = sceneEl.querySelector('[data-role="title"]');
+    var textEl = sceneEl.querySelector('[data-role="text"]');
+    if (stepEl) stepEl.textContent = 'Step ' + pad(i + 1) + ' / ' + pad(steps.length);
+    if (titleEl) titleEl.textContent = st.title;
+    if (textEl) textEl.textContent = st.text;
   }
 
   /* ============ COUNT-UP NUMBERS ============ */
