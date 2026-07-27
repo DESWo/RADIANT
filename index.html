@@ -629,26 +629,46 @@
      sticky needs no pin-spacer, cannot be broken by a transformed ancestor
      the way position: fixed can, and stays correct if the script never runs.
      .is-live adds the scroll runway that the sticky stage travels through. */
-  .pin-scene { position: relative; margin: 2rem 0 1rem; }
-  .js .pin-scene.is-live { height: var(--runway, 420vh); }
-  .pin-sticky { position: sticky; top: 5.4rem; }
+  /* Full-bleed cinematic stage: it breaks out of .wrap to span the viewport
+     and fills the screen below the nav, so the walkthrough plays like a film
+     rather than sitting in a card. */
+  .pin-scene { position: relative; margin: 2.4rem 0 1rem; }
+  .js .pin-scene.is-live {
+    height: var(--runway, 420vh);
+    width: 100vw; margin-inline: calc(50% - 50vw);
+  }
+  .pin-sticky { position: sticky; top: 0; }
   .pin-stage {
     position: relative; isolation: isolate; overflow: hidden;
-    background: #0B1422; border: 1px solid var(--hair);
-    padding: 1.1rem 1.1rem 1.3rem;
-    display: grid; grid-template-columns: 1.5fr 1fr; gap: 1.4rem; align-items: center;
+    background: #0B1422;
+    border-block: 1px solid var(--hair);
+    padding: 5.6rem clamp(1.2rem, 5vw, 4rem) 2.4rem;
+    display: grid; grid-template-columns: 1.35fr 1fr; gap: clamp(1.4rem, 4vw, 3.4rem);
+    align-items: center;
+    min-height: 100svh;
   }
+  .js .pin-scene:not(.is-live) .pin-stage { min-height: 0; padding: 1.1rem; border: 1px solid var(--hair); }
   /* Real drone footage of a working plant sits behind the schematic, heavily
      darkened so it reads as atmosphere rather than decoration. It is the same
      Pexels clip already credited in the Watch section, so nothing new is
      asserted about it. Hidden entirely under reduced motion. */
   .stage-bg { position: absolute; inset: 0; z-index: -2; overflow: hidden; }
-  .stage-bg video { width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0.3; }
+  .stage-bg video, .stage-bg img {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; display: block;
+  }
+  .stage-bg video { opacity: 0.3; }
+  /* One photographic plate per step; the timeline crossfades between them. */
+  .stage-bg img { opacity: 0; will-change: opacity; }
   .stage-bg::after {
     content: ''; position: absolute; inset: 0;
-    background: linear-gradient(90deg, rgba(8,14,24,0.72) 0%, rgba(8,14,24,0.86) 55%, rgba(8,14,24,0.95) 100%);
+    background:
+      linear-gradient(90deg, rgba(7,12,20,0.55) 0%, rgba(7,12,20,0.80) 48%, rgba(7,12,20,0.94) 100%),
+      linear-gradient(0deg, rgba(7,12,20,0.85) 0%, rgba(7,12,20,0.25) 45%, rgba(7,12,20,0.55) 100%);
   }
   .reduced .stage-bg, .js:not(.motion-ok) .stage-bg { display: none; }
+  .plate-credit { font-size: 0.8rem; color: var(--faint); max-width: 52rem; margin: 0.9rem 0 0; line-height: 1.5; }
+  .js .pin-scene:not(.is-live) + .plate-credit { display: none; }
   .pin-figure { position: relative; overflow: hidden; }
   .pin-figure svg { width: 100%; height: auto; display: block; }
   .pin-copy { display: flex; flex-direction: column; justify-content: center; min-height: 12rem; }
@@ -1230,10 +1250,16 @@
     <div class="pin-scene" id="plant-scene" data-scene="plant">
       <div class="pin-sticky">
       <div class="pin-stage">
-        <div class="stage-bg" aria-hidden="true">
-          <video muted loop playsinline preload="none" tabindex="-1" aria-hidden="true">
-            <source src="assets/plant-cooling-towers.mp4" type="video/mp4">
-          </video>
+        <!-- One photographic plate per stage. These are AI-generated
+             illustrations of typical plant hardware, not photographs of a
+             specific facility; the credit line under the scene says so. -->
+        <div class="stage-bg" id="plant-plates" aria-hidden="true">
+          <img src="assets/plant/1-core.webp" alt="" data-plate="1" fetchpriority="high" decoding="async">
+          <img data-src="assets/plant/2-steamgen.webp" alt="" data-plate="2" decoding="async">
+          <img data-src="assets/plant/3-turbine.webp" alt="" data-plate="3" decoding="async">
+          <img data-src="assets/plant/4-condenser.webp" alt="" data-plate="4" decoding="async">
+          <img data-src="assets/plant/5-switchyard.webp" alt="" data-plate="5" decoding="async">
+          <img data-src="assets/plant/6-tower.webp" alt="" data-plate="6" decoding="async">
         </div>
         <div class="pin-figure" id="plant-scene-fig" aria-hidden="true"></div>
         <div class="pin-copy">
@@ -1249,6 +1275,7 @@
       </div>
       </div>
     </div>
+    <p class="plate-credit">Background images are AI-generated illustrations of typical plant hardware, not photographs of any specific facility. The schematic and every figure on this page are the sourced material.</p>
     <ol class="pin-steps" id="plant-scene-steps"></ol>
 
     <div class="plant-explorer reveal">
@@ -2970,10 +2997,28 @@
           'translate(' + (VB_CX - state.s * state.cx) + ',' + (VB_CY - state.s * state.cy) + ') scale(' + state.s + ')');
       };
       apply();
+      // Photographic plates: only the first is eager; the rest swap in their
+      // real src the first time the timeline approaches them.
+      var plates = document.querySelectorAll('#plant-plates img');
+      var loadPlate = function (n) {
+        var img = plates[n];
+        if (img && img.dataset.src) { img.src = img.dataset.src; delete img.dataset.src; }
+      };
+      loadPlate(0); loadPlate(1);
+      if (plates.length) gsap.set(plates[0], { opacity: 1 });
+
       steps.forEach(function (st, i) {
         tl.to(state, { s: st.s, cx: st.cx, cy: st.cy, duration: 0.8, ease: 'power2.inOut', onUpdate: apply }, i);
         tl.to('#plant-cam-svg .hl-' + (i + 1), { opacity: 1, duration: 0.3 }, i + 0.2);
         if (i < steps.length - 1) tl.to('#plant-cam-svg .hl-' + (i + 1), { opacity: 0, duration: 0.25 }, i + 0.82);
+        // crossfade to this step's plate, pulling the next one in early
+        if (i > 0 && plates[i]) {
+          tl.to(plates[i], {
+            opacity: 1, duration: 0.55, ease: 'none',
+            onStart: function () { loadPlate(i + 1); }
+          }, i - 0.25);
+          tl.to(plates[i - 1], { opacity: 0, duration: 0.55, ease: 'none' }, i - 0.25);
+        }
       });
     }
 
