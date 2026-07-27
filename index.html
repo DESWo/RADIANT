@@ -652,6 +652,37 @@
      rather than a photographic plate. */
   .pin-stage--line { background: #080D16; }
   .build-head { margin-top: 3.4rem; }
+
+  /* ============ SCROLL-SCRUBBED SEQUENCE ============ */
+  /* One short clip is decoded to cached frames on load and then drawn to a
+     canvas by scroll position. Same result as shipping a numbered image
+     sequence, without shipping hundreds of files: seeking a video per frame
+     is what makes naive scrubbing stutter, so we never seek during scroll. */
+  .seq-scene { position: relative; margin: 0 0 1rem; }
+  .js .seq-scene.is-live { height: 300vh; width: 100vw; margin-inline: calc(50% - 50vw); }
+  .seq-sticky { position: sticky; top: 0; height: 100svh; overflow: hidden; }
+  .seq-canvas { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; background: #070C14; }
+  .seq-scrim {
+    position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(0deg, rgba(7,12,20,0.92) 0%, rgba(7,12,20,0.15) 42%, rgba(7,12,20,0.55) 100%);
+  }
+  .seq-copy {
+    position: absolute; left: 0; right: 0; bottom: clamp(2.4rem, 8vh, 6rem);
+    padding-inline: clamp(1.2rem, 6vw, 5rem);
+    max-width: 46rem;
+  }
+  .seq-copy h3 { font-family: var(--display); font-weight: 600; font-size: clamp(1.7rem, 4vw, 3rem); line-height: 1.05; letter-spacing: -0.025em; margin-bottom: 0.6rem; }
+  .seq-copy p { font-size: clamp(0.98rem, 1.5vw, 1.15rem); color: var(--body); line-height: 1.6; }
+  .seq-eyebrow { display: block; font-size: 0.78rem; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: var(--blue); margin-bottom: 0.7rem; }
+  .seq-loading { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); font-size: 0.84rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint); }
+  .seq-scene video { display: none; }
+  /* No JS, reduced motion, or decode failure: the clip plays as a normal
+     video instead, so the footage is never lost. */
+  .js .seq-scene:not(.is-live) .seq-sticky { position: static; height: auto; }
+  .js .seq-scene:not(.is-live) video,
+  .reduced .seq-scene video { display: block; width: 100%; height: auto; }
+  .js .seq-scene:not(.is-live) .seq-canvas,
+  .js .seq-scene:not(.is-live) .seq-loading { display: none; }
   /* Real drone footage of a working plant sits behind the schematic, heavily
      darkened so it reads as atmosphere rather than decoration. It is the same
      Pexels clip already credited in the Watch section, so nothing new is
@@ -1251,6 +1282,26 @@
       <p class="lede">No mystery and no green goo. Scroll to follow the energy from a uranium atom to the power line, then click any part of the plant to explore it yourself.</p>
     </div>
 
+    <!-- Scroll-scrubbed establishing shot. The clip is decoded to frames on
+         load and drawn by scroll position, so the orbit tracks the reader. -->
+    <div class="seq-scene" id="plant-seq">
+      <div class="seq-sticky">
+        <video id="plant-seq-video" muted playsinline preload="auto" tabindex="-1"
+               aria-label="Aerial orbit around a nuclear power plant at dusk, cooling towers releasing water vapour.">
+          <source src="assets/plant-orbit.mp4" type="video/mp4">
+        </video>
+        <canvas class="seq-canvas" id="plant-seq-canvas" role="img"
+                aria-label="Aerial orbit around a nuclear power plant at dusk, cooling towers releasing water vapour."></canvas>
+        <div class="seq-scrim" aria-hidden="true"></div>
+        <span class="seq-loading" id="plant-seq-loading">Loading sequence</span>
+        <div class="seq-copy">
+          <span class="seq-eyebrow">The Plant</span>
+          <h3>One building, one job: boil water.</h3>
+          <p>Everything ahead is in service of that. Scroll to circle the site, then follow the energy from a uranium atom to the power line.</p>
+        </div>
+      </div>
+    </div>
+
     <!-- Cinematic pass: the camera follows the energy through the plant.
          The diagram is cloned from #plant-svg below so the two never drift. -->
     <div class="pin-scene" id="plant-scene" data-scene="plant">
@@ -1407,61 +1458,90 @@
       <div class="pin-sticky">
       <div class="pin-stage pin-stage--line">
         <div class="pin-figure">
-          <svg id="bd-svg" viewBox="0 0 900 460" role="img" aria-label="Overhead outline animation of nuclear plant construction seen from above: the excavated pit, the base mat, containment walls, the reactor and dome, the turbine hall, and finally the cooling towers and switchyard connecting to the grid.">
+          <svg id="bd-svg" viewBox="0 0 900 520" role="img" aria-label="Drone-view outline animation of nuclear plant construction: the site is cleared and excavated, the base mat poured, containment walls rise, the dome is lifted into place, the reactor installed, the turbine hall built, cooling towers raised, and the switchyard connected to the grid.">
             <g id="bd-cam">
-              <!-- site context, always present -->
+              <!-- site ground plane, drawn in perspective -->
               <g id="bd-ground" fill="none" stroke="#2C3B52" stroke-width="1.6">
-                <path d="M40 402 Q250 372 470 392 Q690 412 866 380"/>
-                <path d="M40 424 Q250 394 470 414 Q690 434 866 402"/>
+                <path d="M96 330 L430 196 L836 340 L492 486 Z"/>
+                <path d="M232 276 L560 396" stroke-width="1" stroke-dasharray="7 8"/>
+                <path d="M330 372 L648 250" stroke-width="1" stroke-dasharray="7 8"/>
               </g>
 
-              <!-- 1 / excavation seen from above -->
-              <g id="bd-1" fill="none" stroke="#60A5FA" stroke-width="2.4" stroke-linejoin="round">
-                <path d="M236 138 L432 128 L470 246 L410 330 L252 322 L206 232 Z"/>
-                <path d="M258 166 L410 158 L440 244 L396 306 L272 300 L236 232 Z" stroke-width="1.3" stroke="#38537D" stroke-dasharray="6 6"/>
-                <path d="M470 246 L556 268" stroke-width="1.6" stroke="#38537D"/>
+              <!-- 1 / clearing and survey -->
+              <g id="bd-1" fill="none" stroke="#60A5FA" stroke-width="2.2" stroke-linejoin="round">
+                <path d="M250 300 L392 246 L470 274 L328 330 Z"/>
+                <path d="M508 262 L556 244 M586 300 L634 282" stroke-width="1.5" stroke="#38537D"/>
               </g>
-              <!-- 2 / base mat -->
+              <!-- 2 / excavation -->
               <g id="bd-2" fill="none" stroke="#60A5FA" stroke-width="2.4" stroke-linejoin="round">
-                <path d="M262 172 L404 164 L436 242 L392 300 L276 294 L242 230 Z"/>
-                <path d="M262 200 L430 194 M258 232 L436 228 M266 264 L420 258" stroke-width="1.1" stroke="#38537D"/>
-                <path d="M304 168 L292 296 M348 166 L342 298 M392 164 L390 300" stroke-width="1.1" stroke="#38537D"/>
+                <path d="M250 300 L392 246 L470 274 L328 330 Z"/>
+                <path d="M250 300 L250 322 L328 352 L328 330"/>
+                <path d="M328 352 L470 296 L470 274"/>
+                <path d="M392 246 L392 262" stroke-width="1.3" stroke="#38537D"/>
               </g>
-              <!-- 3 / containment walls -->
-              <g id="bd-3" fill="none" stroke="#60A5FA" stroke-width="2.6">
-                <circle cx="340" cy="230" r="76"/>
-                <circle cx="340" cy="230" r="63" stroke-width="1.6" stroke="#38537D"/>
+              <!-- 3 / base mat -->
+              <g id="bd-3" fill="none" stroke="#60A5FA" stroke-width="2.4" stroke-linejoin="round">
+                <path d="M262 302 L390 254 L458 278 L330 328 Z"/>
+                <path d="M288 294 L356 318 M318 284 L386 308 M348 273 L416 297" stroke-width="1" stroke="#38537D"/>
               </g>
-              <!-- 4 / reactor and dome -->
+              <!-- 4 / containment walls rise -->
               <g id="bd-4" fill="none" stroke="#60A5FA" stroke-width="2.4">
-                <circle cx="340" cy="230" r="30"/>
-                <circle cx="340" cy="230" r="13" stroke-width="1.8"/>
-                <path d="M340 200 L340 182 M370 230 L388 230 M340 260 L340 278 M310 230 L292 230" stroke-width="1.4" stroke="#38537D"/>
-              </g>
-              <!-- 5 / turbine hall -->
-              <g id="bd-5" fill="none" stroke="#60A5FA" stroke-width="2.4" stroke-linejoin="round">
-                <rect x="436" y="182" width="196" height="96" rx="4"/>
-                <path d="M436 214 L632 214" stroke-width="1.3" stroke="#38537D"/>
-                <rect x="470" y="228" width="126" height="34" rx="3" stroke-width="1.6"/>
-                <path d="M416 230 L436 230" stroke-width="2"/>
-              </g>
-              <!-- 6 / cooling towers, switchyard, grid -->
-              <g id="bd-6" fill="none" stroke="#60A5FA" stroke-width="2.4">
-                <circle cx="712" cy="160" r="46"/>
-                <circle cx="712" cy="160" r="30" stroke-width="1.3" stroke="#38537D"/>
-                <circle cx="712" cy="304" r="46"/>
-                <circle cx="712" cy="304" r="30" stroke-width="1.3" stroke="#38537D"/>
-                <path d="M632 214 L666 190 M632 246 L666 278" stroke-width="1.6" stroke="#38537D"/>
-                <g stroke-width="1.6">
-                  <path d="M790 196 L862 196 M790 232 L862 232 M790 268 L862 268"/>
-                  <path d="M806 184 L806 280 M846 184 L846 280" stroke="#38537D" stroke-width="1.2"/>
+                <g id="bd-4-grow">
+                  <ellipse cx="360" cy="290" rx="62" ry="26"/>
+                  <path d="M298 290 L298 194"/>
+                  <path d="M422 290 L422 194"/>
+                  <ellipse cx="360" cy="194" rx="62" ry="26"/>
+                  <path d="M312 246 L408 246" stroke-width="1" stroke="#38537D"/>
                 </g>
-                <path d="M758 160 L790 196 M758 304 L790 268" stroke-width="1.4" stroke="#38537D"/>
               </g>
-              <!-- steam plumes, last -->
-              <g id="bd-steam" fill="none" stroke="#93C5FD" stroke-width="1.8" opacity="0">
-                <circle cx="712" cy="160" r="58" stroke-dasharray="4 9"/>
-                <circle cx="712" cy="304" r="58" stroke-dasharray="4 9"/>
+              <!-- 5 / dome lifted into place -->
+              <g id="bd-5" fill="none" stroke="#60A5FA" stroke-width="2.4">
+                <path id="bd-dome" d="M298 194 Q360 122 422 194"/>
+                <path d="M360 122 L360 100 M348 100 L372 100" stroke-width="1.4" stroke="#38537D"/>
+              </g>
+              <!-- 6 / reactor vessel installed -->
+              <g id="bd-6" fill="none" stroke="#60A5FA" stroke-width="2">
+                <ellipse cx="360" cy="268" rx="22" ry="9"/>
+                <path d="M338 268 L338 226 M382 268 L382 226"/>
+                <ellipse cx="360" cy="226" rx="22" ry="9"/>
+                <path d="M350 226 L350 208 M370 226 L370 208" stroke-width="1.3" stroke="#38537D"/>
+              </g>
+              <!-- 7 / turbine hall -->
+              <g id="bd-7" fill="none" stroke="#60A5FA" stroke-width="2.4" stroke-linejoin="round">
+                <g id="bd-7-grow">
+                  <path d="M452 320 L566 278 L668 314 L554 358 Z"/>
+                  <path d="M452 320 L452 272 L554 308 L554 358"/>
+                  <path d="M554 308 L668 266 L668 314"/>
+                  <path d="M452 272 L566 230 L668 266" stroke-width="2"/>
+                  <path d="M566 230 L566 278" stroke-width="1.1" stroke="#38537D"/>
+                </g>
+              </g>
+              <!-- 8 / cooling towers -->
+              <g id="bd-8" fill="none" stroke="#60A5FA" stroke-width="2.4">
+                <g id="bd-8-grow">
+                  <ellipse cx="700" cy="360" rx="44" ry="18"/>
+                  <path d="M656 360 C666 312 674 292 668 268"/>
+                  <path d="M744 360 C734 312 726 292 732 268"/>
+                  <ellipse cx="700" cy="268" rx="32" ry="13"/>
+                  <ellipse cx="790" cy="306" rx="38" ry="15"/>
+                  <path d="M752 306 C761 266 768 248 763 228"/>
+                  <path d="M828 306 C819 266 812 248 817 228"/>
+                  <ellipse cx="790" cy="228" rx="27" ry="11"/>
+                </g>
+              </g>
+              <!-- 9 / switchyard and grid -->
+              <g id="bd-9" fill="none" stroke="#60A5FA" stroke-width="2.2">
+                <path d="M206 372 L206 300 M194 322 L218 322 M197 340 L215 340"/>
+                <path d="M132 388 L132 322 M121 342 L143 342"/>
+                <path d="M206 300 Q170 300 132 322" stroke-width="1.2" stroke="#38537D"/>
+                <path d="M452 296 Q330 330 206 306" stroke-width="1.2" stroke="#38537D"/>
+                <path d="M248 372 L300 350 L336 362 L284 384 Z" stroke-width="1.6" stroke="#38537D"/>
+              </g>
+              <!-- steam, last -->
+              <g id="bd-steam" fill="none" stroke="#93C5FD" stroke-width="2" opacity="0">
+                <path d="M688 258 Q676 226 696 202 Q714 180 704 156"/>
+                <path d="M714 258 Q726 228 710 206 Q696 186 708 162"/>
+                <path d="M780 220 Q770 194 786 174 Q800 156 792 138"/>
               </g>
             </g>
           </svg>
@@ -2993,12 +3073,15 @@
   ];
 
   var BUILD_STEPS = [
-    { title: 'Excavation', text: 'Everything starts by digging out to solid bedrock, often 20 metres down. The rock has to be sound enough to carry the whole plant and to hold it steady through an earthquake.' },
-    { title: 'The base mat', text: 'A single thick raft of reinforced concrete is poured across the pit in one continuous operation. Every building above is anchored to this one slab.' },
-    { title: 'Containment walls', text: 'Metre-thick reinforced concrete walls climb around a sealed steel liner. This is the outer shell built to keep everything inside, whatever happens within.' },
-    { title: 'Reactor and dome', text: 'The pressure vessel is lifted in and the dome closes over the top. From here the work moves inside: piping, steam generators, and thousands of kilometres of cable.' },
-    { title: 'The turbine hall', text: 'The conventional half of the plant goes up alongside: turbine, generator, condenser. This part is much the same as any thermal power station.' },
-    { title: 'Cooling and the grid', text: 'The cooling tower and the switchyard finish the picture. After years of commissioning and regulator sign-off, the plant synchronises to the grid and starts delivering power.' }
+    { title: 'Clearing the site', text: 'Years before any concrete, the ground is surveyed and cleared. The location has to satisfy seismology, hydrology, and a grid connection all at once, which is why siting alone can take a decade.' },
+    { title: 'Excavation', text: 'Crews dig out to solid bedrock, often twenty metres down. The rock has to be sound enough to carry the whole plant and hold it steady through an earthquake.' },
+    { title: 'The base mat', text: 'A single raft of reinforced concrete is poured across the pit in one continuous operation, sometimes running for days without stopping. Every building above is anchored to this one slab.' },
+    { title: 'Containment rises', text: 'Metre-thick reinforced concrete walls climb around a sealed steel liner. This is the shell built to hold everything in, whatever happens inside it.' },
+    { title: 'The dome goes on', text: 'The dome is assembled on the ground and lifted into place in one piece by one of the largest cranes on earth. It is the moment the building becomes recognisable.' },
+    { title: 'The reactor arrives', text: 'The pressure vessel is lowered in and the internals follow: steam generators, pumps, and thousands of kilometres of cable. Most of the remaining work is now inside.' },
+    { title: 'The turbine hall', text: 'The conventional half goes up alongside: turbine, generator, condenser. This part is much the same as any thermal power station; only the heat source differs.' },
+    { title: 'Cooling towers', text: 'The towers are slip-formed upward in a continuous pour, growing a few metres a day until they stand taller than almost anything else on site.' },
+    { title: 'Connected to the grid', text: 'The switchyard ties the plant into the transmission network. After years of commissioning and regulator sign-off, it synchronises to the grid and starts delivering power.' }
   ];
 
   (function () {
@@ -3159,16 +3242,15 @@
        Falls back to a fully drawn diagram if DrawSVG is unavailable. */
     function buildBuildTl (tl) {
       if (!document.getElementById('bd-svg')) return;
-      var groups = ['#bd-1', '#bd-2', '#bd-3', '#bd-4', '#bd-5', '#bd-6'];
+      var groups = ['#bd-1','#bd-2','#bd-3','#bd-4','#bd-5','#bd-6','#bd-7','#bd-8','#bd-9'];
       if (!HAS_DRAW) { gsap.set(groups.join(',') + ',#bd-steam', { opacity: 1 }); return; }
 
-      /* Overhead camera: opens tight on the pit and pulls back as the plant
-         grows, so the last stage reveals the whole site. A slow drift of
-         rotation keeps it feeling like a drone holding station rather than
-         a static plan. */
+      /* Drone camera: an oblique view, not a plan, so structures read as
+         rising off the ground. It circles slowly and pulls back as the plant
+         grows, ending wide on the finished site. */
       var cam = document.getElementById('bd-cam');
-      var VB_CX = 450, VB_CY = 230;
-      var shot = { s: 2.15, cx: 340, cy: 230, r: -7 };
+      var VB_CX = 450, VB_CY = 300;
+      var shot = { s: 1.85, cx: 360, cy: 300, r: 5 };
       var applyCam = function () {
         cam.setAttribute('transform',
           'translate(' + (VB_CX - shot.s * shot.cx) + ',' + (VB_CY - shot.s * shot.cy) + ') ' +
@@ -3176,14 +3258,16 @@
           'rotate(' + shot.r + ' ' + shot.cx + ' ' + shot.cy + ')');
       };
       applyCam();
-      // one continuous pull-back across the whole sequence
       var shots = [
-        { s: 2.15, cx: 340, cy: 230, r: -7 },
-        { s: 1.95, cx: 340, cy: 230, r: -5 },
-        { s: 1.75, cx: 340, cy: 230, r: -3.5 },
-        { s: 1.55, cx: 352, cy: 230, r: -2 },
-        { s: 1.22, cx: 430, cy: 230, r: -1 },
-        { s: 1.0,  cx: 470, cy: 230, r: 0 }
+        { s: 1.85, cx: 360, cy: 300, r: 5 },
+        { s: 1.78, cx: 360, cy: 296, r: 3.6 },
+        { s: 1.70, cx: 360, cy: 292, r: 2.4 },
+        { s: 1.58, cx: 360, cy: 274, r: 1.2 },
+        { s: 1.46, cx: 360, cy: 244, r: 0.2 },
+        { s: 1.38, cx: 372, cy: 250, r: -0.8 },
+        { s: 1.24, cx: 430, cy: 268, r: -1.8 },
+        { s: 1.10, cx: 500, cy: 280, r: -2.6 },
+        { s: 1.00, cx: 460, cy: 300, r: -3.2 }
       ];
       shots.forEach(function (sh, i) {
         tl.to(shot, { s: sh.s, cx: sh.cx, cy: sh.cy, r: sh.r,
@@ -3191,20 +3275,27 @@
       });
 
       gsap.set('#bd-ground > *', { drawSVG: '0%' });
-      tl.to('#bd-ground > *', { drawSVG: '100%', duration: 0.5, ease: 'power2.out', stagger: 0.08 }, 4.3);
+      tl.to('#bd-ground > *', { drawSVG: '100%', duration: 0.6, ease: 'power2.out', stagger: 0.1 }, 0);
 
       groups.forEach(function (g, i) {
         var parts = document.querySelectorAll(g + ' > *');
         gsap.set(parts, { drawSVG: '0%' });
-        tl.to(parts, {
-          drawSVG: '100%', duration: 0.72, ease: 'power2.out', stagger: 0.07
-        }, i + 0.12);
-        // a light settle so the finished stage reads as placed, not drawn
-        tl.fromTo(g, { opacity: 0.75 }, { opacity: 1, duration: 0.3, ease: 'none', immediateRender: false }, i + 0.5);
+        tl.to(parts, { drawSVG: '100%', duration: 0.7, ease: 'power2.out', stagger: 0.06 }, i + 0.14);
+        tl.fromTo(g, { opacity: 0.7 }, { opacity: 1, duration: 0.3, ease: 'none', immediateRender: false }, i + 0.5);
       });
-      // steam only once the towers exist
-      tl.fromTo('#bd-steam', { opacity: 0, scale: 0.9, svgOrigin: '712 232' },
-        { opacity: 0.85, scale: 1, duration: 0.6, ease: 'power2.out', immediateRender: false }, 5.4);
+
+      /* Tall structures also grow upward off their own base, so the reader
+         watches them rise rather than just appear outlined. */
+      [['#bd-4-grow', 290, 3], ['#bd-7-grow', 358, 6], ['#bd-8-grow', 360, 7]].forEach(function (it) {
+        tl.fromTo(it[0], { scaleY: 0.06, transformOrigin: '50% ' + it[1] + 'px' },
+          { scaleY: 1, duration: 0.85, ease: 'power2.out', immediateRender: false }, it[2] + 0.14);
+      });
+      // the dome is craned in from above
+      tl.fromTo('#bd-5', { y: -70, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.7, ease: 'power2.out', immediateRender: false }, 4.14);
+      // steam once the towers stand
+      tl.fromTo('#bd-steam', { opacity: 0, y: 14 },
+        { opacity: 0.85, y: 0, duration: 0.7, ease: 'power2.out', immediateRender: false }, 8.2);
     }
 
     function buildFissionTl (tl) {
@@ -3246,6 +3337,119 @@
       tl.to('#fs-r2', { opacity: 0.25, duration: 0.4 }, 5.4);
       tl.to('#fs-gen2 .fs-g2', { opacity: 0.55, duration: 0.4 }, 5.5);
     }
+  })();
+
+  /* ============ SCROLL-SCRUBBED VIDEO SEQUENCE ============ */
+  /* Decode a short clip into cached frames once, then draw the frame that
+     matches scroll position. Seeking a <video> on every scroll event is what
+     makes naive scrubbing stutter; decoding up front trades a little memory
+     for a scrub that never touches the decoder again. Falls back to an
+     ordinary video element whenever any of this is unavailable. */
+  (function () {
+    var scene = document.getElementById('plant-seq');
+    if (!scene) return;
+    var video = document.getElementById('plant-seq-video');
+    var canvas = document.getElementById('plant-seq-canvas');
+    var loading = document.getElementById('plant-seq-loading');
+    if (!video || !canvas || REDUCE || !HAS_GSAP || typeof createImageBitmap !== 'function') return;
+
+    var ctx = canvas.getContext('2d', { alpha: false });
+    var frames = [], drawn = -1, target = 0;
+
+    // Fewer, smaller frames on narrow screens: this is a decorative
+    // establishing shot and must never cost a phone its memory.
+    var narrow = window.innerWidth < 900;
+    var COUNT = narrow ? 16 : 30;
+    var MAXW = narrow ? 640 : 1100;
+
+    var fit = function () {
+      var r = canvas.getBoundingClientRect();
+      var dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.round(r.width * dpr);
+      canvas.height = Math.round(r.height * dpr);
+      drawn = -1;
+      draw();
+    };
+
+    // cover-fit the frame into the canvas
+    var draw = function () {
+      var i = Math.max(0, Math.min(frames.length - 1, Math.round(target * (frames.length - 1))));
+      if (i === drawn || !frames[i]) return;
+      drawn = i;
+      var f = frames[i];
+      var cw = canvas.width, ch = canvas.height;
+      var scale = Math.max(cw / f.width, ch / f.height);
+      var w = f.width * scale, h = f.height * scale;
+      ctx.drawImage(f, (cw - w) / 2, (ch - h) / 2, w, h);
+    };
+
+    var seek = function (t) {
+      return new Promise(function (res) {
+        var done = function () { video.removeEventListener('seeked', done); res(); };
+        video.addEventListener('seeked', done);
+        video.currentTime = t;
+        setTimeout(done, 900); // never hang on a decoder that will not seek
+      });
+    };
+
+    var decode = function () {
+      var dur = video.duration;
+      if (!dur || !isFinite(dur)) return Promise.reject(new Error('no duration'));
+      var vw = video.videoWidth, vh = video.videoHeight;
+      var s = Math.min(1, MAXW / vw);
+      var off = document.createElement('canvas');
+      off.width = Math.round(vw * s); off.height = Math.round(vh * s);
+      var octx = off.getContext('2d', { alpha: false });
+
+      var chain = Promise.resolve();
+      for (var i = 0; i < COUNT; i++) {
+        (function (n) {
+          chain = chain.then(function () {
+            return seek((n / (COUNT - 1)) * dur * 0.985).then(function () {
+              octx.drawImage(video, 0, 0, off.width, off.height);
+              return createImageBitmap(off).then(function (bmp) {
+                frames.push(bmp);
+                if (n === 1) { fit(); if (loading) loading.textContent = 'Loading sequence'; }
+              });
+            });
+          });
+        })(i);
+      }
+      return chain;
+    };
+
+    var start = function () {
+      if (start.done) return; start.done = true;
+      var go = function () {
+        decode().then(function () {
+          if (!frames.length) throw new Error('no frames');
+          if (loading) loading.remove();
+          fit();
+          ScrollTrigger.create({
+            trigger: scene, start: 'top top', end: 'bottom bottom', scrub: true,
+            invalidateOnRefresh: true,
+            onUpdate: function (self) { target = self.progress; draw(); }
+          });
+          ScrollTrigger.refresh();
+          window.addEventListener('resize', fit);
+        }).catch(function () {
+          // hand the clip back to the browser as an ordinary video
+          scene.classList.remove('is-live');
+          if (loading) loading.remove();
+          video.loop = true; video.play().catch(function () {});
+        });
+      };
+      if (video.readyState >= 2) go();
+      else video.addEventListener('loadeddata', go, { once: true });
+      video.addEventListener('error', function () {
+        scene.classList.remove('is-live');
+        if (loading) loading.remove();
+      }, { once: true });
+    };
+
+    scene.classList.add('is-live');
+    whenVisible(scene, start);
+    setTimeout(start, 2500); // fail open if the observer never fires
   })();
 
   function setCaption (sceneEl, steps, i) {
