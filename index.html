@@ -1407,51 +1407,62 @@
       <div class="pin-sticky">
       <div class="pin-stage pin-stage--line">
         <div class="pin-figure">
-          <svg id="bd-svg" viewBox="0 0 900 460" role="img" aria-label="Outline animation of nuclear plant construction: excavation to bedrock, the base mat, containment walls rising, the steel liner and dome, the turbine hall, and finally the cooling tower and grid connection.">
-            <!-- ground reference, always present -->
-            <line id="bd-ground" x1="30" y1="372" x2="870" y2="372" stroke="#41536F" stroke-width="2"/>
+          <svg id="bd-svg" viewBox="0 0 900 460" role="img" aria-label="Overhead outline animation of nuclear plant construction seen from above: the excavated pit, the base mat, containment walls, the reactor and dome, the turbine hall, and finally the cooling towers and switchyard connecting to the grid.">
+            <g id="bd-cam">
+              <!-- site context, always present -->
+              <g id="bd-ground" fill="none" stroke="#2C3B52" stroke-width="1.6">
+                <path d="M40 402 Q250 372 470 392 Q690 412 866 380"/>
+                <path d="M40 424 Q250 394 470 414 Q690 434 866 402"/>
+              </g>
 
-            <!-- 1 · excavation -->
-            <g id="bd-1" fill="none" stroke="#60A5FA" stroke-width="2.4" stroke-linejoin="round">
-              <path d="M175 372 L205 442 L455 442 L485 372"/>
-              <path d="M215 400 L445 400" stroke-width="1.4" stroke-dasharray="7 7" stroke="#3E5D8A"/>
-              <path d="M120 372 L150 352 M760 372 L790 352" stroke-width="1.6" stroke="#3E5D8A"/>
-            </g>
-            <!-- 2 · base mat -->
-            <g id="bd-2" fill="none" stroke="#60A5FA" stroke-width="2.4" stroke-linejoin="round">
-              <path d="M205 442 L205 414 L455 414 L455 442"/>
-              <path d="M225 414 L225 442 M265 414 L265 442 M305 414 L305 442 M345 414 L345 442 M385 414 L385 442 M425 414 L425 442" stroke-width="1.2" stroke="#3E5D8A"/>
-            </g>
-            <!-- 3 · containment walls rise -->
-            <g id="bd-3" fill="none" stroke="#60A5FA" stroke-width="2.4" stroke-linejoin="round">
-              <path d="M235 414 L235 236"/>
-              <path d="M425 414 L425 236"/>
-              <path d="M235 320 L425 320 M235 272 L425 272" stroke-width="1.2" stroke="#3E5D8A"/>
-            </g>
-            <!-- 4 · dome + reactor -->
-            <g id="bd-4" fill="none" stroke="#60A5FA" stroke-width="2.4" stroke-linejoin="round">
-              <path d="M235 236 Q330 138 425 236"/>
-              <rect x="298" y="300" width="64" height="96" rx="6"/>
-              <path d="M312 300 L312 276 M330 300 L330 276 M348 300 L348 276" stroke-width="1.6"/>
-            </g>
-            <!-- 5 · turbine hall -->
-            <g id="bd-5" fill="none" stroke="#60A5FA" stroke-width="2.4" stroke-linejoin="round">
-              <path d="M470 372 L470 296 L672 296 L672 372"/>
-              <path d="M470 296 L571 268 L672 296" stroke-width="2"/>
-              <rect x="516" y="326" width="110" height="30" rx="4" stroke-width="1.6" stroke="#3E5D8A"/>
-            </g>
-            <!-- 6 · cooling tower + grid -->
-            <g id="bd-6" fill="none" stroke="#60A5FA" stroke-width="2.4" stroke-linejoin="round">
-              <path d="M712 372 C726 300 726 262 736 214 L806 214 C816 262 816 300 830 372 Z"/>
-              <path d="M736 214 Q771 196 806 214" stroke-width="1.6"/>
-              <path d="M700 340 L672 340" stroke-width="1.6" stroke="#3E5D8A"/>
-              <path d="M560 268 L560 176 M540 196 L580 196 M544 216 L576 216" stroke-width="1.8"/>
-              <path d="M560 186 Q640 168 720 182" stroke-width="1.4" stroke="#3E5D8A"/>
-            </g>
-            <!-- steam, only at the end -->
-            <g id="bd-steam" fill="none" stroke="#93C5FD" stroke-width="2" opacity="0">
-              <path d="M752 206 Q744 176 762 156 Q778 138 770 118"/>
-              <path d="M786 206 Q796 178 782 158 Q770 140 780 120"/>
+              <!-- 1 / excavation seen from above -->
+              <g id="bd-1" fill="none" stroke="#60A5FA" stroke-width="2.4" stroke-linejoin="round">
+                <path d="M236 138 L432 128 L470 246 L410 330 L252 322 L206 232 Z"/>
+                <path d="M258 166 L410 158 L440 244 L396 306 L272 300 L236 232 Z" stroke-width="1.3" stroke="#38537D" stroke-dasharray="6 6"/>
+                <path d="M470 246 L556 268" stroke-width="1.6" stroke="#38537D"/>
+              </g>
+              <!-- 2 / base mat -->
+              <g id="bd-2" fill="none" stroke="#60A5FA" stroke-width="2.4" stroke-linejoin="round">
+                <path d="M262 172 L404 164 L436 242 L392 300 L276 294 L242 230 Z"/>
+                <path d="M262 200 L430 194 M258 232 L436 228 M266 264 L420 258" stroke-width="1.1" stroke="#38537D"/>
+                <path d="M304 168 L292 296 M348 166 L342 298 M392 164 L390 300" stroke-width="1.1" stroke="#38537D"/>
+              </g>
+              <!-- 3 / containment walls -->
+              <g id="bd-3" fill="none" stroke="#60A5FA" stroke-width="2.6">
+                <circle cx="340" cy="230" r="76"/>
+                <circle cx="340" cy="230" r="63" stroke-width="1.6" stroke="#38537D"/>
+              </g>
+              <!-- 4 / reactor and dome -->
+              <g id="bd-4" fill="none" stroke="#60A5FA" stroke-width="2.4">
+                <circle cx="340" cy="230" r="30"/>
+                <circle cx="340" cy="230" r="13" stroke-width="1.8"/>
+                <path d="M340 200 L340 182 M370 230 L388 230 M340 260 L340 278 M310 230 L292 230" stroke-width="1.4" stroke="#38537D"/>
+              </g>
+              <!-- 5 / turbine hall -->
+              <g id="bd-5" fill="none" stroke="#60A5FA" stroke-width="2.4" stroke-linejoin="round">
+                <rect x="436" y="182" width="196" height="96" rx="4"/>
+                <path d="M436 214 L632 214" stroke-width="1.3" stroke="#38537D"/>
+                <rect x="470" y="228" width="126" height="34" rx="3" stroke-width="1.6"/>
+                <path d="M416 230 L436 230" stroke-width="2"/>
+              </g>
+              <!-- 6 / cooling towers, switchyard, grid -->
+              <g id="bd-6" fill="none" stroke="#60A5FA" stroke-width="2.4">
+                <circle cx="712" cy="160" r="46"/>
+                <circle cx="712" cy="160" r="30" stroke-width="1.3" stroke="#38537D"/>
+                <circle cx="712" cy="304" r="46"/>
+                <circle cx="712" cy="304" r="30" stroke-width="1.3" stroke="#38537D"/>
+                <path d="M632 214 L666 190 M632 246 L666 278" stroke-width="1.6" stroke="#38537D"/>
+                <g stroke-width="1.6">
+                  <path d="M790 196 L862 196 M790 232 L862 232 M790 268 L862 268"/>
+                  <path d="M806 184 L806 280 M846 184 L846 280" stroke="#38537D" stroke-width="1.2"/>
+                </g>
+                <path d="M758 160 L790 196 M758 304 L790 268" stroke-width="1.4" stroke="#38537D"/>
+              </g>
+              <!-- steam plumes, last -->
+              <g id="bd-steam" fill="none" stroke="#93C5FD" stroke-width="1.8" opacity="0">
+                <circle cx="712" cy="160" r="58" stroke-dasharray="4 9"/>
+                <circle cx="712" cy="304" r="58" stroke-dasharray="4 9"/>
+              </g>
             </g>
           </svg>
         </div>
@@ -3151,8 +3162,36 @@
       var groups = ['#bd-1', '#bd-2', '#bd-3', '#bd-4', '#bd-5', '#bd-6'];
       if (!HAS_DRAW) { gsap.set(groups.join(',') + ',#bd-steam', { opacity: 1 }); return; }
 
-      gsap.set('#bd-ground', { drawSVG: '0%' });
-      tl.to('#bd-ground', { drawSVG: '100%', duration: 0.4, ease: 'power2.out' }, 0);
+      /* Overhead camera: opens tight on the pit and pulls back as the plant
+         grows, so the last stage reveals the whole site. A slow drift of
+         rotation keeps it feeling like a drone holding station rather than
+         a static plan. */
+      var cam = document.getElementById('bd-cam');
+      var VB_CX = 450, VB_CY = 230;
+      var shot = { s: 2.15, cx: 340, cy: 230, r: -7 };
+      var applyCam = function () {
+        cam.setAttribute('transform',
+          'translate(' + (VB_CX - shot.s * shot.cx) + ',' + (VB_CY - shot.s * shot.cy) + ') ' +
+          'scale(' + shot.s + ') ' +
+          'rotate(' + shot.r + ' ' + shot.cx + ' ' + shot.cy + ')');
+      };
+      applyCam();
+      // one continuous pull-back across the whole sequence
+      var shots = [
+        { s: 2.15, cx: 340, cy: 230, r: -7 },
+        { s: 1.95, cx: 340, cy: 230, r: -5 },
+        { s: 1.75, cx: 340, cy: 230, r: -3.5 },
+        { s: 1.55, cx: 352, cy: 230, r: -2 },
+        { s: 1.22, cx: 430, cy: 230, r: -1 },
+        { s: 1.0,  cx: 470, cy: 230, r: 0 }
+      ];
+      shots.forEach(function (sh, i) {
+        tl.to(shot, { s: sh.s, cx: sh.cx, cy: sh.cy, r: sh.r,
+          duration: 0.95, ease: 'power1.inOut', onUpdate: applyCam }, i);
+      });
+
+      gsap.set('#bd-ground > *', { drawSVG: '0%' });
+      tl.to('#bd-ground > *', { drawSVG: '100%', duration: 0.5, ease: 'power2.out', stagger: 0.08 }, 4.3);
 
       groups.forEach(function (g, i) {
         var parts = document.querySelectorAll(g + ' > *');
@@ -3163,9 +3202,9 @@
         // a light settle so the finished stage reads as placed, not drawn
         tl.fromTo(g, { opacity: 0.75 }, { opacity: 1, duration: 0.3, ease: 'none', immediateRender: false }, i + 0.5);
       });
-      // steam only once the tower and grid exist
-      tl.fromTo('#bd-steam', { opacity: 0, y: 12 },
-        { opacity: 0.9, y: 0, duration: 0.6, ease: 'power2.out', immediateRender: false }, 5.4);
+      // steam only once the towers exist
+      tl.fromTo('#bd-steam', { opacity: 0, scale: 0.9, svgOrigin: '712 232' },
+        { opacity: 0.85, scale: 1, duration: 0.6, ease: 'power2.out', immediateRender: false }, 5.4);
     }
 
     function buildFissionTl (tl) {
