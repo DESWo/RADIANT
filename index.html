@@ -804,6 +804,21 @@
   .walkbar button:disabled { opacity: 0.3; cursor: default; }
   .walkbar .wb-exit { border-color: transparent; color: var(--faint); }
   .walkbar .wb-exit:hover { color: var(--spot); }
+  @media (max-width: 640px) {
+    .walkbar {
+      padding: 0.5rem 0.7rem; gap: 0.55rem;
+      font-size: 0.54rem; letter-spacing: 0.09em;
+    }
+    /* the room name is the part that gives, not the page count */
+    .walkbar__where { min-width: 0; flex: 1 1 auto; overflow: hidden; text-overflow: ellipsis; }
+    .walkbar__mid { flex: 0 0 auto; }
+    .walkbar button { padding: 0.45rem 0.6rem; }
+    /* The badge keeps its full-width instrument line on a phone, but stacks
+       above the walk bar instead of underneath it. Both are position:fixed to
+       the bottom edge, so one of them has to give way. */
+    .dose { bottom: var(--walkbar-h, 2.4rem); padding: 0.42rem 0.9rem; }
+    .dose__val { font-size: 1rem; }
+  }
 
   /* Overview hub (landing directory) */
   /* ---- THE LOBBY ----
@@ -1628,6 +1643,17 @@
   .fz-scale { display: flex; justify-content: space-between; font-size: 0.76rem; color: var(--faint); margin-top: 0.3rem; }
   .fz-stats { display: flex; gap: 1.3rem; font-size: 0.9rem; color: var(--muted); }
   .fz-stats b { color: var(--ink); font-variant-numeric: tabular-nums; }
+
+  /* The fission lab on a phone: the fuel and the controls cannot share a row
+     at 390px. Stacked, the lattice gets its full width and the readouts stop
+     running into each other. */
+  @media (max-width: 760px) {
+    .fission-lab { grid-template-columns: 1fr; gap: 0.9rem; }
+    .fz-controls { padding: 1rem; gap: 0.85rem; }
+    .fz-scale { flex-wrap: wrap; gap: 0.2rem 0.9rem; font-size: 0.7rem; }
+    .fz-stats { flex-wrap: wrap; gap: 0.3rem 1.1rem; }
+    .fz-readout { font-size: 0.76rem; gap: 0.5rem; top: 0.55rem; left: 0.6rem; }
+  }
   .fz-hint { font-size: 0.84rem; color: var(--faint); line-height: 1.5; margin: 0; }
 
   /* ============ GRID SIMULATOR ============ */
@@ -3949,21 +3975,11 @@
      hold still when the reader does). Skipped wholesale under reduced
      motion or if the vendored libraries are missing. */
   if (!REDUCE && HAS_GSAP) {
-    // The hero lead drifts up and thins out as the reader leaves it,
-    // giving the masthead a sense of depth against the fission field.
-    gsap.to('.hero__lead', {
-      yPercent: -12, opacity: 0.3, ease: 'none',
-      scrollTrigger: { trigger: '.hero', start: 'top top', end: '55% top', scrub: true }
-    });
-    // The plant footage settles from slightly recessed to full size as
-    // it enters, so the Watch section reads as a deliberate arrival.
-    var tourFrame = document.querySelector('.tour-frame');
-    if (tourFrame) {
-      gsap.fromTo(tourFrame, { scale: 0.96, opacity: 0.85 }, {
-        scale: 1, opacity: 1, ease: 'none',
-        scrollTrigger: { trigger: tourFrame, start: 'top 90%', end: 'top 45%', scrub: true }
-      });
-    }
+    /* Two scroll tweens used to live here, on the masthead lead and on the
+       plant footage. Neither can run: `.hero` is not part of any wing and is
+       never displayed, and the footage arrives by page turn now, lit by the
+       piece system like everything else. A scrubbed tween with nothing to
+       scrub does not sit idle, it parks its target at one end of the tween. */
 
     /* ---- THE WALK: scroll-driven zoom between rooms (2.5D depth) ----
        The room you are leaving scales up past you and fades; the next room's
@@ -3973,14 +3989,9 @@
        room (charts, tables, the simulator) scroll normally underneath, because
        you cannot read a chart that is mid-zoom. */
 
-    // 1. The entry room: fly through it into the museum.
-    var entryInner = document.querySelector('#entry .entry__inner');
-    if (entryInner) {
-      gsap.to(entryInner, {
-        scale: 1.9, opacity: 0, filter: 'blur(6px)', ease: 'power1.in',
-        scrollTrigger: { trigger: '#entry', start: 'top top', end: 'bottom top', scrub: 0.5 }
-      });
-    }
+    /* The entrance flies through into the library on the way in, but walkIn()
+       animates that directly on the wheel, so there is no scroll position for
+       a trigger to read. */
 
     /* A room name used to rise, hold, then fly up past the camera as you
        scrolled through it. Nothing in a wing scrolls any more, so that
@@ -4142,6 +4153,16 @@
          scrub it, so the page turn drives it instead: one beat per page, which
          keeps every bit of the camera work that the scroll version had. */
       sc.el._sceneSteps = n;
+      /* The rail used to be filled from the ScrollTrigger's onUpdate. The page
+         turn drives this timeline now and that trigger is disabled, so the rail
+         reads from the timeline itself or it stops tracking the beat entirely. */
+      tl.eventCallback('onUpdate', function () {
+        if (!rail) return;
+        var p = tl.progress() * n;
+        for (var j = 0; j < rail.children.length; j++) {
+          rail.children[j].style.setProperty('--fill', Math.max(0, Math.min(1, p - j + 1)));
+        }
+      });
       sc.el._sceneGo = function (i, instant) {
         var st = tl.scrollTrigger;
         if (st && st.enabled) st.disable(false);
@@ -4431,6 +4452,11 @@
       }, { once: true });
     };
 
+    /* This decodes the clip to a cache of frames so scroll can scrub it. The
+       museum turns pages instead, and the wing strips `is-live` so the plain
+       <video> plays. Decoding several hundred frames for a canvas that is
+       never shown is the most expensive dead thing on the page. */
+    if (document.documentElement.classList.contains('js')) return;
     scene.classList.add('is-live');
     whenVisible(scene, start);
     setTimeout(start, 2500); // fail open if the observer never fires
@@ -4472,8 +4498,12 @@
   (function () {
     var cv = document.getElementById('hero-bg');
     if (!cv || !cv.getContext) return;
-    var ctx = cv.getContext('2d');
     var hero = cv.parentElement;
+    // The masthead belongs to the no-JS reading order. In the museum it is
+    // never displayed, and an animation loop for a hidden canvas is a loop
+    // that runs for the life of the page and paints nothing.
+    if (!hero || !hero.offsetHeight) return;
+    var ctx = cv.getContext('2d');
     var DPR = Math.min(window.devicePixelRatio || 1, 2);
     var W = 0, H = 0;
     function size() {
@@ -4768,7 +4798,6 @@
     // running behind a scrolling page is exactly what makes scrolling stutter
     if (walkbar) walkbar.hidden = (name !== 'wing');
     window.scrollTo(0, 0);
-    if (HAS_GSAP) ScrollTrigger.refresh();
   }
 
   function wingById(id) {
@@ -5077,6 +5106,7 @@
     }
     // where you are, counted in screens rather than exhibits
     if (wbCount) wbCount.textContent = 'Page ' + (pageIdx + 1) + ' of ' + leaves.length;
+    sizeWalkbar();
     markLong(lf.view);
     var say = document.getElementById('page-say');
     if (say) {
@@ -5094,6 +5124,15 @@
 
   /* An instrument can be taller than the screen it is standing on. When it is,
      say so: without a cue the page looks finished and the rest is never found. */
+  /* Two fixed elements share the bottom edge on a phone. The bar measures
+     itself so the badge can sit exactly on top of it. */
+  function sizeWalkbar() {
+    var bar = document.getElementById('walkbar');
+    if (!bar || bar.hidden) return;
+    document.documentElement.style.setProperty('--walkbar-h', bar.offsetHeight + 'px');
+  }
+  window.addEventListener('resize', sizeWalkbar);
+
   function markLong(view) {
     var bar = document.getElementById('walkbar');
     if (!bar) return;
