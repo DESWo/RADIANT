@@ -110,31 +110,103 @@
     src: url('assets/fonts/public-sans-normal-latin.woff2') format('woff2');
     unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
   }
+  /* ---- Museum type: Spectral (wall text) + JetBrains Mono (instruments) ---- */
+  @font-face {
+    font-family: 'JetBrains Mono';
+    font-style: normal;
+    font-weight: 400 700;
+    font-display: swap;
+    src: url('assets/fonts/jetbrains-mono-normal-latin-ext.woff2') format('woff2');
+    unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  }
+  @font-face {
+    font-family: 'JetBrains Mono';
+    font-style: normal;
+    font-weight: 400 700;
+    font-display: swap;
+    src: url('assets/fonts/jetbrains-mono-normal-latin.woff2') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  }
+  @font-face {
+    font-family: 'Spectral';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('assets/fonts/spectral-400-latin-ext.woff2') format('woff2');
+    unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  }
+  @font-face {
+    font-family: 'Spectral';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('assets/fonts/spectral-400-latin.woff2') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  }
+  @font-face {
+    font-family: 'Spectral';
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url('assets/fonts/spectral-600-latin-ext.woff2') format('woff2');
+    unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  }
+  @font-face {
+    font-family: 'Spectral';
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url('assets/fonts/spectral-600-latin.woff2') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  }
 
   :root {
-    /* ---- Cinematic dark / control-room theme ---- */
-    --ink: #F2F6FC;        /* headings & strong text (light) */
-    --body: #BFC9D9;       /* body text */
-    --muted: #8593A8;      /* secondary text */
-    --faint: #76849C;      /* faint labels & de-emphasis; lightened to clear WCAG AA 4.5:1 on card, tint and paper */
-    --hair: rgba(255,255,255,0.16);  /* borders: carry structure now that shadows are flat */
-    --tint: #0E1522;       /* alternate band, one step up from page */
-    --card: #121B2B;       /* elevated surface */
-    --card-2: #16223500;   /* (reserved) */
-    --blue: #60A5FA;       /* glowing data accent on dark */
-    --blue-deep: #93C5FD;  /* links / accent text, readable on dark */
-    --blue-wash: rgba(96,165,250,0.14);
-    --amber: #FBBF24;      /* signal amber */
-    --navy: #070B14;       /* deepest surfaces */
-    --green-ok: #34D399;
-    --display: 'Fraunces', 'Newsreader', Georgia, serif;
-    --serif: 'Newsreader', Georgia, serif;
-    --sans: 'Public Sans', system-ui, -apple-system, sans-serif;
-    --paper: #0A0E17;   /* page background, near-black navy */
-    --ink-line: rgba(255,255,255,0.16);
+    /* ---- The Radiant Collection: a dark museum after hours ----
+       Six named gallery tokens per the design brief. The legacy names below
+       are remapped onto them so the whole page re-skins warm at once; the
+       colour system's one rule is enforced by hand, not by a token: warm
+       --spot lights STATIC exhibit material, cold --cherenkov is added only
+       to genuinely LIVE readouts (dosimeter, news time, simulator outputs,
+       the fission lab's k). The two never share an element. */
+    --gallery:   #16150F;   /* the room */
+    --wall:      #211F19;   /* raised wall surface */
+    --vitrine:   #0C0B08;   /* recessed exhibit well */
+    --placard:   #E4DCC9;   /* warm off-white wall text / ink */
+    --spot:      #F2C46B;   /* warm gallery spotlight: light + emphasis (static) */
+    --cherenkov: #49D6E8;   /* cold blue, LIVE data readouts only */
+
+    /* structure derived from the palette */
+    --spot-deep: #F7D89A;   /* lighter spot, for links / warm accent text */
+    --spot-wash: rgba(242,196,107,0.12);
+    --glow-spot: 0 0 0 1px rgba(242,196,107,0.22), 0 0 40px rgba(242,196,107,0.14);
+    --glow-cherenkov: 0 0 0 1px rgba(73,214,232,0.30), 0 0 34px rgba(73,214,232,0.20);
+    --hall-pad: 6rem;
+    --placard-col: 22rem;
+
+    /* legacy names → gallery values (the whole file references these) */
+    --ink: #F1EADB;        /* strongest wall text (near-white warm) */
+    --body: #CDC5B2;       /* body / wall reading text */
+    --muted: #B3AB97;      /* secondary wall text */
+    --faint: #96906F;      /* faint labels; tuned for WCAG AA on wall/vitrine/gallery */
+    --hair: rgba(228,220,201,0.14);  /* hairline rules: placard at low opacity */
+    --tint: var(--wall);   /* alternate band = raised wall */
+    --card: var(--vitrine);/* every card becomes a recessed vitrine well */
+    --card-2: #0C0B0800;   /* (reserved) */
+    --blue: var(--spot);       /* legacy "accent" → warm spotlight for static material */
+    --blue-deep: var(--spot-deep); /* links / accent text */
+    --blue-wash: var(--spot-wash);
+    --amber: var(--spot);      /* signal amber folds into the spotlight */
+    --navy: #0A0906;           /* deepest surface, warm near-black */
+    --green-ok: #8FB98A;       /* muted sage for "fact", kept in the warm family */
+    --display: 'Fraunces', Georgia, serif;
+    --serif: 'Spectral', 'Newsreader', Georgia, serif;   /* wall text */
+    --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace; /* instruments */
+    --sans: 'JetBrains Mono', ui-monospace, Menlo, monospace; /* chrome reads as instrument labels */
+    --paper: var(--gallery);   /* page background */
+    --ink-line: var(--hair);
     --shadow: none;
     --shadow-lift: none;
-    --glow-blue: 0 0 0 1px rgba(96,165,250,0.25), 0 0 34px rgba(96,165,250,0.16);
+    --glow-blue: var(--glow-spot);
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -160,8 +232,8 @@
   .lenis.lenis-stopped { overflow: clip; }
 
   body {
-    font-family: var(--sans);
-    font-size: 1.0625rem; line-height: 1.7;
+    font-family: var(--serif);   /* wall text: Spectral. Labels/data opt into --mono explicitly. */
+    font-size: 1.0625rem; line-height: 1.72;
     background: var(--paper); color: var(--body);
     overflow-x: clip;
   }
@@ -173,38 +245,619 @@
   }
   body::after {
     content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
-    background: radial-gradient(120% 80% at 50% -10%, rgba(96,165,250,0.06), rgba(10,14,23,0) 60%);
+    /* warm spotlight pooling from the top of the room, not a cold cast */
+    background: radial-gradient(120% 80% at 50% -10%, rgba(242,196,107,0.07), rgba(22,21,15,0) 60%);
   }
   main, footer, nav { position: relative; z-index: 2; }
 
+  /* ============ THE ENTRY HALL ============
+     Dark, almost empty, one lit object. The visitor arrives in front of a
+     single fuel pellet in a pool of warm light, is told what the collection
+     is, and is invited to walk in. No stat tiles here: the numbers live in
+     the halls, on placards, where a museum keeps them. */
+  /* The entry is two screens tall: one to stand in, one to fly through as the
+     museum opens up. The inner block sticks so the zoom happens in place. */
+  .entry {
+    position: relative; min-height: 190vh;
+    text-align: center; padding: 0 1.5rem;
+    background: radial-gradient(120% 60% at 50% 26%, rgba(242,196,107,0.07), rgba(22,21,15,0) 62%);
+    overflow: clip;
+  }
+  .entry__inner {
+    max-width: 46rem; margin: 0 auto;
+    position: sticky; top: 0; height: 100vh;
+    display: flex; flex-direction: column; justify-content: center;
+    will-change: transform, opacity, filter;
+  }
+  .specimen {
+    width: 190px; height: 190px; margin: 0 auto 2.6rem; position: relative;
+    display: grid; place-items: center;
+  }
+  .specimen::after {
+    content: ''; position: absolute; inset: -42% -42% -62%;
+    background: radial-gradient(closest-side, rgba(242,196,107,0.3), rgba(242,196,107,0) 70%);
+    filter: blur(6px); z-index: -1;
+  }
+  /* a uranium dioxide pellet, lit from above in its vitrine */
+  .pellet {
+    width: 96px; height: 132px;
+    background: linear-gradient(180deg, #F4E4C6, #C9A96B 58%, #7C6636);
+    box-shadow: inset 0 14px 22px rgba(255,255,255,0.32),
+                inset 0 -26px 34px rgba(0,0,0,0.5),
+                0 0 46px rgba(242,196,107,0.38);
+  }
+  .entry__kicker {
+    font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.34em;
+    text-transform: uppercase; color: var(--spot); margin-bottom: 1.3rem;
+  }
+  .entry__title {
+    font-family: var(--display); font-weight: 600; color: var(--ink);
+    font-size: clamp(2.6rem, 7vw, 5rem); line-height: 1.02; letter-spacing: -0.02em;
+  }
+  .entry__sub {
+    font-family: var(--serif); font-style: italic; color: var(--muted);
+    font-size: clamp(1rem, 2.2vw, 1.28rem); line-height: 1.5;
+    margin: 1.3rem auto 0; max-width: 34rem;
+  }
+  .entry__cue {
+    position: absolute; left: 0; right: 0; bottom: 2.2rem;
+    font-family: var(--mono); font-size: 0.64rem; letter-spacing: 0.3em;
+    text-transform: uppercase; color: rgba(228,220,201,0.45);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .entry__cue { animation: entry-cue 2.4s ease-in-out infinite; }
+  }
+  @keyframes entry-cue { 0%,100% { opacity: 0.35; } 50% { opacity: 0.85; } }
+
+  /* ============ THE LIBRARY ============
+     The lobby is a reading room. Five shelves, one per wing; every exhibit is a
+     book standing on its shelf, spine out, the way you would actually find it.
+     Pull a book and it opens: the cover swings back, the pages spread, and the
+     exhibit is what is written inside. Flat and drawn, in the site's own
+     colours, with no 3D and no libraries beyond what is already vendored. */
+    .library {
+    height: 100vh; overflow: hidden;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 0.8rem 1.5rem 0.8rem;
+  }
+  .library__head { max-width: 60rem; margin: 0 auto clamp(0.6rem, 1.4vh, 1.1rem); text-align: center; flex: 0 0 auto; }
+  .library__title {
+    font-family: var(--display); font-weight: 600; color: var(--ink);
+    font-size: clamp(1.3rem, 2.4vw, 1.8rem); line-height: 1.02; letter-spacing: -0.022em;
+  }
+  .library__sub { font-family: var(--serif); font-style: italic; color: var(--muted);
+    max-width: 48rem; margin: 0.3rem auto 0; line-height: 1.35; font-size: 0.78rem; }
+
+    .bookcase {
+    max-width: 76rem; margin: 0 auto; width: 100%;
+    display: grid; gap: 0.42rem 0.8rem;
+    grid-template-columns: repeat(6, 1fr);
+  }
+  /* Three rows, in wing order: the two short wings share the top, The Record
+     gets a row to itself, and the last two share the bottom. Three rows rather
+     than four is what buys the books enough height for their spines to be read. */
+  .shelf { margin: 0; }
+  .shelf:nth-child(1) { grid-column: span 3; }
+  .shelf:nth-child(2) { grid-column: span 3; }
+  .shelf:nth-child(3) { grid-column: span 6; }
+  .shelf:nth-child(4) { grid-column: span 2; }
+  .shelf:nth-child(5) { grid-column: span 4; }
+  @media (max-width: 820px) {
+    .library { height: auto; min-height: 100vh; overflow: visible; }
+    .bookcase { grid-template-columns: 1fr; }
+    .shelf, .shelf:nth-child(n) { grid-column: 1 / -1; }
+  }
+  .shelf__label {
+    display: flex; align-items: baseline; gap: 0.7rem; margin-bottom: 0.22rem;
+    font-family: var(--mono); font-size: 0.56rem; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--wing, var(--spot));
+  }
+  .shelf__label .shelf__n { color: var(--faint); }
+  .shelf__label .shelf__of { margin-left: auto; color: var(--faint); letter-spacing: 0.14em; }
+  /* A real shelf: a case with sides, a back panel in shadow, and a board with
+     visible thickness that the books actually stand on. Books are packed tight
+     against each other and flush to the left, the way they really sit. */
+  .shelf__board {
+    position: relative;
+    display: flex; align-items: flex-end; justify-content: flex-start;
+    gap: 0;                                  /* books touch, as books do */
+    padding: clamp(0.42rem, 1vh, 0.8rem) 0.75rem 0 0.75rem;
+    min-height: 0;
+    background:
+      linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.16) 38%, rgba(0,0,0,0) 70%),
+      #17150F;                                /* the back panel, in shadow */
+    border-left: 7px solid #2E2A20;           /* the case sides */
+    border-right: 7px solid #2E2A20;
+    border-top: 3px solid #262219;
+  }
+  /* the board the books stand on: a lit front edge with real thickness */
+  .shelf__board::after {
+    content: ''; position: absolute; left: -7px; right: -7px; bottom: -9px; height: 9px;
+    background: linear-gradient(180deg, #433C2C 0%, #302B20 55%, #1B180F 100%);
+    box-shadow: 0 3px 7px rgba(0,0,0,0.6);
+  }
+  /* light falling onto the books from the front of the shelf */
+  .shelf__board::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 2;
+    background: linear-gradient(180deg, rgba(242,196,107,0.11) 0%, rgba(242,196,107,0.02) 34%, rgba(0,0,0,0.32) 100%);
+  }
+
+  /* a book, seen spine-on */
+  .book {
+    position: relative; z-index: 1; cursor: pointer; border: 0; border-radius: 0;
+    width: clamp(2.7rem, 3.1vw, 3.4rem); height: clamp(6.7rem, 14.7vh, 8.8rem);
+    padding: 0.3rem 0.25rem 0.42rem;
+    display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+    background: linear-gradient(90deg, rgba(0,0,0,0.5) 0%, rgba(255,255,255,0.07) 14%,
+                rgba(0,0,0,0) 46%, rgba(0,0,0,0.28) 86%, rgba(0,0,0,0.55) 100%),
+                var(--book, #6E6653);
+    box-shadow: inset 0 2px 0 rgba(255,255,255,0.16);
+    transition: transform 0.24s cubic-bezier(0.16,1,0.3,1), filter 0.24s ease;
+    filter: brightness(0.9);
+  }
+  .book::after {   /* the raised bands a bound spine carries */
+    content: ''; position: absolute; left: 0; right: 0; top: 0.85rem; height: 2px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.14), rgba(0,0,0,0.35));
+    box-shadow: 0 4.6rem 0 rgba(0,0,0,0.28), 0 4.6rem 0 -1px rgba(255,255,255,0.12);
+  }
+  .book:hover, .book:focus-visible { transform: translateY(-11px); filter: brightness(1.15); }
+  .book:focus-visible { outline: 2px solid var(--cherenkov); outline-offset: 3px; z-index: 3; }
+  /* the open page never draws a ring: focus lands on it only to carry the
+     keyboard across, and a ring around the whole screen reads as an error */
+  .js body[data-screen="wing"] .view.in-wing:focus,
+  .js body[data-screen="wing"] .view.in-wing:focus-visible { outline: none; }
+  .book__spine {
+    writing-mode: vertical-rl; text-orientation: mixed; transform: rotate(180deg);
+    font-family: var(--serif); font-size: 0.78rem; font-weight: 600; line-height: 1.04;
+    color: #12100A; letter-spacing: 0.005em; white-space: nowrap;
+    flex: 1 1 auto; min-height: 0; overflow: hidden; text-overflow: ellipsis;
+  }
+  /* the device at the foot of the spine, where a binder puts one */
+  .book__mark {
+    flex: 0 0 auto; width: clamp(0.72rem, 1.45vw, 0.9rem); height: auto;
+    margin-top: 0.24rem; color: rgba(14,12,7,0.86);
+    transition: color 0.24s ease;
+  }
+  .book:hover .book__mark, .book:focus-visible .book__mark { color: rgba(16,14,8,0.95); }
+  /* varied heights and widths, so a row reads as a collection not a bar chart */
+  .book--tall  { height: clamp(7rem, 15.3vh, 9.4rem); }
+  .book--short { height: clamp(6.3rem, 13.9vh, 8.2rem); }
+  .book--wide  { width: clamp(3.1rem, 3.7vw, 3.9rem); }
+  .book--thin  { width: clamp(2.3rem, 2.7vw, 2.9rem); }
+  /* a bookend of empty shelf after the last volume */
+  .shelf__board > .book:last-child { margin-right: auto; }
+
+  /* Opening a book. The closed book comes off the shelf, BOTH covers swing
+     apart into a two-page spread, a leaf turns off the right page onto the
+     left, and then the camera pushes into the right-hand page until it fills
+     the screen and becomes the exhibit. Every surface is two-sided: each leaf
+     carries a front face and a back face, so a cover really is the outside of
+     a page. */
+  .bookopen {
+    position: fixed; inset: 0; z-index: 95; display: none;
+    align-items: center; justify-content: center;
+    perspective: 1900px; perspective-origin: 50% 48%;
+  }
+  .bookopen.is-on { display: flex; }
+  .bookopen__scrim { position: absolute; inset: 0; background: #0B0A07; opacity: 0; }
+
+  .bo__book { position: relative; width: 44rem; height: 27rem; transform-style: preserve-3d; }
+  .bo__half { position: absolute; top: 0; height: 100%; width: 50%; transform-style: preserve-3d; }
+  .bo__half--l { left: 0;   transform-origin: right center; }
+  .bo__half--r { left: 50%; transform-origin: left center; }
+  /* the leaf that turns: it lies on the right page until it is flipped left */
+  .bo__leaf {
+    position: absolute; top: 0; left: 50%; height: 100%; width: 50%;
+    transform-style: preserve-3d; transform-origin: left center; opacity: 0;
+  }
+
+  .bo__face { position: absolute; inset: 0; backface-visibility: hidden; }
+  .bo__face--b { transform: rotateY(180deg); }
+
+  .bo__paper { background: linear-gradient(95deg, #EFE7D4 0%, #E0D7C1 90%); }
+  .bo__half--l .bo__paper { box-shadow: inset -18px 0 30px rgba(60,44,16,0.22); }
+  .bo__half--r .bo__paper { box-shadow: inset 18px 0 30px rgba(60,44,16,0.22); }
+  .bo__leaf .bo__paper { box-shadow: -16px 0 38px rgba(0,0,0,0.42), inset 14px 0 22px rgba(60,44,16,0.16); }
+  .bo__cover {
+    background: linear-gradient(100deg, var(--book, #6E6653) 0%, #241E15 100%);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.09), 0 22px 70px rgba(0,0,0,0.62);
+  }
+  /* a blind-stamped rule on the cover, the way a bound volume carries one */
+  .bo__cover::after {
+    content: ''; position: absolute; inset: 0.8rem;
+    border: 1px solid rgba(255,255,255,0.13);
+  }
+  .bo__ctitle {
+    position: absolute; left: 12%; right: 12%; top: 50%; transform: translateY(-50%);
+    text-align: center; font-family: var(--serif); font-weight: 600;
+    font-size: 1.05rem; line-height: 1.25; color: rgba(255,244,214,0.82);
+  }
+  /* the left page of the spread: the wing it belongs to, set as a half-title */
+  .bo__wing {
+    position: absolute; left: 14%; right: 14%; top: 50%; transform: translateY(-50%);
+    text-align: center; font-family: var(--mono); font-size: 0.6rem;
+    letter-spacing: 0.26em; text-transform: uppercase; color: #6B6045;
+  }
+  .bo__wing b { display: block; font-family: var(--serif); font-weight: 600;
+    font-size: 1rem; letter-spacing: 0; text-transform: none; color: #3B3323;
+    margin-top: 0.5rem; }
+  .bo__title {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+    width: 76%; text-align: center; pointer-events: none; opacity: 0;
+    font-family: var(--display); font-weight: 600; color: #16130C;
+    font-size: clamp(2.1rem, 3.6vw, 3.4rem); line-height: 1.08;
+    letter-spacing: -0.022em; text-wrap: balance;
+  }
+  .bo__flood { position: absolute; inset: 0; background: var(--gallery); opacity: 0; pointer-events: none; }
+  @media (max-width: 860px) { .bo__book { width: 23rem; height: 15rem; } .bo__title { font-size: 1.25rem; } }
+
+  @media (max-width: 640px) {
+    .book { width: 2.9rem; height: 8.2rem; }
+    .shelf__board { gap: 0.4rem; }
+  }
+
+  /* ---- THE LOBBY SCREEN: five doors, nothing else ---- */
+  .lobby {
+    min-height: 100vh; display: grid; place-items: center; padding: 6rem 1.5rem 4rem;
+    background: radial-gradient(120% 70% at 50% 8%, rgba(242,196,107,0.07), rgba(22,21,15,0) 60%);
+  }
+  .lobby__inner { width: 100%; max-width: 72rem; text-align: center; }
+  .lobby__title {
+    font-family: var(--display); font-weight: 600; color: var(--ink);
+    font-size: clamp(2.2rem, 5.4vw, 3.8rem); line-height: 1.03; letter-spacing: -0.022em;
+  }
+  .lobby__sub {
+    font-family: var(--serif); font-style: italic; color: var(--muted);
+    max-width: 40rem; margin: 1.1rem auto 3rem; line-height: 1.55;
+  }
+  .wingrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 1.1rem; }
+  /* a doorway: light spills from the head of the frame down to the floor */
+  .wingdoor {
+    position: relative; overflow: hidden; text-align: left; cursor: pointer;
+    display: flex; flex-direction: column; justify-content: flex-end; gap: 0.4rem;
+    min-height: 15rem; padding: 1.3rem 1.3rem 1.4rem;
+    background: linear-gradient(180deg, rgba(242,196,107,0.17) 0%, rgba(242,196,107,0.04) 30%, rgba(12,11,8,0) 66%), var(--vitrine);
+    border: 1px solid var(--hair); border-top: 1px solid rgba(242,196,107,0.45); border-radius: 0;
+    font: inherit; color: inherit;
+    transition: transform 0.28s cubic-bezier(0.16,1,0.3,1), border-top-color 0.28s, background 0.28s;
+  }
+  .wingdoor:hover, .wingdoor:focus-visible {
+    transform: translateY(-4px); border-top-color: var(--spot);
+    background: linear-gradient(180deg, rgba(242,196,107,0.32) 0%, rgba(242,196,107,0.09) 34%, rgba(12,11,8,0) 70%), var(--vitrine);
+  }
+  .wingdoor .wd-n {
+    font-family: var(--mono); font-size: 0.64rem; letter-spacing: 0.26em;
+    text-transform: uppercase; color: var(--spot);
+  }
+  .wingdoor .wd-t { font-family: var(--display); font-size: 1.55rem; font-weight: 600; color: var(--ink); line-height: 1.1; }
+  .wingdoor .wd-d { font-family: var(--serif); font-size: 0.92rem; color: var(--muted); line-height: 1.45; }
+  .wingdoor .wd-c {
+    font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--faint); margin-top: 0.3rem;
+  }
+
+  /* ============ THE DOSIMETER (signature instrument) ============
+     A small working instrument clipped to the corner. It is LIVE data, so it
+     reads in --cherenkov, never --spot. A full traversal of the collection
+     equals 0.040 mSv, one round-trip flight New York to Los Angeles, the same
+     figure the Exposure exhibit cites. Orientation (hall name) + real reading. */
+  .dose {
+    position: fixed; bottom: 3.6rem; right: 1.15rem; z-index: 40;
+    display: grid; grid-template-columns: 6px auto; gap: 0 0.7rem; align-items: stretch;
+    padding: 0.75rem 0.85rem 0.7rem;
+    background: color-mix(in srgb, var(--vitrine) 82%, transparent);
+    border: 1px solid rgba(73,214,232,0.28);
+    backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    font-family: var(--mono); pointer-events: none; user-select: none;
+    opacity: 0; transition: opacity 0.6s ease 0.9s;
+  }
+  .dose.lit { opacity: 1; }
+  .dose__scale { position: relative; grid-row: 1 / 3; width: 6px; background: rgba(73,214,232,0.12); overflow: hidden; }
+  .dose__fill { position: absolute; left: 0; bottom: 0; width: 100%; height: calc(var(--f, 0) * 100%);
+    background: linear-gradient(to top, var(--cherenkov), rgba(73,214,232,0.35));
+    box-shadow: 0 0 10px rgba(73,214,232,0.5); }
+  .dose__read { display: flex; align-items: baseline; gap: 0.28em; }
+  .dose__val { font-size: 1.18rem; font-weight: 600; letter-spacing: 0.01em; color: var(--cherenkov);
+    font-variant-numeric: tabular-nums; text-shadow: 0 0 14px rgba(73,214,232,0.4); }
+  .dose__unit { font-size: 0.68rem; color: rgba(73,214,232,0.72); }
+  .dose__dot { width: 5px; height: 5px; margin-left: 0.15em; align-self: center; background: var(--cherenkov);
+    box-shadow: 0 0 8px var(--cherenkov); }
+  .dose__hall { font-size: 0.6rem; letter-spacing: 0.22em; text-transform: uppercase;
+    color: rgba(73,214,232,0.62); margin-top: 0.28rem; white-space: nowrap; }
+  @media (prefers-reduced-motion: no-preference) {
+    .dose__dot { animation: dose-live 1.6s steps(1,end) infinite; }
+  }
+  @keyframes dose-live { 0%,55% { opacity: 1; } 56%,100% { opacity: 0.15; } }
+  /* Mobile: collapse to a single instrument line pinned to the bottom edge */
+  @media (max-width: 640px) {
+    .dose { top: auto; bottom: 0; right: 0; left: 0; grid-template-columns: auto 1fr auto;
+      align-items: center; gap: 0 0.6rem; padding: 0.5rem 0.9rem;
+      border-left: none; border-right: none; border-bottom: none; }
+    .dose__scale { grid-row: auto; width: 100%; height: 3px; }
+    .dose__fill { width: calc(var(--f, 0) * 100%); height: 100%; left: 0; bottom: 0; }
+    .dose__hall { margin-top: 0; }
+  }
+
   /* ============ VIEW ROUTER (click to navigate; no-JS = full scroll) ============ */
-  .js .view:not(.is-active) { display: none !important; }
-  .js .closing-band { display: none; }
-  .js[data-view="top"] .closing-band { display: block; }
-  .js .view.is-active { animation: viewfade 0.4s ease both; }
-  @keyframes viewfade { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
-  @media (prefers-reduced-motion: reduce) { .js .view.is-active { animation: none; } }
+  /* ============ THE MUSEUM: THREE SCREENS, NO PAGE SCROLL ============
+     title -> lobby -> a wing you walk exhibit by exhibit. Only one screen is
+     ever in the document flow, so there is no long page to scroll. Without JS
+     every section simply shows in order, which keeps the whole site readable. */
+  .js body { overflow: hidden; }
+  /* On a narrow screen the shelves cannot all fit at once, so the library is
+     the one screen allowed to scroll. Everything else stays fixed. */
+  @media (max-width: 820px) {
+    .js body[data-screen="lobby"] { overflow: auto; }
+    .js body[data-screen="lobby"] #main { height: auto; }
+  }
+  /* no top bar: the lobby and the walk bar are the whole navigation */
+  .js .nav { display: none; }
+  .js #progress { display: none; }
+  .js #main { height: 100vh; }
+
+  /* screens. #main always stays in flow: the title and lobby screens live
+     inside it, so hiding main would hide them too (that bug cost an hour). */
+  .js .screen { display: none; }
+  .js body[data-screen="title"] #screen-title { display: grid; }
+  .js body[data-screen="lobby"] #screen-lobby { display: grid; }
+  /* on the title and lobby screens nothing else from the museum is present */
+  .js body[data-screen="title"] .view,
+  .js body[data-screen="title"] .closing-band,
+  .js body[data-screen="title"] footer,
+  .js body[data-screen="lobby"] .view,
+  .js body[data-screen="lobby"] .closing-band,
+  .js body[data-screen="lobby"] footer { display: none !important; }
+  /* In a wing the sources travel with the Sources exhibit: the footer is moved
+     inside it and paged like any other block. Left outside, it is hidden. */
+  .js body[data-screen="wing"] > footer { display: none; }
+  .js body[data-screen="wing"] .view footer { display: block; margin: 0; }
+
+  /* in a wing: exactly one exhibit on screen, filling it, and scrollable only
+     if that single exhibit is genuinely taller than the viewport */
+  /* A wing is one continuous walk: every exhibit in the wing is present and you
+     scroll through them. Each takes the full height so it takes over the screen
+     as you reach it, and its pieces light up on arrival. */
+  .js body[data-screen="wing"] .view { display: none; }
+  /* Inside a wing you are reading a book: one exhibit fills the screen, and
+     moving on turns the page. The exhibits are stacked, only the current one is
+     shown, and a leaf sweeps across to carry you from one to the next. */
+  .js body[data-screen="wing"] #main {
+    height: 100vh; overflow: hidden; position: relative; perspective: 2200px;
+  }
+  .js body[data-screen="wing"] .view.in-wing {
+    position: absolute; inset: 0; display: none;
+    flex-direction: column;
+    padding: 2.2rem 0 4rem;
+    /* a page that fits is centred; one that does not reads from its top, and
+       scrolls inside itself. `safe` is what keeps the top reachable: without it
+       centring pushes the overflow off both ends and the first line is lost.
+       Browsers that do not know `safe` keep the plain centring above. */
+    justify-content: center;
+    justify-content: safe center;
+    overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain;
+    scrollbar-width: none;
+  }
+  .js body[data-screen="wing"] .view.in-wing::-webkit-scrollbar { width: 0; height: 0; }
+  .js body[data-screen="wing"] .view.in-wing.is-page { display: flex; }
+  /* Only the blocks belonging to the open leaf are on screen. */
+  .js body[data-screen="wing"] .leaf-off { display: none !important; }
+  /* a case showing only part of itself lays out as a single column */
+  .js body[data-screen="wing"] .exhibit.is-part,
+  .js body[data-screen="wing"] .is-part { display: block; }
+  /* measured with the page laid out but not painted */
+  .js body[data-screen="wing"] .view.in-wing.is-measuring { display: flex; visibility: hidden; }
+
+  /* A room name was a full-height title card back when the page scrolled and
+     a fixed nav sat over it. Both are gone: in a wing it is simply the first
+     page of the exhibit, centred on its own screen. */
+  .js body[data-screen="wing"] .section-head {
+    min-height: 0; padding: 0; margin: 0 auto;
+  }
+  .js body[data-screen="wing"] .section-head h2 {
+    font-size: clamp(1.5rem, min(7vw, 5.6vh), 3.5rem); margin-bottom: 0.7rem;
+  }
+  .js body[data-screen="wing"] .section-head .lede {
+    font-size: clamp(0.9rem, min(3.4vw, 2vh), 1.2rem); line-height: 1.45;
+  }
+  /* a screen holding a single exhibit piece gives it the whole screen */
+  .js body[data-screen="wing"] .view.in-wing.leaf-solo { padding: 1.2rem 0 3.4rem; }
+  .js body[data-screen="wing"] .view.in-wing.leaf-full { padding: 0; }
+
+  /* The grid model is one instrument: the sliders, the readouts and the city
+     they drive have to be on the screen together or the feedback loop that
+     makes it worth using is broken. So it is tightened to fit rather than
+     split across two pages. */
+  .js body[data-screen="wing"] .sim-row { margin-bottom: 0.45rem; }
+  .js body[data-screen="wing"] .sim-tiles { margin-bottom: 0.8rem; }
+  .js body[data-screen="wing"] .sim-bars-title { margin-bottom: 0.5rem; }
+  .js body[data-screen="wing"] .sim-city-wrap { margin-bottom: 0.5rem; }
+  .js body[data-screen="wing"] #sim-city { width: auto; height: min(15vh, 10rem); margin: 0 auto; }
+  .js body[data-screen="wing"] .sim-notes { margin-top: 0.7rem; }
+  .js body[data-screen="wing"] .sim-notes summary { padding: 0.5rem 0; }
+  .js body[data-screen="wing"] .sim-card { padding: 1.2rem 1.8rem 1rem; margin-bottom: 0; }
+
+  /* A pinned scene was a sticky stage travelling through a scroll runway.
+     There is no scroll here, so the stage simply is the page, and its beats
+     are turned one at a time like everything else. */
+  .js body[data-screen="wing"] .pin-scene.is-live { height: auto; margin-block: 0; }
+  .js body[data-screen="wing"] .pin-sticky { position: relative; top: auto; }
+  .js body[data-screen="wing"] .pin-stage {
+    min-height: 100vh; border-block: 0;
+    padding: 3.2rem clamp(1.2rem, 5vw, 4rem) 4.6rem;   /* bottom clears the walk bar */
+  }
+  .js body[data-screen="wing"] .seq-scene video {
+    display: block; width: auto; max-width: 100%; max-height: 76vh; margin: 0 auto;
+  }
+  .js body[data-screen="wing"] .pin-scene.is-live + .plate-credit { display: block; }
+  .js body[data-screen="wing"] .wing-end { position: absolute; inset: 0; display: none; }
+  .js body[data-screen="wing"] .wing-end.is-page { display: grid; }
+
+  /* the turning leaf */
+  .pageflip {
+    position: fixed; inset: 0; z-index: 70; pointer-events: none;
+    display: none; perspective: 2200px;
+  }
+  .pageflip.is-on { display: block; }
+  .walkbar.is-long .walkbar__mid::after {
+    content: '  \2193  more on this page';
+    color: var(--spot); letter-spacing: 0.14em;
+  }
+
+  /* The sheet turns on its left edge, the way the page of a book does. The two
+     faces are pinned to it 180 degrees apart and each is hidden while it faces
+     away, so what you watch is one page turning over, not two rectangles
+     crossfading. */
+  .pageflip__sheet {
+    position: absolute; inset: 0;
+    transform-origin: left center; transform-style: preserve-3d;
+  }
+  .pageflip__face {
+    position: absolute; inset: 0; overflow: hidden;
+    backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  }
+  /* the front: the page you are leaving, still readable as it lifts */
+  .pageflip__front {
+    background: var(--gallery);
+    box-shadow: 34px 0 90px rgba(0,0,0,0.72);
+  }
+  .pageflip__front > .view { position: absolute !important; inset: 0 !important; }
+  /* the shading that slides across the front as the sheet turns */
+  .pageflip__front::after {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(100deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.3) 42%, rgba(0,0,0,0) 78%);
+    opacity: var(--sh, 0);
+  }
+  /* the back: paper, with the leading edge the eye tracks across the screen */
+  .pageflip__leaf {
+    transform: rotateY(180deg);
+    background: linear-gradient(95deg, #B9AF95 0%, #DCD3BC 16%, #EFE7D4 54%, #E0D6BF 84%, #C2B79C 100%);
+    box-shadow: -26px 0 70px rgba(0,0,0,0.62);
+  }
+  .pageflip__leaf::after {
+    content: ''; position: absolute; top: 0; bottom: 0; right: 0; width: 3px;
+    background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,247,225,0.9));
+  }
+  /* the shadow the turning page casts on the one beneath */
+  .pageflip__shade {
+    position: absolute; inset: 0;
+    background: linear-gradient(90deg, rgba(0,0,0,0.72), rgba(0,0,0,0.18) 52%, rgba(0,0,0,0) 78%);
+    opacity: 0;
+  }
+
+  /* pieces arrive one at a time as you scroll into them */
+  .js body[data-screen="wing"] .piece {
+    opacity: 0; transform: translateY(30px); filter: brightness(0.45);
+    transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1),
+                transform 0.85s cubic-bezier(0.16,1,0.3,1),
+                filter 0.85s cubic-bezier(0.16,1,0.3,1);
+    transition-delay: calc(var(--p, 0) * 90ms);
+  }
+  .js body[data-screen="wing"] .piece.lit { opacity: 1; transform: none; filter: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .js body[data-screen="wing"] .piece { opacity: 1; transform: none; filter: none; }
+  }
+
+  /* the exit at the end of a wing */
+  .wing-end {
+    min-height: 70vh; display: grid; place-items: center; text-align: center;
+    padding: 5rem 1.5rem;
+    background: radial-gradient(120% 70% at 50% 40%, rgba(242,196,107,0.07), rgba(22,21,15,0) 62%);
+  }
+  .wing-end__k { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.3em;
+    text-transform: uppercase; color: var(--spot); margin-bottom: 1rem; }
+  .wing-end h2 { font-family: var(--display); font-size: clamp(1.9rem,4.4vw,3rem); color: var(--ink); margin-bottom: 1.4rem; }
+  .js body[data-screen="wing"] .hero,
+  .js body[data-screen="wing"] .closing-band,
+  .js body[data-screen="wing"] #wing,
+  .js body:not([data-screen="wing"]) .wing-end,
+  .js body[data-screen="wing"] #screen-title,
+  .js body[data-screen="wing"] #screen-lobby { display: none !important; }
+
+  /* the exhibit arrives the way the entry does: out of the dark, into its light */
+  .js .view.is-exhibit > .wrap { animation: exhibit-in 0.85s cubic-bezier(0.16,1,0.3,1) both; }
+  @keyframes exhibit-in {
+    from { opacity: 0; transform: scale(0.86); filter: brightness(0.3) blur(6px); }
+    to   { opacity: 1; transform: none; filter: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .js .view.is-exhibit > .wrap { animation: none; }
+  }
+
+  /* the walk bar: where you are in the wing, and how to move */
+  .walkbar {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
+    display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+    padding: 0.85rem 1.4rem;
+    background: linear-gradient(to top, rgba(12,11,8,0.96), rgba(12,11,8,0.72) 70%, rgba(12,11,8,0));
+    font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase;
+  }
+  .js body:not([data-screen="wing"]) .walkbar { display: none; }
+  .walkbar__where { color: var(--spot); white-space: nowrap; flex: 0 0 auto; }
+  .walkbar__mid { color: var(--faint); text-align: center; flex: 1; }
+  .walkbar button {
+    font: inherit; letter-spacing: inherit; text-transform: inherit;
+    background: none; color: var(--placard); border: 1px solid var(--hair);
+    padding: 0.62rem 1.05rem; cursor: pointer; border-radius: 0;
+    transition: border-color 0.2s, color 0.2s, background 0.2s;
+  }
+  .walkbar button:hover:not(:disabled) { border-color: var(--spot); color: var(--spot); background: rgba(242,196,107,0.08); }
+  .walkbar button:disabled { opacity: 0.3; cursor: default; }
+  .walkbar .wb-exit { border-color: transparent; color: var(--faint); }
+  .walkbar .wb-exit:hover { color: var(--spot); }
 
   /* Overview hub (landing directory) */
-  .hero-hub { position: relative; z-index: 2; padding-top: 3rem; margin-top: 2.5rem; border-top: 1px solid var(--ink-line); }
-  .hub-title { font-family: var(--sans); font-size: 0.82rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-bottom: 1.4rem; }
-  .hub-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 12.5rem), 1fr)); gap: 0.9rem; }
-  /* Index entries, not floating cards: a heavy rail on the reading edge,
-     square corners, and a sideways nudge toward the destination on hover
-     instead of the usual lift-and-glow. */
-  .hub-card {
-    display: flex; flex-direction: column; gap: 0.3rem; text-decoration: none;
-    background: var(--card);
-    border: 1px solid var(--hair);
-    border-left: 4px solid var(--faint);
-    border-radius: 0;
-    padding: 1.05rem 1.15rem;
-    transition: border-left-color 0.18s, background 0.18s, transform 0.18s;
+  /* ---- THE LOBBY ----
+     After the entrance you stand in a lobby lined with doorways. Each door is
+     a lit opening in a dark wall: warm light spills from the top of the frame
+     and falls away toward the floor, the way an open door reads from a dark
+     room. Clicking one walks you through it (see .door-warp below). */
+  .hero-hub { position: relative; z-index: 2; padding-top: 4rem; margin-top: 3rem; border-top: 1px solid var(--ink-line); }
+  .hub-title {
+    font-family: var(--mono); font-size: 0.72rem; font-weight: 400;
+    letter-spacing: 0.32em; text-transform: uppercase; color: var(--spot);
+    margin-bottom: 1.8rem; text-align: center;
   }
+  .hub-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 13.5rem), 1fr)); gap: 1.1rem; }
+  /* A doorway: a tall opening in a dark wall, light spilling from the head of
+     the frame down toward the floor, the way an open door reads from a dark
+     room. Hovering opens it wider; clicking walks you through it. */
+  .hub-card {
+    position: relative; overflow: hidden;
+    display: flex; flex-direction: column; gap: 0.34rem; text-decoration: none;
+    min-height: 12.5rem; justify-content: flex-end;
+    background:
+      linear-gradient(180deg, rgba(242,196,107,0.16) 0%, rgba(242,196,107,0.04) 26%, rgba(12,11,8,0) 62%),
+      var(--vitrine);
+    border: 1px solid var(--hair);
+    border-top: 1px solid rgba(242,196,107,0.42);
+    border-radius: 0;
+    padding: 1.15rem 1.15rem 1.25rem;
+    transition: background 0.3s ease, border-top-color 0.3s ease, transform 0.3s cubic-bezier(0.16,1,0.3,1);
+  }
+  .hub-card::after {
+    content: ''; position: absolute; left: 0; right: 0; top: 0; height: 62%;
+    pointer-events: none; z-index: 0;
+    background: radial-gradient(120% 100% at 50% 0%, rgba(242,196,107,0.14), rgba(242,196,107,0) 70%);
+    opacity: 0.75; transition: opacity 0.3s ease;
+  }
+  .hub-card > * { position: relative; z-index: 1; }
   .hub-card:hover, .hub-card:focus-visible {
-    border-left-color: var(--blue);
-    background: rgba(96,165,250,0.08);
-    transform: translateX(4px);
+    border-top-color: var(--spot);
+    background:
+      linear-gradient(180deg, rgba(242,196,107,0.3) 0%, rgba(242,196,107,0.08) 30%, rgba(12,11,8,0) 66%),
+      var(--vitrine);
+    transform: translateY(-3px);
+  }
+  .hub-card:hover::after { opacity: 1; }
+
+
+  /* Walking through a door: the doorway's light rushes forward and fills the
+     screen, then you arrive in the room. Visual only; the link still works and
+     this is skipped entirely under reduced motion. */
+  .door-warp {
+    position: fixed; inset: 0; z-index: 90; pointer-events: none;
+    background: radial-gradient(closest-side at 50% 50%, rgba(242,196,107,0.92), rgba(242,196,107,0.16) 55%, rgba(22,21,15,0) 78%);
+    opacity: 0; transform: scale(0.14);
   }
   .hub-card .hc-n {
     font-family: var(--sans); font-size: 0.78rem; font-weight: 800;
@@ -220,10 +873,15 @@
   a { color: var(--blue-deep); }
   ::selection { background: rgba(245,158,11,0.3); }
   :focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; border-radius: 0; }
+  /* read aloud, never drawn */
+  .sr-only {
+    position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+    overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0;
+  }
 
   .skip-link {
     position: absolute; left: -9999px; top: 0;
-    background: var(--amber); color: #0A0E17;
+    background: var(--amber); color: #16150F;
     padding: 0.6rem 1rem; z-index: 100; font-weight: 600; text-decoration: none;
   }
   .skip-link:focus { left: 0; }
@@ -234,7 +892,11 @@
      to a static layout: no-JS never hides content, and the reduced-motion
      block at the top kills all transitions while .in states still apply. */
   @media (prefers-reduced-motion: no-preference) {
-    .js .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1); }
+    /* Per-block arrival: a quiet rise as each element enters. The whole-hall
+       zoom-from-depth (brightness + scale) is owned by the GSAP corridor below,
+       so the block reveal stays to opacity + translate and the two don't fight. */
+    .js .reveal { opacity: 0; transform: translateY(26px);
+      transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
     .js .reveal.in { opacity: 1; transform: none; }
 
     /* Kinetic masthead: SplitText builds the word + mask elements itself and
@@ -318,11 +980,12 @@
   .band--tint { background: var(--tint); }
   .band--navy { background: var(--navy); border-top: none; }
 
+  /* the room plaque: mono, wide-tracked, the way a gallery labels a doorway */
   .overline {
-    display: inline-flex; align-items: center; gap: 0.65rem;
-    font-family: var(--sans); font-size: 0.82rem; font-weight: 700;
-    letter-spacing: 0.16em; text-transform: uppercase;
-    color: var(--muted); margin-bottom: 1.4rem;
+    display: inline-flex; align-items: center; gap: 0.7rem;
+    font-family: var(--mono); font-size: 0.72rem; font-weight: 400;
+    letter-spacing: 0.32em; text-transform: uppercase;
+    color: var(--spot); margin-bottom: 1.6rem;
   }
   .overline .n {
     display: inline-flex; align-items: center; justify-content: center;
@@ -332,11 +995,39 @@
   }
   .band--navy .overline .n { background: var(--amber); color: var(--ink); }
 
-  .section-head { max-width: 48rem; margin-bottom: 3rem; }
+  /* ---- ROOM THRESHOLD ----
+     Every hall opens the way the Entry hall does: a full-height dark room with
+     one pool of light, the room's number and name, and its wall text. You cross
+     a threshold into each room before you reach its exhibits, which is what
+     makes the site a building you walk through rather than a page you scroll. */
+  .section-head {
+    position: relative;
+    will-change: transform, opacity, filter;
+    transform-origin: center 45%;
+    min-height: 78vh;
+    display: flex; flex-direction: column; justify-content: center;
+    max-width: 52rem; margin: 0 auto 4.5rem; text-align: center;
+    /* clear the fixed nav so a room's name is never hidden behind it */
+    padding: 7rem 0 3rem;
+  }
+  /* the spotlight pooling on the threshold wall */
+  .section-head::before {
+    content: ''; position: absolute; inset: -10% -30% -20%; z-index: -1; pointer-events: none;
+    background: radial-gradient(closest-side at 50% 44%, rgba(242,196,107,0.10), rgba(242,196,107,0) 72%);
+  }
   .section-head h2 {
     font-family: var(--display); font-optical-sizing: auto;
-    font-weight: 500; font-size: clamp(2.1rem, 5.2vw, 3.6rem);
-    line-height: 1.03; letter-spacing: -0.02em; margin-bottom: 1rem;
+    font-weight: 500; font-size: clamp(2.6rem, 7vw, 5.2rem);
+    line-height: 1.0; letter-spacing: -0.025em; margin-bottom: 1rem;
+    text-wrap: balance;
+  }
+  .section-head .lede { margin-left: auto; margin-right: auto; }
+  /* the rule under a room name centres with it */
+  .section-head h2::after { margin-left: auto; margin-right: auto; }
+  /* the overline becomes the room's plaque: ROOM 03 · SAFETY */
+  .section-head .overline { justify-content: center; }
+  @media (max-width: 760px) {
+    .section-head { min-height: 62vh; margin-bottom: 3rem; }
   }
   .lede { font-family: var(--serif); font-style: italic; font-size: clamp(1.15rem, 1.8vw, 1.42rem); line-height: 1.5; color: var(--muted); max-width: 40rem; }
 
@@ -392,7 +1083,7 @@
     transition: background 0.25s;
   }
   .hstat + .hstat { border-left: 1px solid var(--ink-line); }
-  .hstat:hover { background: rgba(37,99,235,0.045); }
+  .hstat:hover { background: rgba(242,196,107,0.045); }
   .hstat .idx { font-family: var(--sans); font-size: 0.76rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint); white-space: nowrap; }
   .hstat .n {
     font-family: var(--display); font-weight: 600;
@@ -408,12 +1099,12 @@
     display: inline-flex; align-items: center; gap: 0.5rem;
     font-family: var(--sans); font-size: 0.98rem; font-weight: 600;
     background: var(--blue); color: #071426;
-    border: none; border-radius: 0; box-shadow: 0 0 26px rgba(96,165,250,0.28);
+    border: none; border-radius: 0; box-shadow: 0 0 26px rgba(242,196,107,0.28);
     padding: 0.9rem 1.7rem; min-height: 48px;
     text-decoration: none; cursor: pointer;
     transition: background 0.2s;
   }
-  .btn:hover { background: #1E293B; }
+  .btn:hover { background: #211F19; }
   .btn--link { background: none; color: var(--blue-deep); padding: 0.9rem 0.5rem; }
   .btn--link:hover { background: none; text-decoration: underline; }
 
@@ -428,12 +1119,48 @@
   .principle p { font-size: 0.96rem; color: var(--muted); line-height: 1.6; }
 
   /* ============ CHART CARD ============ */
+  /* A vitrine: a recessed well, not a card. Depth comes from light pooling at
+     the top lip and falling to darkness at the floor, never from a drop shadow
+     lifting a box off the page. */
   .chart-card {
-    background: var(--card);
-    border: 1px solid var(--hair); border-radius: 0;
-    box-shadow: var(--shadow);
+    background: var(--vitrine);
+    border: 1px solid var(--hair);
+    border-top: 1px solid rgba(242,196,107,0.30);
+    border-radius: 0;
+    box-shadow: inset 0 34px 54px -42px rgba(242,196,107,0.22),
+                inset 0 -64px 74px -54px rgba(0,0,0,0.6);
     padding: 1.8rem 1.8rem 1.4rem;
     max-width: 54rem; margin: 0 0 2.6rem;
+  }
+
+  /* ---- Exhibits: a wall placard (narrow, left) beside its vitrine (wide) ---- */
+  .exhibit { display: grid; grid-template-columns: var(--placard-col) minmax(0, 1fr);
+    gap: 2rem 2.4rem; align-items: start; margin: 0 0 3rem; max-width: 60rem; }
+  .exhibit .chart-card, .exhibit .vitrine, .exhibit .sim-card { max-width: none; margin: 0; }
+  .incident-case > .tabs { margin-bottom: 1rem; }
+  /* A wide object needs the case, not the label, to have the room: the tabbed
+     incident panel and the grid model both grow taller as they are squeezed. */
+  /* A wide object needs more room than the reading column gives it, so the
+     case steps outside the column the way a big vitrine steps into the floor. */
+  .exhibit--wide {
+    --placard-col: 13.5rem; gap: 1.2rem 1.8rem;
+    max-width: none; margin-inline: calc(50% - 46vw);
+  }
+  .exhibit--wide .placard__title { font-size: 1.2rem; }
+  .exhibit--wide .placard__text { font-size: 0.88rem; }
+  .placard { position: sticky; top: 6rem; align-self: start; }
+  .placard__cat { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.2em; white-space: nowrap;
+    text-transform: uppercase; color: var(--spot); border: 1px solid rgba(242,196,107,0.32);
+    padding: 0.22rem 0.5rem; display: inline-block; margin-bottom: 0.9rem; }
+  .placard__title { font-family: var(--display); font-size: 1.42rem; font-weight: 600;
+    line-height: 1.16; color: var(--ink); letter-spacing: -0.01em; }
+  .placard__prov { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.02em;
+    color: var(--faint); margin: 0.6rem 0 0.9rem; line-height: 1.55; }
+  .placard__text { font-family: var(--serif); font-size: 0.95rem; line-height: 1.6; color: var(--muted); }
+  @media (max-width: 820px) {
+    .exhibit { grid-template-columns: 1fr; gap: 1.1rem; }
+    .exhibit--wide { margin-inline: 0; }
+    .placard { position: static; }
   }
   .chart-card__head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.4rem 1.2rem; justify-content: space-between; }
   .chart-card__title { font-size: 1.02rem; font-weight: 600; color: var(--ink); }
@@ -453,14 +1180,31 @@
   .crow--hero .crow__label { font-weight: 600; color: var(--ink); }
   .crow__label .cat { display: block; font-size: 0.72rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint); }
   .crow__track { position: relative; height: 22px; display: flex; align-items: center; }
+  /* Bars are lit exhibits: they grow out of the dark and the light comes up
+     with them, staggered down the chart like a row of cases being switched on.
+     --i is set per row by the builder so each one starts a beat after the last. */
   .crow__bar {
-    height: 22px; background: var(--faint);
-    border-radius: 0; width: 0;
-    transition: width 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+    height: 22px; border-radius: 0; width: 0;
+    background: linear-gradient(90deg, #6E6653, #8A8067);
+    box-shadow: 0 0 0 rgba(242,196,107,0);
+    transition: width 1.05s cubic-bezier(0.16,1,0.3,1) calc(var(--i, 0) * 90ms),
+                box-shadow 1.05s ease calc(var(--i, 0) * 90ms),
+                filter 1.05s ease calc(var(--i, 0) * 90ms);
+    filter: brightness(0.55);
     flex-shrink: 0;
   }
-  .crow--hero .crow__bar { background: var(--blue); }
-  .crow__val { font-size: 0.92rem; font-weight: 600; color: var(--ink); margin-left: 0.55rem; white-space: nowrap; }
+  .crow__bar.lit { filter: brightness(1); }
+  /* the hero bar (the point of the exhibit) is the one under the spotlight */
+  .crow--hero .crow__bar {
+    background: linear-gradient(90deg, var(--spot), var(--spot-deep));
+  }
+  .crow--hero .crow__bar.lit { box-shadow: 0 0 26px rgba(242,196,107,0.45); }
+  .crow__val {
+    font-family: var(--mono); font-size: 0.9rem; font-weight: 500; color: var(--ink);
+    margin-left: 0.6rem; white-space: nowrap; font-variant-numeric: tabular-nums;
+    opacity: 0; transition: opacity 0.5s ease calc(var(--i, 0) * 90ms + 420ms);
+  }
+  .crow__bar.lit ~ .crow__val, .crow.is-lit .crow__val { opacity: 1; }
 
   .chart-plot { position: relative; }
   .chart-tip {
@@ -470,27 +1214,34 @@
     border-radius: 0; pointer-events: none; max-width: 16rem; display: none;
   }
   .chart-tip strong { font-size: 1.0rem; font-weight: 600; display: block; }
-  .chart-tip .tipname { color: #CBD5E1; }
+  .chart-tip .tipname { color: #D6CFBC; }
 
   .chart-card__foot {
     display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
     gap: 0.8rem; margin-top: 1.6rem; padding-top: 1.1rem;
     border-top: 1px solid var(--hair);
   }
-  .chart-card__src { font-size: 0.82rem; color: var(--muted); max-width: 30rem; }
+  /* Museum credit line: the provenance a gallery prints small at the foot of
+     the case, after the object, never competing with it. */
+  .chart-card__src {
+    font-family: var(--mono); font-size: 0.68rem; line-height: 1.6;
+    letter-spacing: 0.01em; color: var(--faint); max-width: 34rem;
+  }
+  .chart-card__src a { color: var(--faint); text-decoration-color: rgba(228,220,201,0.25); }
+  .chart-card__src a:hover { color: var(--spot); }
   .table-toggle {
     font-family: var(--sans); font-size: 0.88rem; font-weight: 600; color: var(--body);
     background: none; border: 1px solid var(--hair); border-radius: 0;
     padding: 0.55rem 1rem; min-height: 44px; min-width: 44px;
     cursor: pointer; transition: background 0.2s, border-color 0.2s;
   }
-  .table-toggle:hover { background: var(--tint); border-color: #CBD5E1; }
+  .table-toggle:hover { background: var(--tint); border-color: #D6CFBC; }
 
   .data-table { width: 100%; border-collapse: collapse; font-size: 0.96rem; }
   .data-table caption { text-align: left; font-size: 0.84rem; color: var(--muted); padding-bottom: 0.7rem; }
   .data-table th, .data-table td { padding: 0.55rem 0.75rem; border-bottom: 1px solid var(--hair); text-align: left; }
   .data-table td.num, .data-table th.num { text-align: right; font-variant-numeric: tabular-nums; }
-  .data-table thead th { font-size: 0.78rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid #CBD5E1; }
+  .data-table thead th { font-size: 0.78rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid #D6CFBC; }
   .data-table .hero-row { background: var(--blue-wash); font-weight: 600; color: var(--ink); }
 
   /* ============ PULL STAT / CALLOUT ============ */
@@ -514,10 +1265,10 @@
     display: flex; flex-direction: column; justify-content: space-between; gap: 1.4rem;
   }
   .bento .feature .big { font-family: var(--display); font-weight: 600; font-size: clamp(3.4rem, 9vw, 5.8rem); line-height: 0.88; letter-spacing: -0.03em; }
-  .bento .feature .big .u { display: block; font-family: var(--sans); font-size: 0.16em; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #93A9CE; margin-top: 0.9rem; }
+  .bento .feature .big .u { display: block; font-family: var(--sans); font-size: 0.16em; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #A9A18B; margin-top: 0.9rem; }
   .bento .feature p { font-family: var(--serif); font-size: clamp(1.05rem, 1.6vw, 1.25rem); line-height: 1.45; color: #E4EAF3; }
   .bento .feature p strong { color: #fff; font-weight: 600; }
-  .bento .feature a { color: #93C5FD; font-size: 0.84rem; font-weight: 500; }
+  .bento .feature a { color: #F7D89A; font-size: 0.84rem; font-weight: 500; }
   .b-stat .k { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
   .b-stat .v { font-family: var(--display); font-weight: 600; font-size: clamp(2rem, 4.5vw, 2.7rem); line-height: 1; color: var(--ink); letter-spacing: -0.02em; margin: 0.55rem 0 0.6rem; }
   .b-stat .v .u { font-family: var(--sans); font-size: 0.4em; color: var(--muted); font-weight: 600; }
@@ -543,7 +1294,7 @@
   .vs-hud { text-align: center; margin-bottom: 1.6rem; }
   .vs-hud .overline { color: var(--faint); justify-content: center; }
   .vs-hud h2 { color: #fff; font-family: var(--display); font-weight: 500; font-size: clamp(2.2rem, 6vw, 4rem); line-height: 1; letter-spacing: -0.02em; }
-  .vs-hud p { color: #CBD5E1; font-family: var(--serif); font-style: italic; font-size: clamp(1.1rem, 2vw, 1.4rem); margin-top: 1rem; }
+  .vs-hud p { color: #D6CFBC; font-family: var(--serif); font-style: italic; font-size: clamp(1.1rem, 2vw, 1.4rem); margin-top: 1rem; }
   .vs-video { width: 100%; border-radius: 0; display: block; background: #060a14; }
   .vs-veil, .vs-scroll, .vs-progress { display: none; }
   .vs-credit { text-align: center; margin-top: 1rem; font-size: 0.8rem; color: rgba(255,255,255,0.5); }
@@ -650,7 +1401,7 @@
   .js .pin-scene:not(.is-live) .pin-stage { min-height: 0; padding: 1.1rem; border: 1px solid var(--hair); }
   /* The construction scene is line art, so it gets a plain dark ground
      rather than a photographic plate. */
-  .pin-stage--line { background: #080D16; }
+  .pin-stage--line { background: #0C0B08; }
   .build-head { margin-top: 3.4rem; }
 
   /* ============ SCROLL-SCRUBBED SEQUENCE ============ */
@@ -739,25 +1490,25 @@
   /* Highlights start hidden in every copy of the diagram; the explorer's
      [data-active] rules and the scene's timeline each fade in one at a time. */
   .hl { opacity: 0; }
-  #plant-cam-svg .hl { stroke: #60A5FA; stroke-width: 5; fill: none; filter: drop-shadow(0 0 9px #60A5FA); }
+  #plant-cam-svg .hl { stroke: #F2C46B; stroke-width: 5; fill: none; filter: drop-shadow(0 0 9px #F2C46B); }
 
   /* fission scene bits */
   #fs-svg .fs-label { font-family: var(--sans); font-size: 15px; font-weight: 700; letter-spacing: 0.06em; }
-  #fs-svg .fs-nlabel { font-family: var(--sans); font-size: 13px; font-weight: 600; fill: #93C5FD; }
+  #fs-svg .fs-nlabel { font-family: var(--sans); font-size: 13px; font-weight: 600; fill: #F7D89A; }
 
   /* ============ PLANT EXPLORER (clickable diagram) ============ */
   .plant-explorer { display: grid; grid-template-columns: 1.55fr 1fr; gap: 1.4rem; align-items: start; margin-bottom: 1rem; }
-  .plant-fig { margin: 0; background: #0E1A2E; border: 1px solid var(--hair); border-radius: 0; box-shadow: var(--shadow); padding: 0.6rem; }
+  .plant-fig { margin: 0; background: #14120D; border: 1px solid var(--hair); border-radius: 0; box-shadow: var(--shadow); padding: 0.6rem; }
   .plant-fig svg { width: 100%; height: auto; display: block; border-radius: 0; }
   .plant-fig figcaption { font-size: 0.82rem; color: var(--muted); padding: 0.7rem 0.5rem 0.2rem; line-height: 1.5; }
   .hotspot { cursor: pointer; }
   .hotspot:focus-visible { outline: 2px solid var(--blue); outline-offset: 1px; }
-  #plant-svg .hl { stroke: #60A5FA; stroke-width: 4; fill: none; filter: drop-shadow(0 0 7px #60A5FA); transition: opacity 0.3s ease; }
+  #plant-svg .hl { stroke: #F2C46B; stroke-width: 4; fill: none; filter: drop-shadow(0 0 7px #F2C46B); transition: opacity 0.3s ease; }
   #plant-svg[data-active="1"] .hl-1, #plant-svg[data-active="2"] .hl-2, #plant-svg[data-active="3"] .hl-3,
   #plant-svg[data-active="4"] .hl-4, #plant-svg[data-active="5"] .hl-5, #plant-svg[data-active="6"] .hl-6 { opacity: 1; }
   .plant-tabs { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1.1rem; }
   .ptab { text-align: left; font-family: var(--sans); font-size: 0.96rem; font-weight: 600; color: var(--body); background: var(--card); border: 1px solid var(--hair); border-radius: 0; padding: 0.6rem 0.9rem; min-height: 44px; cursor: pointer; transition: border-color 0.2s, background 0.2s, color 0.2s; }
-  .ptab:hover { border-color: #3a4a66; }
+  .ptab:hover { border-color: #5C5444; }
   .ptab[aria-selected="true"] { border-color: var(--blue); background: var(--blue-wash); color: var(--blue-deep); }
   .plant-detail { background: var(--card); border: 1px solid var(--hair); border-radius: 0; padding: 1.3rem 1.4rem; }
   .pd-step { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--faint); }
@@ -779,7 +1530,7 @@
   .js:not(.reduced) .plant-vp {
     position: sticky; top: 0; height: 100vh; height: 100svh;
     overflow: clip; display: flex; align-items: center; justify-content: center;
-    background: radial-gradient(125% 90% at 50% 12%, #182a4d 0%, #0F172A 58%, #080d1a 100%);
+    background: radial-gradient(125% 90% at 50% 12%, #413724 0%, #211F19 58%, #080d1a 100%);
   }
   .js:not(.reduced) .plant-cam {
     width: min(94vw, 1180px); max-width: none; margin: 0; padding: 0;
@@ -802,7 +1553,7 @@
   }
   .js:not(.reduced) .plant-intro .overline { color: var(--faint); }
   .js:not(.reduced) .plant-intro h2 { color: #fff; font-size: clamp(2rem, 5.4vw, 3.6rem); }
-  .js:not(.reduced) .plant-intro .lede { color: #CBD5E1; max-width: 34rem; }
+  .js:not(.reduced) .plant-intro .lede { color: #D6CFBC; max-width: 34rem; }
   .js:not(.reduced) .plant-scroll {
     display: inline-flex; align-items: center; gap: 0.5rem; margin-top: 1.7rem;
     font-size: 0.82rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--faint);
@@ -822,9 +1573,9 @@
     color: #fff; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.18);
     border-radius: 0; padding: 0.5rem 0.95rem; backdrop-filter: blur(6px);
   }
-  .plant-pill .plus { color: var(--acc, #60A5FA); font-size: 1.15em; line-height: 0; transition: color 0.4s; }
+  .plant-pill .plus { color: var(--acc, #F2C46B); font-size: 1.15em; line-height: 0; transition: color 0.4s; }
   .plant-stopnum { display: block; margin-bottom: 0.7rem; font-family: var(--sans); font-size: 0.82rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--faint); }
-  .plant-stopnum .cur { color: var(--acc, #60A5FA); transition: color 0.4s; }
+  .plant-stopnum .cur { color: var(--acc, #F2C46B); transition: color 0.4s; }
   .plant-para { margin-top: 0.85rem; color: #E9EEF6; font-family: var(--serif); font-size: clamp(1rem, 1.5vw, 1.22rem); line-height: 1.55; }
   .plant-nav { display: flex; gap: 0.6rem; margin-top: 1.2rem; pointer-events: auto; }
   .plant-nav button {
@@ -846,7 +1597,7 @@
     transition: background 0.25s, transform 0.25s, border-color 0.25s;
   }
   .plant-rail button:hover { background: rgba(255,255,255,0.5); }
-  .plant-rail button[aria-current="true"] { background: var(--acc, #60A5FA); border-color: var(--acc, #60A5FA); transform: scale(1.4); }
+  .plant-rail button[aria-current="true"] { background: var(--acc, #F2C46B); border-color: var(--acc, #F2C46B); transform: scale(1.4); }
   /* cinema: keep steps + note in the DOM for a11y and no-JS, but out of view */
   .js:not(.reduced) .plant-steps,
   .js:not(.reduced) .plant-fallnote { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
@@ -857,17 +1608,20 @@
 
   /* ============ FISSION LAB ============ */
   .fission-lab { display: grid; grid-template-columns: 1.6fr 1fr; gap: 1.3rem; align-items: start; margin-bottom: 1.8rem; }
-  .fz-stage { position: relative; background: #060c18; border: 1px solid var(--hair); border-radius: 0; overflow: hidden; box-shadow: var(--shadow); }
+  .fz-stage { position: relative; background: var(--vitrine); border: 1px solid var(--hair); border-radius: 0; overflow: hidden; box-shadow: var(--shadow); }
   #fz-canvas { width: 100%; height: auto; display: block; }
   .fz-readout { position: absolute; top: 0.8rem; left: 0.9rem; display: flex; gap: 0.7rem; align-items: center; font-family: var(--sans); font-size: 0.86rem; pointer-events: none; }
   .fz-state { font-weight: 700; letter-spacing: 0.03em; padding: 0.25rem 0.65rem; border-radius: 0; background: rgba(52,211,153,0.18); color: #6ee7b7; }
-  .fz-k { color: #93A4BE; }
-  .fz-k b { color: #fff; font-variant-numeric: tabular-nums; }
+  /* k is LIVE instrument output, so it reads cold (--cherenkov) while the rest
+     of this static exhibit stays warm. That is the whole colour system. */
+  .fz-k { color: rgba(73,214,232,0.7); font-family: var(--mono); }
+  .fz-k b { color: var(--cherenkov); font-variant-numeric: tabular-nums;
+    text-shadow: 0 0 12px rgba(73,214,232,0.35); }
   .fz-controls { display: flex; flex-direction: column; gap: 1.1rem; background: var(--card); border: 1px solid var(--hair); border-radius: 0; padding: 1.3rem; }
   .fz-btn { font-family: var(--sans); font-size: 0.96rem; font-weight: 600; background: var(--blue); color: #06121f; border: none; border-radius: 0; padding: 0.75rem 1rem; min-height: 46px; cursor: pointer; transition: background 0.2s; }
-  .fz-btn:hover { background: #7cb6ff; }
+  .fz-btn:hover { background: #D2C4A9; }
   .fz-btn--ghost { background: none; color: var(--blue-deep); border: 1px solid var(--hair); }
-  .fz-btn--ghost:hover { background: var(--tint); border-color: #3a4a66; }
+  .fz-btn--ghost:hover { background: var(--tint); border-color: #5C5444; }
   .fz-slider label { display: block; font-size: 0.92rem; color: var(--body); margin-bottom: 0.55rem; }
   .fz-slider label b { color: var(--ink); font-weight: 600; }
   .fz-slider input { width: 100%; accent-color: var(--blue); min-height: 26px; cursor: pointer; }
@@ -899,7 +1653,7 @@
   .sim-tile .val { font-family: var(--sans); font-size: 1.6rem; font-weight: 700; color: var(--ink); line-height: 1.1; }
   .sim-tile .sub { font-size: 0.82rem; color: var(--muted); margin-top: 0.35rem; line-height: 1.45; }
   .sim-bars-title { font-size: 0.84rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.9rem; }
-  .sim-city-wrap { background: linear-gradient(180deg, #0b1729 0%, #0a1018 100%); border: 1px solid var(--hair); border-radius: 0; padding: 0.5rem; margin-bottom: 0.9rem; overflow: hidden; }
+  .sim-city-wrap { background: linear-gradient(180deg, #221D12 0%, #0C0B08 100%); border: 1px solid var(--hair); border-radius: 0; padding: 0.5rem; margin-bottom: 0.9rem; overflow: hidden; }
   #sim-city { width: 100%; height: auto; display: block; }
   #sim-city .win { transition: fill 0.4s ease, opacity 0.3s ease; }
   @media (prefers-reduced-motion: no-preference) { #sim-city .win-var { animation: winflicker 2.6s ease-in-out infinite; } }
@@ -934,7 +1688,7 @@
     display: flex; flex-direction: column; align-items: flex-start; gap: 0.05rem;
   }
   .tab small { font-size: 0.8rem; font-weight: 500; color: var(--muted); }
-  .tab:hover { border-color: #CBD5E1; }
+  .tab:hover { border-color: #D6CFBC; }
   .tab[aria-selected="true"] { border-color: var(--blue); color: var(--blue-deep); background: var(--blue-wash); }
   .tab[aria-selected="true"] small { color: var(--blue-deep); }
 
@@ -951,7 +1705,7 @@
   .perception > div { border: 1px solid var(--hair); border-radius: 0; padding: 1.1rem 1.3rem; }
   .perception .p-label { font-size: 0.78rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.4rem; }
   .perception .p-value { font-family: var(--serif); font-size: 1.7rem; font-weight: 500; color: var(--ink); line-height: 1.1; }
-  .perception .confirmed { background: var(--blue-wash); border-color: #BFDBFE; }
+  .perception .confirmed { background: var(--blue-wash); border-color: #E9E2D4; }
   .perception .confirmed .p-value { color: var(--blue-deep); }
   .incident-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem 2rem; margin-top: 1.4rem; }
   .incident-cols h4 { font-family: var(--sans); font-size: 0.84rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.6rem; }
@@ -996,7 +1750,7 @@
     text-decoration: none; display: flex; flex-direction: column; gap: 0.55rem;
     transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
   }
-  .news-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lift); border-color: #CBD5E1; }
+  .news-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lift); border-color: #D6CFBC; }
   .news-card .meta { display: flex; align-items: center; gap: 0.6rem; font-size: 0.82rem; color: var(--muted); }
   .news-card .cat-chip { font-size: 0.76rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; background: var(--blue-wash); color: var(--blue-deep); border-radius: 0; padding: 0.2rem 0.65rem; }
   .news-card h3 { font-family: var(--sans); font-size: 1rem; font-weight: 600; color: var(--ink); line-height: 1.4; }
@@ -1037,7 +1791,7 @@
   .sub-head { font-family: var(--sans); font-size: 1.05rem; font-weight: 600; color: var(--ink); margin: 2.6rem 0 1.2rem; }
   .school-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); gap: 1rem; max-width: 60rem; margin-bottom: 1rem; }
   .school-card { display: block; text-decoration: none; background: var(--card); border: 1px solid var(--hair); border-radius: 0; padding: 1rem 1.2rem; transition: border-color 0.2s, transform 0.2s, background 0.2s; }
-  a.school-card:hover { border-color: var(--blue); transform: translateY(-2px); background: rgba(96,165,250,0.06); }
+  a.school-card:hover { border-color: var(--blue); transform: translateY(-2px); background: rgba(242,196,107,0.06); }
   .school-card h4 { font-family: var(--sans); font-size: 0.98rem; font-weight: 600; color: var(--ink); margin-bottom: 0.2rem; display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; }
   .school-card h4 .go { color: var(--faint); font-weight: 400; transition: color 0.2s; }
   a.school-card:hover h4 .go { color: var(--blue); }
@@ -1048,7 +1802,7 @@
   /* ============ CLOSING ============ */
   .closing-band { padding: 5.5rem 0; }
   .closing-band h2 { color: #fff; font-size: clamp(1.8rem, 4.2vw, 2.8rem); line-height: 1.12; max-width: 22ch; margin-bottom: 1.1rem; }
-  .closing-band p { color: #CBD5E1; max-width: 40rem; font-size: 1rem; }
+  .closing-band p { color: #D6CFBC; max-width: 40rem; font-size: 1rem; }
 
   /* ============ ABOUT ============ */
   .about-grid { display: grid; grid-template-columns: auto 1fr; gap: 2rem; align-items: start; max-width: 50rem; }
@@ -1063,7 +1817,7 @@
   .about-contact { margin-top: 1.2rem; font-size: 0.98rem; }
 
   /* ============ FOOTER ============ */
-  footer { background: var(--navy); color: #CBD5E1; padding: 4.5rem 0 2.5rem; }
+  footer { background: var(--navy); color: #D6CFBC; padding: 4.5rem 0 2.5rem; }
   footer h2 { color: #fff; font-size: 1.8rem; margin-bottom: 2.2rem; }
   .src-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 1.8rem 2.6rem; margin-bottom: 3rem; }
   .src-col h3 { font-family: var(--sans); font-size: 0.8rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--faint); margin-bottom: 0.8rem; }
@@ -1071,7 +1825,7 @@
   .src-note { font-size: 0.86rem; color: var(--faint); max-width: 42rem; margin-bottom: 2.6rem; font-style: italic; }
   .ref-list { list-style: decimal; padding-left: 1.5rem; max-width: 56rem; margin-bottom: 2.6rem; }
   .ref-list li { font-size: 0.9rem; line-height: 1.6; margin-bottom: 0.55rem; }
-  footer a { color: #93C5FD; }
+  footer a { color: #F7D89A; }
   .foot-base { border-top: 1px solid rgba(255,255,255,0.15); padding-top: 1.6rem; display: flex; flex-wrap: wrap; gap: 0.6rem 2rem; justify-content: space-between; font-size: 0.86rem; color: var(--faint); }
 
   /* ============ RESPONSIVE ============ */
@@ -1107,6 +1861,16 @@
 </head>
 <body>
 <div id="progress" aria-hidden="true"></div>
+<!-- Signature instrument: accumulates a real tour dose as you walk the halls.
+     aria-hidden because it is ambient orientation, not content; the halls it
+     names are reachable through the nav and headings. -->
+<aside id="dosimeter" class="dose" aria-hidden="true">
+  <div class="dose__scale"><span class="dose__fill"></span></div>
+  <div class="dose__read">
+    <span class="dose__val" id="dose-val">0.000</span><span class="dose__unit">mSv</span><span class="dose__dot"></span>
+  </div>
+  <div class="dose__hall" id="dose-hall">Entry</div>
+</aside>
 <a class="skip-link" href="#main">Skip to content</a>
 
 <nav class="nav" aria-label="Main">
@@ -1148,6 +1912,34 @@
   </p>
 </noscript>
 
+<!-- ================= ENTRY HALL =================
+     One lit object in a dark room. The collection announces itself, then the
+     visitor walks in. Deliberately holds nothing but the specimen and a name. -->
+<!-- ============ SCREEN 1: THE DOORS ============ -->
+<section class="entry screen" id="screen-title" aria-label="Entrance">
+  <div class="entry__inner">
+    <div class="specimen" aria-hidden="true"><div class="pellet"></div></div>
+    <p class="entry__kicker">The Radiant Collection</p>
+    <p class="entry__title">Confine a star.<br>Walk in.</p>
+    <p class="entry__sub">One uranium fuel pellet, the size of a fingertip, holds about as much energy as a ton of coal. A reactor core holds more than eighteen million of them.</p>
+    <p style="margin-top:2.4rem">
+      <button type="button" class="btn" id="go-lobby">Enter the museum <span class="arr">→</span></button>
+    </p>
+    <p class="entry__cue" aria-hidden="true">Scroll to walk in ↓</p>
+  </div>
+</section>
+
+<!-- ============ SCREEN 2: THE LOBBY ============
+     Five wings. Pick one and you walk it exhibit by exhibit. -->
+<section class="screen library" id="screen-lobby" aria-label="The library">
+  <div class="library__head">
+    <p class="entry__kicker">The Reading Room</p>
+    <h1 class="library__title">Every exhibit is a book.</h1>
+    <p class="library__sub">Five shelves, one for each part of the story. Pull a book off the shelf and it opens to what is written inside.</p>
+  </div>
+  <div id="shelves" class="bookcase"><!-- built from the WINGS map --></div>
+</section>
+
 <!-- ================= OVERVIEW ================= -->
 <header class="view hero" id="top">
   <canvas id="hero-bg" aria-hidden="true"></canvas>
@@ -1184,8 +1976,8 @@
     </div>
   </div>
 
-  <div class="wrap hero-hub">
-    <h2 class="hub-title">Choose where to start</h2>
+  <div class="wrap hero-hub" id="dom-lobby">
+    <h2 class="hub-title">The lobby &middot; choose a room</h2>
     <div class="hub-grid">
       <a class="hub-card" href="#case"><span class="hc-n">01 · THE CASE</span><span class="hc-t">The argument</span><span class="hc-d">The whole case for nuclear, on one page.</span></a>
       <a class="hub-card" href="#reactor-motion"><span class="hc-n">02 · WATCH</span><span class="hc-t">See a real plant</span><span class="hc-d">Aerial footage you zoom into by scrolling.</span></a>
@@ -1233,15 +2025,15 @@
         <p>IPCC median over a plant's lifetime, on par with wind; UNECE finds 5 to 6 g. <a href="https://www.ipcc.ch/site/assets/uploads/2018/02/ipcc_wg3_ar5_annex-iii.pdf" target="_blank" rel="noopener noreferrer">IPCC AR5 ↗</a></p>
       </div>
       <div class="b-claim reveal">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2563EB"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#F2C46B"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <p><strong>Clean and firm.</strong> As clean as wind over its lifetime, and uniquely able to deliver that power reliably, around the clock.</p>
       </div>
       <div class="b-claim reveal">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2563EB"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#F2C46B"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <p><strong>Waste is small and controlled.</strong> A managed problem, not a mythical one, and it never leaves human control.</p>
       </div>
       <div class="b-claim reveal">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2563EB"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#F2C46B"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <p><strong>Next-gen fails safe by design</strong>, and its energy density means clean power from a remarkably small footprint of land.</p>
       </div>
     </div>
@@ -1279,7 +2071,7 @@
     <div class="section-head reveal">
       <span class="overline"><span class="n">02</span>How it works</span>
       <h2 id="h-how">Inside a nuclear power plant</h2>
-      <p class="lede">No mystery and no green goo. Scroll to follow the energy from a uranium atom to the power line, then click any part of the plant to explore it yourself.</p>
+      <p class="lede">No mystery and no green goo. Turn the page to follow the energy from a uranium atom to the power line, then click any part of the plant to explore it yourself.</p>
     </div>
 
     <!-- Scroll-scrubbed establishing shot. The clip is decoded to frames on
@@ -1297,7 +2089,7 @@
         <div class="seq-copy">
           <span class="seq-eyebrow">The Plant</span>
           <h3>One building, one job: boil water.</h3>
-          <p>Everything ahead is in service of that. Scroll to circle the site, then follow the energy from a uranium atom to the power line.</p>
+          <p>Everything ahead is in service of that. Turn the page to circle the site, then follow the energy from a uranium atom to the power line.</p>
         </div>
       </div>
     </div>
@@ -1325,8 +2117,8 @@
           <p class="pin-text" data-role="text"></p>
           <div class="pin-rail" data-role="rail" aria-hidden="true"></div>
           <p class="pin-hint">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
-            Keep scrolling to follow the energy
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            Turn the page to follow the energy
           </p>
         </div>
       </div>
@@ -1338,20 +2130,20 @@
     <div class="plant-explorer reveal">
       <figure class="plant-fig">
         <svg id="plant-svg" data-active="1" viewBox="-46 -34 1052 548" role="img" aria-label="Interactive schematic of a pressurized-water reactor. Click a part to learn what it does: the reactor core, steam generator, turbine hall, condenser, switchyard, and cooling tower.">
-          <rect x="-46" y="-34" width="1052" height="548" rx="20" fill="#0E1A2E"/>
+          <rect x="-46" y="-34" width="1052" height="548" rx="20" fill="#14120D"/>
           <!-- ground -->
-          <line x1="28" y1="400" x2="932" y2="400" stroke="#8FA3C2" stroke-width="2.5"/>
+          <line x1="28" y1="400" x2="932" y2="400" stroke="#A9A18B" stroke-width="2.5"/>
           <!-- containment building -->
-          <path d="M 46 400 L 46 215 Q 46 112 190 112 Q 334 112 334 215 L 334 400 Z" fill="#243349" stroke="#8FA3C2" stroke-width="2.5"/>
+          <path d="M 46 400 L 46 215 Q 46 112 190 112 Q 334 112 334 215 L 334 400 Z" fill="#2C281F" stroke="#A9A18B" stroke-width="2.5"/>
           <!-- reactor vessel, control rods, fuel -->
-          <rect x="72" y="230" width="64" height="135" rx="8" fill="#18243B" stroke="#8FA3C2" stroke-width="2.5"/>
-          <rect x="86" y="204" width="36" height="26" fill="#243349" stroke="#8FA3C2" stroke-width="2"/>
-          <rect x="90" y="230" width="4" height="52" fill="#8FA3C2"/><rect x="102" y="230" width="4" height="52" fill="#8FA3C2"/><rect x="114" y="230" width="4" height="52" fill="#8FA3C2"/>
-          <rect class="fuel" x="86" y="295" width="9" height="58" fill="#FBBF24" stroke="#8FA3C2" stroke-width="1.5"/>
-          <rect class="fuel" x="100" y="295" width="9" height="58" fill="#FBBF24" stroke="#8FA3C2" stroke-width="1.5"/>
-          <rect class="fuel" x="114" y="295" width="9" height="58" fill="#FBBF24" stroke="#8FA3C2" stroke-width="1.5"/>
+          <rect x="72" y="230" width="64" height="135" rx="8" fill="#231F18" stroke="#A9A18B" stroke-width="2.5"/>
+          <rect x="86" y="204" width="36" height="26" fill="#2C281F" stroke="#A9A18B" stroke-width="2"/>
+          <rect x="90" y="230" width="4" height="52" fill="#A9A18B"/><rect x="102" y="230" width="4" height="52" fill="#A9A18B"/><rect x="114" y="230" width="4" height="52" fill="#A9A18B"/>
+          <rect class="fuel" x="86" y="295" width="9" height="58" fill="#FBBF24" stroke="#A9A18B" stroke-width="1.5"/>
+          <rect class="fuel" x="100" y="295" width="9" height="58" fill="#FBBF24" stroke="#A9A18B" stroke-width="1.5"/>
+          <rect class="fuel" x="114" y="295" width="9" height="58" fill="#FBBF24" stroke="#A9A18B" stroke-width="1.5"/>
           <!-- pressurizer -->
-          <rect x="152" y="170" width="26" height="52" rx="9" fill="#18243B" stroke="#8FA3C2" stroke-width="2"/>
+          <rect x="152" y="170" width="26" height="52" rx="9" fill="#231F18" stroke="#A9A18B" stroke-width="2"/>
           <line x1="165" y1="222" x2="165" y2="250" stroke="#FBBF24" stroke-width="3"/>
           <!-- primary loop -->
           <path class="flow" d="M 136 252 H 232" stroke="#FBBF24" stroke-width="3.5" fill="none"/>
@@ -1359,43 +2151,43 @@
           <path class="flow" d="M 232 340 H 136" stroke="#FBBF24" stroke-width="3.5" fill="none"/>
           <polygon points="184,334 172,340 184,346" fill="#FBBF24"/>
           <!-- steam generator -->
-          <rect x="232" y="168" width="58" height="200" rx="16" fill="#18243B" stroke="#8FA3C2" stroke-width="2.5"/>
+          <rect x="232" y="168" width="58" height="200" rx="16" fill="#231F18" stroke="#A9A18B" stroke-width="2.5"/>
           <path d="M 244 300 V 215 Q 261 193 278 215 V 300" stroke="#FBBF24" stroke-width="2" fill="none" opacity="0.55"/>
           <!-- secondary steam loop -->
-          <path class="flow" d="M 261 168 V 138 H 396 V 208" stroke="#2563EB" stroke-width="3" fill="none"/>
-          <polygon points="334,132 346,138 334,144" fill="#2563EB"/>
-          <path class="flow" d="M 436 285 V 322" stroke="#2563EB" stroke-width="2.5" fill="none"/>
-          <path class="flow" d="M 406 350 H 302 V 362 H 290" stroke="#2563EB" stroke-width="2" fill="none"/>
+          <path class="flow" d="M 261 168 V 138 H 396 V 208" stroke="#F2C46B" stroke-width="3" fill="none"/>
+          <polygon points="334,132 346,138 334,144" fill="#F2C46B"/>
+          <path class="flow" d="M 436 285 V 322" stroke="#F2C46B" stroke-width="2.5" fill="none"/>
+          <path class="flow" d="M 406 350 H 302 V 362 H 290" stroke="#F2C46B" stroke-width="2" fill="none"/>
           <!-- turbine -->
-          <polygon points="396,238 486,208 486,292 396,266" fill="#243349" stroke="#8FA3C2" stroke-width="2.5"/>
-          <line x1="486" y1="250" x2="520" y2="250" stroke="#8FA3C2" stroke-width="4"/>
+          <polygon points="396,238 486,208 486,292 396,266" fill="#2C281F" stroke="#A9A18B" stroke-width="2.5"/>
+          <line x1="486" y1="250" x2="520" y2="250" stroke="#A9A18B" stroke-width="4"/>
           <!-- generator -->
-          <rect x="520" y="215" width="100" height="70" rx="6" fill="#18243B" stroke="#8FA3C2" stroke-width="2.5"/>
-          <g stroke="#8FA3C2" stroke-width="2" opacity="0.3"><line x1="538" y1="223" x2="538" y2="277"/><line x1="554" y1="223" x2="554" y2="277"/><line x1="570" y1="223" x2="570" y2="277"/></g>
-          <polygon points="600,228 588,252 596,252 590,268 608,242 598,242" fill="#FBBF24" stroke="#8FA3C2" stroke-width="1.5" stroke-linejoin="round"/>
+          <rect x="520" y="215" width="100" height="70" rx="6" fill="#231F18" stroke="#A9A18B" stroke-width="2.5"/>
+          <g stroke="#A9A18B" stroke-width="2" opacity="0.3"><line x1="538" y1="223" x2="538" y2="277"/><line x1="554" y1="223" x2="554" y2="277"/><line x1="570" y1="223" x2="570" y2="277"/></g>
+          <polygon points="600,228 588,252 596,252 590,268 608,242 598,242" fill="#FBBF24" stroke="#A9A18B" stroke-width="1.5" stroke-linejoin="round"/>
           <!-- condenser -->
-          <rect x="406" y="322" width="104" height="44" rx="6" fill="#243349" stroke="#8FA3C2" stroke-width="2.5"/>
+          <rect x="406" y="322" width="104" height="44" rx="6" fill="#2C281F" stroke="#A9A18B" stroke-width="2.5"/>
           <!-- cooling-water loop -->
-          <path class="flow flow-slow" d="M 510 334 H 796" stroke="#64748B" stroke-width="2.5" fill="none"/>
-          <path class="flow flow-slow" d="M 510 354 H 788" stroke="#64748B" stroke-width="2.5" fill="none"/>
+          <path class="flow flow-slow" d="M 510 334 H 796" stroke="#6E6653" stroke-width="2.5" fill="none"/>
+          <path class="flow flow-slow" d="M 510 354 H 788" stroke="#6E6653" stroke-width="2.5" fill="none"/>
           <!-- cooling tower + vapor -->
-          <path d="M 792 400 C 803 348 800 310 812 268 L 858 268 C 870 310 867 348 878 400 Z" fill="#243349" stroke="#8FA3C2" stroke-width="2.5"/>
-          <circle class="puff" cx="824" cy="244" r="13" fill="#CBD8EC"/>
-          <circle class="puff puff2" cx="846" cy="228" r="16" fill="#CBD8EC"/>
-          <circle class="puff puff3" cx="830" cy="206" r="19" fill="#CBD8EC"/>
+          <path d="M 792 400 C 803 348 800 310 812 268 L 858 268 C 870 310 867 348 878 400 Z" fill="#2C281F" stroke="#A9A18B" stroke-width="2.5"/>
+          <circle class="puff" cx="824" cy="244" r="13" fill="#DCD5C2"/>
+          <circle class="puff puff2" cx="846" cy="228" r="16" fill="#DCD5C2"/>
+          <circle class="puff puff3" cx="830" cy="206" r="19" fill="#DCD5C2"/>
           <!-- transformer + grid -->
-          <line x1="620" y1="250" x2="656" y2="250" stroke="#8FA3C2" stroke-width="2.5"/>
-          <rect x="656" y="232" width="44" height="54" fill="#243349" stroke="#8FA3C2" stroke-width="2.5"/>
-          <line x1="666" y1="232" x2="666" y2="216" stroke="#8FA3C2" stroke-width="2"/><circle cx="666" cy="213" r="3" fill="#8FA3C2"/>
-          <line x1="682" y1="232" x2="682" y2="216" stroke="#8FA3C2" stroke-width="2"/><circle cx="682" cy="213" r="3" fill="#8FA3C2"/>
-          <line x1="700" y1="258" x2="715" y2="258" stroke="#8FA3C2" stroke-width="2.5"/>
-          <polygon points="712,400 736,400 727,180 721,180" fill="none" stroke="#8FA3C2" stroke-width="2"/>
-          <line x1="698" y1="205" x2="750" y2="205" stroke="#8FA3C2" stroke-width="2"/>
-          <line x1="702" y1="238" x2="746" y2="238" stroke="#8FA3C2" stroke-width="2"/>
-          <path d="M 750 205 Q 850 232 932 216" stroke="#8FA3C2" stroke-width="1.5" fill="none"/>
-          <path d="M 746 238 Q 848 264 932 250" stroke="#8FA3C2" stroke-width="1.5" fill="none"/>
+          <line x1="620" y1="250" x2="656" y2="250" stroke="#A9A18B" stroke-width="2.5"/>
+          <rect x="656" y="232" width="44" height="54" fill="#2C281F" stroke="#A9A18B" stroke-width="2.5"/>
+          <line x1="666" y1="232" x2="666" y2="216" stroke="#A9A18B" stroke-width="2"/><circle cx="666" cy="213" r="3" fill="#A9A18B"/>
+          <line x1="682" y1="232" x2="682" y2="216" stroke="#A9A18B" stroke-width="2"/><circle cx="682" cy="213" r="3" fill="#A9A18B"/>
+          <line x1="700" y1="258" x2="715" y2="258" stroke="#A9A18B" stroke-width="2.5"/>
+          <polygon points="712,400 736,400 727,180 721,180" fill="none" stroke="#A9A18B" stroke-width="2"/>
+          <line x1="698" y1="205" x2="750" y2="205" stroke="#A9A18B" stroke-width="2"/>
+          <line x1="702" y1="238" x2="746" y2="238" stroke="#A9A18B" stroke-width="2"/>
+          <path d="M 750 205 Q 850 232 932 216" stroke="#A9A18B" stroke-width="1.5" fill="none"/>
+          <path d="M 746 238 Q 848 264 932 250" stroke="#A9A18B" stroke-width="1.5" fill="none"/>
           <!-- component labels -->
-          <g font-family="'Public Sans', sans-serif" font-size="12.5" font-weight="500" fill="#94A6C2" letter-spacing="1.5">
+          <g font-family="'Public Sans', sans-serif" font-size="12.5" font-weight="500" fill="#A9A18B" letter-spacing="1.5">
             <text x="190" y="428" text-anchor="middle">CONTAINMENT</text>
             <text x="470" y="428" text-anchor="middle">TURBINE HALL</text>
             <text x="724" y="428" text-anchor="middle">GRID</text>
@@ -1451,7 +2243,7 @@
     <div class="section-head reveal build-head">
       <span class="overline">Construction</span>
       <h2 id="h-build">How one gets built</h2>
-      <p class="lede">A plant is a decade-long civil engineering project before it is ever a power station. Scroll to watch one go up, from bedrock to first power.</p>
+      <p class="lede">A plant is a decade-long civil engineering project before it is ever a power station. Turn the page to watch one go up, from bedrock to first power.</p>
     </div>
 
     <div class="pin-scene" id="build-scene" data-scene="build">
@@ -1459,92 +2251,92 @@
       <div class="pin-stage pin-stage--line">
         <div class="pin-figure">
           <svg id="bd-svg" viewBox="0 0 900 470" role="img" aria-label="Outline animation of a nuclear power plant being built: the site is cleared and excavated, the base mat poured, containment walls rise, the dome is lifted on, the reactor installed, the turbine hall built, the cooling tower slip-formed upward, and the switchyard connected to the grid.">
-            <g id="bd-far" fill="none" stroke="#1E2C40" stroke-width="1.6">
+            <g id="bd-far" fill="none" stroke="#2A2620" stroke-width="1.6">
               <path d="M-60 348 Q120 314 300 336 Q470 356 640 326 Q800 300 960 330"/>
-              <path d="M-60 374 Q160 350 340 364 Q520 378 700 356 Q840 340 960 360" stroke="#182434"/>
+              <path d="M-60 374 Q160 350 340 364 Q520 378 700 356 Q840 340 960 360" stroke="#221E18"/>
             </g>
             <g id="bd-cam">
               <!-- grade line and distant horizon -->
-              <g id="bd-ground" fill="none" stroke="#31425C" stroke-width="2">
+              <g id="bd-ground" fill="none" stroke="#4A4234" stroke-width="2">
                 <path d="M30 392 L870 392"/>
-                <path d="M30 356 Q220 342 430 352 Q650 362 870 344" stroke-width="1.2" stroke="#25344A"/>
+                <path d="M30 356 Q220 342 430 352 Q650 362 870 344" stroke-width="1.2" stroke="#423B2D"/>
               </g>
 
               <!-- 1 / clearing and survey -->
-              <g id="bd-1" fill="none" stroke="#60A5FA" stroke-width="2.2" stroke-linecap="round">
+              <g id="bd-1" fill="none" stroke="#F2C46B" stroke-width="2.2" stroke-linecap="round">
                 <path d="M232 392 L232 368 M244 374 L220 374"/>
                 <path d="M420 392 L420 368 M432 374 L408 374"/>
-                <path d="M660 392 L660 372 M670 377 L650 377" stroke="#3E5D8A"/>
-                <path d="M252 384 L400 384" stroke-width="1.2" stroke="#3E5D8A" stroke-dasharray="8 8"/>
+                <path d="M660 392 L660 372 M670 377 L650 377" stroke="#7A6B4E"/>
+                <path d="M252 384 L400 384" stroke-width="1.2" stroke="#7A6B4E" stroke-dasharray="8 8"/>
               </g>
               <!-- 2 / excavation below grade -->
-              <g id="bd-2" fill="none" stroke="#60A5FA" stroke-width="2.4" stroke-linejoin="round">
+              <g id="bd-2" fill="none" stroke="#F2C46B" stroke-width="2.4" stroke-linejoin="round">
                 <path d="M238 392 L256 448 L396 448 L414 392"/>
-                <path d="M264 420 L388 420" stroke-width="1.2" stroke="#3E5D8A" stroke-dasharray="6 7"/>
+                <path d="M264 420 L388 420" stroke-width="1.2" stroke="#7A6B4E" stroke-dasharray="6 7"/>
               </g>
               <!-- 3 / base mat -->
-              <g id="bd-3" fill="none" stroke="#60A5FA" stroke-width="2.4" stroke-linejoin="round">
+              <g id="bd-3" fill="none" stroke="#F2C46B" stroke-width="2.4" stroke-linejoin="round">
                 <path d="M256 448 L256 424 L396 424 L396 448"/>
-                <path d="M282 424 L282 448 M310 424 L310 448 M338 424 L338 448 M366 424 L366 448" stroke-width="1.1" stroke="#3E5D8A"/>
+                <path d="M282 424 L282 448 M310 424 L310 448 M338 424 L338 448 M366 424 L366 448" stroke-width="1.1" stroke="#7A6B4E"/>
               </g>
               <!-- 4 / containment walls rise -->
-              <g id="bd-4" fill="none" stroke="#60A5FA" stroke-width="2.6">
+              <g id="bd-4" fill="none" stroke="#F2C46B" stroke-width="2.6">
                 <g id="bd-4-grow">
                   <path d="M264 424 L264 218"/>
                   <path d="M388 424 L388 218"/>
-                  <path d="M264 330 L388 330 M264 268 L388 268" stroke-width="1.1" stroke="#3E5D8A"/>
+                  <path d="M264 330 L388 330 M264 268 L388 268" stroke-width="1.1" stroke="#7A6B4E"/>
                 </g>
               </g>
               <!-- 5 / the dome is craned on -->
-              <g id="bd-5" fill="none" stroke="#60A5FA" stroke-width="2.6">
+              <g id="bd-5" fill="none" stroke="#F2C46B" stroke-width="2.6">
                 <path d="M264 218 A62 62 0 0 1 388 218"/>
-                <path d="M326 156 L326 132 M314 132 L338 132" stroke-width="1.5" stroke="#3E5D8A"/>
+                <path d="M326 156 L326 132 M314 132 L338 132" stroke-width="1.5" stroke="#7A6B4E"/>
               </g>
               <!-- 6 / reactor vessel and steam generators -->
-              <g id="bd-6" fill="none" stroke="#60A5FA" stroke-width="2">
+              <g id="bd-6" fill="none" stroke="#F2C46B" stroke-width="2">
                 <path d="M306 400 L306 306 A20 20 0 0 1 346 306 L346 400 Z"/>
                 <path d="M312 296 L312 276 M326 296 L326 272 M340 296 L340 276" stroke-width="1.4"/>
-                <path d="M356 400 L356 322 A14 14 0 0 1 384 322 L384 400" stroke-width="1.6" stroke="#3E5D8A"/>
+                <path d="M356 400 L356 322 A14 14 0 0 1 384 322 L384 400" stroke-width="1.6" stroke="#7A6B4E"/>
               </g>
               <!-- 7 / turbine hall -->
-              <g id="bd-7" fill="none" stroke="#60A5FA" stroke-width="2.4" stroke-linejoin="round">
+              <g id="bd-7" fill="none" stroke="#F2C46B" stroke-width="2.4" stroke-linejoin="round">
                 <g id="bd-7-grow">
                   <path d="M432 392 L432 306 L648 306 L648 392"/>
                   <path d="M432 306 L540 282 L648 306"/>
-                  <rect x="470" y="336" width="128" height="38" rx="3" stroke-width="1.5" stroke="#3E5D8A"/>
+                  <rect x="470" y="336" width="128" height="38" rx="3" stroke-width="1.5" stroke="#7A6B4E"/>
                   <path d="M388 340 L432 340" stroke-width="1.8"/>
                 </g>
               </g>
               <!-- 8 / cooling tower -->
-              <g id="bd-8" fill="none" stroke="#60A5FA" stroke-width="2.6">
+              <g id="bd-8" fill="none" stroke="#F2C46B" stroke-width="2.6">
                 <g id="bd-8-grow">
                   <path d="M694 392 C710 322 726 268 722 200"/>
                   <path d="M846 392 C830 322 814 268 818 200"/>
                   <path d="M722 200 A48 14 0 0 0 818 200"/>
-                  <path d="M722 200 A48 14 0 0 1 818 200" stroke-width="1.4" stroke="#3E5D8A"/>
-                  <path d="M700 360 L840 360" stroke-width="1.2" stroke="#3E5D8A"/>
-                  <path d="M648 356 L694 356" stroke-width="1.6" stroke="#3E5D8A"/>
+                  <path d="M722 200 A48 14 0 0 1 818 200" stroke-width="1.4" stroke="#7A6B4E"/>
+                  <path d="M700 360 L840 360" stroke-width="1.2" stroke="#7A6B4E"/>
+                  <path d="M648 356 L694 356" stroke-width="1.6" stroke="#7A6B4E"/>
                 </g>
               </g>
               <!-- 9 / switchyard and grid -->
-              <g id="bd-9" fill="none" stroke="#60A5FA" stroke-width="2.2" stroke-linecap="round">
+              <g id="bd-9" fill="none" stroke="#F2C46B" stroke-width="2.2" stroke-linecap="round">
                 <path d="M150 392 L150 268 M126 292 L174 292 M132 316 L168 316"/>
                 <path d="M64 392 L64 296 M46 316 L82 316"/>
-                <path d="M150 268 Q108 272 64 296" stroke-width="1.2" stroke="#3E5D8A"/>
-                <path d="M432 330 Q292 300 150 288" stroke-width="1.2" stroke="#3E5D8A"/>
-                <rect x="196" y="352" width="52" height="40" rx="3" stroke-width="1.6" stroke="#3E5D8A"/>
+                <path d="M150 268 Q108 272 64 296" stroke-width="1.2" stroke="#7A6B4E"/>
+                <path d="M432 330 Q292 300 150 288" stroke-width="1.2" stroke="#7A6B4E"/>
+                <rect x="196" y="352" width="52" height="40" rx="3" stroke-width="1.6" stroke="#7A6B4E"/>
               </g>
               <!-- steam, last -->
-              <g id="bd-steam" fill="none" stroke="#93C5FD" stroke-width="2.2" opacity="0" stroke-linecap="round">
+              <g id="bd-steam" fill="none" stroke="#F7D89A" stroke-width="2.2" opacity="0" stroke-linecap="round">
                 <path d="M742 190 Q728 150 752 118 Q772 90 758 56"/>
                 <path d="M776 188 Q792 148 772 116 Q754 88 770 54"/>
                 <path d="M804 192 Q818 158 800 132" stroke-width="1.6"/>
               </g>
             </g>
                         <!-- near ground: parallax foreground, closest to camera -->
-              <g id="bd-near" fill="none" stroke="#33455F" stroke-width="2">
+              <g id="bd-near" fill="none" stroke="#554D3D" stroke-width="2">
                 <path d="M-60 448 Q180 436 420 446 Q680 456 960 442"/>
-                <path d="M40 448 L40 432 M92 450 L92 436 M786 446 L786 430 M858 444 L858 428" stroke-width="1.5" stroke="#2A3A50"/>
+                <path d="M40 448 L40 432 M92 450 L92 436 M786 446 L786 430 M858 444 L858 428" stroke-width="1.5" stroke="#474033"/>
               </g>
             </svg>
         </div>
@@ -1554,8 +2346,8 @@
           <p class="pin-text" data-role="text"></p>
           <div class="pin-rail" data-role="rail" aria-hidden="true"></div>
           <p class="pin-hint">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
-            Keep scrolling to build it
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            Turn the page to build it
           </p>
         </div>
       </div>
@@ -1571,7 +2363,7 @@
     <div class="section-head reveal">
       <span class="overline">The physics</span>
       <h2 id="h-fission">How fission works</h2>
-      <p class="lede">All that heat comes from splitting atoms. Scroll to watch a single split become a chain reaction, then fire your own neutrons below and slide the control rods to see why a reactor holds steady and a bomb is a different beast entirely.</p>
+      <p class="lede">All that heat comes from splitting atoms. Turn the page to watch a single split become a chain reaction, then fire your own neutrons and slide the control rods to see why a reactor holds steady and a bomb is a different beast entirely.</p>
     </div>
 
     <!-- Cinematic pass: one fission event, told in six beats. -->
@@ -1582,7 +2374,7 @@
           <svg id="fs-svg" viewBox="0 0 900 460" role="img" aria-label="Animated diagram of nuclear fission: a free neutron strikes a uranium-235 nucleus, which absorbs it, splits into two fragments while releasing energy and two or three fresh neutrons, and those neutrons go on to split further nuclei until control rods absorb the spares.">
             <defs>
               <radialGradient id="fsAmber"><stop offset="0" stop-color="#FDE68A"/><stop offset="0.55" stop-color="#FBBF24"/><stop offset="1" stop-color="#B45309"/></radialGradient>
-              <radialGradient id="fsBlue"><stop offset="0" stop-color="#DBEAFE"/><stop offset="0.6" stop-color="#60A5FA"/><stop offset="1" stop-color="#1D4ED8"/></radialGradient>
+              <radialGradient id="fsBlue"><stop offset="0" stop-color="#F2EEE7"/><stop offset="0.6" stop-color="#F2C46B"/><stop offset="1" stop-color="#A28753"/></radialGradient>
               <radialGradient id="fsHalo"><stop offset="0" stop-color="#FBBF24" stop-opacity="0.55"/><stop offset="1" stop-color="#FBBF24" stop-opacity="0"/></radialGradient>
               <radialGradient id="fsGreen"><stop offset="0" stop-color="#A7F3D0"/><stop offset="0.6" stop-color="#34D399"/><stop offset="1" stop-color="#047857"/></radialGradient>
             </defs>
@@ -1631,9 +2423,9 @@
 
             <!-- control rod -->
             <g id="fs-rod" opacity="0">
-              <rect x="596" y="-150" width="26" height="300" fill="#94A3B8"/>
-              <rect x="596" y="-150" width="26" height="300" fill="none" stroke="#CBD5E1" stroke-width="1.5"/>
-              <text class="fs-label" x="609" y="176" text-anchor="middle" fill="#94A3B8">CONTROL ROD</text>
+              <rect x="596" y="-150" width="26" height="300" fill="#6E6653"/>
+              <rect x="596" y="-150" width="26" height="300" fill="none" stroke="#D6CFBC" stroke-width="1.5"/>
+              <text class="fs-label" x="609" y="176" text-anchor="middle" fill="#6E6653">CONTROL ROD</text>
             </g>
           </svg>
         </div>
@@ -1643,8 +2435,8 @@
           <p class="pin-text" data-role="text"></p>
           <div class="pin-rail" data-role="rail" aria-hidden="true"></div>
           <p class="pin-hint">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
-            Keep scrolling to split the atom
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            Turn the page to split the atom
           </p>
         </div>
       </div>
@@ -1699,20 +2491,27 @@
       <p class="lede">The most powerful argument for nuclear energy is also the most counterintuitive: it is among the safest ways to generate electricity ever devised.</p>
     </div>
 
-    <div class="chart-card reveal" id="deaths-card">
-      <div class="chart-card__head">
-        <div class="chart-card__title">Death rates from energy production</div>
-        <div class="chart-card__unit">deaths per TWh · accidents + air pollution</div>
+    <div class="exhibit reveal">
+      <div class="placard">
+        <div class="placard__cat">OWID · 2020 · D/TWH</div>
+        <h3 class="placard__title">Death rates, per terawatt-hour</h3>
+        <div class="placard__prov">Our World in Data, 2020 · after Markandya &amp; Wilkinson (2007) and Sovacool et&nbsp;al. (2016)</div>
+        <p class="placard__text">The most counterintuitive number in energy. The figures include accidents and air pollution, and the nuclear bar even carries modeled long-term Chernobyl deaths, not only the direct ones. It is still the lowest on the wall.</p>
       </div>
-      <div class="chart-card__legend" aria-hidden="true">
-        <span class="key"><span class="swatch" style="background:#2563EB"></span>Nuclear</span>
-        <span class="key"><span class="swatch" style="background:#94A3B8"></span>All other sources</span>
-      </div>
-      <div id="deaths-chart"><div class="chart-plot"><div class="chart-rows"></div><div class="chart-tip" role="status"></div></div></div>
-      <div id="deaths-table" hidden></div>
-      <div class="chart-card__foot">
-        <p class="chart-card__src"><a href="https://ourworldindata.org/safest-sources-of-energy" target="_blank" rel="noopener noreferrer">Source: Our World in Data (2020)</a>, based on Markandya &amp; Wilkinson (2007, <em>The Lancet</em>) and Sovacool et&nbsp;al. (2016). How to read this: figures include accidents plus air pollution; nuclear includes modeled long-term Chernobyl estimates, not just direct deaths. Per-TWh values depend on modeling assumptions. Accessed Jul 14, 2026.</p>
-        <button class="table-toggle" data-chart="deaths" aria-pressed="false">View as table</button>
+      <div class="chart-card" id="deaths-card">
+        <div class="chart-card__head">
+          <div class="chart-card__unit">deaths per TWh · accidents + air pollution</div>
+        </div>
+        <div class="chart-card__legend" aria-hidden="true">
+          <span class="key"><span class="swatch" style="background:var(--spot)"></span>Nuclear</span>
+          <span class="key"><span class="swatch" style="background:#6E6653"></span>All other sources</span>
+        </div>
+        <div id="deaths-chart"><div class="chart-plot"><div class="chart-rows"></div><div class="chart-tip" role="status"></div></div></div>
+        <div id="deaths-table" hidden></div>
+        <div class="chart-card__foot">
+          <p class="chart-card__src"><a href="https://ourworldindata.org/safest-sources-of-energy" target="_blank" rel="noopener noreferrer">Source: Our World in Data (2020)</a>, based on Markandya &amp; Wilkinson (2007, <em>The Lancet</em>) and Sovacool et&nbsp;al. (2016). How to read this: figures include accidents plus air pollution; nuclear includes modeled long-term Chernobyl estimates, not just direct deaths. Per-TWh values depend on modeling assumptions. Accessed Jul 14, 2026.</p>
+          <button class="table-toggle" data-chart="deaths" aria-pressed="false">View as table</button>
+        </div>
       </div>
     </div>
 
@@ -1738,20 +2537,28 @@
       <p class="lede">Capacity factor is the share of the year a plant spends generating at full power. U.S. nuclear plants ran at 90.8% in 2024, around the clock, in every season. In recent U.S. data, that is the highest average of any major source.</p>
     </div>
 
-    <div class="chart-card reveal" id="capacity-card">
-      <div class="chart-card__head">
-        <div class="chart-card__title">Average capacity factor by energy source</div>
-        <div class="chart-card__unit">% of the year at full power · U.S., 2024</div>
+    <div class="exhibit reveal">
+      <div class="placard">
+        <div class="placard__cat">EIA &middot; 2024 &middot; % OF YEAR</div>
+        <h3 class="placard__title">Average capacity factor by energy source</h3>
+        <div class="placard__prov">U.S. EIA, Electric Power Monthly, Tables 6.07.A and 6.07.B &middot; annual 2024, utility-scale generators</div>
+        <p class="placard__text">Capacity factor is a measure of availability, not of cost. It answers one question: of all the hours in a year, how many did this actually spend generating? Nuclear ran at 90.8% of them, in every season and in every kind of weather.</p>
       </div>
-      <div class="chart-card__legend" aria-hidden="true">
-        <span class="key"><span class="swatch" style="background:#2563EB"></span>Nuclear</span>
-        <span class="key"><span class="swatch" style="background:#94A3B8"></span>All other sources</span>
-      </div>
-      <div id="capacity-chart"><div class="chart-plot"><div class="chart-rows"></div><div class="chart-tip" role="status"></div></div></div>
-      <div id="capacity-table" hidden></div>
-      <div class="chart-card__foot">
-        <p class="chart-card__src"><a href="https://www.eia.gov/electricity/monthly/epm_table_grapher.php?t=epmt_6_07_b" target="_blank" rel="noopener noreferrer">Source: U.S. EIA, Electric Power Monthly, Tables 6.07.A and 6.07.B</a>. Annual 2024 values, U.S. utility-scale generators. Capacity factor compares actual generation with the maximum possible. Accessed Jul 14, 2026.</p>
-        <button class="table-toggle" data-chart="capacity" aria-pressed="false">View as table</button>
+      <div class="chart-card reveal" id="capacity-card">
+        <div class="chart-card__head">
+          <div class="chart-card__title">Average capacity factor by energy source</div>
+          <div class="chart-card__unit">% of the year at full power · U.S., 2024</div>
+        </div>
+        <div class="chart-card__legend" aria-hidden="true">
+          <span class="key"><span class="swatch" style="background:#F2C46B"></span>Nuclear</span>
+          <span class="key"><span class="swatch" style="background:#6E6653"></span>All other sources</span>
+        </div>
+        <div id="capacity-chart"><div class="chart-plot"><div class="chart-rows"></div><div class="chart-tip" role="status"></div></div></div>
+        <div id="capacity-table" hidden></div>
+        <div class="chart-card__foot">
+          <p class="chart-card__src"><a href="https://www.eia.gov/electricity/monthly/epm_table_grapher.php?t=epmt_6_07_b" target="_blank" rel="noopener noreferrer">Source: U.S. EIA, Electric Power Monthly, Tables 6.07.A and 6.07.B</a>. Annual 2024 values, U.S. utility-scale generators. Capacity factor compares actual generation with the maximum possible. Accessed Jul 14, 2026.</p>
+          <button class="table-toggle" data-chart="capacity" aria-pressed="false">View as table</button>
+        </div>
       </div>
     </div>
 
@@ -1782,71 +2589,79 @@
       <p class="lede">Power a city that needs 1,000 MW around the clock. Choose the mix, and the model computes the carbon, the hardware, and the reliability picture from the same cited data used across this site.</p>
     </div>
 
-    <div class="sim-card reveal">
-      <div class="sim-row">
-        <label for="sim-nuclear">Nuclear</label>
-        <input type="range" id="sim-nuclear" min="0" max="100" step="1" value="30">
-        <output id="sim-nuclear-out" for="sim-nuclear">30%</output>
+    <div class="exhibit exhibit--wide reveal">
+      <div class="placard">
+        <div class="placard__cat">ORIGINAL MODEL &middot; gCO&#8322;/kWh</div>
+        <h3 class="placard__title">A city that needs 1,000 MW, around the clock</h3>
+        <div class="placard__prov">Original model &middot; gCO&#8322;/kWh &middot; carbon intensities and capacity factors from the sources cited throughout this museum</div>
+        <p class="placard__text">Choose the mix and the model does the rest. Slide solar toward 80% and watch the buildout climb while the firm share collapses. Slide nuclear up and watch the carbon fall. That trade-off, in one small model, is the argument of this whole building.</p>
       </div>
-      <div class="sim-row">
-        <label for="sim-solar">Solar</label>
-        <input type="range" id="sim-solar" min="0" max="100" step="1" value="15">
-        <output id="sim-solar-out" for="sim-solar">15%</output>
-      </div>
-      <div class="sim-row">
-        <label for="sim-wind">Wind</label>
-        <input type="range" id="sim-wind" min="0" max="100" step="1" value="15">
-        <output id="sim-wind-out" for="sim-wind">15%</output>
-      </div>
-      <div class="sim-row">
-        <label for="sim-hydro">Hydropower</label>
-        <input type="range" id="sim-hydro" min="0" max="100" step="1" value="10">
-        <output id="sim-hydro-out" for="sim-hydro">10%</output>
-      </div>
-      <p class="sim-gas">Natural gas fills whatever share is left: <strong id="sim-gas">30%</strong>. Slide a source up and gas gives way.</p>
-
-      <div class="sim-tiles" role="status" aria-live="off">
-        <div class="sim-tile">
-          <div class="lbl">Grid carbon intensity</div>
-          <div class="val" id="sim-co2">162 g/kWh</div>
-          <div class="sub">U.S. grid today: about 370. France's nuclear-heavy grid: about 56.</div>
+      <div class="sim-card reveal">
+        <div class="sim-row">
+          <label for="sim-nuclear">Nuclear</label>
+          <input type="range" id="sim-nuclear" min="0" max="100" step="1" value="30">
+          <output id="sim-nuclear-out" for="sim-nuclear">30%</output>
         </div>
-        <div class="sim-tile">
-          <div class="lbl">Capacity you must build</div>
-          <div class="val" id="sim-cap">2,203 MW</div>
-          <div class="sub" id="sim-cap-sub">to reliably average 1,000 MW, because nothing runs all the time</div>
+        <div class="sim-row">
+          <label for="sim-solar">Solar</label>
+          <input type="range" id="sim-solar" min="0" max="100" step="1" value="15">
+          <output id="sim-solar-out" for="sim-solar">15%</output>
         </div>
-        <div class="sim-tile">
-          <div class="lbl">Firm share</div>
-          <div class="val" id="sim-firm">70%</div>
-          <div class="sub" id="sim-firm-sub">supply that does not depend on the weather</div>
+        <div class="sim-row">
+          <label for="sim-wind">Wind</label>
+          <input type="range" id="sim-wind" min="0" max="100" step="1" value="15">
+          <output id="sim-wind-out" for="sim-wind">15%</output>
         </div>
-      </div>
+        <div class="sim-row">
+          <label for="sim-hydro">Hydropower</label>
+          <input type="range" id="sim-hydro" min="0" max="100" step="1" value="10">
+          <output id="sim-hydro-out" for="sim-hydro">10%</output>
+        </div>
+        <p class="sim-gas">Natural gas fills whatever share is left: <strong id="sim-gas">30%</strong>. Slide a source up and gas gives way.</p>
 
-      <div class="sim-bars-title">Your grid, powering the city</div>
-      <div class="sim-city-wrap">
-        <svg id="sim-city" viewBox="0 0 640 250" role="img" aria-label="A city skyline whose lit windows are coloured by the energy source powering them; solar and wind windows flicker to show they are intermittent."></svg>
-      </div>
-      <div class="sim-legend">
-        <span class="k"><span class="sw" style="background:#60A5FA"></span>Nuclear</span>
-        <span class="k"><span class="sw" style="background:#FBBF24"></span>Solar</span>
-        <span class="k"><span class="sw" style="background:#38BDF8"></span>Wind</span>
-        <span class="k"><span class="sw" style="background:#34D399"></span>Hydro</span>
-        <span class="k"><span class="sw" style="background:#9AA6BC"></span>Gas</span>
-        <span class="k" style="color:var(--faint)">Flickering windows are intermittent (solar &amp; wind)</span>
-      </div>
+        <div class="sim-tiles" role="status" aria-live="off">
+          <div class="sim-tile">
+            <div class="lbl">Grid carbon intensity</div>
+            <div class="val" id="sim-co2">162 g/kWh</div>
+            <div class="sub">U.S. grid today: about 370. France's nuclear-heavy grid: about 56.</div>
+          </div>
+          <div class="sim-tile">
+            <div class="lbl">Capacity you must build</div>
+            <div class="val" id="sim-cap">2,203 MW</div>
+            <div class="sub" id="sim-cap-sub">to reliably average 1,000 MW, because nothing runs all the time</div>
+          </div>
+          <div class="sim-tile">
+            <div class="lbl">Firm share</div>
+            <div class="val" id="sim-firm">70%</div>
+            <div class="sub" id="sim-firm-sub">supply that does not depend on the weather</div>
+          </div>
+        </div>
 
-      <details class="sim-notes">
-        <summary>Assumptions and equations</summary>
-        <ul>
-          <li>Demand is a constant 1,000 MW (8,760 GWh per year). Real demand varies by hour and season; ignoring timing flatters variable sources, because storage and curtailment are not modeled.</li>
-          <li>Capacity factors are U.S. 2024 annual averages from EIA (reference 6): nuclear 90.8%, gas combined cycle 60.5%, hydro 34.6%, wind 34.0%, solar 23.2%.</li>
-          <li>Lifecycle emissions are IPCC AR5 medians (reference 4): nuclear 12, wind 11, hydro 24, solar 48, gas 490 gCO₂eq/kWh.</li>
-          <li>Capacity per source: <code>MW = share × 1,000 ÷ capacity factor</code>. Carbon intensity: <code>g/kWh = Σ share × emission factor</code>. Firm share: <code>nuclear + hydro + gas</code>.</li>
-          <li>Grid references (U.S. about 370, France about 56 gCO₂/kWh in 2023) are from Ember via Our World in Data (reference 16).</li>
-          <li>This is an educational model, not a grid-planning tool. Real planning models hourly weather, transmission, reserve margins, storage, and cost.</li>
-        </ul>
-      </details>
+        <div class="sim-bars-title">Your grid, powering the city</div>
+        <div class="sim-city-wrap">
+          <svg id="sim-city" viewBox="0 0 640 250" role="img" aria-label="A city skyline whose lit windows are coloured by the energy source powering them; solar and wind windows flicker to show they are intermittent."></svg>
+        </div>
+        <div class="sim-legend">
+          <span class="k"><span class="sw" style="background:#F2C46B"></span>Nuclear</span>
+          <span class="k"><span class="sw" style="background:#FBBF24"></span>Solar</span>
+          <span class="k"><span class="sw" style="background:#49D6E8"></span>Wind</span>
+          <span class="k"><span class="sw" style="background:#34D399"></span>Hydro</span>
+          <span class="k"><span class="sw" style="background:#A9A18B"></span>Gas</span>
+          <span class="k" style="color:var(--faint)">Flickering windows are intermittent (solar &amp; wind)</span>
+        </div>
+
+        <details class="sim-notes">
+          <summary>Assumptions and equations</summary>
+          <ul>
+            <li>Demand is a constant 1,000 MW (8,760 GWh per year). Real demand varies by hour and season; ignoring timing flatters variable sources, because storage and curtailment are not modeled.</li>
+            <li>Capacity factors are U.S. 2024 annual averages from EIA (reference 6): nuclear 90.8%, gas combined cycle 60.5%, hydro 34.6%, wind 34.0%, solar 23.2%.</li>
+            <li>Lifecycle emissions are IPCC AR5 medians (reference 4): nuclear 12, wind 11, hydro 24, solar 48, gas 490 gCO₂eq/kWh.</li>
+            <li>Capacity per source: <code>MW = share × 1,000 ÷ capacity factor</code>. Carbon intensity: <code>g/kWh = Σ share × emission factor</code>. Firm share: <code>nuclear + hydro + gas</code>.</li>
+            <li>Grid references (U.S. about 370, France about 56 gCO₂/kWh in 2023) are from Ember via Our World in Data (reference 16).</li>
+            <li>This is an educational model, not a grid-planning tool. Real planning models hourly weather, transmission, reserve margins, storage, and cost.</li>
+          </ul>
+        </details>
+      </div>
     </div>
 
     <div class="prose reveal">
@@ -1864,20 +2679,28 @@
       <p class="lede">Running costs and building costs are different questions. Existing nuclear plants are inexpensive to operate; new construction is where nuclear struggles (see Limitations).</p>
     </div>
 
-    <div class="chart-card reveal" id="costs-card">
-      <div class="chart-card__head">
-        <div class="chart-card__title">Operating expenses of existing plants</div>
-        <div class="chart-card__unit">$ per MWh · fuel + operation + maintenance · U.S., 2024</div>
+    <div class="exhibit reveal">
+      <div class="placard">
+        <div class="placard__cat">EIA &middot; 2024 &middot; $/MWH</div>
+        <h3 class="placard__title">Operating expenses of existing plants</h3>
+        <div class="placard__prov">U.S. EIA, Electric Power Annual, Table 8.4 &middot; 2024, major investor-owned utilities</div>
+        <p class="placard__text">Running a reactor that already exists is cheap. Building a new one is not, and this chart says nothing about that: it counts fuel, operation and maintenance, and nothing else. The expensive part of nuclear happens before the plant ever produces a watt.</p>
       </div>
-      <div class="chart-card__legend" aria-hidden="true">
-        <span class="key"><span class="swatch" style="background:#2563EB"></span>Nuclear</span>
-        <span class="key"><span class="swatch" style="background:#94A3B8"></span>All other sources</span>
-      </div>
-      <div id="costs-chart"><div class="chart-plot"><div class="chart-rows"></div><div class="chart-tip" role="status"></div></div></div>
-      <div id="costs-table" hidden></div>
-      <div class="chart-card__foot">
-        <p class="chart-card__src"><a href="https://www.eia.gov/electricity/annual/html/epa_08_04.html" target="_blank" rel="noopener noreferrer">Source: U.S. EIA, Electric Power Annual, Table 8.4</a>. 2024 operating expenses for major investor-owned utilities. How to read this: running costs only. Excludes capital, financing, transmission, and decommissioning; wind and solar are not in this table. New-build economics differ greatly. Accessed Jul 14, 2026.</p>
-        <button class="table-toggle" data-chart="costs" aria-pressed="false">View as table</button>
+      <div class="chart-card reveal" id="costs-card">
+        <div class="chart-card__head">
+          <div class="chart-card__title">Operating expenses of existing plants</div>
+          <div class="chart-card__unit">$ per MWh · fuel + operation + maintenance · U.S., 2024</div>
+        </div>
+        <div class="chart-card__legend" aria-hidden="true">
+          <span class="key"><span class="swatch" style="background:#F2C46B"></span>Nuclear</span>
+          <span class="key"><span class="swatch" style="background:#6E6653"></span>All other sources</span>
+        </div>
+        <div id="costs-chart"><div class="chart-plot"><div class="chart-rows"></div><div class="chart-tip" role="status"></div></div></div>
+        <div id="costs-table" hidden></div>
+        <div class="chart-card__foot">
+          <p class="chart-card__src"><a href="https://www.eia.gov/electricity/annual/html/epa_08_04.html" target="_blank" rel="noopener noreferrer">Source: U.S. EIA, Electric Power Annual, Table 8.4</a>. 2024 operating expenses for major investor-owned utilities. How to read this: running costs only. Excludes capital, financing, transmission, and decommissioning; wind and solar are not in this table. New-build economics differ greatly. Accessed Jul 14, 2026.</p>
+          <button class="table-toggle" data-chart="costs" aria-pressed="false">View as table</button>
+        </div>
       </div>
     </div>
 
@@ -1903,8 +2726,18 @@
       <p class="lede">Even the disasters tell a more measured story than memory suggests. Select an incident to compare what people feared with what the evidence found.</p>
     </div>
 
-    <div class="tabs reveal" role="tablist" aria-label="Nuclear incidents" id="incident-tabs"></div>
-    <div class="incident-panel reveal" id="incident-panel" role="tabpanel"></div>
+    <div class="exhibit exhibit--wide reveal">
+      <div class="placard">
+        <div class="placard__cat">INES &middot; 1979 / 1986 / 2011</div>
+        <h3 class="placard__title">Three accidents, and what they actually did</h3>
+        <div class="placard__prov">UNSCEAR (2008, 2013); WHO; U.S. NRC &middot; confirmed deaths and modeled long-term estimates</div>
+        <p class="placard__text">Choose a case. Each pairs what was feared at the time with what the evidence found afterwards. Nothing here is dismissed. The exhibit is about the size of the gap between the two.</p>
+      </div>
+      <div class="incident-case">
+        <div class="tabs" role="tablist" aria-label="Nuclear incidents" id="incident-tabs"></div>
+        <div class="incident-panel" id="incident-panel" role="tabpanel"></div>
+      </div>
+    </div>
     <p class="school-note reveal" style="margin-bottom:0">How these numbers are counted: "confirmed" means direct radiation deaths documented in UNSCEAR and WHO assessments. Modeled long-term projections, evacuation-related deaths, displacement, and cleanup costs are listed separately because institutions count these categories differently, and an accident's full impact is much more than its death toll. Sources: UNSCEAR 2008 and 2013 reports; WHO; U.S. NRC.</p>
 
     <div class="callout reveal" style="margin-top:2.4rem">
@@ -1935,20 +2768,28 @@
       </div>
     </div>
 
-    <div class="chart-card reveal" id="exposure-card">
-      <div class="chart-card__head">
-        <div class="chart-card__title">Everyday radiation doses, compared</div>
-        <div class="chart-card__unit">millisieverts (mSv)</div>
+    <div class="exhibit reveal">
+      <div class="placard">
+        <div class="placard__cat">NRC &middot; EPA &middot; mSv</div>
+        <h3 class="placard__title">Everyday radiation doses, compared</h3>
+        <div class="placard__prov">U.S. NRC, "Doses in Our Daily Lives"; EPA &middot; effective dose in millisieverts</div>
+        <p class="placard__text">Everything on this wall gives you a dose: the granite under your feet, the food in your kitchen, the sky on a flight. The bar for living beside a nuclear plant is the one you have to look for.</p>
       </div>
-      <div class="chart-card__legend" aria-hidden="true">
-        <span class="key"><span class="swatch" style="background:#2563EB"></span>Living near a nuclear plant</span>
-        <span class="key"><span class="swatch" style="background:#94A3B8"></span>Everything else</span>
-      </div>
-      <div id="exposure-chart"><div class="chart-plot"><div class="chart-rows"></div><div class="chart-tip" role="status"></div></div></div>
-      <div id="exposure-table" hidden></div>
-      <div class="chart-card__foot">
-        <p class="chart-card__src"><a href="https://www.nrc.gov/about-nrc/radiation/around-us/doses-daily-lives" target="_blank" rel="noopener noreferrer">Source: U.S. NRC, "Doses in Our Daily Lives"</a>; EPA. How to read this: effective-dose estimates; simple comparisons do not capture every contextual difference between dose types. Linear scale; the plant's near-invisible bar is the point. Accessed Jul 14, 2026.</p>
-        <button class="table-toggle" data-chart="exposure" aria-pressed="false">View as table</button>
+      <div class="chart-card reveal" id="exposure-card">
+        <div class="chart-card__head">
+          <div class="chart-card__title">Everyday radiation doses, compared</div>
+          <div class="chart-card__unit">millisieverts (mSv)</div>
+        </div>
+        <div class="chart-card__legend" aria-hidden="true">
+          <span class="key"><span class="swatch" style="background:#F2C46B"></span>Living near a nuclear plant</span>
+          <span class="key"><span class="swatch" style="background:#6E6653"></span>Everything else</span>
+        </div>
+        <div id="exposure-chart"><div class="chart-plot"><div class="chart-rows"></div><div class="chart-tip" role="status"></div></div></div>
+        <div id="exposure-table" hidden></div>
+        <div class="chart-card__foot">
+          <p class="chart-card__src"><a href="https://www.nrc.gov/about-nrc/radiation/around-us/doses-daily-lives" target="_blank" rel="noopener noreferrer">Source: U.S. NRC, "Doses in Our Daily Lives"</a>; EPA. How to read this: effective-dose estimates; simple comparisons do not capture every contextual difference between dose types. Linear scale; the plant's near-invisible bar is the point. Accessed Jul 14, 2026.</p>
+          <button class="table-toggle" data-chart="exposure" aria-pressed="false">View as table</button>
+        </div>
       </div>
     </div>
   </div>
@@ -1980,19 +2821,19 @@
           </div>
           <figure class="field-fig">
             <svg viewBox="0 0 860 400" role="img" aria-label="Illustration of a football field: all spent fuel ever produced by commercial nuclear power would fit, stacked, within its area.">
-              <rect x="0" y="0" width="860" height="400" fill="#0E1A2E"/>
-              <rect x="30" y="28" width="800" height="344" fill="#152238" stroke="#8FA3C2" stroke-width="2.5"/>
-              <rect x="30" y="28" width="64" height="344" fill="#1B2942" stroke="#8FA3C2" stroke-width="1.5"/>
-              <rect x="766" y="28" width="64" height="344" fill="#1B2942" stroke="#8FA3C2" stroke-width="1.5"/>
-              <g stroke="#3A4A66" stroke-width="1.5">
+              <rect x="0" y="0" width="860" height="400" fill="#14120D"/>
+              <rect x="30" y="28" width="800" height="344" fill="#302A1D" stroke="#A9A18B" stroke-width="2.5"/>
+              <rect x="30" y="28" width="64" height="344" fill="#241F18" stroke="#A9A18B" stroke-width="1.5"/>
+              <rect x="766" y="28" width="64" height="344" fill="#241F18" stroke="#A9A18B" stroke-width="1.5"/>
+              <g stroke="#4E4636" stroke-width="1.5">
                 <line x1="161" y1="28" x2="161" y2="372"/><line x1="228" y1="28" x2="228" y2="372"/><line x1="295" y1="28" x2="295" y2="372"/><line x1="362" y1="28" x2="362" y2="372"/><line x1="430" y1="28" x2="430" y2="372"/><line x1="498" y1="28" x2="498" y2="372"/><line x1="565" y1="28" x2="565" y2="372"/><line x1="632" y1="28" x2="632" y2="372"/><line x1="699" y1="28" x2="699" y2="372"/>
               </g>
-              <rect x="340" y="128" width="180" height="144" fill="#FBBF24" stroke="#8FA3C2" stroke-width="2.5" rx="4"/>
-              <g stroke="#8FA3C2" stroke-width="1.5" opacity="0.45">
+              <rect x="340" y="128" width="180" height="144" fill="#FBBF24" stroke="#A9A18B" stroke-width="2.5" rx="4"/>
+              <g stroke="#A9A18B" stroke-width="1.5" opacity="0.45">
                 <line x1="340" y1="164" x2="520" y2="164"/><line x1="340" y1="200" x2="520" y2="200"/><line x1="340" y1="236" x2="520" y2="236"/><line x1="385" y1="128" x2="385" y2="272"/><line x1="430" y1="128" x2="430" y2="272"/><line x1="475" y1="128" x2="475" y2="272"/>
               </g>
               <text x="430" y="98" text-anchor="middle" font-family="'Public Sans', sans-serif" font-weight="700" font-size="24" fill="#EAF0F8" letter-spacing="1">ALL OF IT. EVER.</text>
-              <text x="430" y="318" text-anchor="middle" font-family="'Public Sans', sans-serif" font-weight="500" font-size="14" fill="#94A6C2" letter-spacing="1">one football field, stacked under 10 yards deep</text>
+              <text x="430" y="318" text-anchor="middle" font-family="'Public Sans', sans-serif" font-weight="500" font-size="14" fill="#A9A18B" letter-spacing="1">one football field, stacked under 10 yards deep</text>
             </svg>
             <figcaption>DOE: all U.S. spent fuel, stacked, would cover one football field to a depth of less than 10 yards. Fuel assemblies only; packaging, spacing, and shielding not included. (Illustrative, not to scale.)</figcaption>
           </figure>
@@ -2253,10 +3094,36 @@
 </section>
 
 <!-- ================= CLOSING ================= -->
+<!-- ================= THE FURTHER WING =================
+     You reach the end of the main galleries and the corridor keeps going: a
+     second lobby for everyone who wants more, and a way back to the entrance
+     for everyone who is done. A museum never dead-ends at a wall. -->
+<section class="view band" id="wing" aria-labelledby="h-wing">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="overline"><span class="n">16</span>The Further Wing</span>
+      <h2 id="h-wing">The corridor keeps going</h2>
+      <p class="lede">You have walked the main galleries. Everything past this point is for the visitor who wants to go further: the field as it stands today, the people who work in it, and the way in for anyone who wants to join them.</p>
+    </div>
+
+    <div class="hub-grid reveal">
+      <a class="hub-card" href="#news"><span class="hc-n">Wing · Now</span><span class="hc-t">This week in nuclear</span><span class="hc-d">Headlines that refresh on their own, straight from the field.</span></a>
+      <a class="hub-card" href="#careers"><span class="hc-n">Wing · Work</span><span class="hc-t">Working in nuclear</span><span class="hc-d">Real roles, real pay, and what the days actually look like.</span></a>
+      <a class="hub-card" href="#students"><span class="hc-n">Wing · Enter</span><span class="hc-t">Your pathway in</span><span class="hc-d">Schools, scholarships, and funded internships.</span></a>
+      <a class="hub-card" href="#limits"><span class="hc-n">Wing · Honest</span><span class="hc-t">The honest cost column</span><span class="hc-d">Overruns, waste politics, proliferation. Left in on purpose.</span></a>
+      <a class="hub-card" href="#simulator"><span class="hc-n">Wing · Play</span><span class="hc-t">Build a grid yourself</span><span class="hc-d">Pick a mix, light a city, watch the carbon move.</span></a>
+      <a class="hub-card" href="#about"><span class="hc-n">Wing · Desk</span><span class="hc-t">The reference desk</span><span class="hc-d">Every figure on these walls, with its primary source.</span></a>
+    </div>
+  </div>
+</section>
+
 <section class="band band--navy closing-band" aria-label="Closing statement">
   <div class="wrap">
     <h2 class="reveal">Make the truth impossible to ignore</h2>
     <p class="reveal">For too long, public fear has drowned out the evidence. The numbers belong back at the center of the conversation. Not to win a debate with louder claims, but to put the data front and center.</p>
+    <p class="reveal" style="margin-top:1.6rem">
+      <a class="btn" href="#entry">Walk back to the entrance <span class="arr">→</span></a>
+    </p>
   </div>
 </section>
 
@@ -2302,6 +3169,7 @@
       <li>U.S. BLS. <a href="https://www.bls.gov/ooh/architecture-and-engineering/nuclear-engineers.htm" target="_blank" rel="noopener noreferrer">Occupational Outlook Handbook, Nuclear Engineers</a>. Median wage $127,520 (May 2024); ~800 projected annual openings.</li>
       <li>U.S. NRC. <a href="https://www.nrc.gov/reactors/operating/list-power-reactor-units.html" target="_blank" rel="noopener noreferrer">Operating power reactor list</a>. 94 licensed operating reactors at 54 plants.</li>
       <li>Ember, via Our World in Data. <a href="https://ourworldindata.org/grapher/carbon-intensity-electricity" target="_blank" rel="noopener noreferrer">"Carbon intensity of electricity generation"</a>. 2023 grid averages used in the simulator: United States about 370 gCO₂/kWh, France about 56.</li>
+      <li>Nuclear Energy Institute. <a href="https://www.nei.org/fundamentals/nuclear-fuel" target="_blank" rel="noopener noreferrer">"Nuclear Fuel"</a>. One uranium fuel pellet holds roughly the energy of one ton of coal; a typical pressurized-water reactor core contains more than 18 million pellets across about 51,000 fuel rods. Basis for the Entry hall. Accessed Jul 31, 2026.</li>
     </ol>
     <p class="src-note">Every figure on this page was checked against these sources on July 14, 2026. Estimates carry uncertainty, and where major sources disagree, ranges are shown. Found an error? Use the contact email above; corrections are welcome.</p>
     <div class="foot-base">
@@ -2333,18 +3201,12 @@
      if a vendored file fails to load the page scrolls natively. */
   var lenis = null;
   var HAS_GSAP = typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined';
-  if (!REDUCE && typeof Lenis === 'function') {
-    /* Heavier, longer glide than the default. A low lerp keeps the page
-       coasting after the wheel stops, which is what makes scroll-scrubbed
-       motion feel continuous instead of stepped. */
-    lenis = new Lenis({ autoRaf: !HAS_GSAP, lerp: 0.075, wheelMultiplier: 0.95, syncTouch: true });
-    if (HAS_GSAP) {
-      gsap.registerPlugin(ScrollTrigger);
-      lenis.on('scroll', ScrollTrigger.update);
-      gsap.ticker.add(function (time) { lenis.raf(time * 1000); });
-      gsap.ticker.lagSmoothing(0);
-    }
-  }
+  /* Lenis is deliberately NOT used any more. The museum no longer scrolls the
+     window: a wing is a scroll-snap panel that steps one exhibit per gesture.
+     A smooth-scroll library intercepts the wheel and fights snap, which showed
+     up as scrolling that felt laggy and refused to advance. Native scroll with
+     snap is both smoother and correct here. */
+  if (HAS_GSAP) { gsap.registerPlugin(ScrollTrigger); gsap.ticker.lagSmoothing(0); }
   var HAS_DRAW = !REDUCE && typeof gsap !== 'undefined' && typeof DrawSVGPlugin !== 'undefined';
   if (HAS_DRAW) gsap.registerPlugin(DrawSVGPlugin);
 
@@ -2548,9 +3410,19 @@
     table.appendChild(tbody);
     tableWrap.appendChild(table);
 
-    // grow bars on scroll into view (fails open via whenVisible)
+    // The exhibit lights up when you arrive: each bar grows out of the dark and
+    // brightens a beat after the one above it, then its number fades in.
+    // Fails open via whenVisible, and --i drives the stagger from CSS.
     function setWidths() {
-      rows.querySelectorAll('.crow__bar').forEach(function (b) { b.style.width = b.dataset.w + '%'; });
+      rows.querySelectorAll('.crow').forEach(function (row, i) {
+        var b = row.querySelector('.crow__bar');
+        if (!b) return;
+        row.style.setProperty('--i', i);
+        b.style.setProperty('--i', i);
+        b.style.width = b.dataset.w + '%';
+        b.classList.add('lit');
+        row.classList.add('is-lit');
+      });
     }
     whenVisible(rows, setWidths);
     cfg._setWidths = setWidths;
@@ -2830,7 +3702,7 @@
     if (!cityEl) return;
 
     var SVGNS = 'http://www.w3.org/2000/svg';
-    var COLORS = { nuclear: '#60A5FA', solar: '#FBBF24', wind: '#38BDF8', hydro: '#34D399', gas: '#9AA6BC' };
+    var COLORS = { nuclear: '#F2C46B', solar: '#FBBF24', wind: '#49D6E8', hydro: '#34D399', gas: '#A9A18B' };
     var VARIABLE = { solar: 1, wind: 1 };
     var WIN_OFF = '#0c1626';
 
@@ -2851,7 +3723,7 @@
         star.setAttribute('cx', (rnd() * 640).toFixed(0));
         star.setAttribute('cy', (rnd() * 150).toFixed(0));
         star.setAttribute('r', (0.4 + rnd() * 0.9).toFixed(2));
-        star.setAttribute('fill', '#233149');
+        star.setAttribute('fill', '#40392C');
         cityEl.appendChild(star);
       }
       var winW = 8, winH = 10, gapX = 6, gapY = 7, pad = 8;
@@ -2860,7 +3732,7 @@
         body.setAttribute('x', b.x); body.setAttribute('y', GROUND - b.h);
         body.setAttribute('width', b.w); body.setAttribute('height', b.h);
         body.setAttribute('rx', 3);
-        body.setAttribute('fill', '#111d31'); body.setAttribute('stroke', '#26344c'); body.setAttribute('stroke-width', '1');
+        body.setAttribute('fill', '#2A2418'); body.setAttribute('stroke', '#433C2F'); body.setAttribute('stroke-width', '1');
         cityEl.appendChild(body);
         var cols = Math.max(1, Math.floor((b.w - 2 * pad + gapX) / (winW + gapX)));
         var rows = Math.max(1, Math.floor((b.h - 2 * pad + gapY) / (winH + gapY)));
@@ -3025,6 +3897,53 @@
     setProgress();
   }
 
+  /* ============ DOSIMETER (signature instrument) ============
+     Live readout: a full traversal accumulates 0.040 mSv, one round-trip
+     flight New York to Los Angeles, the figure the Exposure exhibit cites.
+     The shown value eases toward the scroll target so the last digits visibly
+     roll; under reduced motion it snaps and the live dot stops blinking. */
+  (function () {
+    var el = document.getElementById('dosimeter');
+    var valEl = document.getElementById('dose-val');
+    var hallEl = document.getElementById('dose-hall');
+    if (!el || !valEl) return;
+    var DOSE_FULL = 0.040;
+    var shown = 0, target = 0, raf = 0;
+    function frac() {
+      var de = document.documentElement;
+      var max = de.scrollHeight - de.clientHeight;
+      return max > 0 ? Math.min(Math.max(window.scrollY / max, 0), 1) : 0;
+    }
+    function render(v) {
+      valEl.textContent = v.toFixed(3);
+      el.style.setProperty('--f', frac().toFixed(4));
+    }
+    function tick() {
+      shown += (target - shown) * 0.18;
+      if (Math.abs(target - shown) < 0.00004) { shown = target; raf = 0; }
+      render(shown);
+      if (raf) raf = requestAnimationFrame(tick);
+    }
+    function update() {
+      target = DOSE_FULL * frac();
+      if (REDUCE) { shown = target; render(shown); return; }
+      if (!raf) raf = requestAnimationFrame(tick);
+    }
+    function hall() {
+      var a = document.querySelector('#nav-links a.active');
+      if (a && a.textContent.trim()) hallEl.textContent = a.textContent.trim();
+    }
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    window.addEventListener('hashchange', function () { update(); hall(); });
+    // the view router stamps <html data-view>; catch every hall change, incl.
+    // the initial deep-link load that runs after this init.
+    new MutationObserver(hall).observe(document.documentElement, { attributes: true, attributeFilter: ['data-view'] });
+    update(); hall();
+    if (REDUCE) el.classList.add('lit');
+    else setTimeout(function () { el.classList.add('lit'); }, 100);
+  })();
+
   /* ============ SCROLL-SCRUBBED ACCENTS (GSAP) ============ */
   /* Two restrained scrubs, both tied directly to scroll position (they
      hold still when the reader does). Skipped wholesale under reduced
@@ -3045,6 +3964,30 @@
         scrollTrigger: { trigger: tourFrame, start: 'top 90%', end: 'top 45%', scrub: true }
       });
     }
+
+    /* ---- THE WALK: scroll-driven zoom between rooms (2.5D depth) ----
+       The room you are leaving scales up past you and fades; the next room's
+       threshold rises out of the background and comes forward into its light.
+       Applied to the ENTRY and to each hall's full-screen threshold, which are
+       one-screen objects and can safely be flown through. The exhibits inside a
+       room (charts, tables, the simulator) scroll normally underneath, because
+       you cannot read a chart that is mid-zoom. */
+
+    // 1. The entry room: fly through it into the museum.
+    var entryInner = document.querySelector('#entry .entry__inner');
+    if (entryInner) {
+      gsap.to(entryInner, {
+        scale: 1.9, opacity: 0, filter: 'blur(6px)', ease: 'power1.in',
+        scrollTrigger: { trigger: '#entry', start: 'top top', end: 'bottom top', scrub: 0.5 }
+      });
+    }
+
+    /* A room name used to rise, hold, then fly up past the camera as you
+       scrolled through it. Nothing in a wing scrolls any more, so that
+       timeline never played: it simply parked every room name at one end of
+       its scrub, which is `opacity: 0`. Sixteen title pages rendered blank.
+       The room name is a .piece now, and arrives out of the dark with
+       everything else on its page. */
   }
 
   /* ============ PINNED SCROLL SCENES ============ */
@@ -3194,6 +4137,18 @@
 
       sc.build(tl, sc.steps);
       tl.set({}, {}, n); // normalize total duration so progress maps to steps
+
+      /* The same timeline, addressable by beat. In a wing there is no scroll to
+         scrub it, so the page turn drives it instead: one beat per page, which
+         keeps every bit of the camera work that the scroll version had. */
+      sc.el._sceneSteps = n;
+      sc.el._sceneGo = function (i, instant) {
+        var st = tl.scrollTrigger;
+        if (st && st.enabled) st.disable(false);
+        if (instant) { tl.progress(Math.min(i / n, 1)); return; }
+        gsap.killTweensOf(tl);
+        tl.tweenTo(Math.max(0, Math.min(i, n)), { duration: 0.75, ease: 'power2.inOut' });
+      };
     });
 
     function buildPlantTl (tl, steps) {
@@ -3552,7 +4507,7 @@
       // atom rings with gentle mouse parallax
       var px = (mx - 0.5) * 14, py = (my - 0.45) * 10;
       var cx = W * 0.74 + px, cy = H * 0.36 + py;
-      ctx.strokeStyle = 'rgba(96,165,250,0.16)';
+      ctx.strokeStyle = 'rgba(242,196,107,0.16)';
       ctx.lineWidth = 1.2;
       [H * 0.16, H * 0.24, H * 0.33].forEach(function (r, i) {
         ctx.beginPath();
@@ -3561,8 +4516,8 @@
       });
       // core glow
       var grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, H * 0.2);
-      grad.addColorStop(0, 'rgba(96,165,250,0.14)');
-      grad.addColorStop(1, 'rgba(96,165,250,0)');
+      grad.addColorStop(0, 'rgba(242,196,107,0.14)');
+      grad.addColorStop(1, 'rgba(242,196,107,0)');
       ctx.fillStyle = grad;
       ctx.fillRect(cx - H * 0.25, cy - H * 0.25, H * 0.5, H * 0.5);
       // drifting neutrons
@@ -3720,11 +4675,11 @@
         var n = nuclei[i];
         if (n.flash > 0) { ctx.fillStyle = 'rgba(251,191,36,' + (0.5 * n.flash) + ')'; ctx.beginPath(); ctx.arc(n.x, n.y, 16, 0, 6.283); ctx.fill(); }
         ctx.beginPath(); ctx.arc(n.x, n.y, 6, 0, 6.283);
-        if (n.spent) { ctx.fillStyle = '#2a3750'; ctx.fill(); }
+        if (n.spent) { ctx.fillStyle = '#474033'; ctx.fill(); }
         else { ctx.fillStyle = 'rgba(251,191,36,0.18)'; ctx.fill(); ctx.lineWidth = 1.6; ctx.strokeStyle = '#FBBF24'; ctx.stroke(); }
       }
       for (var m = 0; m < neutrons.length; m++) {
-        var p = neutrons[m]; ctx.fillStyle = p.target ? '#eaf2ff' : 'rgba(148,166,194,0.6)';
+        var p = neutrons[m]; ctx.fillStyle = p.target ? '#F1EADB' : 'rgba(148,166,194,0.6)';
         ctx.beginPath(); ctx.arc(p.x, p.y, p.target ? 2.6 : 2, 0, 6.283); ctx.fill();
       }
     }
@@ -3732,7 +4687,7 @@
       fissEl.textContent = fissions; neuEl.textContent = neutrons.length;
       var k = kValue(); kEl.textContent = k.toFixed(1);
       var label, bg, fg;
-      if (k < 0.95) { label = 'Subcritical'; bg = 'rgba(96,165,250,0.18)'; fg = '#93c5fd'; }
+      if (k < 0.95) { label = 'Subcritical'; bg = 'rgba(73,214,232,0.16)'; fg = '#8FE4F0'; }
       else if (k <= 1.06) { label = 'Steady'; bg = 'rgba(52,211,153,0.18)'; fg = '#6ee7b7'; }
       else { label = 'Runaway'; bg = 'rgba(248,113,113,0.2)'; fg = '#fca5a5'; }
       stateEl.textContent = label; stateEl.style.background = bg; stateEl.style.color = fg;
@@ -3769,51 +4724,827 @@
     }
   })();
 
-  /* ============ VIEW ROUTER (click to navigate, one section at a time) ============ */
-  var navLinks = document.querySelectorAll('#nav-links a');
-  var views = [].slice.call(document.querySelectorAll('.view'));
-  var htmlEl = document.documentElement;
+  /* ============ THE MUSEUM: title -> lobby -> walk a wing ============
+     Three screens, no page scroll. A wing is an ordered list of exhibits and
+     you move through them one at a time, which is the gallery walk: arrive,
+     look, move on. Every exhibit keeps its own markup, charts and citations, so
+     nothing about the content changes, only how you travel between them. */
+  var WINGS = [
+    { id: 'atom',    n: 'Wing I',   name: 'The Atom',
+      desc: 'What actually happens inside a nucleus, and why it releases so much.',
+      rooms: ['fission'] },
+    { id: 'reactor', n: 'Wing II',  name: 'The Reactor',
+      desc: 'How that heat becomes a plant, part by part, reactor to grid.',
+      rooms: ['reactor-motion', 'how'] },
+    { id: 'record',  n: 'Wing III', name: 'The Record',
+      desc: 'The evidence: deaths per unit of energy, uptime, cost, dose, accidents.',
+      rooms: ['data', 'capacity', 'costs', 'incidents', 'exposure', 'simulator', 'case'] },
+    { id: 'frontier',n: 'Wing IV',  name: 'The Frontier',
+      desc: 'Where the field is going, and the problems it has not solved.',
+      rooms: ['limits', 'news'] },
+    { id: 'reading', n: 'Wing V',   name: 'The Reading Room',
+      desc: 'Myths answered, the way into the field, and every source on the walls.',
+      rooms: ['myths', 'careers', 'students', 'about'] }
+  ];
 
-  function activateView(id) {
-    var target = document.getElementById(id);
-    if (!target || !target.classList.contains('view')) target = document.getElementById('top');
-    id = target.id;
-    views.forEach(function (v) { v.classList.toggle('is-active', v === target); });
-    htmlEl.setAttribute('data-view', id);
-    navLinks.forEach(function (a) {
-      var on = a.getAttribute('href') === '#' + id;
-      a.classList.toggle('active', on);
-      if (on) a.scrollIntoView({ block: 'nearest', inline: 'nearest' });
-    });
-    // make sure everything in the shown view is visible, then reset scroll
-    target.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('in'); });
-    if (lenis) lenis.scrollTo(0, { immediate: true });
-    else window.scrollTo(0, 0);
-    window.dispatchEvent(new Event('scroll')); // re-sync scroll-driven sections
-    // view switches change which sections exist in layout, so scrub
-    // trigger positions measured against the old view are stale
+  var body = document.body;
+  var htmlEl = document.documentElement;
+  // looked up on demand: the walk bar is markup that comes after this script
+  var $ = function (id) { return document.getElementById(id); };
+  var walkbar, wbWhere, wbCount, wbPrev, wbNext;
+  function bindWalkbar() {
+    walkbar = $('walkbar'); wbWhere = $('wb-where'); wbCount = $('wb-count');
+    wbPrev = $('wb-prev'); wbNext = $('wb-next');
+    var l = $('wb-lobby');
+    if (l && !l._bound) { l._bound = 1; l.addEventListener('click', function () { screenTo('lobby'); }); }
+  }
+  var wing = null, step = 0;
+
+  function screenTo(name) {
+    bindWalkbar();
+    body.setAttribute('data-screen', name);
+    // a canvas sized while hidden measures 0; resize once it is on screen
+    // the atrium must not keep rendering once you have left it: a WebGL loop
+    // running behind a scrolling page is exactly what makes scrolling stutter
+    if (walkbar) walkbar.hidden = (name !== 'wing');
+    window.scrollTo(0, 0);
     if (HAS_GSAP) ScrollTrigger.refresh();
   }
 
-  function routeFromHash() {
-    activateView((location.hash || '#top').slice(1));
+  function wingById(id) {
+    for (var i = 0; i < WINGS.length; i++) if (WINGS[i].id === id) return WINGS[i];
+    return null;
   }
 
-  // intercept in-page links to views so they swap the view instead of scrolling
+  /* A wing is a walk: every exhibit in it is laid out in order and you scroll
+     through them. Each exhibit's pieces (its heading, its chart, its wall text,
+     its citation) stay dark until you reach them, then light up in sequence,
+     numbers count up and charts draw themselves. */
+  var pieceObserver = null;
+
+  function markPieces(root) {
+    // an exhibit's own top-level blocks are its pieces
+    var wrap = root.querySelector('.wrap') || root;
+    var kids = wrap.children, n = 0;
+    for (var i = 0; i < kids.length; i++) {
+      var k = kids[i];
+      if (k.classList.contains('piece')) continue;
+      k.classList.add('piece');
+      k.style.setProperty('--p', (n++ % 4));
+    }
+  }
+
+  function litPiece(el) {
+    if (el.classList.contains('lit')) return;
+    el.classList.add('lit');
+    // charts draw themselves the moment their piece arrives
+    Object.keys(CHARTS).forEach(function (key) {
+      if (el.querySelector('#' + key + '-chart') && CHARTS[key]._setWidths) CHARTS[key]._setWidths();
+    });
+    // numbers count up on arrival
+    el.querySelectorAll('[data-count]').forEach(function (nEl) {
+      if (nEl._counted) return;
+      nEl._counted = 1;
+      if (typeof runCount === 'function') runCount(nEl);
+    });
+  }
+
+  function watchPieces() {
+    if (pieceObserver) pieceObserver.disconnect();
+    var pieces = document.querySelectorAll('body[data-screen="wing"] .view.in-wing .piece');
+    if (!('IntersectionObserver' in window)) {
+      pieces.forEach(litPiece);
+      return;
+    }
+    pieceObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) { if (en.isIntersecting) { litPiece(en.target); pieceObserver.unobserve(en.target); } });
+    }, { root: document.getElementById('main'), rootMargin: '0px 0px -8% 0px', threshold: 0.06 });
+    pieces.forEach(function (p) { pieceObserver.observe(p); });
+    // fail open: anything already on screen lights immediately
+    pieces.forEach(function (p) {
+      var r = p.getBoundingClientRect();
+      if (r.top < window.innerHeight && r.bottom > 0) litPiece(p);
+    });
+    // scroll-snap moves the panel, not the window, so watch the panel too
+    var panel = document.getElementById('main');
+    if (panel && !panel._pieceScroll) {
+      panel._pieceScroll = 1;
+      panel.addEventListener('scroll', function () {
+        document.querySelectorAll('.view.in-wing .piece:not(.lit)').forEach(function (p) {
+          var r = p.getBoundingClientRect();
+          if (r.top < window.innerHeight * 0.92 && r.bottom > 0) litPiece(p);
+        });
+      }, { passive: true });
+    }
+  }
+
+  /* A wing is a book, and an exhibit is not one page of it but a short stack.
+     Each block of an exhibit gets its own screen unless two are small enough
+     to share one, and a pinned scene contributes a screen per beat. Turning
+     the page moves one screen, never one exhibit. */
+  var pageIdx = 0, turning = false, leaves = [];
+
+  /* Everything an exhibit is made of, in reading order. Most sit inside .wrap;
+     a couple of exhibits carry blocks outside it as well. */
+  function blocksOf(view) {
+    var out = [];
+    [].forEach.call(view.children, function (c) {
+      if (c.classList.contains('wrap')) [].forEach.call(c.children, function (g) { out.push(g); });
+      else out.push(c);
+    });
+    return out;
+  }
+
+  /* Things that are one exhibit piece, however tall: never split these across
+     screens, or a chart loses its placard and a room name loses its lede. */
+  var UNIT = '.section-head, .exhibit, .chart-card, .sim-card, .incident-panel,' +
+             '.about-grid, .tour-figure, .plant-explorer, .duo, .callout, .tiles,' +
+             '.pathway, .bento, .piece, .incident-case, .fission-lab,' +
+             '.seq-scene, .seq-sticky, .pin-scene, .pin-sticky, .pin-stage,' +
+             'figure, table, details';
+  /* On a phone a case and its label cannot share a screen, so the label
+     becomes the page before the object: read the placard, then turn to the
+     thing it describes. Grids of cards break up the same way. Only the real
+     instruments stay whole, because their parts are useless separately. */
+  var UNIT_NARROW = '.section-head, .chart-card, .sim-card, .incident-panel,' +
+                    '.about-grid, .tour-figure, .plant-explorer, .callout,' +
+                    '.piece, .incident-case, .fission-lab,' +
+                    '.seq-scene, .seq-sticky, .pin-scene, .pin-sticky, .pin-stage,' +
+                    'figure, table, details';
+  /* A short laptop screen is under the same constraint as a phone: there is
+     not enough height for a case and its label together. What matters is the
+     room available, not whether the device is called a phone. */
+  function unitsFor() {
+    return (window.innerWidth <= 820 || window.innerHeight < 800) ? UNIT_NARROW : UNIT;
+  }
+
+  /* Heights can only be read while the page is laid out, and every page but
+     the open one is display:none. So the whole wing is laid out unpainted and
+     paged in that window, while the numbers are real. */
+  function buildLeaves() {
+    var views = wing.rooms.map(function (id) { return document.getElementById(id); }).filter(Boolean);
+    // a live sequence needs a scroll runway it will never get here
+    views.forEach(function (v) {
+      v.querySelectorAll('.seq-scene.is-live').forEach(function (sq) { sq.classList.remove('is-live'); });
+      v.classList.add('is-page', 'is-measuring');
+      v.querySelectorAll('.leaf-off').forEach(function (c) { c.classList.remove('leaf-off'); });
+    });
+
+    var room = window.innerHeight * 0.74;   // leaves headroom for margins between blocks
+    var units = unitsFor();
+    var open = null;
+    leaves = [];
+
+    function feed(view, el, depth) {
+      // a pinned scene: the stage stays put and the beat advances
+      if (el._sceneGo && el.classList.contains('is-live')) {
+        for (var i = 0; i < el._sceneSteps; i++) leaves.push({ view: view, els: [el], scene: el, step: i });
+        open = null;
+        return;
+      }
+      // its written-out steps belong to the scene, and are hidden while it is live
+      var prev = el.previousElementSibling;
+      if (el.classList.contains('pin-steps') && prev && prev.classList.contains('is-live')) return;
+
+      var h = el.getBoundingClientRect().height;
+      if (h < 4) return;                                    // nothing to look at
+
+      // A block taller than the screen is paged by its own parts, or the
+      // reference list would be one unreadable page instead of three. Designed
+      // units are never taken apart: a vitrine's placard belongs with its
+      // chart, and a room name is one card, not three lines on three screens.
+      if (h > room && depth < 4 && el.children.length && !el.matches(units)) {
+        open = null;
+        [].forEach.call(el.children, function (c) { feed(view, c, depth + 1); });
+        open = null;
+        return;
+      }
+
+      // A room name owns its screen when there is enough of it to hold one.
+      // The Info room's name is a single line, and a screen of one line is
+      // not a page, it is a pause.
+      var alone = el.classList.contains('section-head') && h > room * 0.34 && !!el.querySelector('h2');
+      if (open && !alone && !open.alone && open.view === view && open.h + h <= room) {
+        open.els.push(el); open.h += h;
+      } else {
+        open = { view: view, els: [el], scene: null, step: 0, h: h, alone: alone };
+        leaves.push(open);
+      }
+    }
+
+    views.forEach(function (view) {
+      open = null;
+      var top = [];
+      [].forEach.call(view.children, function (c) {
+        if (c.classList.contains('wrap')) [].forEach.call(c.children, function (g) { top.push(g); });
+        else top.push(c);
+      });
+      var was = leaves.length;
+      top.forEach(function (el) { feed(view, el, 0); });
+      if (leaves.length === was) leaves.push({ view: view, els: top, scene: null, step: 0 });  // never unreachable
+    });
+
+    /* A heading is not a page. Anything that is only a heading joins what it
+       introduces. */
+    for (var k = leaves.length - 2; k >= 0; k--) {
+      var lk = leaves[k];
+      if (lk.scene || lk.els.length !== 1) continue;
+      if (!/^H[1-4]$/.test(lk.els[0].tagName)) continue;
+      var nx = leaves[k + 1];
+      if (!nx || nx.scene || nx.view !== lk.view) continue;
+      nx.els = lk.els.concat(nx.els);
+      leaves.splice(k, 1);
+    }
+
+    /* Packing by summed heights is an estimate: a grid row is as tall as its
+       tallest cell, margins collapse, and a list reflows when it is shortened.
+       So every page is now laid out for real and measured, and anything that
+       still overflows spills onto the next one. This is the check that makes
+       "one screen, one thing" true rather than intended. */
+    for (var i = 0; i < leaves.length; i++) {
+      var lf = leaves[i];
+      if (lf.scene) continue;
+      /* A single object that is a shade too tall cannot be split, so it is
+         drawn very slightly smaller instead. `zoom` reflows, unlike a
+         transform, so the page really does get shorter; it is capped so
+         nothing is ever shrunk to the point of being hard to read. Content
+         here changes on its own (news.json regenerates), so this is a
+         standing guard rather than a one-off measurement. */
+      if (lf.els.length === 1) {
+        lf.view.classList.add('leaf-solo');
+        applyLeaf(lf.view, lf.els);
+        var el = lf.els[0], k = 1;
+        el.style.zoom = '';
+        /* Step it down and look again, rather than computing a ratio once and
+           trusting it: padding does not shrink with the object, and a figure
+           with a fixed aspect gives back less height than the arithmetic
+           predicts. Stop as soon as it fits, or give up and let it scroll. */
+        while (k > 0.84 && lf.view.scrollHeight > lf.view.clientHeight + 4) {
+          k = Math.round(k * 96) / 100;
+          el.style.zoom = k;
+        }
+        lf.fit = lf.view.scrollHeight <= lf.view.clientHeight + 4 && k < 1 ? k : 0;
+        el.style.zoom = '';
+        continue;
+      }
+      var fits = function () {
+        lf.view.classList.toggle('leaf-solo', lf.els.length === 1);
+        applyLeaf(lf.view, lf.els);
+        return lf.view.scrollHeight <= lf.view.clientHeight + 4;
+      };
+      if (fits()) continue;
+      var spill = [];
+      while (lf.els.length > 1 && !fits()) spill.unshift(lf.els.pop());
+      if (spill.length) leaves.splice(i + 1, 0, { view: lf.view, els: spill, scene: null, step: 0 });
+    }
+
+    views.forEach(function (v) {
+      v.classList.remove('is-page', 'is-measuring', 'leaf-solo', 'leaf-full');
+      v.querySelectorAll('.leaf-off').forEach(function (c) { c.classList.remove('leaf-off'); });
+    });
+    var end = document.getElementById('wing-end');
+    if (end) leaves.push({ view: end, els: [], scene: null, step: 0 });
+  }
+
+  /* Show only this leaf: everything on the path down to its blocks stays, and
+     every sibling along that path goes. */
+  function applyLeaf(view, els) {
+    view.querySelectorAll('.leaf-off').forEach(function (c) { c.classList.remove('leaf-off'); });
+    view.querySelectorAll('.is-part').forEach(function (c) { c.classList.remove('is-part'); });
+    if (!els.length) return;
+    var keep = [];
+    els.forEach(function (el) {
+      for (var p = el; p && p !== view; p = p.parentNode) if (keep.indexOf(p) < 0) keep.push(p);
+    });
+    keep.forEach(function (node) {
+      var parent = node.parentNode, cut = false;
+      [].forEach.call(parent.children, function (c) {
+        if (keep.indexOf(c) < 0) { c.classList.add('leaf-off'); cut = true; }
+      });
+      /* A container showing only some of its children is no longer the layout
+         it was designed as. A two-column case with its label hidden would drop
+         the object into the label's narrow column, where it grows very tall. */
+      if (cut && parent !== view && parent.classList) parent.classList.add('is-part');
+    });
+  }
+
+  function showPage(i, instant) {
+    if (!leaves.length) return;
+    var was = leaves[pageIdx];
+    pageIdx = Math.max(0, Math.min(i, leaves.length - 1));
+    var lf = leaves[pageIdx];
+    // one exhibit is the open page
+    var seen = [];
+    leaves.forEach(function (l) { if (seen.indexOf(l.view) < 0) seen.push(l.view); });
+    seen.forEach(function (v) { v.classList.toggle('is-page', v === lf.view); });
+    applyLeaf(lf.view, lf.els);   // and within it, one leaf
+    lf.view.classList.toggle('leaf-full', !!lf.scene);
+    lf.view.classList.toggle('leaf-solo', !lf.scene && lf.els.length === 1);
+    if (lf.els.length === 1) lf.els[0].style.zoom = lf.fit || '';
+    lf.view.scrollTop = 0;
+    if (lf.view.id !== 'wing-end') {
+      markPieces(lf.view);
+      /* Light the whole path, not just the blocks. When a page is part of a
+         longer list its container is the .reveal, and a container left at
+         opacity 0 renders a page that measures full and looks empty. */
+      lf.els.forEach(function (el) {
+        for (var p = el; p && p !== lf.view.parentNode; p = p.parentNode) {
+          if (!p.classList) continue;
+          if (p.classList.contains('reveal')) p.classList.add('in');
+          if (p.classList.contains('piece')) litPiece(p);
+        }
+        el.querySelectorAll('.reveal').forEach(function (r) { r.classList.add('in'); });
+        // everything on the open page lights up, charts draw, numbers count
+        el.querySelectorAll('.piece').forEach(litPiece);
+      });
+      htmlEl.setAttribute('data-view', lf.view.id);
+    }
+    /* Stepping one beat inside a scene is the camera move that beat is for, so
+       it animates. Arriving at a scene, or jumping across it, is not: playing
+       the whole sequence backwards at speed to reach beat one looks like the
+       page is malfunctioning. */
+    if (lf.scene && lf.scene._sceneGo) {
+      var oneBeat = was && was.scene === lf.scene && Math.abs(was.step - lf.step) === 1;
+      lf.scene._sceneGo(lf.step, instant || !oneBeat);
+    }
+
+    /* Keyboard focus has to travel with the page. Without this it stays on a
+       control that display:none just removed, and Tab restarts from the top of
+       the document on every turn. */
+    lf.view.setAttribute('tabindex', '-1');
+    if (!instant && document.activeElement !== document.body) {
+      try { lf.view.focus({ preventScroll: true }); } catch (err) { lf.view.focus(); }
+    }
+    // where you are, counted in screens rather than exhibits
+    if (wbCount) wbCount.textContent = 'Page ' + (pageIdx + 1) + ' of ' + leaves.length;
+    markLong(lf.view);
+    var say = document.getElementById('page-say');
+    if (say) {
+      var what = lf.view.id === 'wing-end' ? 'End of ' + wing.name
+        : (BOOK_TITLES[lf.view.id] || lf.view.id);
+      say.textContent = what + '. Page ' + (pageIdx + 1) + ' of ' + leaves.length + '.';
+    }
+    if (wbWhere) {
+      var name = lf.view.id === 'wing-end' ? wing.name : (BOOK_TITLES[lf.view.id] || wing.name);
+      wbWhere.textContent = wing.name + (lf.view.id === 'wing-end' ? '' : ' · ' + name);
+    }
+    step = wing.rooms.indexOf(lf.view.id);
+    if (step < 0) step = wing.rooms.length - 1;
+  }
+
+  /* An instrument can be taller than the screen it is standing on. When it is,
+     say so: without a cue the page looks finished and the rest is never found. */
+  function markLong(view) {
+    var bar = document.getElementById('walkbar');
+    if (!bar) return;
+    var show = function () {
+      var room = view.scrollHeight - view.clientHeight;
+      // a stray pixel or two is not "more on this page"
+      bar.classList.toggle('is-long', room > 28 && view.scrollTop < room - 8);
+    };
+    show();
+    // fonts, charts and canvases settle a frame or two after the page opens,
+    // and the first measurement is taken before they do
+    requestAnimationFrame(show);
+    setTimeout(show, 400);
+    if (!view._longWatch) {
+      view._longWatch = 1;
+      view.addEventListener('scroll', show, { passive: true });
+    }
+  }
+
+  /* Turn the page: a leaf sweeps across, and the next screen is beneath it. */
+  function turnPage(dir) {
+    if (turning) return;
+    var next = pageIdx + dir;
+    if (next < 0 || next >= leaves.length) return;
+    var stage = document.getElementById('pageflip');
+    if (REDUCE || !HAS_GSAP || !stage) { showPage(next); return; }
+    // a beat of the same pinned scene is a move within one picture, not a new
+    // page: let the camera carry it rather than throwing a sheet over it
+    var here = leaves[pageIdx], there = leaves[next];
+    if (here.scene && there.scene === here.scene) { showPage(next); return; }
+    var sheet = document.getElementById('pf-sheet'),
+        front = document.getElementById('pf-front'),
+        shade = document.getElementById('pf-shade');
+    turning = true;
+
+    /* Photograph the page you are leaving and put it on the front of the sheet.
+       A clone is the only way to have the old page and the new one on screen at
+       once, because most turns move between two leaves of the same element. */
+    front.innerHTML = '';
+    var snap = leaves[pageIdx].view.cloneNode(true);
+    snap.removeAttribute('id');
+    snap.querySelectorAll('[id]').forEach(function (n) { n.removeAttribute('id'); });
+    // media does not survive a clone, and a second copy would fight for bandwidth
+    snap.querySelectorAll('video, iframe').forEach(function (n) { n.remove(); });
+    // a cloned canvas comes back blank, so the picture is copied across
+    var src = leaves[pageIdx].view.querySelectorAll('canvas'),
+        dst = snap.querySelectorAll('canvas');
+    for (var c = 0; c < dst.length; c++) {
+      if (!src[c] || !src[c].width) continue;
+      dst[c].width = src[c].width; dst[c].height = src[c].height;
+      try { dst[c].getContext('2d').drawImage(src[c], 0, 0); } catch (err) { /* tainted; leave it */ }
+    }
+    front.appendChild(snap);
+    stage.classList.add('is-on');
+
+    // forward, the sheet lifts off the screen and turns to the left; back, it
+    // comes in from the left and lands flat
+    var from = dir > 0 ? 0 : -180, to = dir > 0 ? -180 : 0;
+    gsap.set(sheet, { rotateY: from, transformOrigin: 'left center' });
+    gsap.set(shade, { opacity: 0 });
+    gsap.set(front, { '--sh': 0 });
+
+    gsap.timeline({
+      onComplete: function () {
+        stage.classList.remove('is-on');
+        front.innerHTML = '';
+        turning = false;
+      }
+    })
+      // the new page is already there, under the sheet, from the first frame
+      .add(function () { showPage(next); }, 0)
+      .to(shade, { opacity: 0.8, duration: 0.34, ease: 'power1.in' }, 0.1)
+      .to(sheet, { rotateY: to, duration: 0.82, ease: 'power2.in' }, 0)
+      .to(front, { '--sh': 0.7, duration: 0.42, ease: 'power1.in' }, 0.1)
+      .to(shade, { opacity: 0, duration: 0.34, ease: 'power1.out' }, 0.46);
+  }
+
+  /* Lay the wing out and open it at the chosen exhibit. */
+  function showExhibit() {
+    bindWalkbar();
+    var rooms = wing.rooms;
+    step = Math.max(0, Math.min(step, rooms.length - 1));
+    document.querySelectorAll('.view.in-wing').forEach(function (v) { v.classList.remove('in-wing', 'is-page'); });
+    rooms.forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) el.classList.add('in-wing');
+    });
+    var end = document.getElementById('wing-end');
+    if (end) {
+      end.hidden = false;
+      end.classList.remove('is-page');
+      var last = document.getElementById(rooms[rooms.length - 1]);
+      if (last && last.parentNode) last.parentNode.insertBefore(end, last.nextSibling);
+      var t = document.getElementById('wing-end-title');
+      if (t) t.textContent = 'That is ' + wing.name + '.';
+      var out = document.getElementById('wing-end-lobby');
+      if (out && !out._bound) {
+        out._bound = 1;
+        out.addEventListener('click', function () { screenTo('lobby'); });
+      }
+    }
+    if (history.replaceState) history.replaceState(null, '', '#' + wing.id);
+    /* The numbered references belong to the Sources exhibit. Move the footer
+       inside it once, so the pager treats it as that exhibit's last blocks
+       rather than page furniture that nothing can reach. */
+    var about = document.getElementById('about'), foot = document.getElementById('sources');
+    if (about && foot && !about.contains(foot)) {
+      (about.querySelector('.wrap') || about).appendChild(foot);
+      /* The list runs over several pages, and an <ol> renumbers from 1 when
+         the items above are hidden. Every figure on the site cites a reference
+         by number, so the numbers are pinned to be absolute. */
+      var n = 0;
+      foot.querySelectorAll('.ref-list > li').forEach(function (li) { li.value = ++n; });
+    }
+    buildLeaves();
+    /* A scrubbed ScrollTrigger with nothing to scrub leaves its timeline at
+       the far end. Park each scene on its first beat now, before any of it is
+       on screen. */
+    rooms.forEach(function (id) {
+      var v = document.getElementById(id);
+      if (!v) return;
+      v.querySelectorAll('.pin-scene').forEach(function (sc) {
+        if (sc._sceneGo) sc._sceneGo(0, true);
+      });
+    });
+    // open at the first screen of the exhibit that was asked for
+    var want = rooms[step], at = 0;
+    for (var i = 0; i < leaves.length; i++) { if (leaves[i].view.id === want) { at = i; break; } }
+    showPage(at, true);
+  }
+
+  /* the wheel, arrow keys and touch all turn pages */
+  (function () {
+    /* One gesture turns one page. A trackpad flick keeps firing wheel events
+       for about a second after your fingers leave it, and without a lock that
+       tail throws three or four more pages past the one you wanted. So: a
+       higher threshold, a fresh count for each new gesture, and a lock that
+       swallows the momentum tail while the page is turning. */
+    var acc = 0, lastWheel = 0, lockUntil = 0;
+    var STEP = 240, GESTURE_GAP = 1500, LOCK = 1150, QUIET = 220;
+
+    /* On a page taller than the screen, the wheel reads that page first and
+       only turns it once you reach the edge. Without this the page turns out
+       from under you and the bottom of a tall exhibit is unreachable. */
+    function atEdge(dy) {
+      var pg = document.querySelector('.view.in-wing.is-page, .wing-end.is-page');
+      if (!pg) return true;
+      var room = pg.scrollHeight - pg.clientHeight;
+      if (room <= 4) return true;
+      return dy > 0 ? pg.scrollTop >= room - 2 : pg.scrollTop <= 2;
+    }
+    window.addEventListener('wheel', function (e) {
+      if (body.getAttribute('data-screen') !== 'wing') return;
+      var now = Date.now();
+      if (now - lastWheel > GESTURE_GAP) acc = 0;   // a long pause starts the count over
+      lastWheel = now;
+      /* While the lock is up, every further event pushes it out again, so it
+         only lifts once the wheel has actually been still for a moment. A
+         fixed lock cannot work: a long flick outlasts any constant you pick. */
+      if (turning || now < lockUntil) { acc = 0; lockUntil = Math.max(lockUntil, now + QUIET); return; }
+      if (!atEdge(e.deltaY)) { acc = 0; return; }
+      acc += e.deltaY;
+      if (Math.abs(acc) < STEP) return;
+      var dir = acc > 0 ? 1 : -1;
+      acc = 0; lockUntil = now + LOCK;
+      turnPage(dir);
+    }, { passive: true });
+    window.addEventListener('keydown', function (e) {
+      if (body.getAttribute('data-screen') !== 'wing') return;
+      if (e.target && /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
+      // left/right always turn; up/down read a tall page first, then turn
+      if (e.key === 'ArrowRight' || e.key === 'PageDown') { e.preventDefault(); turnPage(1); }
+      else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); turnPage(-1); }
+      else if (e.key === 'ArrowDown' && atEdge(1)) { e.preventDefault(); turnPage(1); }
+      else if (e.key === 'ArrowUp' && atEdge(-1)) { e.preventDefault(); turnPage(-1); }
+      else if (e.key === 'Escape') { e.preventDefault(); screenTo('lobby'); }
+    });
+    var ty = null;
+    window.addEventListener('touchstart', function (e) { ty = e.touches[0].clientY; }, { passive: true });
+    window.addEventListener('touchend', function (e) {
+      if (body.getAttribute('data-screen') !== 'wing' || ty === null) return;
+      var dy = ty - (e.changedTouches[0] ? e.changedTouches[0].clientY : ty);
+      if (Math.abs(dy) > 70 && atEdge(dy) && Date.now() > lockUntil) {
+        lockUntil = Date.now() + LOCK;
+        turnPage(dy > 0 ? 1 : -1);
+      }
+      ty = null;
+    }, { passive: true });
+  })();
+
+  function enterWing(id, atStep) {
+    var w = wingById(id);
+    if (!w) return;
+    wing = w; step = atStep || 0;
+    screenTo('wing');
+    showExhibit();
+  }
+
+  /* ---- build the library: a shelf per wing, a book per exhibit ---- */
+  // Titles for the spines. Falls back to the exhibit's own heading if missing.
+  var BOOK_TITLES = {
+    fission: 'Fission', 'reactor-motion': 'A Real Plant', how: 'Inside One',
+    data: 'Death Rates', capacity: 'Uptime', costs: 'Costs',
+    incidents: 'Accidents', exposure: 'Radiation', simulator: 'Build a Grid',
+    'case': 'The Case', limits: 'Problems', news: 'Right Now',
+    myths: 'Myths', careers: 'Careers', students: 'Your Way In',
+    about: 'Sources'
+  };
+  /* Binding cloth, one colour per wing, so a shelf reads as a set and you can
+     tell at a glance which wing a book belongs to. All five sit at roughly the
+     same lightness, because the spine lettering is near-black and has to stay
+     legible on every one of them. */
+  var WING_CLOTH = {
+    atom:     '#8A7550',   // ochre
+    reactor:  '#7C6B45',   // tan
+    record:   '#6E6653',   // olive
+    frontier: '#5E6B63',   // slate green
+    reading:  '#6B5A47'    // walnut
+  };
+  /* Volumes in a wing are bound in the same cloth from slightly different
+     dye lots, the way a real set is. */
+  function dyeLot(hex, k) {
+    var n = parseInt(hex.slice(1), 16);
+    var ch = [(n >> 16) & 255, (n >> 8) & 255, n & 255].map(function (v) {
+      return Math.max(0, Math.min(255, Math.round(v * k)));
+    });
+    return '#' + ch.map(function (v) { return ('0' + v.toString(16)).slice(-2); }).join('');
+  }
+  var LOTS = [1, 0.9, 1.08, 0.95, 1.04, 0.88, 1.12];
+
+  /* A publisher's device at the foot of each spine: one mark per exhibit, so a
+     book is findable by its symbol before you have read its title. Drawn, not
+     lettered, to match the rest of the building. */
+  var BOOK_MARKS = {
+    fission:          '<circle cx="12" cy="12" r="8"/><path d="M12 4l-2.4 5.6 4.8 1.6-2.4 4.8"/>',
+    'reactor-motion': '<path d="M8 21V10L6 4h12l-2 6v11z"/><path d="M10 2.2c1.1-1 2.9-1 4 0"/>',
+    how:              '<path d="M3.5 20.5h17"/><path d="M6 20.5V13a6 6 0 0 1 12 0v7.5"/><circle cx="12" cy="13.5" r="2"/>',
+    data:             '<path d="M4 20.5V6M9.3 20.5v-8M14.7 20.5v-5M20 20.5v-2.4"/>',
+    capacity:         '<circle cx="12" cy="12" r="8"/><path d="M12 7v5.4l3.2 2"/>',
+    costs:            '<circle cx="12" cy="12" r="8"/><path d="M12 6.6v10.8"/><path d="M14.6 9.6c0-1.2-1.2-2.1-2.6-2.1s-2.6.9-2.6 2.1S10.6 11.8 12 11.8s2.6 1 2.6 2.2-1.2 2.1-2.6 2.1-2.6-.9-2.6-2.1"/>',
+    incidents:        '<path d="M12 3.6L2.6 20.4h18.8z"/><path d="M12 10v4.2M12 17.4h.01"/>',
+    exposure:         '<circle cx="12" cy="12" r="2.3"/><path d="M12 2.6a9.4 9.4 0 0 1 8.1 4.7l-4.1 2.4A4.7 4.7 0 0 0 12 7.3z"/><path d="M12 2.6a9.4 9.4 0 0 1 8.1 4.7l-4.1 2.4A4.7 4.7 0 0 0 12 7.3z" transform="rotate(120 12 12)"/><path d="M12 2.6a9.4 9.4 0 0 1 8.1 4.7l-4.1 2.4A4.7 4.7 0 0 0 12 7.3z" transform="rotate(240 12 12)"/>',
+    simulator:        '<path d="M3.5 7h17M3.5 12h17M3.5 17h17"/><circle cx="9" cy="7" r="2.1"/><circle cx="15.5" cy="12" r="2.1"/><circle cx="7" cy="17" r="2.1"/>',
+    'case':           '<path d="M12 5v14M7 19.5h10M3 9.2h18"/><path d="M3 9.2L1.4 12.8h3.2z"/><path d="M21 9.2l1.6 3.6h-3.2z"/>',
+    limits:           '<path d="M13.5 2.8L9.6 9.4l4.2 1.9-3.4 4.2 3.6 1.8-2.4 4.1"/>',
+    news:             '<circle cx="12" cy="12" r="2.1"/><path d="M7.9 7.9a6 6 0 0 0 0 8.2M16.1 7.9a6 6 0 0 1 0 8.2M4.9 4.9a10 10 0 0 0 0 14.2M19.1 4.9a10 10 0 0 1 0 14.2"/>',
+    myths:            '<path d="M3.5 9h14l-3.4-3.4M20.5 15h-14l3.4 3.4"/>',
+    careers:          '<path d="M2.8 17.6h18.4"/><path d="M5.2 17.6v-2.2a6.8 6.8 0 0 1 13.6 0v2.2"/><path d="M9.6 8.9V5.4h4.8v3.5"/>',
+    students:         '<path d="M9.4 3.2h9.4v17.6H9.4"/><path d="M2.6 12h9.6M9 8.2l3.8 3.8L9 15.8"/>',
+    about:            '<path d="M3 5.2h6.6a2.4 2.4 0 0 1 2.4 2.4v11.6a2.4 2.4 0 0 0-2.4-2.4H3z"/><path d="M21 5.2h-6.6A2.4 2.4 0 0 0 12 7.6v11.6a2.4 2.4 0 0 1 2.4-2.4H21z"/>'
+  };
+
+  function bookTitle(id) {
+    if (BOOK_TITLES[id]) return BOOK_TITLES[id];
+    var el = document.getElementById(id);
+    var h = el && el.querySelector('h2');
+    return h ? h.textContent.trim() : id;
+  }
+
+  var shelvesEl = document.getElementById('shelves');
+  if (shelvesEl) {
+    WINGS.forEach(function (w, wi) {
+      var shelf = document.createElement('section');
+      shelf.className = 'shelf';
+      var count = w.rooms.length;
+      shelf.style.setProperty('--wing', dyeLot(WING_CLOTH[w.id] || '#6E6653', 1.55));
+      shelf.innerHTML =
+        '<div class="shelf__label"><span class="shelf__n">' + w.n + '</span>' + w.name +
+        '<span class="shelf__of">' + count + (count === 1 ? ' volume' : ' volumes') + '</span></div>' +
+        '<div class="shelf__board"></div>';
+      var board = shelf.querySelector('.shelf__board');
+      w.rooms.forEach(function (id, i) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        var t = bookTitle(id);
+        var hVar = (t.length + i * 7) % 3;              // stable per book
+        var wVar = (t.length + wi * 5) % 4;
+        b.className = 'book'
+          + (hVar === 0 ? ' book--tall' : hVar === 2 ? ' book--short' : '')
+          + (wVar === 0 ? ' book--wide' : wVar === 3 ? ' book--thin' : '');
+        var cloth = WING_CLOTH[w.id] || '#6E6653';
+        b.style.setProperty('--book', dyeLot(cloth, LOTS[i % LOTS.length]));
+        b.setAttribute('aria-label', 'Open ' + bookTitle(id) + ', in ' + w.name);
+        b.innerHTML = '<span class="book__spine">' + t + '</span>'
+          + (BOOK_MARKS[id]
+              ? '<svg class="book__mark" viewBox="0 0 24 24" fill="none" stroke="currentColor"'
+                + ' stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"'
+                + ' aria-hidden="true">' + BOOK_MARKS[id] + '</svg>'
+              : '');
+        b.addEventListener('click', function () { openBook(b, w.id, i, t); });
+        board.appendChild(b);
+      });
+      shelvesEl.appendChild(shelf);
+    });
+  }
+
+  /* One sheet of paper is not a riffle. Clone the leaf into a small block of
+     pages the first time a book is opened, front sheet first. */
+  var RIFFLE = 6, riffled = null;
+  function riffleLeaves() {
+    if (riffled) return riffled;
+    var first = document.getElementById('bo-leaf');
+    if (!first) return [];
+    for (var i = 1; i < RIFFLE; i++) {
+      var c = first.cloneNode(true);
+      c.id = 'bo-leaf-' + i;
+      first.parentNode.insertBefore(c, first);   // earlier in the DOM = deeper in the stack
+    }
+    riffled = [].slice.call(document.querySelectorAll('.bo__leaf')).reverse();
+    return riffled;
+  }
+
+  /* Opening a book, in four beats: it comes off the shelf closed, both covers
+     swing apart into a spread, a leaf turns off the right page onto the left,
+     and the camera pushes into the right page until it fills the screen and
+     becomes the exhibit. Reduced motion goes straight to the exhibit. */
+  function openBook(bookEl, wingId, atStep, title) {
+    var stage = document.getElementById('bookopen');
+    if (REDUCE || !HAS_GSAP || !stage) { enterWing(wingId, atStep); return; }
+    stage.classList.add('is-on');           // laid out before it is measured
+    var book  = document.getElementById('bo-book'),
+        left  = document.getElementById('bo-left'),
+        leaf  = riffleLeaves(),
+        ttl   = document.getElementById('bo-title'),
+        ctl   = document.getElementById('bo-ctitle'),
+        wng   = document.getElementById('bo-wing'),
+        flood = document.getElementById('bo-flood'),
+        scrim = document.getElementById('bo-scrim');
+
+    stage.style.setProperty('--book', getComputedStyle(bookEl).getPropertyValue('--book') || '#6E6653');
+    if (ttl) ttl.textContent = title || '';
+    if (ctl) ctl.textContent = title || '';
+    var wg = wingById(wingId);
+    if (wng && wg) wng.innerHTML = wg.n + '<b>' + wg.name + '</b>';
+
+
+    /* A shut book is only the right half of the spread, so its visible centre
+       sits a quarter of the spread's width to the right of the element centre.
+       Everything is offset by that quarter until the covers open, which is why
+       the book slides left as it opens: the spread is finding its centre. */
+    var q = book.offsetWidth / 4;
+    var r = bookEl.getBoundingClientRect();
+    var fromX = (r.left + r.width / 2 - window.innerWidth / 2) - q;
+    var fromY = r.top + r.height / 2 - window.innerHeight / 2;
+
+    gsap.set(book, { x: fromX, y: fromY, scale: 0.1, rotateY: 26, transformOrigin: '50% 50%', opacity: 1 });
+    gsap.set(left, { rotateY: 180, z: 6 });   // shut: folded over the right half, cover out
+    // the block of pages sits on the right, front sheet nearest you
+    leaf.forEach(function (lf, i) { gsap.set(lf, { rotateY: 0, z: 3 - i * 0.35, opacity: 0 }); });
+    gsap.set([ttl, flood, scrim], { opacity: 0 });
+
+    gsap.timeline({
+      onComplete: function () {
+        enterWing(wingId, atStep);
+        stage.classList.remove('is-on');
+        gsap.set([book, left, ttl, flood, scrim].concat(leaf), { clearProps: 'all' });
+      }
+    })
+      // 1. off the shelf, still shut, turning to face you
+      .to(scrim, { opacity: 0.95, duration: 0.38, ease: 'power1.out' }, 0)
+      .to(book, { x: -q, y: 0, scale: 1, duration: 0.55, ease: 'power3.out' }, 0)
+      // 2. both covers swing apart and the spread settles flat and centred
+      .set(leaf, { opacity: 1 }, 0.42)
+      .to(left, { rotateY: 0, z: 0, duration: 0.7, ease: 'power2.inOut' }, 0.42)
+      .to(book, { x: 0, rotateY: 0, duration: 0.7, ease: 'power2.inOut' }, 0.42)
+      // 3. it riffles: the sheets go over in quick succession, about a second
+      //    of pages, and the last one uncovers the page you were looking for
+      .to(leaf, {
+        rotateY: -172, duration: 0.52, ease: 'power1.inOut',
+        stagger: { each: 0.1, from: 'start' }
+      }, 1.05)
+      // 4. what the last sheet uncovers is the exhibit, and the camera goes in
+      .to(ttl, { opacity: 1, duration: 0.4, ease: 'power1.out' }, 1.86)
+      .set(book, { transformOrigin: '75% 50%' }, 2.24)
+      .to(book, { scale: 8, duration: 0.6, ease: 'power2.in' }, 2.26)
+      .to(flood, { opacity: 1, duration: 0.48, ease: 'power2.in' }, 2.4);
+  }
+
+  /* The title screen scrolls into the library: push down and the entrance
+     recedes and dissolves, and you are standing at the shelves. The button does
+     the same thing for anyone who would rather click. */
+  (function () {
+    var title = document.getElementById('screen-title');
+    if (!title) return;
+    var inner = title.querySelector('.entry__inner');
+    var acc = 0, busy = false;
+
+    function walkIn() {
+      if (busy) return;
+      busy = true;
+      var finish = function () {
+        screenTo('lobby');
+        if (inner) { inner.style.transform = ''; inner.style.opacity = ''; inner.style.filter = ''; }
+        acc = 0; busy = false;
+      };
+      if (inner && !REDUCE && HAS_GSAP) {
+        gsap.to(inner, { scale: 1.7, opacity: 0, filter: 'blur(7px)', duration: 0.8,
+                         ease: 'power2.in', onComplete: finish });
+      } else { finish(); }
+    }
+
+    window.addEventListener('wheel', function (e) {
+      if (document.body.getAttribute('data-screen') !== 'title' || busy) return;
+      if (e.deltaY <= 0) { acc = Math.max(0, acc + e.deltaY); return; }
+      acc += e.deltaY;
+      if (inner && !REDUCE) {
+        var p = Math.min(acc / 260, 1);
+        inner.style.transform = 'scale(' + (1 + p * 0.12) + ')';
+        inner.style.opacity = String(1 - p * 0.35);
+      }
+      if (acc > 260) walkIn();
+    }, { passive: true });
+
+    var y0 = null;
+    window.addEventListener('touchstart', function (e) { y0 = e.touches[0].clientY; }, { passive: true });
+    window.addEventListener('touchmove', function (e) {
+      if (document.body.getAttribute('data-screen') !== 'title' || y0 === null) return;
+      if (y0 - e.touches[0].clientY > 90) { y0 = null; walkIn(); }
+    }, { passive: true });
+
+    window.addEventListener('keydown', function (e) {
+      if (document.body.getAttribute('data-screen') !== 'title') return;
+      if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); walkIn(); }
+    });
+  })();
+
+  var goLobby = document.getElementById('go-lobby');
+  if (goLobby) goLobby.addEventListener('click', function () { screenTo('lobby'); });
+
+  /* any in-page link to a room jumps into whichever wing holds it */
   document.addEventListener('click', function (e) {
     var a = e.target.closest ? e.target.closest('a[href^="#"]') : null;
     if (!a) return;
-    var href = a.getAttribute('href');
-    if (!href || href.length < 2) return;
-    var el = document.getElementById(href.slice(1));
-    if (el && el.classList.contains('view')) {
-      e.preventDefault();
-      if (location.hash !== href) location.hash = href.slice(1);
-      else activateView(href.slice(1));
+    var id = a.getAttribute('href').slice(1);
+    if (!id) return;
+    for (var i = 0; i < WINGS.length; i++) {
+      var k = WINGS[i].rooms.indexOf(id);
+      if (k !== -1) { e.preventDefault(); enterWing(WINGS[i].id, k); return; }
     }
   });
-  window.addEventListener('hashchange', routeFromHash);
-  routeFromHash();
+
+  /* deep links: #wingId/roomId, otherwise start at the doors */
+  (function () {
+    var h = (location.hash || '').slice(1);
+    if (h.indexOf('/') !== -1) {
+      var parts = h.split('/'), w = wingById(parts[0]);
+      if (w) { var k = w.rooms.indexOf(parts[1]); enterWing(w.id, k === -1 ? 0 : k); return; }
+    }
+    if (h === 'lobby') { screenTo('lobby'); return; }
+    screenTo('title');
+  })();
 
   /* Nav scroll affordance: the link rail hides its scrollbar, so mark it when
      its contents overflow and note when it has been scrolled to the end. CSS
@@ -3849,5 +5580,56 @@
   }
 })();
 </script>
+<!-- the walk bar: where you are in the wing and how to move through it -->
+<div class="pageflip" id="pageflip" aria-hidden="true">
+  <div class="pageflip__shade" id="pf-shade"></div>
+  <!-- One sheet with two sides. The sheet is what rotates; the faces are fixed
+       to it, one at 0 and one at 180, so they are genuinely back to back. The
+       front carries a snapshot of the page you are leaving, so what turns over
+       is the page you were just reading rather than a blank slab. -->
+  <div class="pageflip__sheet" id="pf-sheet">
+    <div class="pageflip__face pageflip__front" id="pf-front"></div>
+    <div class="pageflip__face pageflip__leaf" id="pf-leaf"></div>
+  </div>
+</div>
+
+<div class="bookopen" id="bookopen" aria-hidden="true">
+  <div class="bookopen__scrim" id="bo-scrim"></div>
+  <div class="bo__book" id="bo-book">
+    <div class="bo__half bo__half--l" id="bo-left">
+      <div class="bo__face bo__face--f bo__paper"><span class="bo__wing" id="bo-wing"></span></div>
+      <div class="bo__face bo__face--b bo__cover"><span class="bo__ctitle" id="bo-ctitle"></span></div>
+    </div>
+    <div class="bo__half bo__half--r" id="bo-right">
+      <div class="bo__face bo__face--f bo__paper"><span class="bo__title" id="bo-title"></span></div>
+      <div class="bo__face bo__face--b bo__cover"></div>
+    </div>
+    <div class="bo__leaf" id="bo-leaf">
+      <div class="bo__face bo__face--f bo__paper"></div>
+      <div class="bo__face bo__face--b bo__paper"></div>
+    </div>
+    <!-- five more leaves are cloned from this one at load, so the book has a
+         block of pages to riffle through rather than a single sheet -->
+  </div>
+  <div class="bo__flood" id="bo-flood"></div>
+</div>
+
+<div class="walkbar" id="walkbar" hidden>
+  <button type="button" class="wb-exit" id="wb-lobby" aria-label="Back to the library">&larr; Lobby</button>
+  <span class="walkbar__where" id="wb-where"></span>
+  <span class="walkbar__mid" id="wb-count"></span>
+</div>
+<!-- Turning a page swaps the screen with no scroll and no page load, so a
+     screen reader gets no cue on its own. This says what you just turned to. -->
+<p class="sr-only" id="page-say" role="status" aria-live="polite" aria-atomic="true"></p>
+
+<!-- the way out at the end of a wing -->
+<section class="wing-end" id="wing-end" hidden aria-label="End of wing">
+  <div>
+    <p class="wing-end__k">End of the wing</p>
+    <h2 id="wing-end-title">That is the wing.</h2>
+    <p><button type="button" class="btn" id="wing-end-lobby">Back to the lobby <span class="arr">&rarr;</span></button></p>
+  </div>
+</section>
 </body>
 </html>
