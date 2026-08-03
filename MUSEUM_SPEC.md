@@ -198,6 +198,40 @@ the slider readouts are.
 - Reduced motion: the book opens straight through, pages turn with no leaf, and
   everything is at full opacity. Verified.
 
+## The plant walkthrough: a machine that starts up (built)
+
+The schematic animates everything at once, which is right for a diagram you are
+reading. Walking the plant is a different thing:
+
+- `#plant-cam-svg` opens **cold** — flows still, fuel dim, rotor hidden, no plume.
+- Reaching a beat adds `run-N` **cumulatively**, so each component starts working
+  and keeps working. By the cooling tower the whole plant is running, because you
+  started it. Core heat, boiling tube bundle, spinning rotor and live windings,
+  condensate return, current down the transmission lines, plume.
+- `run-N` is set from `_sceneGo`, not from a timeline `call()`. **A GSAP callback
+  at position 0 never fires on an instant seek** — the same trap that left the
+  beat rail unpainted on its first beat. Anything that must be true *at* a beat
+  belongs in the function that sets the beat.
+- The stage lost its photographic backdrop (a scroll-era plate that just washed
+  out around the drawing) and the figure now covers its frame with
+  `preserveAspectRatio="slice"`. Covering narrows the horizontal field of view,
+  so the camera scale is multiplied by `frameAspect / sourceAspect` or the
+  subject of each beat sits half outside the frame. Edges fade into the ground
+  rather than cutting through a label.
+
+## Dead scroll machinery, swept
+
+Nothing in a wing scrolls, so every scroll-driven thing was either broken or
+waste. Removed: the hero-lead and tour-frame scrubs, the entry fly-through
+(walkIn animates that by hand), `ScrollTrigger.refresh()` on every page turn, a
+`requestAnimationFrame` loop painting a canvas inside a `display:none` section,
+and the frame-sequence decoder that decoded a clip for a canvas the museum never
+shows. The three pinned scenes are plain `paused: true` timelines now.
+
+**The page went from six ScrollTriggers to none.** If a scrubbed trigger ever
+reappears, assume it is parked at one end of its tween: that is what blanked the
+room names, sat the scenes on their last beat, and froze the beat rails.
+
 ## Status
 
 Built: title screen, the library, the four-beat book opening with the riffle,

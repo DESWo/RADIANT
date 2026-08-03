@@ -662,6 +662,25 @@
   /* a screen holding a single exhibit piece gives it the whole screen */
   .js body[data-screen="wing"] .view.in-wing.leaf-solo { padding: 1.2rem 0 3.4rem; }
   .js body[data-screen="wing"] .view.in-wing.leaf-full { padding: 0; }
+  .js body[data-screen="wing"] .leaf-full > .wrap { max-width: none; padding: 0; width: 100%; }
+
+  /* The plant tour, full bleed: the footage is the room you are standing in.
+     The credit sits over the foot of it rather than pushing it up the page. */
+  .js body[data-screen="wing"] .leaf-full .tour-figure {
+    max-width: none; margin: 0; width: 100%; height: 100vh; position: relative;
+  }
+  .js body[data-screen="wing"] .leaf-full .tour-frame {
+    border: 0; box-shadow: none; width: 100%; height: 100%;
+  }
+  .js body[data-screen="wing"] .leaf-full .tour-frame video {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+  }
+  .js body[data-screen="wing"] .leaf-full .tour-figure figcaption {
+    position: absolute; left: 0; right: 0; bottom: 0; margin: 0;
+    padding: 4rem clamp(1.2rem, 5vw, 3rem) 4.4rem;
+    font-size: 0.8rem; color: rgba(228,220,201,0.82);
+    background: linear-gradient(to top, rgba(12,11,8,0.92), rgba(12,11,8,0));
+  }
 
   /* The grid model is one instrument: the sliders, the readouts and the city
      they drive have to be on the screen together or the feedback loop that
@@ -679,6 +698,35 @@
   /* A pinned scene was a sticky stage travelling through a scroll runway.
      There is no scroll here, so the stage simply is the page, and its beats
      are turned one at a time like everything else. */
+  /* The photographic backdrop was a scroll-era device: a plate behind the
+     drawing that crossfaded as you travelled. Sitting still behind a page it
+     just washes out around every edge of the diagram, so the plant stage gets
+     the same clean dark ground the construction scene already uses, and the
+     drawing itself takes the room. */
+  .js body[data-screen="wing"] .stage-bg { display: none; }
+  .js body[data-screen="wing"] .pin-stage { background: #0C0B08; }
+  @media (min-width: 821px) {
+    .js body[data-screen="wing"] .pin-stage { grid-template-columns: 1.95fr 1fr; }
+    .js body[data-screen="wing"] .pin-figure { height: min(76vh, 47rem); }
+    .js body[data-screen="wing"] .pin-figure svg { width: 100%; height: 100%; }
+  }
+  /* The frame covers rather than letterboxes, so it always crops something at
+     the edges. Let the drawing fall away into the dark there instead of being
+     cut through the middle of a label. */
+  .js body[data-screen="wing"] .pin-figure::after {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background:
+      linear-gradient(to top,   #0C0B08 0%, rgba(12,11,8,0) 13%),
+      linear-gradient(to right, #0C0B08 0%, rgba(12,11,8,0) 7%),
+      linear-gradient(to left,  #0C0B08 0%, rgba(12,11,8,0) 7%);
+  }
+  /* the fission stage has its own ground, so its fade has to match it */
+  .js body[data-screen="wing"] #fission-scene .pin-figure::after {
+    background:
+      linear-gradient(to top,   #0B1422 0%, rgba(11,20,34,0) 13%),
+      linear-gradient(to right, #0B1422 0%, rgba(11,20,34,0) 7%),
+      linear-gradient(to left,  #0B1422 0%, rgba(11,20,34,0) 7%);
+  }
   .js body[data-screen="wing"] .pin-scene.is-live { height: auto; margin-block: 0; }
   .js body[data-screen="wing"] .pin-sticky { position: relative; top: auto; }
   .js body[data-screen="wing"] .pin-stage {
@@ -1386,6 +1434,69 @@
     .fuel { animation: fuelglow 2.6s ease-in-out infinite; }
     @keyframes fuelglow { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
   }
+
+  /* ---- The walkthrough: a cold plant that starts up as you reach each part ----
+     In the schematic everything animates at once, which is right for a diagram
+     you are reading. Walking the plant is a different thing: the machine is
+     dark and still until the camera arrives at a component, and then that
+     component starts working and keeps working. By the last beat the whole
+     plant is running, because you started it. `run-N` is added cumulatively. */
+  #plant-cam-svg .flow { animation: none; stroke-dasharray: 10 9; opacity: 0.42; }
+  #plant-cam-svg .fuel,
+  #plant-cam-svg .puff { animation: none; }
+  #plant-cam-svg .fuel { opacity: 0.45; }
+  #plant-cam-svg .puff { opacity: 0.2; }
+  #plant-cam-svg .pf-rotor, #plant-cam-svg .pf-hub { opacity: 0; }
+  #plant-cam-svg .pf-bolt { opacity: 0.25; }
+  #plant-cam-svg .pf-tubes { opacity: 0.25; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* 1 - the core: the fuel comes up to heat and the primary loop moves */
+    #plant-cam-svg.run-1 .fuel { opacity: 1; animation: core-heat 1.9s ease-in-out infinite; }
+    #plant-cam-svg.run-1 .pf-primary { opacity: 1; animation: flowdash 1s linear infinite; }
+    @keyframes core-heat {
+      0%, 100% { opacity: 1; filter: drop-shadow(0 0 3px rgba(251,191,36,0.7)); }
+      50% { opacity: 0.72; filter: drop-shadow(0 0 9px rgba(251,191,36,0.95)); }
+    }
+    /* 2 - the steam generator: the tube bundle boils the second loop */
+    #plant-cam-svg.run-2 .pf-tubes { animation: tubes-boil 1.5s ease-in-out infinite; }
+    #plant-cam-svg.run-2 .pf-steam { opacity: 1; animation: flowdash 0.75s linear infinite; }
+    @keyframes tubes-boil { 0%, 100% { opacity: 0.35; } 50% { opacity: 0.95; } }
+    /* 3 - the turbine hall: the rotor spins and the generator makes current */
+    #plant-cam-svg.run-3 .pf-rotor {
+      opacity: 0.95; transform-box: view-box; transform-origin: 441px 250px;
+      animation: rotor-spin 0.5s linear infinite;
+    }
+    #plant-cam-svg.run-3 .pf-hub { opacity: 1; }
+    #plant-cam-svg.run-3 .pf-coils { animation: coils-live 1.1s ease-in-out infinite; }
+    #plant-cam-svg.run-3 .pf-bolt { animation: bolt-strike 1.6s ease-in-out infinite; }
+    @keyframes rotor-spin { to { transform: rotate(360deg); } }
+    @keyframes coils-live { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.9; } }
+    @keyframes bolt-strike {
+      0%, 62%, 100% { opacity: 0.3; }
+      70% { opacity: 1; filter: drop-shadow(0 0 8px rgba(242,196,107,0.9)); }
+      78% { opacity: 0.45; }
+      86% { opacity: 1; }
+    }
+    /* 4 - the condenser: spent steam is cooled and pumped back round */
+    #plant-cam-svg.run-4 .pf-cond { opacity: 1; animation: flowdash 1.1s linear infinite; }
+    #plant-cam-svg.run-4 .flow-slow { opacity: 0.9; animation: flowdash 2s linear infinite; }
+    /* 5 - the switchyard: power leaves down the transmission lines */
+    #plant-cam-svg.run-5 .pf-grid {
+      stroke: #F2C46B; stroke-dasharray: 5 12;
+      animation: flowdash 1.5s linear infinite;
+    }
+    /* 6 - the cooling tower: the plume finally rises */
+    #plant-cam-svg.run-6 .puff { opacity: 0.75; animation: puffrise 4.5s ease-in-out infinite; }
+    #plant-cam-svg.run-6 .puff2 { animation-delay: 1.4s; }
+    #plant-cam-svg.run-6 .puff3 { animation-delay: 2.8s; }
+  }
+  /* everything on, still, for anyone who does not want the motion */
+  @media (prefers-reduced-motion: reduce) {
+    #plant-cam-svg .flow, #plant-cam-svg .fuel, #plant-cam-svg .puff,
+    #plant-cam-svg .pf-tubes, #plant-cam-svg .pf-bolt { opacity: 1; }
+    #plant-cam-svg .pf-rotor, #plant-cam-svg .pf-hub { opacity: 0.95; }
+  }
   /* ============ PINNED SCROLL SCENES ============ */
   /* Used by the plant walkthrough and the fission story. The section pins
      while the scroll position scrubs a timeline: the stage stays put and the
@@ -1479,14 +1590,18 @@
     display: block; margin-bottom: 0.6rem;
   }
   .pin-title { font-family: var(--display); font-weight: 600; font-size: clamp(1.4rem, 2.6vw, 2rem); line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 0.7rem; }
-  .pin-text { font-size: 0.98rem; color: var(--muted); line-height: 1.6; }
+  /* This copy sits on a dark photographic stage, not on the gallery wall, so
+     it needs to be brighter than ordinary body text or it reads as switched
+     off next to the lit diagram beside it. */
+  .pin-text { font-size: 1rem; color: var(--placard); line-height: 1.6; }
+  .pin-hint { color: var(--muted); }
   .pin-rail { display: flex; gap: 6px; margin-top: 1.2rem; }
   .pin-rail span { flex: 1; height: 3px; background: var(--ink-line); position: relative; overflow: hidden; }
   /* --fill is written continuously from the scroll position, so the rail
      slides with the reader rather than snapping one segment at a time. */
   .pin-rail span::after { content: ''; position: absolute; inset: 0; background: var(--blue); transform: scaleX(var(--fill, 0)); transform-origin: 0 50%; }
   .pin-rail span.done::after { transform: scaleX(1); }
-  .pin-hint { font-size: 0.84rem; color: var(--faint); margin-top: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+  .pin-hint { font-size: 0.84rem; margin-top: 1rem; display: flex; align-items: center; gap: 0.5rem; }
   @media (max-width: 860px) {
     .pin-stage { grid-template-columns: 1fr; }
     .pin-copy { min-height: 9rem; }
@@ -2172,25 +2287,30 @@
           <rect x="152" y="170" width="26" height="52" rx="9" fill="#231F18" stroke="#A9A18B" stroke-width="2"/>
           <line x1="165" y1="222" x2="165" y2="250" stroke="#FBBF24" stroke-width="3"/>
           <!-- primary loop -->
-          <path class="flow" d="M 136 252 H 232" stroke="#FBBF24" stroke-width="3.5" fill="none"/>
+          <path class="flow pf-primary" d="M 136 252 H 232" stroke="#FBBF24" stroke-width="3.5" fill="none"/>
           <polygon points="196,246 208,252 196,258" fill="#FBBF24"/>
-          <path class="flow" d="M 232 340 H 136" stroke="#FBBF24" stroke-width="3.5" fill="none"/>
+          <path class="flow pf-primary" d="M 232 340 H 136" stroke="#FBBF24" stroke-width="3.5" fill="none"/>
           <polygon points="184,334 172,340 184,346" fill="#FBBF24"/>
           <!-- steam generator -->
           <rect x="232" y="168" width="58" height="200" rx="16" fill="#231F18" stroke="#A9A18B" stroke-width="2.5"/>
-          <path d="M 244 300 V 215 Q 261 193 278 215 V 300" stroke="#FBBF24" stroke-width="2" fill="none" opacity="0.55"/>
+          <path class="pf-tubes" d="M 244 300 V 215 Q 261 193 278 215 V 300" stroke="#FBBF24" stroke-width="2" fill="none" opacity="0.55"/>
           <!-- secondary steam loop -->
-          <path class="flow" d="M 261 168 V 138 H 396 V 208" stroke="#F2C46B" stroke-width="3" fill="none"/>
+          <path class="flow pf-steam" d="M 261 168 V 138 H 396 V 208" stroke="#F2C46B" stroke-width="3" fill="none"/>
           <polygon points="334,132 346,138 334,144" fill="#F2C46B"/>
-          <path class="flow" d="M 436 285 V 322" stroke="#F2C46B" stroke-width="2.5" fill="none"/>
-          <path class="flow" d="M 406 350 H 302 V 362 H 290" stroke="#F2C46B" stroke-width="2" fill="none"/>
+          <path class="flow pf-steam" d="M 436 285 V 322" stroke="#F2C46B" stroke-width="2.5" fill="none"/>
+          <path class="flow pf-cond" d="M 406 350 H 302 V 362 H 290" stroke="#F2C46B" stroke-width="2" fill="none"/>
           <!-- turbine -->
           <polygon points="396,238 486,208 486,292 396,266" fill="#2C281F" stroke="#A9A18B" stroke-width="2.5"/>
           <line x1="486" y1="250" x2="520" y2="250" stroke="#A9A18B" stroke-width="4"/>
+          <g class="pf-rotor" stroke="#F2C46B" stroke-width="3" stroke-linecap="round">
+            <line x1="424" y1="250" x2="458" y2="250"/><line x1="441" y1="233" x2="441" y2="267"/>
+            <line x1="429" y1="238" x2="453" y2="262"/><line x1="453" y1="238" x2="429" y2="262"/>
+          </g>
+          <circle class="pf-hub" cx="441" cy="250" r="4.5" fill="#F2C46B"/>
           <!-- generator -->
           <rect x="520" y="215" width="100" height="70" rx="6" fill="#231F18" stroke="#A9A18B" stroke-width="2.5"/>
-          <g stroke="#A9A18B" stroke-width="2" opacity="0.3"><line x1="538" y1="223" x2="538" y2="277"/><line x1="554" y1="223" x2="554" y2="277"/><line x1="570" y1="223" x2="570" y2="277"/></g>
-          <polygon points="600,228 588,252 596,252 590,268 608,242 598,242" fill="#FBBF24" stroke="#A9A18B" stroke-width="1.5" stroke-linejoin="round"/>
+          <g class="pf-coils" stroke="#A9A18B" stroke-width="2" opacity="0.3"><line x1="538" y1="223" x2="538" y2="277"/><line x1="554" y1="223" x2="554" y2="277"/><line x1="570" y1="223" x2="570" y2="277"/></g>
+          <polygon class="pf-bolt" points="600,228 588,252 596,252 590,268 608,242 598,242" fill="#FBBF24" stroke="#A9A18B" stroke-width="1.5" stroke-linejoin="round"/>
           <!-- condenser -->
           <rect x="406" y="322" width="104" height="44" rx="6" fill="#2C281F" stroke="#A9A18B" stroke-width="2.5"/>
           <!-- cooling-water loop -->
@@ -2210,8 +2330,8 @@
           <polygon points="712,400 736,400 727,180 721,180" fill="none" stroke="#A9A18B" stroke-width="2"/>
           <line x1="698" y1="205" x2="750" y2="205" stroke="#A9A18B" stroke-width="2"/>
           <line x1="702" y1="238" x2="746" y2="238" stroke="#A9A18B" stroke-width="2"/>
-          <path d="M 750 205 Q 850 232 932 216" stroke="#A9A18B" stroke-width="1.5" fill="none"/>
-          <path d="M 746 238 Q 848 264 932 250" stroke="#A9A18B" stroke-width="1.5" fill="none"/>
+          <path class="pf-grid" d="M 750 205 Q 850 232 932 216" stroke="#A9A18B" stroke-width="1.5" fill="none"/>
+          <path class="pf-grid" d="M 746 238 Q 848 264 932 250" stroke="#A9A18B" stroke-width="1.5" fill="none"/>
           <!-- component labels -->
           <g font-family="'Public Sans', sans-serif" font-size="12.5" font-weight="500" fill="#A9A18B" letter-spacing="1.5">
             <text x="190" y="428" text-anchor="middle">CONTAINMENT</text>
@@ -4077,6 +4197,10 @@
       clone.removeAttribute('role');
       clone.removeAttribute('aria-label');
       clone.setAttribute('aria-hidden', 'true');
+      // fill the frame rather than sitting in a letterboxed band inside it;
+      // every beat of this scene is already a zoomed camera on one component,
+      // so cropping the margins costs nothing
+      clone.setAttribute('preserveAspectRatio', 'xMidYMid slice');
       // drop interactive hotspots and every duplicated id
       Array.prototype.forEach.call(clone.querySelectorAll('.hotspot'), function (n) { n.parentNode.removeChild(n); });
       Array.prototype.forEach.call(clone.querySelectorAll('[id]'), function (n) { n.removeAttribute('id'); });
@@ -4095,14 +4219,7 @@
 
       // Backdrop footage is preload="none"; only fetch and play it while the
       // scene is actually on screen, and never fight the reader for attention.
-      var bgVid = sc.el.querySelector('.stage-bg video');
-      if (bgVid) {
-        whenVisible(sc.el, function () {
-          bgVid.load();
-          var p = bgVid.play();
-          if (p && p.catch) p.catch(function () {}); // autoplay refusal is fine
-        });
-      }
+      // the backdrop is hidden in a wing, so it is never fetched or played
 
       var rail = sc.el.querySelector('[data-role="rail"]');
       if (rail) { rail.innerHTML = ''; sc.steps.forEach(function () { rail.appendChild(document.createElement('span')); }); }
@@ -4111,26 +4228,12 @@
       // Scroll runway: one viewport-ish of travel per beat, plus a screen so
       // the last beat can be read before the stage releases.
       sc.el.style.setProperty('--runway', (n * 62 + 70) + 'vh');
-      var tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: sc.el,
-          start: 'top 12%',
-          end: 'bottom bottom',
-          scrub: 0.85,
-          invalidateOnRefresh: true,
-          onUpdate: function (self) {
-            // The rail tracks continuously so it slides with the scroll
-            // rather than snapping a segment at a time.
-            if (rail) {
-              var p = self.progress * n;
-              for (var j = 0; j < rail.children.length; j++) {
-                var fill = Math.max(0, Math.min(1, p - j));
-                rail.children[j].style.setProperty('--fill', fill);
-              }
-            }
-          }
-        }
-      });
+      /* This was a scroll-scrubbed timeline. The page turn drives it now, one
+         beat per screen, so it is simply paused and addressed by beat. Leaving
+         the trigger attached is not neutral: with no scroll to read it parks
+         the timeline at one end, which is how the scenes ended up sitting on
+         their last beat before anyone had reached them. */
+      var tl = gsap.timeline({ paused: true });
       /* Caption changes live inside the scrubbed timeline so they cross
          dissolve under the reader's thumb instead of snapping at a
          boundary. onComplete/onReverseComplete swap the text at the
@@ -4148,6 +4251,8 @@
 
       sc.build(tl, sc.steps);
       tl.set({}, {}, n); // normalize total duration so progress maps to steps
+      tl.progress(0);    // and it opens on its first beat, not its last
+      paintRail();       // progress(0) on a timeline already at 0 fires nothing
 
       /* The same timeline, addressable by beat. In a wing there is no scroll to
          scrub it, so the page turn drives it instead: one beat per page, which
@@ -4156,16 +4261,16 @@
       /* The rail used to be filled from the ScrollTrigger's onUpdate. The page
          turn drives this timeline now and that trigger is disabled, so the rail
          reads from the timeline itself or it stops tracking the beat entirely. */
-      tl.eventCallback('onUpdate', function () {
+      function paintRail() {
         if (!rail) return;
         var p = tl.progress() * n;
         for (var j = 0; j < rail.children.length; j++) {
           rail.children[j].style.setProperty('--fill', Math.max(0, Math.min(1, p - j + 1)));
         }
-      });
+      }
+      tl.eventCallback('onUpdate', paintRail);
       sc.el._sceneGo = function (i, instant) {
-        var st = tl.scrollTrigger;
-        if (st && st.enabled) st.disable(false);
+        if (sc.el._runTo) sc.el._runTo(i + 1);
         if (instant) { tl.progress(Math.min(i / n, 1)); return; }
         gsap.killTweensOf(tl);
         tl.tweenTo(Math.max(0, Math.min(i, n)), { duration: 0.75, ease: 'power2.inOut' });
@@ -4177,11 +4282,29 @@
       if (!cam) return;
       var VB_CX = 480, VB_CY = 240;                 // centre of viewBox "-46 -34 1052 548"
       var state = { s: 1, cx: VB_CX, cy: VB_CY };
+      /* The frame is far taller than the drawing now, and it covers rather than
+         letterboxes, so the horizontal field of view is narrower than the one
+         these camera moves were composed for. Scale every shot by how much
+         narrower, or the subject of the beat sits half outside the frame. */
+      var SRC_ASPECT = 1052 / 548, fit = 1;
+      function measureFit() {
+        var svg = document.getElementById('plant-cam-svg');
+        if (!svg) return;
+        var r = svg.getBoundingClientRect();
+        if (!r.width || !r.height) return;
+        fit = Math.min(1, (r.width / r.height) / SRC_ASPECT);
+        apply();
+      }
       var apply = function () {
+        var s = state.s * fit;
         cam.setAttribute('transform',
-          'translate(' + (VB_CX - state.s * state.cx) + ',' + (VB_CY - state.s * state.cy) + ') scale(' + state.s + ')');
+          'translate(' + (VB_CX - s * state.cx) + ',' + (VB_CY - s * state.cy) + ') scale(' + s + ')');
       };
       apply();
+      window.addEventListener('resize', measureFit);
+      // buildPlantTl runs outside the scenes loop, so reach the element by id
+      var host = document.getElementById('plant-scene');
+      if (host) host._measureFit = measureFit;
       // Photographic plates: only the first is eager; the rest swap in their
       // real src the first time the timeline approaches them.
       var plates = document.querySelectorAll('#plant-plates img');
@@ -4191,6 +4314,19 @@
       };
       loadPlate(0); loadPlate(1);
       if (plates.length) gsap.set(plates[0], { opacity: 1 });
+
+      /* Start each component as its beat arrives, and leave it running. Walking
+         the plant starts the plant. */
+      var camSvg = document.getElementById('plant-cam-svg');
+      function runTo(k) {
+        if (!camSvg) return;
+        for (var r = 1; r <= steps.length; r++) camSvg.classList.toggle('run-' + r, r <= k);
+      }
+      runTo(0);
+      // one source of truth: the pager sets the beat, so the pager starts the
+      // plant. A timeline callback at position 0 never fires on an instant seek.
+      var runHost = document.getElementById('plant-scene');
+      if (runHost) runHost._runTo = runTo;
 
       steps.forEach(function (st, i) {
         tl.to(state, { s: st.s, cx: st.cx, cy: st.cy, duration: 0.8, ease: 'power2.inOut', onUpdate: apply }, i);
@@ -5067,8 +5203,12 @@
     leaves.forEach(function (l) { if (seen.indexOf(l.view) < 0) seen.push(l.view); });
     seen.forEach(function (v) { v.classList.toggle('is-page', v === lf.view); });
     applyLeaf(lf.view, lf.els);   // and within it, one leaf
-    lf.view.classList.toggle('leaf-full', !!lf.scene);
-    lf.view.classList.toggle('leaf-solo', !lf.scene && lf.els.length === 1);
+    /* A scene, or a single piece of footage, is the exhibit itself: it gets the
+       screen edge to edge rather than sitting in the reading column. */
+    var bleed = !!lf.scene ||
+      (lf.els.length === 1 && lf.els[0].classList && lf.els[0].classList.contains('tour-figure'));
+    lf.view.classList.toggle('leaf-full', bleed);
+    lf.view.classList.toggle('leaf-solo', !bleed && lf.els.length === 1);
     if (lf.els.length === 1) lf.els[0].style.zoom = lf.fit || '';
     lf.view.scrollTop = 0;
     if (lf.view.id !== 'wing-end') {
@@ -5092,6 +5232,7 @@
        it animates. Arriving at a scene, or jumping across it, is not: playing
        the whole sequence backwards at speed to reach beat one looks like the
        page is malfunctioning. */
+    if (lf.scene && lf.scene._measureFit) lf.scene._measureFit();
     if (lf.scene && lf.scene._sceneGo) {
       var oneBeat = was && was.scene === lf.scene && Math.abs(was.step - lf.step) === 1;
       lf.scene._sceneGo(lf.step, instant || !oneBeat);
@@ -5354,14 +5495,18 @@
   };
   /* Volumes in a wing are bound in the same cloth from slightly different
      dye lots, the way a real set is. */
-  function dyeLot(hex, k) {
+  function dyeLot(hex, k, cast) {
     var n = parseInt(hex.slice(1), 16);
-    var ch = [(n >> 16) & 255, (n >> 8) & 255, n & 255].map(function (v) {
-      return Math.max(0, Math.min(255, Math.round(v * k)));
+    var bias = [1 + (cast || 0) * 0.07, 1, 1 - (cast || 0) * 0.09];   // R, G, B
+    var ch = [(n >> 16) & 255, (n >> 8) & 255, n & 255].map(function (v, j) {
+      return Math.max(0, Math.min(255, Math.round(v * k * bias[j])));
     });
     return '#' + ch.map(function (v) { return ('0' + v.toString(16)).slice(-2); }).join('');
   }
-  var LOTS = [1, 0.9, 1.08, 0.95, 1.04, 0.88, 1.12];
+  var LOTS = [1, 0.82, 1.16, 0.9, 1.08, 0.76, 1.22];
+  /* Lightness alone is not enough to tell two volumes apart on a shelf, so each
+     dye lot also leans warm or cool. */
+  var CASTS = [0, 1, -1, -1, 1, 0, 1];
 
   /* A publisher's device at the foot of each spine: one mark per exhibit, so a
      book is findable by its symbol before you have read its title. Drawn, not
@@ -5408,13 +5553,15 @@
         var b = document.createElement('button');
         b.type = 'button';
         var t = bookTitle(id);
-        var hVar = (t.length + i * 7) % 3;              // stable per book
-        var wVar = (t.length + wi * 5) % 4;
+        // by position, not by title length: two titles of similar length used to
+        // land on the same variant and the volumes read as one book twice
+        var hVar = i % 3;
+        var wVar = (i * 3 + wi) % 4;
         b.className = 'book'
           + (hVar === 0 ? ' book--tall' : hVar === 2 ? ' book--short' : '')
           + (wVar === 0 ? ' book--wide' : wVar === 3 ? ' book--thin' : '');
         var cloth = WING_CLOTH[w.id] || '#6E6653';
-        b.style.setProperty('--book', dyeLot(cloth, LOTS[i % LOTS.length]));
+        b.style.setProperty('--book', dyeLot(cloth, LOTS[i % LOTS.length], CASTS[i % CASTS.length]));
         b.setAttribute('aria-label', 'Open ' + bookTitle(id) + ', in ' + w.name);
         b.innerHTML = '<span class="book__spine">' + t + '</span>'
           + (BOOK_MARKS[id]
