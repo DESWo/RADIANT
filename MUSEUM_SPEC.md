@@ -253,6 +253,21 @@ incident tabs, the myth panels, the plant-explorer hotspots, the fission lab
 physics, all internal anchors, no HTTP failures, no duplicate ids, no console
 errors, and zero ScrollTriggers.
 
+## Editorial pass before publishing
+
+- **A room name shares its screen with what it introduces.** `alone` in the
+  packer is now always false; the measured pass splits a head off only when the
+  two genuinely do not fit. Sixteen pages that carried an overline, a heading
+  and one sentence are gone.
+- **A shelf is as long as the books on it** (`width: fit-content`, auto grid
+  columns). Sized to the column, three quarters of every board was empty, which
+  reads as under-stocked rather than curated.
+- **The end of a wing says what was in it and what it cost you**: the volumes by
+  name, and the dose in words — "about 44% of one New York to Los Angeles
+  flight". `window.__doseSay()` owns that sentence.
+- Wall text is set to a book's measure (44rem, centred) rather than stranded
+  across a 1440px column.
+
 ## Status
 
 Built: title screen, the library, the four-beat book opening with the riffle,

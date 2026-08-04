@@ -320,7 +320,12 @@
     display: flex; flex-direction: column; justify-content: center;
     padding: 0.8rem 1.5rem 0.8rem;
   }
-  .library__head { max-width: 60rem; margin: 0 auto clamp(0.6rem, 1.4vh, 1.1rem); text-align: center; flex: 0 0 auto; }
+  .library__head {
+    max-width: 60rem; margin: 0 auto clamp(0.6rem, 1.4vh, 1.1rem); text-align: center;
+    /* laid out as a flex column: as a block it was reporting twice the height
+       of its own contents and pushing the shelves a hundred pixels down */
+    flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; gap: 0.3rem;
+  }
   .library__title {
     font-family: var(--display); font-weight: 600; color: var(--ink);
     font-size: clamp(1.3rem, 2.4vw, 1.8rem); line-height: 1.02; letter-spacing: -0.022em;
@@ -330,13 +335,19 @@
 
     .bookcase {
     max-width: 76rem; margin: 0 auto; width: 100%;
-    display: grid; gap: 0.42rem 0.8rem;
-    grid-template-columns: repeat(6, 1fr);
+    display: grid; gap: 0.42rem 1.6rem;
+    /* auto columns, so a shelf takes the width of its books and the row packs
+       around it rather than leaving a gap where an empty column used to be */
+    grid-template-columns: repeat(6, auto);
+    justify-content: center;
   }
   /* Three rows, in wing order: the two short wings share the top, The Record
      gets a row to itself, and the last two share the bottom. Three rows rather
      than four is what buys the books enough height for their spines to be read. */
-  .shelf { margin: 0; }
+  /* A shelf is as long as the books it holds. Sized to the column it left
+     three quarters of every board empty, which reads as under-stocked rather
+     than curated. */
+  .shelf { margin: 0; width: fit-content; max-width: 100%; }
   .shelf:nth-child(1) { grid-column: span 3; }
   .shelf:nth-child(2) { grid-column: span 3; }
   .shelf:nth-child(3) { grid-column: span 6; }
@@ -353,7 +364,7 @@
     text-transform: uppercase; color: var(--wing, var(--spot));
   }
   .shelf__label .shelf__n { color: var(--faint); }
-  .shelf__label .shelf__of { margin-left: auto; color: var(--faint); letter-spacing: 0.14em; }
+  .shelf__label .shelf__of { margin-left: auto; padding-left: 1.6rem; color: var(--faint); letter-spacing: 0.14em; }
   /* A real shelf: a case with sides, a back panel in shadow, and a board with
      visible thickness that the books actually stand on. Books are packed tight
      against each other and flush to the left, the way they really sit. */
@@ -361,7 +372,7 @@
     position: relative;
     display: flex; align-items: flex-end; justify-content: flex-start;
     gap: 0;                                  /* books touch, as books do */
-    padding: clamp(0.42rem, 1vh, 0.8rem) 0.75rem 0 0.75rem;
+    padding: clamp(0.42rem, 1vh, 0.8rem) 1.5rem 0 0.75rem;   /* a bookend of empty board */
     min-height: 0;
     background:
       linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.16) 38%, rgba(0,0,0,0) 70%),
@@ -424,8 +435,7 @@
   .book--short { height: clamp(6.3rem, 13.9vh, 8.2rem); }
   .book--wide  { width: clamp(3.1rem, 3.7vw, 3.9rem); }
   .book--thin  { width: clamp(2.3rem, 2.7vw, 2.9rem); }
-  /* a bookend of empty shelf after the last volume */
-  .shelf__board > .book:last-child { margin-right: auto; }
+
 
   /* Opening a book. The closed book comes off the shelf, BOTH covers swing
      apart into a two-page spread, a leaf turns off the right page onto the
@@ -661,6 +671,11 @@
   }
   /* a screen holding a single exhibit piece gives it the whole screen */
   .js body[data-screen="wing"] .view.in-wing.leaf-solo { padding: 1.2rem 0 3.4rem; }
+  /* Wall text reads at a book's measure, not a screen's. Left in a 1440px
+     column it stranded the right third of the page. */
+  .js body[data-screen="wing"] .prose,
+  .js body[data-screen="wing"] .pull,
+  .js body[data-screen="wing"] .callout { max-width: 44rem; margin-inline: auto; }
   .js body[data-screen="wing"] .view.in-wing.leaf-full { padding: 0; }
   .js body[data-screen="wing"] .leaf-full > .wrap { max-width: none; padding: 0; width: 100%; }
 
@@ -813,6 +828,11 @@
   }
   .wing-end__k { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.3em;
     text-transform: uppercase; color: var(--spot); margin-bottom: 1rem; }
+  .wing-end__seen { font-family: var(--serif); color: var(--muted); max-width: 34rem;
+    margin: 0.9rem auto 0; line-height: 1.55; }
+  .wing-end__dose { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--cherenkov); opacity: 0.75;
+    max-width: 34rem; margin: 1.1rem auto 0; line-height: 1.7; }
   .wing-end h2 { font-family: var(--display); font-size: clamp(1.9rem,4.4vw,3rem); color: var(--ink); margin-bottom: 1.4rem; }
   .js body[data-screen="wing"] .hero,
   .js body[data-screen="wing"] .closing-band,
@@ -2066,7 +2086,7 @@
     <p style="margin-top:2.4rem">
       <button type="button" class="btn" id="go-lobby">Enter the museum <span class="arr">→</span></button>
     </p>
-    <p class="entry__cue" aria-hidden="true">Scroll to walk in ↓</p>
+    <p class="entry__cue" aria-hidden="true">Scroll, or press the button, to walk in ↓</p>
   </div>
 </section>
 
@@ -4079,6 +4099,14 @@
     }
     /* The pager calls this on every page it opens. A room you have already
        stood in adds nothing, which is what makes the badge mean anything. */
+    /* 0.040 mSv is a number almost nobody can size. Say what it is worth. */
+    window.__doseSay = function () {
+      var mSv = DOSE_FULL * frac();
+      var pct = Math.round(frac() * 100);
+      if (!pct) return '';
+      return 'You have taken ' + mSv.toFixed(3) + ' mSv walking this museum: about '
+        + pct + '% of one New York to Los Angeles flight.';
+    };
     window.__doseWalk = function (roomId, label) {
       if (roomId && !seen[roomId]) { seen[roomId] = 1; seenCount++; }
       if (hallEl && label) hallEl.textContent = label;
@@ -5085,10 +5113,11 @@
         return;
       }
 
-      // A room name owns its screen when there is enough of it to hold one.
-      // The Info room's name is a single line, and a screen of one line is
-      // not a page, it is a pause.
-      var alone = el.classList.contains('section-head') && h > room * 0.34 && !!el.querySelector('h2');
+      /* A room name used to own a screen outright. That produced sixteen pages
+         carrying an overline, a heading and one sentence, and the reader turned
+         a page to reach anything. It shares with what it introduces whenever
+         the two fit; the measured pass below splits them when they do not. */
+      var alone = false;
       if (open && !alone && !open.alone && open.view === view && open.h + h <= room) {
         open.els.push(el); open.h += h;
       } else {
@@ -5250,6 +5279,8 @@
     if (window.__doseWalk) {
       window.__doseWalk(lf.view.id === 'wing-end' ? '' : lf.view.id,
                         lf.view.id === 'wing-end' ? wing.name : (BOOK_TITLES[lf.view.id] || wing.name));
+      var dEl = document.getElementById('wing-end-dose');
+      if (dEl && lf.view.id === 'wing-end' && window.__doseSay) dEl.textContent = window.__doseSay();
     }
     sizeWalkbar();
     markLong(lf.view);
@@ -5373,6 +5404,15 @@
       if (last && last.parentNode) last.parentNode.insertBefore(end, last.nextSibling);
       var t = document.getElementById('wing-end-title');
       if (t) t.textContent = 'That is ' + wing.name + '.';
+      /* An end card that says only "that is the wing" is an anticlimax after
+         twenty cited pages. Say what was in it, and what the badge now reads. */
+      var seenEl = document.getElementById('wing-end-seen');
+      if (seenEl) {
+        var titles = rooms.map(function (id) { return BOOK_TITLES[id] || id; });
+        seenEl.textContent = titles.length === 1
+          ? 'One volume: ' + titles[0] + '.'
+          : titles.length + ' volumes: ' + titles.slice(0, -1).join(', ') + ', and ' + titles[titles.length - 1] + '.';
+      }
       var out = document.getElementById('wing-end-lobby');
       if (out && !out._bound) {
         out._bound = 1;
@@ -5822,6 +5862,8 @@
   <div>
     <p class="wing-end__k">End of the wing</p>
     <h2 id="wing-end-title">That is the wing.</h2>
+    <p class="wing-end__seen" id="wing-end-seen"></p>
+    <p class="wing-end__dose" id="wing-end-dose"></p>
     <p><button type="button" class="btn" id="wing-end-lobby">Back to the lobby <span class="arr">&rarr;</span></button></p>
   </div>
 </section>
