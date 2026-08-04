@@ -5457,7 +5457,12 @@
        higher threshold, a fresh count for each new gesture, and a lock that
        swallows the momentum tail while the page is turning. */
     var acc = 0, lastWheel = 0, lockUntil = 0;
-    var STEP = 240, GESTURE_GAP = 1500, LOCK = 1150, QUIET = 220;
+    /* STEP is the distance a trackpad has to glide to turn a page. A mouse
+       wheel does not glide: it arrives in discrete notches of about 100 to 120,
+       or in `deltaMode` lines, and one notch is already a deliberate
+       instruction. Held to STEP, a mouse needed two notches to turn one page,
+       which read as the first scroll doing nothing. */
+    var STEP = 240, NOTCH = 100, GESTURE_GAP = 1500, LOCK = 1150, QUIET = 220;
 
     /* On a page taller than the screen, the wheel reads that page first and
        only turns it once you reach the edge. Without this the page turns out
@@ -5479,9 +5484,10 @@
          fixed lock cannot work: a long flick outlasts any constant you pick. */
       if (turning || now < lockUntil) { acc = 0; lockUntil = Math.max(lockUntil, now + QUIET); return; }
       if (!atEdge(e.deltaY)) { acc = 0; return; }
+      var notched = e.deltaMode !== 0 || Math.abs(e.deltaY) >= NOTCH;
       acc += e.deltaY;
-      if (Math.abs(acc) < STEP) return;
-      var dir = acc > 0 ? 1 : -1;
+      if (!notched && Math.abs(acc) < STEP) return;
+      var dir = (notched ? e.deltaY : acc) > 0 ? 1 : -1;
       acc = 0; lockUntil = now + LOCK;
       turnPage(dir);
     }, { passive: true });

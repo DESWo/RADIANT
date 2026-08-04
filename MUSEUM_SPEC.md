@@ -140,8 +140,14 @@ bottom before it turns.
     the screen.
   - The sheet leaves the frame at 90 degrees, so `power2.in` over 0.82s is used:
     an ease-in-out spends half its time off-screen.
-- **One gesture turns one page.** `STEP 240, GESTURE_GAP 1500, LOCK 1150,
-  QUIET 220` in the wheel handler. A trackpad keeps firing wheel events for a
+- **One gesture turns one page, and one notch is a gesture.** `STEP 240,
+  NOTCH 100, GESTURE_GAP 1500, LOCK 1150, QUIET 220` in the wheel handler.
+  A trackpad glides, so it has to cover `STEP` before the page turns. A mouse
+  wheel does not glide: it arrives in discrete notches of about 100 to 120, or
+  in `deltaMode` lines and pages. Held to the glide threshold a mouse needed
+  **two** notches per page, which reads exactly as "the first scroll did
+  nothing". Anything discrete turns on its own event; only continuous input
+  accumulates. A trackpad keeps firing wheel events for a
   second or more after your fingers leave it, so every swallowed event pushes
   the lock out by `QUIET` — the lock lifts only once the wheel is actually
   still. A fixed lock cannot work: a long flick outlasts any constant.
