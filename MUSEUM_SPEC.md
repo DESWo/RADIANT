@@ -147,7 +147,17 @@ bottom before it turns.
   in `deltaMode` lines and pages. Held to the glide threshold a mouse needed
   **two** notches per page, which reads exactly as "the first scroll did
   nothing". Anything discrete turns on its own event; only continuous input
-  accumulates. A trackpad keeps firing wheel events for a
+  accumulates.
+- **The input lock is capped** (`LOCK_MAX`). It holds until the wheel goes quiet,
+  so a flick's momentum tail cannot turn a second page — but every swallowed
+  event used to push it forward, so somebody who kept scrolling *because nothing
+  happened* held it open indefinitely and made the problem worse. It now never
+  survives past `LOCK_MAX` from the turn that set it.
+- The flip tween is 0.66s, not 0.82s: the sheet is off the screen by 90 degrees,
+  which `power2.in` reaches about two thirds through, so the tail was gating
+  input for an animation nobody could still see. `showPage(next)` stays at
+  position **0** — the incoming page has to be under the sheet from the first
+  frame, or it pops in mid-turn. A trackpad keeps firing wheel events for a
   second or more after your fingers leave it, so every swallowed event pushes
   the lock out by `QUIET` — the lock lifts only once the wheel is actually
   still. A fixed lock cannot work: a long flick outlasts any constant.
