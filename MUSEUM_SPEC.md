@@ -232,6 +232,27 @@ shows. The three pinned scenes are plain `paused: true` timelines now.
 reappears, assume it is parked at one end of its tween: that is what blanked the
 room names, sat the scenes on their last beat, and froze the beat rails.
 
+## Live audit, and what it found
+
+Two more scroll-era casualties, both invisible until the live site was walked
+end to end:
+
+- **The dosimeter was dead.** It read `window.scrollY / (scrollHeight - clientHeight)`,
+  and the museum never scrolls the document, so the signature element sat at
+  `0.000 mSv / Entry` for every visitor from the moment page-flip navigation
+  landed. It counts exhibits walked now — sixteen volumes, 0.040 mSv for the
+  full traversal, revisits add nothing — driven from `showPage` via
+  `window.__doseWalk(roomId, label)`.
+- **"Walk back to the entrance" pointed at `#entry`**, an id that exists nowhere
+  on the page. The entrance is `#screen-title`. It is an anchor to `#top` (the
+  masthead, which is the no-JS reading order) with JS intercepting it to change
+  screen, so it works with and without scripts.
+
+Everything else on the live build passed: chart table toggles, the three
+incident tabs, the myth panels, the plant-explorer hotspots, the fission lab
+physics, all internal anchors, no HTTP failures, no duplicate ids, no console
+errors, and zero ScrollTriggers.
+
 ## Status
 
 Built: title screen, the library, the four-beat book opening with the riffle,

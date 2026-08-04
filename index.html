@@ -3268,7 +3268,7 @@
     <h2 class="reveal">Make the truth impossible to ignore</h2>
     <p class="reveal">For too long, public fear has drowned out the evidence. The numbers belong back at the center of the conversation. Not to win a debate with louder claims, but to put the data front and center.</p>
     <p class="reveal" style="margin-top:1.6rem">
-      <a class="btn" href="#entry">Walk back to the entrance <span class="arr">→</span></a>
+      <a class="btn" href="#top" id="back-to-entrance">Walk back to the entrance <span class="arr">→</span></a>
     </p>
   </div>
 </section>
@@ -4053,13 +4053,15 @@
     var valEl = document.getElementById('dose-val');
     var hallEl = document.getElementById('dose-hall');
     if (!el || !valEl) return;
-    var DOSE_FULL = 0.040;
+    /* 0.040 mSv for the whole building, which is one round-trip New York to
+       Los Angeles by air. It used to be read off the scrollbar; nothing in the
+       museum scrolls the document, so it sat at 0.000 mSv for every visitor
+       from the moment the page-flip navigation landed. It counts the exhibits
+       you have walked instead: sixteen volumes, one full traversal. */
+    var DOSE_FULL = 0.040, DOSE_ROOMS = 16;
+    var seen = Object.create(null), seenCount = 0;
     var shown = 0, target = 0, raf = 0;
-    function frac() {
-      var de = document.documentElement;
-      var max = de.scrollHeight - de.clientHeight;
-      return max > 0 ? Math.min(Math.max(window.scrollY / max, 0), 1) : 0;
-    }
+    function frac() { return Math.min(seenCount / DOSE_ROOMS, 1); }
     function render(v) {
       valEl.textContent = v.toFixed(3);
       el.style.setProperty('--f', frac().toFixed(4));
@@ -4075,17 +4077,15 @@
       if (REDUCE) { shown = target; render(shown); return; }
       if (!raf) raf = requestAnimationFrame(tick);
     }
-    function hall() {
-      var a = document.querySelector('#nav-links a.active');
-      if (a && a.textContent.trim()) hallEl.textContent = a.textContent.trim();
-    }
-    window.addEventListener('scroll', update, { passive: true });
+    /* The pager calls this on every page it opens. A room you have already
+       stood in adds nothing, which is what makes the badge mean anything. */
+    window.__doseWalk = function (roomId, label) {
+      if (roomId && !seen[roomId]) { seen[roomId] = 1; seenCount++; }
+      if (hallEl && label) hallEl.textContent = label;
+      update();
+    };
     window.addEventListener('resize', update);
-    window.addEventListener('hashchange', function () { update(); hall(); });
-    // the view router stamps <html data-view>; catch every hall change, incl.
-    // the initial deep-link load that runs after this init.
-    new MutationObserver(hall).observe(document.documentElement, { attributes: true, attributeFilter: ['data-view'] });
-    update(); hall();
+    update();
     if (REDUCE) el.classList.add('lit');
     else setTimeout(function () { el.classList.add('lit'); }, 100);
   })();
@@ -5247,6 +5247,10 @@
     }
     // where you are, counted in screens rather than exhibits
     if (wbCount) wbCount.textContent = 'Page ' + (pageIdx + 1) + ' of ' + leaves.length;
+    if (window.__doseWalk) {
+      window.__doseWalk(lf.view.id === 'wing-end' ? '' : lf.view.id,
+                        lf.view.id === 'wing-end' ? wing.name : (BOOK_TITLES[lf.view.id] || wing.name));
+    }
     sizeWalkbar();
     markLong(lf.view);
     var say = document.getElementById('page-say');
@@ -5708,6 +5712,10 @@
 
   var goLobby = document.getElementById('go-lobby');
   if (goLobby) goLobby.addEventListener('click', function () { screenTo('lobby'); });
+  // this was an anchor to #entry, an id that does not exist anywhere on the
+  // page: the entrance is #screen-title, and a screen change is not a hash jump
+  var backIn = document.getElementById('back-to-entrance');
+  if (backIn) backIn.addEventListener('click', function (e) { e.preventDefault(); screenTo('title'); });
 
   /* any in-page link to a room jumps into whichever wing holds it */
   document.addEventListener('click', function (e) {
