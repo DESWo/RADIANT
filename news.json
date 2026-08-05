@@ -1,6 +1,33 @@
 {
-  "generated_at": "2026-08-04T19:59:52.065081+00:00",
+  "generated_at": "2026-08-05T03:37:24.779760+00:00",
   "items": [
+    {
+      "title": "Governor Lee speaks at Nuclear Energy Summit",
+      "url": "https://news.google.com/rss/articles/CBMi2AFBVV95cUxOZkVyN05XT1VqaXFxNmViV2F6RlRqUkQ3UFJyeExQWFFMdVhELWV2NC1hWjlCYXRMMHlWOU00MThBYXRtQ0h5cHZQeHdjcm9ucFRoUGpuUi0yUmd1SGpfNWFmUEp4bDI1SVFPZHhyc0hlM3lFYlZwSDhTM1ZxTHBUV3cwRmVORHVaNVFkRW9HSF96WjJrdG1QVS1FdFBRY1dpYm5ReW02MzhRWVpSLWFBRm9SZHRISDBFS3EwMVJOa29Qa0VOQ29MbXluSTdYcHNoQ18zbERhRms?oc=5",
+      "source": "WBIR",
+      "published": "2026-08-04T21:56:00+00:00",
+      "date": "Aug 4, 2026",
+      "cat": "News",
+      "summary": ""
+    },
+    {
+      "title": "Nuclear power hasn’t proven its worth | Opinion",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE9SRFZQN2ZZVk1waEI3dTRZTW5nekZrbndqNFdHX1JaYktMb2RMQmFLZTkzaUM0M2xtTlhQdmdTTjBfdWRYTUFIQVN6SWw0SFk?oc=5",
+      "source": "The Portland Press Herald",
+      "published": "2026-08-04T19:00:00+00:00",
+      "date": "Aug 4, 2026",
+      "cat": "News",
+      "summary": ""
+    },
+    {
+      "title": "US, Paraguay sign nuclear energy cooperation deal",
+      "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE8wZGpEZHFOMXJtM28yeS1sa2xpQW9kTlhZaWx6azRVZ010LTlxXzVON24xRkl6ckM3SUktSnRNODc4azYxelVjbUx4cFNaaDVCTWtwcUxBNk8?oc=5",
+      "source": "TRT World",
+      "published": "2026-08-04T16:49:35+00:00",
+      "date": "Aug 4, 2026",
+      "cat": "News",
+      "summary": ""
+    },
     {
       "title": "Finnish regulator gives positive decision on used fuel repository",
       "url": "https://www.world-nuclear-news.org/articles/finnish-regulator-gives-positive-decision-on-used-fuel-repository",
@@ -27,33 +54,6 @@
       "date": "Aug 4, 2026",
       "cat": "Policy",
       "summary": "A series of agreements between Westinghouse Electric Company and Amentum aims to support the fleet-scale deployment of the AP1000 reactor and to collaborate on gaining regulatory…"
-    },
-    {
-      "title": "Mid-year updates from major uranium producers",
-      "url": "https://www.world-nuclear-news.org/articles/mid-year-updates-from-major-uranium-producers",
-      "source": "World Nuclear News",
-      "published": "2026-08-04T11:24:43+00:00",
-      "date": "Aug 4, 2026",
-      "cat": "News",
-      "summary": "Kazatomprom's uranium production in the first half of 2026 was higher than the same period in 2025. Cameco's uranium production was impacted by logistical challenges earlier in…"
-    },
-    {
-      "title": "BWXT sells medical business for USD800 million",
-      "url": "https://www.world-nuclear-news.org/articles/bwxt-sells-medical-business-for-usd800-million",
-      "source": "World Nuclear News",
-      "published": "2026-08-04T11:17:58+00:00",
-      "date": "Aug 4, 2026",
-      "cat": "Technology",
-      "summary": "BWX Technologies is to sell its medical division, which includes BWXT Medical and Kinectrics’ stable medical isotopes business, to Nordic Capital."
-    },
-    {
-      "title": "China approves construction of eight more reactors",
-      "url": "https://www.world-nuclear-news.org/articles/china-approves-construction-of-eight-more-reactors",
-      "source": "World Nuclear News",
-      "published": "2026-08-03T16:15:26+00:00",
-      "date": "Aug 3, 2026",
-      "cat": "Industry",
-      "summary": "The construction of three pairs of Hualong One (HPR1000) reactors at the Jinqimen, Taipingling and Zhuanghe sites, as well as two Guohe One (CAP1400) reactors at the Laiyang site…"
     }
   ]
 }
