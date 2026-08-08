@@ -1223,7 +1223,8 @@
      falling to darkness at the floor, and a catalog number in the corner. No
      drop shadows and no lift on hover: a vitrine is set into the wall, not
      resting on it. */
-  .school-card, .news-card, .tile, .res-card, .bento .feature {
+  .school-card, .news-card, .tile, .res-card, .bento .feature,
+  .b-stat, .b-claim, .info-card, .pathway .stage, .acc {
     border-top-color: rgba(242,196,107,0.28);
     box-shadow: inset 0 26px 42px -34px rgba(242,196,107,0.20),
                 inset 0 -48px 58px -44px rgba(0,0,0,0.55);
@@ -1239,7 +1240,7 @@
     color: var(--faint); opacity: 0.5;
   }
   /* pointing at a case raises the light in it; the case itself does not move */
-  .school-card:hover, .news-card:hover, .res-card:hover, .tile:hover {
+  .school-card:hover, .news-card:hover, .res-card:hover, .tile:hover, .acc:hover {
     border-top-color: rgba(242,196,107,0.58);
     box-shadow: inset 0 30px 46px -30px rgba(242,196,107,0.34),
                 inset 0 -48px 58px -44px rgba(0,0,0,0.55);
@@ -1371,7 +1372,8 @@
 
   /* ============ BENTO (The Case) ============ */
   .bento { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; max-width: 60rem; margin-bottom: 2.8rem; }
-  .bento > * { border: 1px solid var(--hair); border-radius: 0; background: var(--card); box-shadow: var(--shadow); padding: 1.6rem 1.7rem; }
+  .bento > * { border: 1px solid var(--hair); border-radius: 0; background: var(--card); padding: 1.6rem 1.7rem;
+    border-top-color: rgba(242,196,107,0.28); box-shadow: inset 0 26px 42px -34px rgba(242,196,107,0.20), inset 0 -48px 58px -44px rgba(0,0,0,0.55); }
   .bento .feature {
     grid-column: span 2; grid-row: span 2; background: var(--navy); color: #fff; border-color: var(--navy);
     display: flex; flex-direction: column; justify-content: space-between; gap: 1.4rem;
@@ -1862,7 +1864,8 @@
 
   /* ============ INFO CARDS (baseload etc.) ============ */
   .duo { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; max-width: 54rem; margin-bottom: 2.4rem; }
-  .info-card { background: var(--card); border: 1px solid var(--hair); border-radius: 0; box-shadow: var(--shadow); padding: 1.5rem 1.6rem; }
+  .info-card { background: var(--card); border: 1px solid var(--hair); border-radius: 0; padding: 1.5rem 1.6rem;
+    border-top-color: rgba(242,196,107,0.28); box-shadow: inset 0 26px 42px -34px rgba(242,196,107,0.20), inset 0 -48px 58px -44px rgba(0,0,0,0.55); }
   .info-card h3 { font-family: var(--sans); font-size: 1.02rem; font-weight: 600; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
   .info-card h3 svg { color: var(--blue); flex-shrink: 0; }
   .info-card p { font-size: 0.94rem; color: var(--muted); line-height: 1.6; }
