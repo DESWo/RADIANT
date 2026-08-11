@@ -461,6 +461,27 @@
     transform-style: preserve-3d; transform-origin: left center; opacity: 0;
   }
 
+  /* Stacked page edges. A book seen open shows its fore-edge on both sides,
+     and that striation is most of what says "this is paper, and there is a lot
+     of it". They sit just outside the spread and fade in as it opens. */
+  .bo__edge {
+    position: absolute; top: 1.6%; bottom: 1.6%; width: 10px; opacity: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(90deg,
+      #EFE7D4 0 1px, #D8CFB7 1px 2px, #C6BC9F 2px 3px);
+    box-shadow: inset 0 0 8px rgba(60,44,16,0.4);
+  }
+  .bo__edge--l { left: -10px; }
+  .bo__edge--r { right: -10px; }
+  /* the crease at the binding: paper cannot lie flat where it is sewn */
+  .bo__gutter {
+    position: absolute; top: 0; bottom: 0; left: 50%; width: 74px;
+    margin-left: -37px; opacity: 0; pointer-events: none;
+    background: linear-gradient(90deg,
+      rgba(38,26,8,0) 0%, rgba(38,26,8,0.42) 42%, rgba(24,16,4,0.55) 50%,
+      rgba(38,26,8,0.42) 58%, rgba(38,26,8,0) 100%);
+  }
+
   .bo__face { position: absolute; inset: 0; backface-visibility: hidden; }
   .bo__face--b { transform: rotateY(180deg); }
 
@@ -758,7 +779,14 @@
   /* the turning leaf */
   .pageflip {
     position: fixed; inset: 0; z-index: 70; pointer-events: none;
-    display: none; perspective: 2200px;
+    display: none; overflow: hidden;
+    /* A full-viewport plane hinged on its left edge projects toward infinity
+       as it nears perpendicular. At 2200px it measured 7249x11315 at 84
+       degrees: instead of going edge-on the sheet swelled across the screen
+       still carrying the old page, while the new one showed underneath. That
+       is the "both pages at once". A longer camera flattens it to about 150px
+       at the same angle, which is what edge-on should look like. */
+    perspective: 6400px;
   }
   .pageflip.is-on { display: block; }
   .walkbar.is-long .walkbar__mid::after {
@@ -1792,7 +1820,7 @@
   .fz-stage { position: relative; background: var(--vitrine); border: 1px solid var(--hair); border-radius: 0; overflow: hidden; box-shadow: var(--shadow); }
   #fz-canvas { width: 100%; height: auto; display: block; }
   .fz-readout { position: absolute; top: 0.8rem; left: 0.9rem; display: flex; gap: 0.7rem; align-items: center; font-family: var(--sans); font-size: 0.86rem; pointer-events: none; }
-  .fz-state { font-weight: 700; letter-spacing: 0.03em; padding: 0.25rem 0.65rem; border-radius: 0; background: rgba(52,211,153,0.18); color: #6ee7b7; }
+  .fz-state { font-weight: 700; letter-spacing: 0.03em; padding: 0.25rem 0.65rem; border-radius: 0; background: rgba(143,185,138,0.16); color: #C4DCBF; }
   /* k is LIVE instrument output, so it reads cold (--cherenkov) while the rest
      of this static exhibit stays warm. That is the whole colour system. */
   .fz-k { color: rgba(73,214,232,0.7); font-family: var(--mono); }
@@ -1914,7 +1942,7 @@
     font-family: var(--sans); transition: background 0.2s;
   }
   .acc-head:hover { background: var(--tint); }
-  .acc-head .acc-icon { flex-shrink: 0; margin-top: 0.15rem; }
+  .acc-head .acc-icon { flex-shrink: 0; margin-top: 0.15rem; color: var(--faint); }
   .acc-head .acc-title { flex: 1; }
   .acc-head .acc-kicker { display: block; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.2rem; }
   .acc-head .acc-text { font-size: 1rem; font-weight: 600; color: var(--ink); line-height: 1.45; }
@@ -1925,9 +1953,10 @@
   .acc.open .acc-panel { grid-template-rows: 1fr; }
   .acc-panel > div { overflow: hidden; }
   .acc-body { padding: 0 1.5rem 1.5rem; }
-  .fact-box { background: rgba(52,211,153,0.09); border: 1px solid rgba(52,211,153,0.28); border-radius: 0; padding: 1.1rem 1.3rem; display: flex; gap: 0.8rem; align-items: flex-start; }
+  .fact-box { background: rgba(143,185,138,0.08); border: 1px solid rgba(143,185,138,0.26); border-radius: 0; padding: 1.1rem 1.3rem; display: flex; gap: 0.8rem; align-items: flex-start; }
+  .fact-box > svg { color: var(--green-ok); flex-shrink: 0; margin-top: 0.1rem; }
   .fact-box .fact-label { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--green-ok); display: block; margin-bottom: 0.25rem; }
-  .fact-box p { font-size: 0.98rem; color: #BDEFD9; line-height: 1.6; }
+  .fact-box p { font-size: 0.98rem; color: var(--placard); line-height: 1.6; }
   .fact-box svg { flex-shrink: 0; margin-top: 0.1rem; }
 
   /* ============ FIELD FIGURE ============ */
@@ -2068,12 +2097,7 @@
 
 <nav class="nav" aria-label="Main">
   <a class="nav__brand" href="#top">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <circle cx="12" cy="12" r="2.4" fill="currentColor"/>
-      <path d="M12 3a9 9 0 0 1 7.8 4.5l-5.2 3a3 3 0 0 0-2.6-1.5V3Z" fill="currentColor"/>
-      <path d="M4.2 7.5l5.2 3A3 3 0 0 0 9.4 12H3a9 9 0 0 1 1.2-4.5Z" fill="currentColor"/>
-      <path d="M9.4 13.5a3 3 0 0 0 1.3 1.3l-3 5.2A9 9 0 0 1 3.6 15l5.8-1.5Z" fill="currentColor"/>
-    </svg>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="2.3"/><path d="M12 2.6a9.4 9.4 0 0 1 8.1 4.7l-4.1 2.4A4.7 4.7 0 0 0 12 7.3z"/><path d="M12 2.6a9.4 9.4 0 0 1 8.1 4.7l-4.1 2.4A4.7 4.7 0 0 0 12 7.3z" transform="rotate(120 12 12)"/><path d="M12 2.6a9.4 9.4 0 0 1 8.1 4.7l-4.1 2.4A4.7 4.7 0 0 0 12 7.3z" transform="rotate(240 12 12)"/></svg>
     Radiant
   </a>
   <div class="nav__links" id="nav-links" data-lenis-prevent>
@@ -2218,15 +2242,15 @@
         <p>IPCC median over a plant's lifetime, on par with wind; UNECE finds 5 to 6 g. <a href="https://www.ipcc.ch/site/assets/uploads/2018/02/ipcc_wg3_ar5_annex-iii.pdf" target="_blank" rel="noopener noreferrer">IPCC AR5 ↗</a></p>
       </div>
       <div class="b-claim reveal">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#F2C46B"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.6 15.5h18.8"/><path d="M5.5 15.5V11M10 15.5V7.2M14.5 15.5v-6M19 15.5v-9"/><path d="M2.6 19.4h18.8"/></svg>
         <p><strong>Clean and firm.</strong> As clean as wind over its lifetime, and uniquely able to deliver that power reliably, around the clock.</p>
       </div>
       <div class="b-claim reveal">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#F2C46B"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.4 20.4V6.9c0-1.4 2-2.5 4.6-2.5s4.6 1.1 4.6 2.5v13.5z"/><path d="M7.4 10.4h9.2M7.4 15h9.2"/><path d="M4.4 20.4h15.2"/></svg>
         <p><strong>Waste is small and controlled.</strong> A managed problem, not a mythical one, and it never leaves human control.</p>
       </div>
       <div class="b-claim reveal">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#F2C46B"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.2v9.6"/><path d="M8.4 9.6L12 13.2l3.6-3.6"/><path d="M4 15.2c0 3.4 3.6 5.6 8 5.6s8-2.2 8-5.6"/></svg>
         <p><strong>Next-gen fails safe by design</strong>, and its energy density means clean power from a remarkably small footprint of land.</p>
       </div>
     </div>
@@ -2310,7 +2334,7 @@
           <p class="pin-text" data-role="text"></p>
           <div class="pin-rail" data-role="rail" aria-hidden="true"></div>
           <p class="pin-hint">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.6 4.4h9.8l3.6 3.6v11.6H3.6z"/><path d="M13.4 4.4V8h3.6"/><path d="M19.4 9.6c1.6 2.4 1.4 5.6-.6 7.8"/></svg>
             Turn the page to follow the energy
           </p>
         </div>
@@ -2544,7 +2568,7 @@
           <p class="pin-text" data-role="text"></p>
           <div class="pin-rail" data-role="rail" aria-hidden="true"></div>
           <p class="pin-hint">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.6 4.4h9.8l3.6 3.6v11.6H3.6z"/><path d="M13.4 4.4V8h3.6"/><path d="M19.4 9.6c1.6 2.4 1.4 5.6-.6 7.8"/></svg>
             Turn the page to build it
           </p>
         </div>
@@ -2574,7 +2598,7 @@
               <radialGradient id="fsAmber"><stop offset="0" stop-color="#FDE68A"/><stop offset="0.55" stop-color="#FBBF24"/><stop offset="1" stop-color="#B45309"/></radialGradient>
               <radialGradient id="fsBlue"><stop offset="0" stop-color="#F2EEE7"/><stop offset="0.6" stop-color="#F2C46B"/><stop offset="1" stop-color="#A28753"/></radialGradient>
               <radialGradient id="fsHalo"><stop offset="0" stop-color="#FBBF24" stop-opacity="0.55"/><stop offset="1" stop-color="#FBBF24" stop-opacity="0"/></radialGradient>
-              <radialGradient id="fsGreen"><stop offset="0" stop-color="#A7F3D0"/><stop offset="0.6" stop-color="#34D399"/><stop offset="1" stop-color="#047857"/></radialGradient>
+              <radialGradient id="fsGreen"><stop offset="0" stop-color="#D2E4CD"/><stop offset="0.6" stop-color="#8FB98A"/><stop offset="1" stop-color="#4A6B48"/></radialGradient>
             </defs>
 
             <!-- second-generation nuclei, waiting -->
@@ -2600,12 +2624,12 @@
 
             <!-- fission fragments (hidden until the split) -->
             <g id="fs-fa" transform="translate(400,236)" opacity="0">
-              <circle r="34" fill="url(#fsGreen)"/><circle r="34" fill="none" stroke="#A7F3D0" stroke-width="2" stroke-opacity="0.7"/>
-              <text class="fs-label" x="0" y="-48" text-anchor="middle" fill="#34D399">BARIUM</text>
+              <circle r="34" fill="url(#fsGreen)"/><circle r="34" fill="none" stroke="#D2E4CD" stroke-width="2" stroke-opacity="0.7"/>
+              <text class="fs-label" x="0" y="-48" text-anchor="middle" fill="#8FB98A">BARIUM</text>
             </g>
             <g id="fs-fb" transform="translate(400,236)" opacity="0">
-              <circle r="30" fill="url(#fsGreen)"/><circle r="30" fill="none" stroke="#A7F3D0" stroke-width="2" stroke-opacity="0.7"/>
-              <text class="fs-label" x="0" y="52" text-anchor="middle" fill="#34D399">KRYPTON</text>
+              <circle r="30" fill="url(#fsGreen)"/><circle r="30" fill="none" stroke="#D2E4CD" stroke-width="2" stroke-opacity="0.7"/>
+              <text class="fs-label" x="0" y="52" text-anchor="middle" fill="#8FB98A">KRYPTON</text>
             </g>
 
             <!-- incoming neutron -->
@@ -2633,7 +2657,7 @@
           <p class="pin-text" data-role="text"></p>
           <div class="pin-rail" data-role="rail" aria-hidden="true"></div>
           <p class="pin-hint">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.6 4.4h9.8l3.6 3.6v11.6H3.6z"/><path d="M13.4 4.4V8h3.6"/><path d="M19.4 9.6c1.6 2.4 1.4 5.6-.6 7.8"/></svg>
             Turn the page to split the atom
           </p>
         </div>
@@ -2665,11 +2689,11 @@
 
     <div class="duo">
       <div class="info-card reveal">
-        <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18"/></svg>The split</h3>
+        <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 3.4a8.6 8.6 0 0 0 0 17.2"/><path d="M13 3.4a8.6 8.6 0 0 1 0 17.2"/><path d="M12 2.6l-1.8 4.6 3.4 1.6-2 4.4 3.2 1.4-1.6 3.8"/></svg>The split</h3>
         <p>A slow neutron strikes the nucleus of a uranium-235 atom. The nucleus absorbs it, wobbles, and splits into two smaller atoms. A tiny bit of its mass turns directly into energy (E = mc²), which is why so little fuel gives off so much heat: one pellet the size of a fingertip holds about as much energy as a ton of coal.</p>
       </div>
       <div class="info-card reveal">
-        <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h4l2-6 4 12 2-6h4"/></svg>The chain reaction</h3>
+        <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="4.2" cy="12" r="1.5"/><path d="M5.8 12h3.4"/><circle cx="10.8" cy="7.6" r="1.4"/><circle cx="10.8" cy="16.4" r="1.4"/><path d="M9.4 11.4l1.2-2.6M9.4 12.6l1.2 2.6"/><path d="M12.3 6.6l2.6-1.4M12.3 8.6l2.6 1.4M12.3 15.4l2.6-1.4M12.3 17.4l2.6 1.4"/></svg>The chain reaction</h3>
         <p>Each split also flings out two or three fresh neutrons. If those go on to split more nuclei, the reaction sustains itself. Left unchecked it doubles and doubles; the whole trick of a reactor is to hold it right at the edge, where each split triggers exactly one more.</p>
       </div>
     </div>
@@ -2762,11 +2786,11 @@
 
     <div class="duo">
       <div class="info-card reveal">
-        <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="12 6 12 12 16 14"/><circle cx="12" cy="12" r="10"/></svg>Firm sources</h3>
+        <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 7v5.4l3.2 2"/></svg>Firm sources</h3>
         <p><strong>Nuclear, geothermal, coal, gas, reservoir hydro.</strong> Available on demand, day or night, whatever the weather. Nuclear, geothermal and coal run steadily around the clock; gas and reservoir hydro ramp up and down to follow demand.</p>
       </div>
       <div class="info-card reveal">
-        <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.5 19a4.5 4.5 0 1 0 0-9h-1.8a7 7 0 1 0-11.2 6"/></svg>Variable sources</h3>
+        <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.4 14.6a3.9 3.9 0 0 0 0-7.8h-1.6a6.1 6.1 0 1 0-9.8 5.2"/><path d="M4.6 18.4h2.8M10 18.4h2.8M15.4 18.4h2.8"/></svg>Variable sources</h3>
         <p><strong>Solar, wind, run-of-river hydro.</strong> Output follows the weather, so they need firm capacity, storage, or transmission to fill the gaps.</p>
       </div>
     </div>
@@ -2957,11 +2981,11 @@
 
     <div class="duo">
       <div class="info-card reveal">
-        <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>What is a millisievert?</h3>
+        <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.4 16.6h17.2"/><path d="M5.6 16.6v-3M9.2 16.6v-5.4M12.8 16.6v-3M16.4 16.6v-7.6M20 16.6v-3"/><path d="M9.2 8.4v-3"/></svg>What is a millisievert?</h3>
         <p>A millisievert (mSv) measures radiation dose. The average person receives about <strong>3 mSv per year</strong> from natural background radiation: cosmic rays, radon, and radioactive elements in soil and rock.</p>
       </div>
       <div class="info-card reveal">
-        <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2 4 5.5v5.6c0 4.9 3.4 9.5 8 10.9 4.6-1.4 8-6 8-10.9V5.5L12 2Z"/></svg>The key insight</h3>
+        <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.4 20.4h17.2"/><path d="M6.6 20.4V4.6h3.4v15.8"/><path d="M14.4 20.4v-1.8h3.4v1.8"/></svg>The key insight</h3>
         <p>The NRC estimates that living near a U.S. nuclear plant adds about <strong>0.001 mSv a year</strong>, a few thousandths of natural background. One cross-country flight gives you roughly 40 times more.</p>
       </div>
     </div>
@@ -3005,16 +3029,16 @@
     <div id="myth-list">
       <div class="acc reveal">
         <button class="acc-head" aria-expanded="false">
-          <svg class="acc-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke="#DC2626" stroke-width="2"/><path d="M15 9l-6 6M9 9l6 6" stroke="#DC2626" stroke-width="2" stroke-linecap="round"/></svg>
+          <svg class="acc-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.4 12a8.4 8.4 0 0 1-13.1 6.9"/><path d="M3.6 12A8.4 8.4 0 0 1 16.7 5.1"/><path d="M6.4 17.6L17.6 6.4"/></svg>
           <span class="acc-title">
             <span class="acc-kicker">Myth</span>
             <span class="acc-text">"Nuclear waste is uncontrollable, dangerous for 10,000 years, and there's nowhere to put it."</span>
           </span>
-          <svg class="acc-caret" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          <svg class="acc-caret" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5.4 9.2L12 15.4l6.6-6.2"/></svg>
         </button>
         <div class="acc-panel"><div><div class="acc-body">
           <div class="fact-box">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#047857"/><path d="M8 12.5l2.8 2.8L16.5 9" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.4 18.6h17.2"/><path d="M6.2 12.4l3.6 3.6 8-9.4"/></svg>
             <p><span class="fact-label">Fact</span>Since the 1950s, U.S. commercial reactors have produced roughly 90,000 metric tons of used fuel, growing by about 2,000 tons a year. It is solid and tracked: stored first in water-filled pools at reactor sites, then moved into sealed dry casks after it cools. Per the <a href="https://www.energy.gov/ne/articles/5-fast-facts-about-spent-nuclear-fuel" target="_blank" rel="noopener noreferrer">U.S. Department of Energy</a>, if all of it were stacked it would cover a single football field to a depth of less than 10 yards. That counts the fuel assemblies themselves, not packaging or spacing, and used fuel is distinct from lower-level wastes, which are handled separately. The unsolved part is political, not technical: the U.S. still has no permanent geological repository, while Finland is completing the world's first.</p>
           </div>
           <figure class="field-fig">
@@ -3040,16 +3064,16 @@
 
       <div class="acc reveal">
         <button class="acc-head" aria-expanded="false">
-          <svg class="acc-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke="#DC2626" stroke-width="2"/><path d="M15 9l-6 6M9 9l6 6" stroke="#DC2626" stroke-width="2" stroke-linecap="round"/></svg>
+          <svg class="acc-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.4 12a8.4 8.4 0 0 1-13.1 6.9"/><path d="M3.6 12A8.4 8.4 0 0 1 16.7 5.1"/><path d="M6.4 17.6L17.6 6.4"/></svg>
           <span class="acc-title">
             <span class="acc-kicker">Myth</span>
             <span class="acc-text">"Living near a nuclear plant is dangerous."</span>
           </span>
-          <svg class="acc-caret" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          <svg class="acc-caret" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5.4 9.2L12 15.4l6.6-6.2"/></svg>
         </button>
         <div class="acc-panel"><div><div class="acc-body">
           <div class="fact-box">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#047857"/><path d="M8 12.5l2.8 2.8L16.5 9" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.4 18.6h17.2"/><path d="M6.2 12.4l3.6 3.6 8-9.4"/></svg>
             <p><span class="fact-label">Fact</span>One cross-country flight (about 0.04 mSv) exposes you to roughly 40 times more radiation than the NRC estimates for living near a nuclear plant for an entire year (about 0.001 mSv). Both are tiny next to the roughly 3 mSv everyone receives annually from natural background radiation.</p>
           </div>
         </div></div></div>
@@ -3057,16 +3081,16 @@
 
       <div class="acc reveal">
         <button class="acc-head" aria-expanded="false">
-          <svg class="acc-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke="#DC2626" stroke-width="2"/><path d="M15 9l-6 6M9 9l6 6" stroke="#DC2626" stroke-width="2" stroke-linecap="round"/></svg>
+          <svg class="acc-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.4 12a8.4 8.4 0 0 1-13.1 6.9"/><path d="M3.6 12A8.4 8.4 0 0 1 16.7 5.1"/><path d="M6.4 17.6L17.6 6.4"/></svg>
           <span class="acc-title">
             <span class="acc-kicker">Myth</span>
             <span class="acc-text">"Nuclear plants can explode like a bomb."</span>
           </span>
-          <svg class="acc-caret" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          <svg class="acc-caret" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5.4 9.2L12 15.4l6.6-6.2"/></svg>
         </button>
         <div class="acc-panel"><div><div class="acc-body">
           <div class="fact-box">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#047857"/><path d="M8 12.5l2.8 2.8L16.5 9" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.4 18.6h17.2"/><path d="M6.2 12.4l3.6 3.6 8-9.4"/></svg>
             <p><span class="fact-label">Fact</span>A reactor physically cannot detonate like a nuclear weapon. The fuel is nowhere near enriched enough, and the physics are fundamentally different. Weapons require precise configurations that a power reactor cannot produce by accident.</p>
           </div>
         </div></div></div>
@@ -3074,16 +3098,16 @@
 
       <div class="acc reveal">
         <button class="acc-head" aria-expanded="false">
-          <svg class="acc-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke="#DC2626" stroke-width="2"/><path d="M15 9l-6 6M9 9l6 6" stroke="#DC2626" stroke-width="2" stroke-linecap="round"/></svg>
+          <svg class="acc-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.4 12a8.4 8.4 0 0 1-13.1 6.9"/><path d="M3.6 12A8.4 8.4 0 0 1 16.7 5.1"/><path d="M6.4 17.6L17.6 6.4"/></svg>
           <span class="acc-title">
             <span class="acc-kicker">Myth</span>
             <span class="acc-text">"Nuclear technology is stuck in the 1970s."</span>
           </span>
-          <svg class="acc-caret" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          <svg class="acc-caret" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5.4 9.2L12 15.4l6.6-6.2"/></svg>
         </button>
         <div class="acc-panel"><div><div class="acc-body">
           <div class="fact-box">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#047857"/><path d="M8 12.5l2.8 2.8L16.5 9" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.4 18.6h17.2"/><path d="M6.2 12.4l3.6 3.6 8-9.4"/></svg>
             <p><span class="fact-label">Fact</span>A new generation of designs, including small modular reactors and molten-salt concepts, is built around <strong>passive safety</strong>: mechanisms that rely on physical properties such as natural circulation, gravity, and negative temperature feedback rather than powered equipment and operator action. The U.S. NRC certified its first small modular design in 2023. These designs are engineered to fail safe instead of failing loud, though most remain to be proven in commercial operation.</p>
           </div>
         </div></div></div>
@@ -3091,16 +3115,16 @@
 
       <div class="acc reveal">
         <button class="acc-head" aria-expanded="false">
-          <svg class="acc-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke="#DC2626" stroke-width="2"/><path d="M15 9l-6 6M9 9l6 6" stroke="#DC2626" stroke-width="2" stroke-linecap="round"/></svg>
+          <svg class="acc-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.4 12a8.4 8.4 0 0 1-13.1 6.9"/><path d="M3.6 12A8.4 8.4 0 0 1 16.7 5.1"/><path d="M6.4 17.6L17.6 6.4"/></svg>
           <span class="acc-title">
             <span class="acc-kicker">Myth</span>
             <span class="acc-text">"Nuclear fuel will run out; it isn't renewable."</span>
           </span>
-          <svg class="acc-caret" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          <svg class="acc-caret" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5.4 9.2L12 15.4l6.6-6.2"/></svg>
         </button>
         <div class="acc-panel"><div><div class="acc-body">
           <div class="fact-box">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#047857"/><path d="M8 12.5l2.8 2.8L16.5 9" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.4 18.6h17.2"/><path d="M6.2 12.4l3.6 3.6 8-9.4"/></svg>
             <p><span class="fact-label">Fact</span>Known uranium resources cover many decades at current consumption, and advanced reactors could stretch that much further by reusing spent fuel. Thorium is relatively abundant too, though commercially viable thorium fuel cycles still face technical, regulatory, and economic hurdles. The fuel-supply question is real but long-horizon, not imminent.</p>
           </div>
         </div></div></div>
@@ -5696,7 +5720,9 @@
         ctl   = document.getElementById('bo-ctitle'),
         wng   = document.getElementById('bo-wing'),
         flood = document.getElementById('bo-flood'),
-        scrim = document.getElementById('bo-scrim');
+        scrim = document.getElementById('bo-scrim'),
+        edges = [document.getElementById('bo-edge-l'), document.getElementById('bo-edge-r')].filter(Boolean),
+        gutter = document.getElementById('bo-gutter');
 
     stage.style.setProperty('--book', getComputedStyle(bookEl).getPropertyValue('--book') || '#6E6653');
     if (ttl) ttl.textContent = title || '';
@@ -5714,7 +5740,8 @@
     var fromX = (r.left + r.width / 2 - window.innerWidth / 2) - q;
     var fromY = r.top + r.height / 2 - window.innerHeight / 2;
 
-    gsap.set(book, { x: fromX, y: fromY, scale: 0.1, rotateY: 26, transformOrigin: '50% 50%', opacity: 1 });
+    gsap.set(book, { x: fromX, y: fromY, scale: 0.1, rotateY: 26, rotateX: 0, transformOrigin: '50% 50%', opacity: 1 });
+    gsap.set(edges.concat(gutter ? [gutter] : []), { opacity: 0 });
     gsap.set(left, { rotateY: 180, z: 6 });   // shut: folded over the right half, cover out
     // the block of pages sits on the right, front sheet nearest you
     leaf.forEach(function (lf, i) { gsap.set(lf, { rotateY: 0, z: 3 - i * 0.35, opacity: 0 }); });
@@ -5724,7 +5751,7 @@
       onComplete: function () {
         enterWing(wingId, atStep);
         stage.classList.remove('is-on');
-        gsap.set([book, left, ttl, flood, scrim].concat(leaf), { clearProps: 'all' });
+        gsap.set([book, left, ttl, flood, scrim, gutter].concat(leaf, edges), { clearProps: 'all' });
       }
     })
       // 1. off the shelf, still shut, turning to face you
@@ -5733,17 +5760,32 @@
       // 2. both covers swing apart and the spread settles flat and centred
       .set(leaf, { opacity: 1 }, 0.42)
       .to(left, { rotateY: 0, z: 0, duration: 0.7, ease: 'power2.inOut' }, 0.42)
-      .to(book, { x: 0, rotateY: 0, duration: 0.7, ease: 'power2.inOut' }, 0.42)
+      // it lands open on a slight tilt, the way a book lies on a lectern
+      .to(book, { x: 0, rotateY: 0, rotateX: 9, duration: 0.7, ease: 'power2.inOut' }, 0.42)
+      // and settles, because paper and board have weight
+      .to(book, { rotateX: 6.4, duration: 0.26, ease: 'power2.out' }, 1.12)
+      .to(edges, { opacity: 1, duration: 0.4, ease: 'power1.out' }, 0.72)
+      .to(gutter, { opacity: 1, duration: 0.45, ease: 'power1.out' }, 0.66)
       // 3. it riffles: the sheets go over in quick succession, about a second
       //    of pages, and the last one uncovers the page you were looking for
+      /* Each sheet dims as it stands upright and brightens again as it lands:
+         a page edge-on catches almost no light. They also fan a little, so the
+         block riffles instead of moving in lockstep. */
       .to(leaf, {
-        rotateY: -172, duration: 0.52, ease: 'power1.inOut',
-        stagger: { each: 0.1, from: 'start' }
+        keyframes: [
+          { rotateY: -88, filter: 'brightness(0.74)', duration: 0.27, ease: 'power1.in' },
+          { rotateY: -172, filter: 'brightness(1)', duration: 0.31, ease: 'power2.out' }
+        ],
+        rotateZ: function (i) { return i % 2 ? 0.9 : -0.7; },
+        stagger: { each: 0.085, from: 'start' }
       }, 1.05)
       // 4. what the last sheet uncovers is the exhibit, and the camera goes in
       .to(ttl, { opacity: 1, duration: 0.4, ease: 'power1.out' }, 1.86)
       .set(book, { transformOrigin: '75% 50%' }, 2.24)
-      .to(book, { scale: 8, duration: 0.6, ease: 'power2.in' }, 2.26)
+      // the camera levels as it goes in: you stop looking at a book and start
+      // reading a page
+      .to(book, { scale: 8, rotateX: 0, duration: 0.6, ease: 'power2.in' }, 2.26)
+      .to(edges.concat(gutter ? [gutter] : []), { opacity: 0, duration: 0.3 }, 2.3)
       .to(flood, { opacity: 1, duration: 0.48, ease: 'power2.in' }, 2.4);
   }
 
@@ -5883,6 +5925,11 @@
       <div class="bo__face bo__face--f bo__paper"><span class="bo__title" id="bo-title"></span></div>
       <div class="bo__face bo__face--b bo__cover"></div>
     </div>
+    <!-- the stacked page edges, and the crease the binding makes down the
+         middle: without them a spread is two rectangles, not a book -->
+    <div class="bo__edge bo__edge--l" id="bo-edge-l" aria-hidden="true"></div>
+    <div class="bo__edge bo__edge--r" id="bo-edge-r" aria-hidden="true"></div>
+    <div class="bo__gutter" id="bo-gutter" aria-hidden="true"></div>
     <div class="bo__leaf" id="bo-leaf">
       <div class="bo__face bo__face--f bo__paper"></div>
       <div class="bo__face bo__face--b bo__paper"></div>
