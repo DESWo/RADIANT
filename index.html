@@ -388,6 +388,14 @@
     color: #12100A; letter-spacing: 0.005em; white-space: nowrap;
     flex: 1 1 auto; min-height: 0; overflow: hidden; text-overflow: ellipsis;
   }
+  /* A volume you can operate carries a lit band at the head of the spine, the
+     way a working instrument carries a power lamp. */
+  .book--live::before {
+    content: ''; position: absolute; left: 0; right: 0; top: 0; height: 3px;
+    background: var(--cherenkov); box-shadow: 0 0 8px rgba(73,214,232,0.75); z-index: 2;
+  }
+  .book--live .book__mark { color: rgba(14,12,7,0.92); }
+
   /* the device at the foot of the spine, where a binder puts one */
   .book__mark {
     flex: 0 0 auto; width: clamp(0.72rem, 1.45vw, 0.9rem); height: auto;
@@ -1189,6 +1197,84 @@
   .rk-src { margin-top: 1.4rem; }
   @media (max-width: 820px) { .rk { grid-template-columns: 1fr; } }
 
+
+  /* ---- FIG: one system every technical figure inherits ----
+     Stroke weights, arrowheads, callouts, label type and caption treatment live
+     here so no single diagram grows its own visual style. Colour is semantic:
+     structures are off-white, nuclear material and heat are amber, anything
+     live (neutrons, radiation, flow, electrical output) is Cherenkov blue,
+     secondary structure is muted, and red means an actual hazard. */
+  .fig {
+    --fig-struct: #E4DCC9;   /* components and vessels */
+    --fig-mat:    #F2C46B;   /* nuclear material, heat, static emphasis */
+    --fig-live:   #49D6E8;   /* neutrons, radiation, live flows and data */
+    --fig-sec:    #8A8267;   /* secondary structure */
+    --fig-haz:    #D4573F;   /* hazard or failure only */
+    --fig-w1: 2;             /* primary structure */
+    --fig-w2: 1.25;          /* secondary structure and annotation */
+    margin: 0 0 1.6rem;
+  }
+  .fig__plate { position: relative; background: #0A0906; border: 1px solid var(--hair); padding: 1.1rem 1.2rem 0.9rem; }
+  .fig svg { display: block; width: 100%; height: auto; }
+  .fig__num {
+    font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--spot); border: 1px solid rgba(242,196,107,0.3); padding: 0.2rem 0.5rem;
+    display: inline-block; margin-bottom: 0.7rem;
+  }
+  /* numbered callouts: the label sits beside the figure, never inside it */
+  .fig__key { list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+    gap: 0.35rem 1.4rem; margin: 0.9rem 0 0; }
+  .fig__key li { display: flex; gap: 0.55rem; font-size: 0.86rem; color: var(--muted); line-height: 1.45; }
+  .fig__key b { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.1em; color: var(--spot);
+    padding-top: 0.15rem; flex: 0 0 auto; }
+  .fig__cap { font-size: 0.82rem; color: var(--muted); line-height: 1.55; margin-top: 0.8rem; }
+  .fig__cap a { color: var(--spot-deep, var(--spot)); }
+
+  /* in-figure type is always the instrument face, never the wall text */
+  .fig text, .fig .fig-lab { font-family: var(--mono); font-size: 13px; letter-spacing: 0.12em;
+    text-transform: uppercase; fill: var(--fig-struct); }
+  .fig .fig-lab--sm { font-size: 11px; fill: var(--fig-sec); }
+  .fig .fig-lab--live { fill: var(--fig-live); }
+  .fig .fig-lab--mat { fill: var(--fig-mat); }
+  /* line roles: solid structure, thin leader, live flow */
+  .fig .fig-struct { fill: none; stroke: var(--fig-struct); stroke-width: 2; stroke-linejoin: round; }
+  .fig .fig-sec    { fill: none; stroke: var(--fig-sec); stroke-width: 1.25; }
+  .fig .fig-lead   { fill: none; stroke: var(--fig-sec); stroke-width: 1; }
+  .fig .fig-live   { fill: none; stroke: var(--fig-live); stroke-width: 2; }
+  .fig .fig-mat    { fill: var(--fig-mat); }
+
+
+  /* The highlight is tied to the beat, not to a timeline position: in a paged
+     scene the playhead rests exactly on the beat, so anything keyed to
+     i + 0.2 is never on screen when the reader is looking. */
+  #plant-cam-svg .hl { opacity: 0; transition: opacity 0.35s ease; }
+  #plant-cam-svg[data-beat="1"] .hl-1, #plant-cam-svg[data-beat="2"] .hl-2,
+  #plant-cam-svg[data-beat="3"] .hl-3, #plant-cam-svg[data-beat="4"] .hl-4,
+  #plant-cam-svg[data-beat="5"] .hl-5, #plant-cam-svg[data-beat="6"] .hl-6 { opacity: 1; }
+
+  /* ---- FIG 02: the plant schematic ----
+     Structure is drawn once, quietly. The flow layer is heavier than the
+     structure on purpose: someone should be able to trace fission to grid
+     before reading a single label. */
+  #plant-svg .pl-struct, #plant-cam-svg .pl-struct {
+    fill: none; stroke: #E4DCC9; stroke-width: 2; stroke-linejoin: round;
+  }
+  #plant-svg .pl-sec, #plant-cam-svg .pl-sec {
+    fill: none; stroke: #8A8267; stroke-width: 1.25;
+  }
+  #plant-svg .pl-fig, #plant-cam-svg .pl-fig {
+    font-family: var(--mono); font-size: 13px; letter-spacing: 0.16em;
+    text-transform: uppercase; fill: #8A8267;
+  }
+  /* numbered cues on the figure; the names live in the key beneath it */
+  #plant-svg .pl-cue circle, #plant-cam-svg .pl-cue circle {
+    fill: #0C0B08; stroke: #F2C46B; stroke-width: 1.25;
+  }
+  #plant-svg .pl-cue text, #plant-cam-svg .pl-cue text {
+    font-family: var(--mono); font-size: 12px; font-weight: 700;
+    letter-spacing: 0.06em; fill: #F2C46B;
+  }
+
   /* ---- Exhibits: a wall placard (narrow, left) beside its vitrine (wide) ---- */
   .exhibit { display: grid; grid-template-columns: var(--placard-col) minmax(0, 1fr);
     gap: 2rem 2.4rem; align-items: start; margin: 0 0 3rem; max-width: 60rem; }
@@ -1466,7 +1552,7 @@
     #plant-cam-svg.run-4 .flow-slow { opacity: 0.9; animation: flowdash 2s linear infinite; }
     /* 5 - the switchyard: power leaves down the transmission lines */
     #plant-cam-svg.run-5 .pf-grid {
-      stroke: #F2C46B; stroke-dasharray: 5 12;
+      stroke: #49D6E8; stroke-opacity: 1; stroke-dasharray: 5 12;
       animation: flowdash 1.5s linear infinite;
     }
     /* 6 - the cooling tower: the plume finally rises */
@@ -1581,7 +1667,7 @@
 
   /* Highlights start hidden in every copy of the diagram; the explorer's [data-active] rules and the scene's timeline each fade in one at a time. */
   .hl { opacity: 0; }
-  #plant-cam-svg .hl { stroke: #F2C46B; stroke-width: 5; fill: none; filter: drop-shadow(0 0 9px #F2C46B); }
+  #plant-cam-svg .hl { stroke: #F2C46B; stroke-width: 2; fill: none; }
 
   /* fission scene bits */
   #fs-svg .fs-label { font-family: var(--sans); font-size: 15px; font-weight: 700; letter-spacing: 0.06em; }
@@ -1594,7 +1680,7 @@
   .plant-fig figcaption { font-size: 0.82rem; color: var(--muted); padding: 0.7rem 0.5rem 0.2rem; line-height: 1.5; }
   .hotspot { cursor: pointer; }
   .hotspot:focus-visible { outline: 2px solid var(--blue); outline-offset: 1px; }
-  #plant-svg .hl { stroke: #F2C46B; stroke-width: 4; fill: none; filter: drop-shadow(0 0 7px #F2C46B); transition: opacity 0.3s ease; }
+  #plant-svg .hl { stroke: #F2C46B; stroke-width: 2; fill: none; transition: opacity 0.3s ease; }
   #plant-svg[data-active="1"] .hl-1, #plant-svg[data-active="2"] .hl-2, #plant-svg[data-active="3"] .hl-3,
   #plant-svg[data-active="4"] .hl-4, #plant-svg[data-active="5"] .hl-5, #plant-svg[data-active="6"] .hl-6 { opacity: 1; }
   .plant-tabs { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1.1rem; }
@@ -1629,7 +1715,7 @@
     transform-origin: center center; will-change: transform;
   }
   .js:not(.reduced) .plant-cam svg { filter: drop-shadow(0 20px 55px rgba(0,0,0,0.5)); }
-  .js:not(.reduced) .plant-cam .hl { transition: opacity 0.45s ease; stroke: currentColor; stroke-width: 4; fill: none; filter: drop-shadow(0 0 7px currentColor); }
+  .js:not(.reduced) .plant-cam .hl { transition: opacity 0.45s ease; stroke: currentColor; stroke-width: 2; fill: none; }
   .js:not(.reduced) .plant-cam svg[data-stage="1"] .hl-1,
   .js:not(.reduced) .plant-cam svg[data-stage="2"] .hl-2,
   .js:not(.reduced) .plant-cam svg[data-stage="3"] .hl-3,
@@ -2026,7 +2112,7 @@
   <div class="library__head">
     <p class="entry__kicker">The Reading Room</p>
     <h1 class="library__title">Every exhibit is a book.</h1>
-    <p class="library__sub">Five shelves, one for each part of the story. Pull a book off the shelf and it opens to what is written inside.</p>
+    <p class="library__sub">Five shelves, one for each part of the story. Three of these you do not just read &mdash; you operate them: <b>run a reactor</b>, <b>build a grid</b>, <b>fire a neutron</b>. They are marked on the shelf.</p>
   </div>
   <div id="shelves" class="bookcase"><!-- built from the WINGS map --></div>
 </section>
@@ -2221,88 +2307,105 @@
     <div class="plant-explorer reveal">
       <figure class="plant-fig">
         <svg id="plant-svg" data-active="1" viewBox="-46 -34 1052 548" role="img" aria-label="Interactive schematic of a pressurized-water reactor. Click a part to learn what it does: the reactor core, steam generator, turbine hall, condenser, switchyard, and cooling tower.">
-          <rect x="-46" y="-34" width="1052" height="548" rx="20" fill="#14120D"/>
-          <!-- ground -->
-          <line x1="28" y1="400" x2="932" y2="400" stroke="#A9A18B" stroke-width="2.5"/>
-          <!-- containment building -->
-          <path d="M 46 400 L 46 215 Q 46 112 190 112 Q 334 112 334 215 L 334 400 Z" fill="#2C281F" stroke="#A9A18B" stroke-width="2.5"/>
-          <!-- reactor vessel, control rods, fuel -->
-          <rect x="72" y="230" width="64" height="135" rx="8" fill="#231F18" stroke="#A9A18B" stroke-width="2.5"/>
-          <rect x="86" y="204" width="36" height="26" fill="#2C281F" stroke="#A9A18B" stroke-width="2"/>
-          <rect x="90" y="230" width="4" height="52" fill="#A9A18B"/><rect x="102" y="230" width="4" height="52" fill="#A9A18B"/><rect x="114" y="230" width="4" height="52" fill="#A9A18B"/>
-          <rect class="fuel" x="86" y="295" width="9" height="58" fill="#FBBF24" stroke="#A9A18B" stroke-width="1.5"/>
-          <rect class="fuel" x="100" y="295" width="9" height="58" fill="#FBBF24" stroke="#A9A18B" stroke-width="1.5"/>
-          <rect class="fuel" x="114" y="295" width="9" height="58" fill="#FBBF24" stroke="#A9A18B" stroke-width="1.5"/>
-          <!-- pressurizer -->
-          <rect x="152" y="170" width="26" height="52" rx="9" fill="#231F18" stroke="#A9A18B" stroke-width="2"/>
-          <line x1="165" y1="222" x2="165" y2="250" stroke="#FBBF24" stroke-width="3"/>
-          <!-- primary loop -->
-          <path class="flow pf-primary" d="M 136 252 H 232" stroke="#FBBF24" stroke-width="3.5" fill="none"/>
-          <polygon points="196,246 208,252 196,258" fill="#FBBF24"/>
-          <path class="flow pf-primary" d="M 232 340 H 136" stroke="#FBBF24" stroke-width="3.5" fill="none"/>
-          <polygon points="184,334 172,340 184,346" fill="#FBBF24"/>
-          <!-- steam generator -->
-          <rect x="232" y="168" width="58" height="200" rx="16" fill="#231F18" stroke="#A9A18B" stroke-width="2.5"/>
-          <path class="pf-tubes" d="M 244 300 V 215 Q 261 193 278 215 V 300" stroke="#FBBF24" stroke-width="2" fill="none" opacity="0.55"/>
-          <!-- secondary steam loop -->
-          <path class="flow pf-steam" d="M 261 168 V 138 H 396 V 208" stroke="#F2C46B" stroke-width="3" fill="none"/>
-          <polygon points="334,132 346,138 334,144" fill="#F2C46B"/>
-          <path class="flow pf-steam" d="M 436 285 V 322" stroke="#F2C46B" stroke-width="2.5" fill="none"/>
-          <path class="flow pf-cond" d="M 406 350 H 302 V 362 H 290" stroke="#F2C46B" stroke-width="2" fill="none"/>
-          <!-- turbine -->
-          <polygon points="396,238 486,208 486,292 396,266" fill="#2C281F" stroke="#A9A18B" stroke-width="2.5"/>
-          <line x1="486" y1="250" x2="520" y2="250" stroke="#A9A18B" stroke-width="4"/>
+          <defs>
+            <marker id="plArrow" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+              <path d="M0.5 1.4 L9 5 L0.5 8.6 z" fill="#F2C46B"/>
+            </marker>
+            <marker id="plArrowCool" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+              <path d="M0.5 1.4 L9 5 L0.5 8.6 z" fill="#8A8267"/>
+            </marker>
+          </defs>
+          <rect x="-46" y="-34" width="1052" height="548" rx="0" fill="#0C0B08"/>
+          <text class="pl-fig" x="-24" y="-8">FIG. 02 &#8212; PRESSURIZED WATER REACTOR</text>
+
+          <!-- ground line -->
+          <line x1="28" y1="400" x2="932" y2="400" stroke="#8A8267" stroke-width="1.25"/>
+
+          <!-- ============ COMPONENTS: simplified silhouettes, one weight ============ -->
+          <!-- 01 containment + reactor vessel -->
+          <path d="M 46 400 L 46 215 Q 46 112 190 112 Q 334 112 334 215 L 334 400" class="pl-struct"/>
+          <rect x="74" y="230" width="60" height="132" rx="6" class="pl-struct"/>
+          <rect x="88" y="206" width="32" height="24" class="pl-sec"/>
+          <rect x="92" y="230" width="3" height="50" fill="#8A8267"/><rect x="103" y="230" width="3" height="50" fill="#8A8267"/><rect x="114" y="230" width="3" height="50" fill="#8A8267"/>
+          <rect class="fuel" x="88" y="294" width="8" height="56" fill="#F2C46B"/>
+          <rect class="fuel" x="101" y="294" width="8" height="56" fill="#F2C46B"/>
+          <rect class="fuel" x="114" y="294" width="8" height="56" fill="#F2C46B"/>
+          <rect x="152" y="170" width="24" height="50" rx="8" class="pl-sec"/>
+
+          <!-- 02 steam generator -->
+          <rect x="232" y="168" width="56" height="200" rx="12" class="pl-struct"/>
+          <path class="pf-tubes" d="M 246 300 V 216 Q 260 194 274 216 V 300" fill="none" stroke="#F2C46B" stroke-width="2"/>
+
+          <!-- 03 turbine + generator -->
+          <polygon points="398,240 486,210 486,290 398,268" class="pl-struct"/>
           <g class="pf-rotor" stroke="#F2C46B" stroke-width="3" stroke-linecap="round">
-            <line x1="424" y1="250" x2="458" y2="250"/><line x1="441" y1="233" x2="441" y2="267"/>
-            <line x1="429" y1="238" x2="453" y2="262"/><line x1="453" y1="238" x2="429" y2="262"/>
+            <line x1="426" y1="252" x2="458" y2="252"/><line x1="442" y1="236" x2="442" y2="268"/>
+            <line x1="431" y1="241" x2="453" y2="263"/><line x1="453" y1="241" x2="431" y2="263"/>
           </g>
-          <circle class="pf-hub" cx="441" cy="250" r="4.5" fill="#F2C46B"/>
-          <!-- generator -->
-          <rect x="520" y="215" width="100" height="70" rx="6" fill="#231F18" stroke="#A9A18B" stroke-width="2.5"/>
-          <g class="pf-coils" stroke="#A9A18B" stroke-width="2" opacity="0.3"><line x1="538" y1="223" x2="538" y2="277"/><line x1="554" y1="223" x2="554" y2="277"/><line x1="570" y1="223" x2="570" y2="277"/></g>
-          <polygon class="pf-bolt" points="600,228 588,252 596,252 590,268 608,242 598,242" fill="#FBBF24" stroke="#A9A18B" stroke-width="1.5" stroke-linejoin="round"/>
-          <!-- condenser -->
-          <rect x="406" y="322" width="104" height="44" rx="6" fill="#2C281F" stroke="#A9A18B" stroke-width="2.5"/>
-          <!-- cooling-water loop -->
-          <path class="flow flow-slow" d="M 510 334 H 796" stroke="#6E6653" stroke-width="2.5" fill="none"/>
-          <path class="flow flow-slow" d="M 510 354 H 788" stroke="#6E6653" stroke-width="2.5" fill="none"/>
-          <!-- cooling tower + vapor -->
-          <path d="M 792 400 C 803 348 800 310 812 268 L 858 268 C 870 310 867 348 878 400 Z" fill="#2C281F" stroke="#A9A18B" stroke-width="2.5"/>
-          <circle class="puff" cx="824" cy="244" r="13" fill="#DCD5C2"/>
-          <circle class="puff puff2" cx="846" cy="228" r="16" fill="#DCD5C2"/>
-          <circle class="puff puff3" cx="830" cy="206" r="19" fill="#DCD5C2"/>
-          <!-- transformer + grid -->
-          <line x1="620" y1="250" x2="656" y2="250" stroke="#A9A18B" stroke-width="2.5"/>
-          <rect x="656" y="232" width="44" height="54" fill="#2C281F" stroke="#A9A18B" stroke-width="2.5"/>
-          <line x1="666" y1="232" x2="666" y2="216" stroke="#A9A18B" stroke-width="2"/><circle cx="666" cy="213" r="3" fill="#A9A18B"/>
-          <line x1="682" y1="232" x2="682" y2="216" stroke="#A9A18B" stroke-width="2"/><circle cx="682" cy="213" r="3" fill="#A9A18B"/>
-          <line x1="700" y1="258" x2="715" y2="258" stroke="#A9A18B" stroke-width="2.5"/>
-          <polygon points="712,400 736,400 727,180 721,180" fill="none" stroke="#A9A18B" stroke-width="2"/>
-          <line x1="698" y1="205" x2="750" y2="205" stroke="#A9A18B" stroke-width="2"/>
-          <line x1="702" y1="238" x2="746" y2="238" stroke="#A9A18B" stroke-width="2"/>
-          <path class="pf-grid" d="M 750 205 Q 850 232 932 216" stroke="#A9A18B" stroke-width="1.5" fill="none"/>
-          <path class="pf-grid" d="M 746 238 Q 848 264 932 250" stroke="#A9A18B" stroke-width="1.5" fill="none"/>
-          <!-- component labels -->
-          <g font-family="'Public Sans', sans-serif" font-size="12.5" font-weight="500" fill="#A9A18B" letter-spacing="1.5">
-            <text x="190" y="428" text-anchor="middle">CONTAINMENT</text>
-            <text x="470" y="428" text-anchor="middle">TURBINE HALL</text>
-            <text x="724" y="428" text-anchor="middle">GRID</text>
-            <text x="835" y="428" text-anchor="middle">COOLING</text>
+          <circle class="pf-hub" cx="442" cy="252" r="4" fill="#F2C46B"/>
+          <line x1="486" y1="250" x2="520" y2="250" stroke="#E4DCC9" stroke-width="3"/>
+          <rect x="520" y="216" width="98" height="68" rx="4" class="pl-struct"/>
+          <g class="pf-coils" stroke="#8A8267" stroke-width="1.25" opacity="0.35"><line x1="540" y1="226" x2="540" y2="274"/><line x1="558" y1="226" x2="558" y2="274"/><line x1="576" y1="226" x2="576" y2="274"/></g>
+          <polygon class="pf-bolt" points="598,228 587,251 595,251 589,270 606,244 597,244" fill="#F2C46B" opacity="0.3"/>
+
+          <!-- 04 condenser -->
+          <rect x="406" y="322" width="104" height="42" rx="4" class="pl-struct"/>
+
+          <!-- 05 switchyard -->
+          <rect x="656" y="232" width="42" height="52" class="pl-struct"/>
+          <line x1="666" y1="232" x2="666" y2="216" class="pl-sec"/><circle cx="666" cy="213" r="2.5" fill="#8A8267"/>
+          <line x1="684" y1="232" x2="684" y2="216" class="pl-sec"/><circle cx="684" cy="213" r="2.5" fill="#8A8267"/>
+          <polygon points="712,400 736,400 727,182 721,182" fill="none" stroke="#8A8267" stroke-width="1.25"/>
+          <line x1="700" y1="206" x2="748" y2="206" class="pl-sec"/><line x1="704" y1="240" x2="744" y2="240" class="pl-sec"/>
+
+          <!-- 06 cooling tower -->
+          <path d="M 792 400 C 803 348 800 310 812 268 L 858 268 C 870 310 867 348 878 400 Z" class="pl-struct"/>
+          <circle class="puff" cx="824" cy="246" r="11" fill="none" stroke="#E4DCC9" stroke-width="1.25"/>
+          <circle class="puff puff2" cx="845" cy="230" r="14" fill="none" stroke="#E4DCC9" stroke-width="1.25"/>
+          <circle class="puff puff3" cx="829" cy="209" r="17" fill="none" stroke="#E4DCC9" stroke-width="1.25"/>
+
+          <!-- ============ FLOW: the layer that has to read first ============ -->
+          <!-- primary loop: hot water, core -> steam generator -> back -->
+          <path class="flow pf-primary" d="M 134 250 H 232" stroke="#F2C46B" stroke-width="3" fill="none" marker-end="url(#plArrow)"/>
+          <path class="flow pf-primary" d="M 232 342 H 134" stroke="#F2C46B" stroke-width="3" fill="none" marker-end="url(#plArrow)"/>
+          <!-- secondary loop: steam to the turbine -->
+          <path class="flow pf-steam" d="M 260 168 V 140 H 398 V 214" stroke="#E4DCC9" stroke-width="3" fill="none" marker-end="url(#plArrow)"/>
+          <!-- turbine exhaust to the condenser -->
+          <path class="flow pf-steam" d="M 442 290 V 322" stroke="#E4DCC9" stroke-width="3" fill="none" marker-end="url(#plArrow)"/>
+          <!-- condensate back to the steam generator -->
+          <path class="flow pf-cond" d="M 406 352 H 300 V 364 H 288" stroke="#E4DCC9" stroke-width="2" fill="none" opacity="0.75" marker-end="url(#plArrow)"/>
+          <!-- cooling water: condenser <-> tower -->
+          <path class="flow flow-slow" d="M 510 334 H 800" stroke="#8A8267" stroke-width="3" fill="none" marker-end="url(#plArrowCool)"/>
+          <path class="flow flow-slow" d="M 792 356 H 510" stroke="#8A8267" stroke-width="3" fill="none" marker-end="url(#plArrowCool)"/>
+          <!-- electricity: its own line role -->
+          <line x1="618" y1="250" x2="656" y2="250" stroke="#49D6E8" stroke-width="3"/>
+          <path class="pf-grid" d="M 748 206 Q 850 232 932 216" fill="none" stroke="#49D6E8" stroke-width="2" opacity="0.5"/>
+          <path class="pf-grid" d="M 744 240 Q 848 266 932 250" fill="none" stroke="#49D6E8" stroke-width="2" opacity="0.5"/>
+
+          <!-- ============ CALLOUT NUMBERS ============ -->
+          <g class="pl-cue">
+            <circle cx="124" cy="176" r="12"/><text x="124" y="181" text-anchor="middle">01</text>
+            <circle cx="261" cy="146" r="12"/><text x="261" y="151" text-anchor="middle">02</text>
+            <circle cx="508" cy="192" r="12"/><text x="508" y="197" text-anchor="middle">03</text>
+            <circle cx="458" cy="384" r="12"/><text x="458" y="389" text-anchor="middle">04</text>
+            <circle cx="696" cy="164" r="12"/><text x="696" y="169" text-anchor="middle">05</text>
+            <circle cx="835" cy="184" r="12"/><text x="835" y="189" text-anchor="middle">06</text>
           </g>
+
           <!-- highlight overlays (cinema) -->
-          <rect class="hl hl-1" x="60" y="196" width="128" height="176" rx="12"/>
-          <rect class="hl hl-2" x="224" y="160" width="74" height="216" rx="12"/>
-          <rect class="hl hl-3" x="388" y="200" width="240" height="94" rx="12"/>
-          <rect class="hl hl-4" x="398" y="316" width="120" height="58" rx="10"/>
-          <rect class="hl hl-5" x="648" y="176" width="96" height="118" rx="12"/>
-          <rect class="hl hl-6" x="784" y="256" width="102" height="150" rx="14"/>
-        
-          <rect class="hotspot" data-part="1" x="60" y="196" width="128" height="176" rx="12" fill="transparent" tabindex="0" role="button" aria-label="Reactor core"/>
-          <rect class="hotspot" data-part="2" x="224" y="160" width="74" height="216" rx="12" fill="transparent" tabindex="0" role="button" aria-label="Steam generator"/>
-          <rect class="hotspot" data-part="3" x="388" y="200" width="240" height="94" rx="12" fill="transparent" tabindex="0" role="button" aria-label="Turbine hall"/>
-          <rect class="hotspot" data-part="4" x="398" y="316" width="120" height="58" rx="12" fill="transparent" tabindex="0" role="button" aria-label="Condenser"/>
-          <rect class="hotspot" data-part="5" x="648" y="176" width="96" height="118" rx="12" fill="transparent" tabindex="0" role="button" aria-label="Switchyard"/>
-          <rect class="hotspot" data-part="6" x="784" y="256" width="102" height="150" rx="12" fill="transparent" tabindex="0" role="button" aria-label="Cooling tower"/>
+          <rect class="hl hl-1" x="60" y="196" width="128" height="176" rx="0"/>
+          <rect class="hl hl-2" x="224" y="160" width="74" height="216" rx="0"/>
+          <rect class="hl hl-3" x="388" y="200" width="240" height="94" rx="0"/>
+          <rect class="hl hl-4" x="398" y="316" width="120" height="58" rx="0"/>
+          <rect class="hl hl-5" x="648" y="176" width="96" height="118" rx="0"/>
+          <rect class="hl hl-6" x="784" y="256" width="102" height="150" rx="0"/>
+
+          <rect class="hotspot" data-part="1" x="60" y="196" width="128" height="176" fill="transparent" tabindex="0" role="button" aria-label="Reactor core"/>
+          <rect class="hotspot" data-part="2" x="224" y="160" width="74" height="216" fill="transparent" tabindex="0" role="button" aria-label="Steam generator"/>
+          <rect class="hotspot" data-part="3" x="388" y="200" width="240" height="94" fill="transparent" tabindex="0" role="button" aria-label="Turbine hall"/>
+          <rect class="hotspot" data-part="4" x="398" y="316" width="120" height="58" fill="transparent" tabindex="0" role="button" aria-label="Condenser"/>
+          <rect class="hotspot" data-part="5" x="648" y="176" width="96" height="118" fill="transparent" tabindex="0" role="button" aria-label="Switchyard"/>
+          <rect class="hotspot" data-part="6" x="784" y="256" width="102" height="150" fill="transparent" tabindex="0" role="button" aria-label="Cooling tower"/>
         </svg>
         <figcaption>Pressurized-water reactor (PWR), the most common design worldwide; other designs differ. Amber: primary loop. Blue: secondary steam loop. Gray: cooling-water loop. Not to scale.</figcaption>
       </figure>
@@ -2467,61 +2570,72 @@
       <div class="pin-sticky">
       <div class="pin-stage">
         <div class="pin-figure">
-          <svg id="fs-svg" viewBox="0 0 900 460" role="img" aria-label="Animated diagram of nuclear fission: a free neutron strikes a uranium-235 nucleus, which absorbs it, splits into two fragments while releasing energy and two or three fresh neutrons, and those neutrons go on to split further nuclei until control rods absorb the spares.">
+          <svg id="fs-svg" class="fig" viewBox="0 0 900 460" role="img" aria-label="Technical figure: a free neutron strikes a uranium-235 nucleus, which deforms and splits into barium-141 and krypton-92, releasing about 200 MeV and two to three fresh neutrons; a control rod absorbs the spares.">
             <defs>
-              <radialGradient id="fsAmber"><stop offset="0" stop-color="#FDE68A"/><stop offset="0.55" stop-color="#FBBF24"/><stop offset="1" stop-color="#B45309"/></radialGradient>
-              <radialGradient id="fsBlue"><stop offset="0" stop-color="#F2EEE7"/><stop offset="0.6" stop-color="#F2C46B"/><stop offset="1" stop-color="#A28753"/></radialGradient>
-              <radialGradient id="fsHalo"><stop offset="0" stop-color="#FBBF24" stop-opacity="0.55"/><stop offset="1" stop-color="#FBBF24" stop-opacity="0"/></radialGradient>
-              <radialGradient id="fsGreen"><stop offset="0" stop-color="#D2E4CD"/><stop offset="0.6" stop-color="#8FB98A"/><stop offset="1" stop-color="#4A6B48"/></radialGradient>
+              <marker id="figArrow" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto-start-reverse">
+                <path d="M0.5 1.4 L9 5 L0.5 8.6 z" fill="#E4DCC9"/>
+              </marker>
+              <marker id="figArrowLive" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto-start-reverse">
+                <path d="M0.5 1.4 L9 5 L0.5 8.6 z" fill="#49D6E8"/>
+              </marker>
             </defs>
 
-            <!-- second-generation nuclei, waiting -->
+            <text class="fig-lab fig-lab--sm" x="18" y="26">FIG. 01 &#8212; FISSION OF URANIUM-235</text>
+
+            <!-- 01 trajectory of the incoming neutron: a real path, so a real line -->
+            <path class="fig-live" d="M 86 236 H 336" stroke-dasharray="7 7" opacity="0.5" marker-end="url(#figArrowLive)"/>
+
+            <!-- second-generation nuclei, not yet reacted: outline only -->
             <g id="fs-gen2">
-              <g class="fs-g2" transform="translate(716,104)"><circle r="30" fill="url(#fsAmber)" opacity="0.5"/><circle r="30" fill="none" stroke="#FBBF24" stroke-opacity="0.5" stroke-width="1.5"/></g>
-              <g class="fs-g2" transform="translate(760,236)"><circle r="30" fill="url(#fsAmber)" opacity="0.5"/><circle r="30" fill="none" stroke="#FBBF24" stroke-opacity="0.5" stroke-width="1.5"/></g>
-              <g class="fs-g2" transform="translate(716,366)"><circle r="30" fill="url(#fsAmber)" opacity="0.5"/><circle r="30" fill="none" stroke="#FBBF24" stroke-opacity="0.5" stroke-width="1.5"/></g>
+              <g class="fs-g2" transform="translate(716,104)"><circle r="28" fill="none" stroke="#F2C46B" stroke-width="1.25" opacity="0.85"/></g>
+              <g class="fs-g2" transform="translate(760,236)"><circle r="28" fill="none" stroke="#F2C46B" stroke-width="1.25" opacity="0.85"/></g>
+              <g class="fs-g2" transform="translate(716,366)"><circle r="28" fill="none" stroke="#F2C46B" stroke-width="1.25" opacity="0.85"/></g>
+              <text class="fig-lab fig-lab--sm" x="738" y="430" text-anchor="middle">FURTHER U-235</text>
             </g>
 
-            <!-- energy burst -->
-            <circle id="fs-halo" cx="400" cy="236" r="120" fill="url(#fsHalo)" opacity="0"/>
-            <circle id="fs-ring" cx="400" cy="236" r="52" fill="none" stroke="#FDE68A" stroke-width="3" opacity="0"/>
+            <!-- the energy release: two thin rings, no glow blob -->
+            <circle id="fs-ring" cx="400" cy="236" r="52" fill="none" stroke="#F2C46B" stroke-width="2" opacity="0"/>
+            <circle id="fs-halo" cx="400" cy="236" r="76" fill="none" stroke="#F2C46B" stroke-width="1.25" opacity="0"/>
 
-            <!-- the U-235 nucleus -->
+            <!-- 02 the target nucleus: flat fill, one ring, no craters -->
             <g id="fs-nuc" transform="translate(400,236)">
-              <circle r="54" fill="url(#fsAmber)"/>
-              <circle r="54" fill="none" stroke="#FDE68A" stroke-width="2" stroke-opacity="0.75"/>
-              <circle cx="-18" cy="-14" r="9" fill="#B45309" opacity="0.5"/>
-              <circle cx="16" cy="6" r="11" fill="#B45309" opacity="0.45"/>
-              <circle cx="-6" cy="22" r="7" fill="#B45309" opacity="0.5"/>
-              <text class="fs-label" x="0" y="86" text-anchor="middle" fill="#FBBF24">URANIUM-235</text>
+              <circle r="54" fill="#F2C46B" fill-opacity="0.10"/>
+              <circle r="54" fill="none" stroke="#F2C46B" stroke-width="2"/>
+              <text class="fig-lab fig-lab--mat" x="0" y="88" text-anchor="middle">U-235</text>
             </g>
 
-            <!-- fission fragments (hidden until the split) -->
+            <!-- 03 the fragments -->
             <g id="fs-fa" transform="translate(400,236)" opacity="0">
-              <circle r="34" fill="url(#fsGreen)"/><circle r="34" fill="none" stroke="#D2E4CD" stroke-width="2" stroke-opacity="0.7"/>
-              <text class="fs-label" x="0" y="-48" text-anchor="middle" fill="#8FB98A">BARIUM</text>
+              <circle r="34" fill="#E4DCC9" fill-opacity="0.08"/>
+              <circle r="34" fill="none" stroke="#E4DCC9" stroke-width="2"/>
+              <text class="fig-lab" x="0" y="-48" text-anchor="middle">BA-141</text>
             </g>
             <g id="fs-fb" transform="translate(400,236)" opacity="0">
-              <circle r="30" fill="url(#fsGreen)"/><circle r="30" fill="none" stroke="#D2E4CD" stroke-width="2" stroke-opacity="0.7"/>
-              <text class="fs-label" x="0" y="52" text-anchor="middle" fill="#8FB98A">KRYPTON</text>
+              <circle r="30" fill="#E4DCC9" fill-opacity="0.08"/>
+              <circle r="30" fill="none" stroke="#E4DCC9" stroke-width="2"/>
+              <text class="fig-lab" x="0" y="52" text-anchor="middle">KR-92</text>
             </g>
 
-            <!-- incoming neutron -->
+            <!-- energy annotation on a straight leader -->
+            <path class="fig-lead" d="M 452 196 L 520 150 H 566"/>
+            <text class="fig-lab fig-lab--mat" x="574" y="155">&#8776;200 MeV</text>
+
+            <!-- the incoming neutron -->
             <g id="fs-n0" transform="translate(70,236)">
-              <circle r="13" fill="url(#fsBlue)"/>
-              <text class="fs-nlabel" x="0" y="-24" text-anchor="middle">neutron</text>
+              <circle r="7" fill="#49D6E8"/>
+              <text class="fig-lab fig-lab--live fig-lab--sm" x="0" y="-20" text-anchor="middle">NEUTRON</text>
             </g>
 
-            <!-- released neutrons -->
-            <circle id="fs-r1" cx="400" cy="236" r="12" fill="url(#fsBlue)" opacity="0"/>
-            <circle id="fs-r2" cx="400" cy="236" r="12" fill="url(#fsBlue)" opacity="0"/>
-            <circle id="fs-r3" cx="400" cy="236" r="12" fill="url(#fsBlue)" opacity="0"/>
+            <!-- 04 released neutrons -->
+            <circle id="fs-r1" cx="400" cy="236" r="7" fill="#49D6E8" opacity="0"/>
+            <circle id="fs-r2" cx="400" cy="236" r="7" fill="#49D6E8" opacity="0"/>
+            <circle id="fs-r3" cx="400" cy="236" r="7" fill="#49D6E8" opacity="0"/>
 
-            <!-- control rod -->
+            <!-- the control rod: secondary structure, flat -->
             <g id="fs-rod" opacity="0">
-              <rect x="596" y="-150" width="26" height="300" fill="#6E6653"/>
-              <rect x="596" y="-150" width="26" height="300" fill="none" stroke="#D6CFBC" stroke-width="1.5"/>
-              <text class="fs-label" x="609" y="176" text-anchor="middle" fill="#6E6653">CONTROL ROD</text>
+              <rect x="596" y="-150" width="24" height="300" fill="#8A8267" fill-opacity="0.3"/>
+              <rect x="596" y="-150" width="24" height="300" fill="none" stroke="#8A8267" stroke-width="1.25"/>
+              <text class="fig-lab fig-lab--sm" x="608" y="176" text-anchor="middle">CONTROL ROD</text>
             </g>
           </svg>
         </div>
@@ -4275,6 +4389,7 @@
       var camSvg = document.getElementById('plant-cam-svg');
       function runTo(k) {
         if (!camSvg) return;
+        camSvg.setAttribute('data-beat', k);   // the highlight follows the beat
         for (var r = 1; r <= steps.length; r++) camSvg.classList.toggle('run-' + r, r <= k);
       }
       runTo(0);
@@ -4285,8 +4400,6 @@
 
       steps.forEach(function (st, i) {
         tl.to(state, { s: st.s, cx: st.cx, cy: st.cy, duration: 0.8, ease: 'power2.inOut', onUpdate: apply }, i);
-        tl.to('#plant-cam-svg .hl-' + (i + 1), { opacity: 1, duration: 0.3 }, i + 0.2);
-        if (i < steps.length - 1) tl.to('#plant-cam-svg .hl-' + (i + 1), { opacity: 0, duration: 0.25 }, i + 0.82);
         // crossfade to this step's plate, pulling the next one in early
         if (i > 0 && plates[i]) {
           tl.to(plates[i], {
@@ -4393,21 +4506,21 @@
       tl.to('#fs-nuc', { opacity: 0, duration: 0.2 }, 2.05);
       tl.fromTo('#fs-ring', { opacity: 0.95, scale: 0.6 }, { opacity: 0, scale: 3.4, duration: 0.8, ease: 'power2.out', svgOrigin: '400 236' }, 2);
       tl.fromTo('#fs-halo', { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1.4, duration: 0.5, ease: 'power2.out', svgOrigin: '400 236' }, 2);
-      tl.to('#fs-halo', { opacity: 0.35, duration: 0.5 }, 2.5);
+      tl.to('#fs-halo', { opacity: 0, duration: 0.45 }, 2.35);
       tl.fromTo('#fs-fa', { opacity: 0, x: 400, y: 236 }, { opacity: 1, x: 282, y: 132, duration: 0.75, ease: 'power2.out' }, 2.15);
       tl.fromTo('#fs-fb', { opacity: 0, x: 400, y: 236 }, { opacity: 1, x: 296, y: 348, duration: 0.75, ease: 'power2.out' }, 2.15);
       // 3 · fresh neutrons leave
       tl.fromTo('#fs-r1', { opacity: 0, x: 0, y: 0 }, { opacity: 1, x: 120, y: -70, duration: 0.7, ease: 'power1.out' }, 3);
       tl.fromTo('#fs-r2', { opacity: 0, x: 0, y: 0 }, { opacity: 1, x: 140, y: 4, duration: 0.7, ease: 'power1.out' }, 3.1);
       tl.fromTo('#fs-r3', { opacity: 0, x: 0, y: 0 }, { opacity: 1, x: 118, y: 78, duration: 0.7, ease: 'power1.out' }, 3.2);
-      tl.to('#fs-halo', { opacity: 0, duration: 0.4 }, 3.2);
+      
       // 4 · they reach the next nuclei, which light up
       tl.to('#fs-r1', { x: 300, y: -128, duration: 0.7, ease: 'none' }, 4);
       tl.to('#fs-r2', { x: 344, y: 0, duration: 0.7, ease: 'none' }, 4);
       tl.to('#fs-r3', { x: 300, y: 126, duration: 0.7, ease: 'none' }, 4);
       tl.to('#fs-gen2 .fs-g2', { opacity: 1, scale: 1.12, duration: 0.45, stagger: 0.08, ease: 'power2.out', svgOrigin: '740 236' }, 4.5);
       // 5 · control rods take up the slack
-      tl.fromTo('#fs-rod', { opacity: 0, y: 0 }, { opacity: 1, y: 168, duration: 0.75, ease: 'power2.out' }, 5);
+      tl.fromTo('#fs-rod', { opacity: 0, y: 0 }, { opacity: 1, y: 168, duration: 0.7, ease: 'power2.out' }, 4.55);
       tl.to('#fs-r2', { opacity: 0.25, duration: 0.4 }, 5.4);
       tl.to('#fs-gen2 .fs-g2', { opacity: 0.55, duration: 0.4 }, 5.5);
     }
@@ -5509,7 +5622,7 @@
   /* ---- build the library: a shelf per wing, a book per exhibit ---- */
   // Titles for the spines. Falls back to the exhibit's own heading if missing.
   var BOOK_TITLES = {
-    fission: 'Fission', kinetics: 'Holding Steady', 'reactor-motion': 'A Real Plant', how: 'Inside One',
+    fission: 'Fission', kinetics: 'Control', 'reactor-motion': 'A Real Plant', how: 'Inside One',
     data: 'Death Rates', capacity: 'Uptime', costs: 'Costs',
     incidents: 'Accidents', exposure: 'Radiation', simulator: 'Build a Grid',
     'case': 'The Case', limits: 'Problems', news: 'Right Now',
@@ -5557,6 +5670,10 @@
     about:            '<path d="M3 5.2h6.6a2.4 2.4 0 0 1 2.4 2.4v11.6a2.4 2.4 0 0 0-2.4-2.4H3z"/><path d="M21 5.2h-6.6A2.4 2.4 0 0 0 12 7.6v11.6a2.4 2.4 0 0 1 2.4-2.4H21z"/>'
   };
 
+  /* The three volumes that are instruments rather than reading. A visitor
+     should be able to see from the shelf that this is not only a report. */
+  var OPERABLE = { simulator: 1, kinetics: 1, fission: 1 };
+
   function bookTitle(id) {
     if (BOOK_TITLES[id]) return BOOK_TITLES[id];
     var el = document.getElementById(id);
@@ -5589,7 +5706,9 @@
           + (wVar === 0 ? ' book--wide' : wVar === 3 ? ' book--thin' : '');
         var cloth = WING_CLOTH[w.id] || '#6E6653';
         b.style.setProperty('--book', dyeLot(cloth, LOTS[i % LOTS.length], CASTS[i % CASTS.length]));
-        b.setAttribute('aria-label', 'Open ' + bookTitle(id) + ', in ' + w.name);
+        if (OPERABLE[id]) b.classList.add('book--live');
+        b.setAttribute('aria-label', 'Open ' + bookTitle(id) + ', in ' + w.name
+          + (OPERABLE[id] ? '. An interactive model you can operate.' : ''));
         b.innerHTML = '<span class="book__spine">' + t + '</span>'
           + (BOOK_MARKS[id]
               ? '<svg class="book__mark" viewBox="0 0 24 24" fill="none" stroke="currentColor"'

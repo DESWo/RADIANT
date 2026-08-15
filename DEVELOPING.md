@@ -1,4 +1,4 @@
-# RADIANT
+# Developing RADIANT
 
 Evidence-based pro-nuclear advocacy site, adapted from my paper "Radiant: The Case
 for Nuclear Energy". One self-contained page, no build step, no package manager.
@@ -11,12 +11,6 @@ python3 -m http.server 4174
 ```
 
 Then open http://localhost:4174. There is nothing to install and nothing to build.
-
-## Read index.html in pieces, never whole
-
-`index.html` is about 5,600 lines and 320 KB: markup, styles, and the motion
-system all in one file. Reading it end to end burns most of a context window for
-almost no benefit. Grep for the section or selector you need and read that range.
 
 ## Gotchas
 
