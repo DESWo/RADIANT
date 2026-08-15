@@ -330,12 +330,121 @@ position 0 never firing on an instant seek; `margin: 0` clobbering
 `margin-inline`; an `<ol>` renumbering from 1 when the items above it are hidden,
 while every figure cites a reference by number.
 
+## Curation pass: one question per wing
+
+Each wing answers exactly one question, and the museum is the progression
+through them.
+
+    I   The Atom      What is happening?
+    II  The Reactor   How does that become electricity?
+    III The Record    Does the evidence support it?
+    IV  The Frontier  What is still hard, and what changes next?
+    V   The Field     How do I keep learning, or join?
+
+**No global numbering.** The old `01`..`16` labels predated the wings and
+contradicted them: `02` appeared twice, `15` never, `16` sat on a room no wing
+contained, and the museum walked `03 Safety` then `01 The Case` then `10`.
+There were three competing systems (section overlines, hero index cards, and
+the retired further wing's `Wing · Now` labels). All of them are gone. A room's
+address is now `wing.name + ' · ' + BOOK_TITLES[id]`, stamped onto the overline
+from the same registry the walkbar and the shelf already used, so the three can
+never disagree. Museum mode hides the linear label (`.overline > .rm`) and
+prints the address in `::before`; the linear page keeps its own label.
+
+**Wing III is two acts and a verdict.** Is it dangerous (Death Rates,
+Accidents, Radiation), then is it useful (Uptime, Costs, Build a Grid), then
+The Case as the synthesis. The Case used to be section 01, an opening
+manifesto; it now reads as a verdict on what the visitor just walked through.
+The broad coal air-pollution comparison moved out of Accidents into Death
+Rates, where comparative mortality belongs, folded into the prose that already
+made that argument without a number rather than added as a second stacked
+callout. Accidents got its own closing beat so it no longer ends on a
+methodology caveat.
+
+**DOM order now matches museum order.** They had diverged, and the DOM is what
+a no-JS reader gets, so the verdict would have read as an opening manifesto to
+anyone without JS. Both are reordered.
+
+**Wing I stops at k.** Fission teaches one split, the neutrons, the chain, and
+k. Control owns rods, delayed neutrons, Doppler, period and SCRAM. The fission
+lab's slider became neutron absorption rather than a control rod, and its state
+words became plain (`Dies out` / `Self-sustaining` / `Runaway`) so the
+reactivity vocabulary stays with the room that can demonstrate it. The
+reactor-versus-bomb point was being made five times; it is now made twice, once
+where it is earned (Control, after the simulator shows Doppler) and once as FAQ
+(Myths). "The difference between a reactor and a bomb is control" is gone: it
+implied a reactor is a restrained bomb.
+
+**The Further Wing is retired.** Verified first: no inbound `href`, not in any
+`WINGS[].rooms`, no `BOOK_TITLES` entry, no JS or CSS reaching it, and every
+one of its six links except `#about` was already in the nav rail, with `#about`
+reachable from the rail and a hero card. `#wing-end` is a different element and
+survives.
+
+## Traps this pass found
+
+**`.piece` made pagination depend on visit history.** `markPieces()` stamps
+`.piece` on every top-level block the first time a room is shown, and `.piece`
+was in the `UNIT` never-split list, so from the second visit onward nothing
+could be decomposed. Measured: Sources 14 pages then 11, Right Now 13 then 9 —
+the reference list collapsing from three readable pages into one. `.piece` is a
+stagger marker, not a designed unit; removed from `UNIT` and `UNIT_NARROW`.
+Rooms now paginate identically on every visit.
+
+**Paged timelines must COMPLETE on the beat, not start there.** The pager parks
+the playhead exactly on `i`, so anything keyed to `i` or `i + 0.2` has not
+happened yet when the reader is looking. The plant camera was a full beat
+behind at every beat (beat 6, "The cooling tower", framed the switchyard) and
+no highlight was ever lit at rest. The construction scene had it twice over:
+camera and draw-on. Fixed by keying moves to arrive at `i`, and by binding the
+highlight to `data-beat` instead of a timeline position.
+
+**A stray `</div>` in Students** closed `.wrap` early and stranded the school
+note and all six sourced programme cards outside the column.
+
+**The AI photographic plates were never visible.**
+`body[data-screen="wing"] .stage-bg { display: none }` hid them museum-wide, so
+six images were fetched and never painted, and a credit line disclosed pictures
+nobody could see. Markup, preloader, crossfade and credit removed.
+
+**Deleting an element with an id can blank the whole site.** The museum is one
+top-level `<script>`; `#career-list`, `#news-grid`, `#fz-rods`, `#fz-fire`,
+`#fz-reset` and `#rk-rods` are dereferenced with no null guard, so a
+`TypeError` aborts the block before `body` ever gets `data-screen`. Grep the
+script for an id before removing its element.
+
+**Deep links were broken and are now fixed.** `showExhibit` wrote `#record`
+while the boot only read a hash containing `/` or the literal `lobby`, so every
+URL the site produced about itself dropped the visitor at the entrance. The
+pager now writes `#wing/room` so the address always names the page on screen,
+and the reader accepts every shape the site produces: `#wing/room`, a bare
+`#wing`, a bare `#room` (what the nav rail and hero index write), and `#lobby`;
+anything unrecognised opens at the doors. Changing `WINGS[].id` is still
+unsafe — shared links carry it, and `WING_CLOTH` keys on `id` with a fallback
+equal to Wing III's olive — so Wing V was renamed by `name` only.
+
+**`DOSE_ROOMS` was 16 against 18 rooms**, so the badge read 100% two rooms
+early. It is now counted from `WINGS` at runtime
+(`window.__DOSE_ROOMS`), so adding or retiring a room can never desync it
+again. Verified: denominator 18, and the badge reaches 100% at room 18 of 18.
+
 ## Status
 
 Built: title screen, the library, the four-beat book opening with the riffle,
-five wings, page-flip navigation over 86 real screens, vitrines and placards,
-warm gallery palette, three-role type, dosimeter, chart light-up animation,
-further wing, the accessibility pass above.
+five wings, page-flip navigation, vitrines and placards, warm gallery palette,
+three-role type, dosimeter, chart light-up animation, the accessibility pass
+above, the curation pass above.
 
-Owed: nothing outstanding from the remodel brief. The three instruments listed
-above still scroll on short screens, by design.
+Owed: nothing outstanding. The three instruments listed above still scroll on
+short screens, by design.
+
+`#limits` used to assert "roughly seven years late at about $35 billion" and
+"Onkalo will be the world's first" with no citation, while every other evidence
+room carried its source. Rather than invent references, the claims were made
+qualitative: Vogtle "finished years late and far above their original budget",
+and the repository line now says no country has one in operation yet and Onkalo
+is the closest any has come — which states the problem more completely than the
+original did. **If the precise figures are wanted back, they need a primary
+source, and it must be appended at the END of the reference list** because
+`#simulator` hardcodes "(reference 6)", "(reference 4)" and "(reference 16)"
+and those markers do not follow a renumber.
