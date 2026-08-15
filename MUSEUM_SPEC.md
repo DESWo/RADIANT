@@ -284,6 +284,52 @@ errors, and zero ScrollTriggers.
 - Wall text is set to a book's measure (44rem, centred) rather than stranded
   across a 1440px column.
 
+## Holding Steady: the reactor model (Wing I, built)
+
+The exhibit that makes the argument physically instead of asserting it.
+
+- **One-group point kinetics with Doppler feedback.** Three controls: rod
+  reactivity, SCRAM, reset. Readouts for power, fuel temperature, reactor
+  period, and a reactivity budget that splits rods against fuel temperature.
+- **Constants are cited**: beta = 0.0065 (U-235 thermal fission), Lambda = 2e-5 s
+  (LWR prompt neutron generation time), fuel temperature coefficient -3 pcm/K,
+  inside the NRC-quoted -5 to -2 pcm/K band for PWRs. The methodology note says
+  plainly that it is a teaching model: no xenon, no moderator feedback, no
+  burnup, no thermal-hydraulics.
+- **Numerically it has to be solved in two regimes.** Point kinetics with
+  Lambda = 2e-5 s is stiff; explicit stepping at 60 Hz diverges. Below prompt
+  critical the prompt term is solved quasi-statically (the prompt-jump
+  approximation), which yields the textbook period (beta - rho)/(lambda*rho)
+  directly. Above prompt critical the prompt branch is stepped in 400 substeps.
+- **Validated against analytic results, not eyeballed**: steady state holds at
+  rho = 0; the period tracks (beta - rho)/(lambda*rho) to within 1% across
+  50-400 pcm when compared against the model's own net reactivity; the Doppler
+  equilibrium lands on the analytic fixed point (198.6% at 826C vs 198.8% at
+  827C); after a scram the power shows a prompt drop then a delayed-neutron
+  tail. Re-run those checks before touching the constants.
+- **What it teaches, measured**: at +800 pcm withdrawn, well past beta, Doppler
+  subtracts about 617 pcm and holds net reactivity near +183. The fuel stops the
+  excursion, not the operator. That is the exhibit.
+- `.rk` is in **both** UNIT lists. Split, the readouts land on one page and the
+  controls on another, and the instrument cannot be driven at all.
+- Under reduced motion the model still integrates (the trace is information, not
+  decoration) but repaints at 4 Hz instead of every frame.
+
+## Source comments: what stays
+
+`index.html` carried 8,236 words of commentary, most of it design rationale
+written to explain decisions mid-session. That is a conversation, not
+documentation, and it was the clearest evidence of AI assistance in the repo.
+It is down to 3,522.
+
+**The test is not length, it is whether the comment stops a bug coming back.**
+Deleted: everything narrative, all of which already lives in this file. Kept and
+condensed: the constraints that cost real time to find, e.g. `perspective: 2200px`
+projecting the turning sheet to 7249x11315 at 84 degrees; a GSAP callback at
+position 0 never firing on an instant seek; `margin: 0` clobbering
+`margin-inline`; an `<ol>` renumbering from 1 when the items above it are hidden,
+while every figure cites a reference by number.
+
 ## Status
 
 Built: title screen, the library, the four-beat book opening with the riffle,
