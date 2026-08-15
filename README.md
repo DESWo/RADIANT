@@ -4,7 +4,8 @@ An evidence-based advocacy website by Desmond Wong, bringing data-driven clarity
 to nuclear energy discussions.
 
 The site is a single self-contained page, [index.html](index.html), with no
-build step and no dependencies (fonts load from Google Fonts). Its content is
+build step and no package manager. Fonts and libraries are self-hosted under
+`assets/`; nothing is fetched from a CDN. Its content is
 adapted from the advocacy paper *"Radiant: The Case for Nuclear Energy."*
 
 ## Running locally
@@ -12,8 +13,8 @@ adapted from the advocacy paper *"Radiant: The Case for Nuclear Energy."*
 Open `index.html` directly in a browser, or serve the folder:
 
 ```sh
-python3 -m http.server 4173
-# then visit http://localhost:4173
+python3 -m http.server 4174
+# then visit http://localhost:4174
 ```
 
 ## Deploying
@@ -69,6 +70,9 @@ one click on the Actions tab re-enables them.
 
 Safety figures from Our World in Data (Markandya & Wilkinson 2007; Sovacool et
 al. 2016). Lifecycle emissions consistent with IPCC/UNECE assessments.
-Capacity-factor and France generation-share figures from EIA and IEA. Before
-formal publication, each statistic should be cited to its primary source and
-checked against the most recent year available.
+Capacity-factor and France generation-share figures from EIA and IEA.
+
+Every figure on the page carries its source inline: 17 numbered references with
+links and access dates, a source line under each chart, and "how to read this"
+notes covering what a number does and does not include. Figures were last
+verified on July 14, 2026.
