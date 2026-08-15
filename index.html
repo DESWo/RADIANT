@@ -4665,13 +4665,18 @@
       ctx.stroke();
     }
 
+    var acc = 0, FRAME = REDUCE ? 0.25 : 0;   // seconds between repaints
     function tick(t) {
       if (!last) last = t;
       var dt = Math.min((t - last) / 1000, 0.1); last = t;
       var r = step(dt);
-      hist.push({ n: S.n, T: S.T });
-      if (hist.length > 420) hist.shift();
-      paint(r); draw();
+      acc += dt;
+      if (acc >= FRAME) {
+        acc = 0;
+        hist.push({ n: S.n, T: S.T });
+        if (hist.length > 420) hist.shift();
+        paint(r); draw();
+      }
       raf = requestAnimationFrame(tick);
     }
 
@@ -5086,13 +5091,13 @@
   /* Things that are one exhibit piece, however tall: never split these across screens, or a chart loses its placard and a room name loses its lede. */
   var UNIT = '.section-head, .exhibit, .chart-card, .sim-card, .incident-panel,' +
              '.about-grid, .tour-figure, .plant-explorer, .duo, .callout, .tiles,' +
-             '.pathway, .bento, .piece, .incident-case, .fission-lab,' +
+             '.pathway, .bento, .piece, .incident-case, .fission-lab, .rk,' +
              '.seq-scene, .seq-sticky, .pin-scene, .pin-sticky, .pin-stage,' +
              'figure, table, details';
   
   var UNIT_NARROW = '.section-head, .chart-card, .sim-card, .incident-panel,' +
                     '.about-grid, .tour-figure, .plant-explorer, .callout,' +
-                    '.piece, .incident-case, .fission-lab,' +
+                    '.piece, .incident-case, .fission-lab, .rk,' +
                     '.seq-scene, .seq-sticky, .pin-scene, .pin-sticky, .pin-stage,' +
                     'figure, table, details';
   /* A short laptop screen is under the same constraint as a phone: there is not enough height for a case and its label together. What matters is the room available, not whether the device is. */
