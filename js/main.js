@@ -4,6 +4,8 @@
    read off `window` rather than imported. */
 
 import { CHARTS } from '../data/charts.js';
+import { createReactor, BETA, T_IN, T_REF } from './reactor-model.js';
+import { SOURCES, DEMAND, balance, solve } from './grid-model.js';
 import { INCIDENTS } from '../data/incidents.js';
 import { FALLBACK_NEWS } from '../data/news.js';
 import { CAREERS } from '../data/careers.js';
@@ -364,14 +366,6 @@ CAREERS.forEach(function (c) {
 
 /* ============ GRID-MIX SIMULATOR ============ */
 (function () {
-  var DEMAND = 1000; // MW, constant
-  var SOURCES = [
-    { id: 'nuclear', label: 'Nuclear',     cf: 0.908, ef: 12,  slider: true, hero: true },
-    { id: 'solar',   label: 'Solar',       cf: 0.232, ef: 48,  slider: true },
-    { id: 'wind',    label: 'Wind',        cf: 0.340, ef: 11,  slider: true },
-    { id: 'hydro',   label: 'Hydropower',  cf: 0.346, ef: 24,  slider: true },
-    { id: 'gas',     label: 'Natural gas', cf: 0.605, ef: 490 }
-  ];
   var cityEl = document.getElementById('sim-city');
   if (!cityEl) return;
 
@@ -456,39 +450,16 @@ CAREERS.forEach(function (c) {
   function el(id) { return document.getElementById(id); }
 
   function update(movedId) {
-    var shares = {}, sliderSum = 0;
+    var raw = {};
+    SOURCES.forEach(function (s) { if (s.slider) raw[s.id] = parseInt(el('sim-' + s.id).value, 10); });
+    var shares = balance(raw, movedId);
+    // write the balanced values back to the sliders that were squeezed
     SOURCES.forEach(function (s) {
-      if (!s.slider) return;
-      shares[s.id] = parseInt(el('sim-' + s.id).value, 10);
-      sliderSum += shares[s.id];
+      if (s.slider && +el('sim-' + s.id).value !== shares[s.id]) el('sim-' + s.id).value = shares[s.id];
     });
-    if (sliderSum > 100) {
-      // honor the slider being moved; squeeze the others proportionally
-      var excess = sliderSum - 100;
-      var othersSum = sliderSum - (movedId ? shares[movedId] : 0);
-      SOURCES.forEach(function (s) {
-        if (!s.slider || s.id === movedId) return;
-        var cut = othersSum > 0 ? Math.floor(shares[s.id] * (othersSum - excess) / othersSum) : 0;
-        shares[s.id] = Math.max(0, cut);
-        el('sim-' + s.id).value = shares[s.id];
-      });
-      if (movedId && shares[movedId] > 100) {
-        shares[movedId] = 100;
-        el('sim-' + movedId).value = 100;
-      }
-      sliderSum = 0;
-      SOURCES.forEach(function (s) { if (s.slider) sliderSum += shares[s.id]; });
-    }
-    shares.gas = 100 - sliderSum;
 
-    var co2 = 0, totalCap = 0, caps = {};
-    SOURCES.forEach(function (s) {
-      var share = shares[s.id] / 100;
-      co2 += share * s.ef;
-      caps[s.id] = share * DEMAND / s.cf;
-      totalCap += caps[s.id];
-    });
-    var firm = shares.nuclear + shares.hydro + shares.gas;
+    var solved = solve(shares);
+    var co2 = solved.co2, totalCap = solved.capacity, caps = solved.caps, firm = solved.firm;
 
     SOURCES.forEach(function (s) {
       if (s.slider) el('sim-' + s.id + '-out').textContent = shares[s.id] + '%';
@@ -909,61 +880,24 @@ function setCaption (sceneEl, steps, i) {
   if (!cv || !cv.getContext) return;
   var ctx = cv.getContext('2d');
 
-  var BETA = 0.0065;        // delayed neutron fraction, U-235 thermal fission
-  var LAMBDA = 2e-5;        // prompt neutron generation time, s (LWR)
-  var DECAY = 0.0784;       // one-group precursor decay constant, 1/s
-  var ALPHA = -3e-5;        // fuel temperature coefficient, dk/k per K (-3 pcm/K)
-  var T_IN = 290, T_REF = 560, P_TAU = 6.0, T_TAU = 9.0;
+  var P_TAU = 6.0;
   var el = function (id) { return document.getElementById(id); };
   var out = { state: el('rk-state'), pow: el('rk-power'), temp: el('rk-temp'), per: el('rk-period'),
               rod: el('rk-rodpos'), rhoRod: el('rk-rho-rod'), rhoDop: el('rk-rho-dop'),
               rho: el('rk-rho'), bar: el('rk-bar'), beta: el('rk-beta'), live: el('rk-live') };
   var slider = el('rk-rods');
 
-  var S, hist, scram = false, last = 0, raf = 0;
+  var core = createReactor();
+  var S = core.state;
+  var hist, last = 0, raf = 0;
   function reset() {
-    S = { n: 1, C: 1 / (DECAY * LAMBDA / BETA) * 0, T: T_REF, rod: 0 };
-    S.C = S.n * BETA / (LAMBDA * DECAY);      // equilibrium precursors at n = 1
-    hist = []; scram = false; slider.value = 0; slider.disabled = false;
+    core.reset();
+    hist = []; slider.value = 0; slider.disabled = false;
     out.live.textContent = '';
   }
   reset();
 
-  function step(dt) {
-    var rodRho = scram ? -0.02 : S.rod * 1e-5;          // pcm -> dk/k
-    var dopRho = ALPHA * (S.T - T_REF);
-    var rho = rodRho + dopRho;
-    var period = Infinity;
-
-    if (rho < BETA * 0.97) {
-      /* Quasi-static: the prompt population settles instantly against the
-         precursors, so the reactor runs on the delayed neutrons and the
-         period is (beta - rho) / (lambda * rho). */
-      var nq = DECAY * S.C * LAMBDA / (BETA - rho);
-      S.n = nq > 0 ? nq : 1e-9;
-      S.C += ((BETA / LAMBDA) * S.n - DECAY * S.C) * dt;
-      if (rho > 1e-7) period = (BETA - rho) / (DECAY * rho);
-      else if (rho < -1e-7) period = (BETA - rho) / (DECAY * rho);
-    } else {
-      /* Prompt critical: step the prompt branch directly, finely. */
-      var sub = 400, h = dt / sub;
-      for (var i = 0; i < sub; i++) {
-        var dn = ((rho - BETA) / LAMBDA) * S.n + DECAY * S.C;
-        var dC = (BETA / LAMBDA) * S.n - DECAY * S.C;
-        S.n += dn * h; S.C += dC * h;
-        if (S.n > 5e3) { S.n = 5e3; break; }
-        if (S.n < 1e-9) { S.n = 1e-9; break; }
-        S.T += ((S.n - (S.T - T_IN) / (T_REF - T_IN)) * (T_REF - T_IN) / T_TAU) * h;
-        dopRho = ALPHA * (S.T - T_REF); rho = rodRho + dopRho;
-      }
-      period = LAMBDA / Math.max(rho - BETA, 1e-9);
-    }
-    // fuel temperature chases power with a lag; heat removal is proportional
-    var Teq = T_IN + (T_REF - T_IN) * S.n;
-    S.T += (Teq - S.T) / T_TAU * dt;
-    if (S.T < T_IN) S.T = T_IN;
-    return { rho: rho, rodRho: rodRho, dopRho: dopRho, period: period };
-  }
+  var step = core.step;
 
   function paint(r) {
     var pct = S.n * 100;
@@ -979,7 +913,7 @@ function setCaption (sceneEl, steps, i) {
       : Math.abs(per) < 0.01 ? per.toExponential(1) : per.toFixed(1);
 
     var st = 'Critical', tag = '';
-    if (scram) { st = 'Scrammed'; tag = 'scram'; }
+    if (core.scrammed) { st = 'Scrammed'; tag = 'scram'; }
     else if (r.rho >= BETA * 0.97) { st = 'Prompt critical'; tag = 'prompt'; }
     else if (r.rho > 2e-5) st = 'Supercritical';
     else if (r.rho < -2e-5) { st = 'Subcritical'; tag = 'sub'; }
@@ -991,7 +925,7 @@ function setCaption (sceneEl, steps, i) {
     out.beta.style.left = (50 + 650 / 1000 * 50) + '%';
 
     // the message that teaches the exhibit
-    if (scram) out.live.textContent = 'Rods in. The chain reaction stops in seconds; decay heat does not.';
+    if (core.scrammed) out.live.textContent = 'Rods in. The chain reaction stops in seconds; decay heat does not.';
     else if (r.rho >= BETA * 0.97 && S.n > 1.5)
       out.live.textContent = 'Prompt critical — and the fuel, not the operator, is what pulls it back.';
     else if (S.n > 1.6 && r.dopRho < -1e-4)
@@ -1041,9 +975,9 @@ function setCaption (sceneEl, steps, i) {
     raf = requestAnimationFrame(tick);
   }
 
-  slider.addEventListener('input', function () { S.rod = +slider.value; scram = false; slider.disabled = false; });
-  el('rk-scram').addEventListener('click', function () { scram = true; S.rod = -800; slider.value = -800; });
-  el('rk-reset').addEventListener('click', function () { reset(); S.rod = 0; hist = []; });
+  slider.addEventListener('input', function () { core.setRod(+slider.value); slider.disabled = false; });
+  el('rk-scram').addEventListener('click', function () { core.scram(); slider.value = -800; });
+  el('rk-reset').addEventListener('click', function () { reset(); core.setRod(0); hist = []; });
 
   /* Only run while it is on screen: a 20 Hz integrator behind a hidden page
      is work nobody can see. */
