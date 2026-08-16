@@ -1,16 +1,32 @@
 # Developing RADIANT
 
 Evidence-based pro-nuclear advocacy site, adapted from my paper "Radiant: The Case
-for Nuclear Energy". One self-contained page, no build step, no package manager.
-See @README.md for deployment and sourcing.
+for Nuclear Energy". One self-contained page, no build step, no runtime
+dependencies. See @README.md for deployment and sourcing, and @DESIGN.md for how
+the museum is put together.
 
 ## Run it
 
 ```bash
-python3 -m http.server 4174
+npm run serve
 ```
 
-Then open http://localhost:4174. There is nothing to install and nothing to build.
+Then open http://localhost:4174. The site itself needs nothing installed and
+nothing built; `npm` is only there for the tests.
+
+## Test it
+
+```bash
+npm install   # once: Playwright, the only dev dependency
+npm test
+```
+
+Four suites, about nine minutes. `npm test -- static` runs the markup and
+citation checks alone and finishes instantly, which catches most mistakes.
+
+The same command runs in CI on every push. If a check fails, read what it
+compared: the physics suite asserts against closed-form results, so a failure
+there means the model changed, not that the test drifted.
 
 ## Gotchas
 
@@ -34,8 +50,10 @@ Then open http://localhost:4174. There is nothing to install and nothing to buil
 index.html               the entire site
 assets/fonts/            self-hosted faces
 assets/*.min.js          vendored GSAP, ScrollTrigger, SplitText, DrawSVG, Lenis
-assets/plant*, *.mp4     hero media
+assets/*.mp4             plant footage
+tests/                   the checks; run.mjs is the entry point
 news.json                generated feed
 scripts/update_news.py   the generator
+DESIGN.md                how the museum works
 ROADMAP.md               what is planned next
 ```

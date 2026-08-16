@@ -4,9 +4,14 @@ An evidence-based advocacy website by Desmond Wong, bringing data-driven clarity
 to nuclear energy discussions.
 
 The site is a single self-contained page, [index.html](index.html), with no
-build step and no package manager. Fonts and libraries are self-hosted under
-`assets/`; nothing is fetched from a CDN. Its content is
-adapted from the advocacy paper *"Radiant: The Case for Nuclear Energy."*
+build step and no runtime dependencies. Fonts and libraries are self-hosted
+under `assets/`; nothing is fetched from a CDN. Its content is adapted from the
+advocacy paper *"Radiant: The Case for Nuclear Energy."*
+
+It is presented as a museum: five wings, each answering one question, walked a
+page at a time rather than scrolled. Two of the exhibits are original models you
+operate — a point-kinetics reactor and a grid-mix simulator.
+[DESIGN.md](DESIGN.md) explains how it is built.
 
 ## Running locally
 
@@ -16,6 +21,20 @@ Open `index.html` directly in a browser, or serve the folder:
 python3 -m http.server 4174
 # then visit http://localhost:4174
 ```
+
+## Tests
+
+Automated checks run in CI on every push, and locally with:
+
+```sh
+npm install   # Playwright, the only dev dependency
+npm test
+```
+
+Four suites: markup and citation integrity, both physics models against
+closed-form results, museum navigation and deep links, and rendering at three
+viewports including keyboard and reduced-motion paths. `npm test -- static`
+runs the no-browser checks alone.
 
 ## Deploying
 
@@ -35,23 +54,35 @@ severity, mining impacts, proliferation, and SMR uncertainty.
 See [ROADMAP.md](ROADMAP.md) for planned work (datasets, methodology page,
 reproducible calculations, an original model, and automated testing).
 
-## Sections
+## The five wings
 
-1. **Overview**: hero and the three principles
-2. **The Case**: the argument in one page, with key stats and verdicts
-3. **The Plant**: an annotated diagram of a fission plant, reactor to grid
-4. **Safety**: death rates per TWh (interactive chart + table view)
-5. **Capacity**: capacity factors by source (interactive chart)
-6. **Simulator**: an original grid-mix model; pick a mix, see carbon intensity, required capacity, and firm share, with assumptions and equations shown
-7. **Costs**: operating costs by source (interactive chart)
-8. **Incidents**: TMI, Chernobyl, Fukushima in a tabbed facts-vs-perception panel
-9. **Exposure**: everyday radiation doses in context (interactive chart)
-10. **Myths**: five myths vs. facts in expandable panels
-11. **Limitations**: the honest cost column, from construction overruns to proliferation
-12. **News**: auto-updating headlines and resources
-13. **Careers**: BLS-sourced stats and four expandable career profiles
-14. **Students**: pathway, schools with nuclear engineering programs, funded opportunities
-15. **Info**: about the author and sources
+Each wing answers one question.
+
+**I · The Atom** — *What is happening?*
+Fission (one split becoming a chain reaction, with a chain-reaction lab you
+drive) and Control (an operable point-kinetics reactor: pull the rods, watch
+delayed neutrons and Doppler feedback push back, scram it).
+
+**II · The Reactor** — *How does that become electricity?*
+A Real Plant (drone footage of a working station), Inside One (a six-stage
+walk from core to grid over an annotated PWR schematic, plus a clickable plant
+explorer) and Building One (a nine-stage construction sequence).
+
+**III · The Record** — *Does the evidence support it?*
+First whether it is dangerous: Death Rates per TWh, Accidents (TMI, Chernobyl
+and Fukushima, feared against found), Radiation in everyday context. Then
+whether it is useful: Uptime, Costs, and Build a Grid, an original model where
+you pick a mix and see carbon intensity, capacity and firm share. The Case
+closes the wing as a verdict on all of it.
+
+**IV · The Frontier** — *What is still hard, and what changes next?*
+Problems (construction, financing, waste, accidents, mining and water,
+proliferation, workforce, SMR uncertainty) and Right Now (the durable frontier
+questions, then auto-updating headlines).
+
+**V · The Field** — *How do I keep learning, or join?*
+Myths as a reference shelf, Careers, Your Way In (named programs, each linked
+to the organisation that runs it) and Sources.
 
 ## Auto-updating news
 
