@@ -1,15 +1,31 @@
 /* Checks that need no browser: markup integrity, citation integrity, and the
    project's own house rules (no CDN links, self-hosted fonts). */
 
-import { readFile } from 'node:fs/promises';
+import { readFile, readdir } from 'node:fs/promises';
 import { join } from 'node:path';
 import { html, ROOT, tracker } from './lib.mjs';
+
+/* Everything the browser is served, concatenated. The site is split across
+   index.html plus css/ and js/, so a rule like "no CDN links" has to be
+   checked against all of it, not just the page. */
+async function allSource() {
+  const parts = [await html()];
+  for (const dir of ['css', 'js', 'data']) {
+    let names = [];
+    try { names = await readdir(join(ROOT, dir)); } catch { continue; }
+    for (const n of names.filter((f) => /\.(css|js|mjs)$/.test(f))) {
+      parts.push(await readFile(join(ROOT, dir, n), 'utf8'));
+    }
+  }
+  return parts.join('\n');
+}
 
 export const NAME = 'static';
 
 export async function run() {
   const t = tracker(NAME);
   const src = await html();
+  const shipped = await allSource();
 
   // --- duplicate ids -------------------------------------------------------
   const ids = [...src.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]);
@@ -59,15 +75,21 @@ export async function run() {
 
   // --- house rules ---------------------------------------------------------
   // Libraries and fonts are vendored on purpose; a CDN link breaks that.
-  const cdn = [...src.matchAll(/(?:src|href)="(https?:\/\/[^"]+)"/g)]
-    .map((m) => m[1])
-    .filter((u) => !/^https?:\/\/(www\.)?(ourworldindata|ipcc|unece|eia|nrc|iaea|bls|ans|energy|neup|naygn|winus|pris|umich|mit|berkeley|tamu|psu|gatech|wisc|utk|ncsu|purdue|oregonstate|pexels|ember)/i.test(u))
-    .filter((u) => /cdn|unpkg|jsdelivr|googleapis|gstatic|cdnjs/i.test(u));
-  cdn.length ? t.fail(`external asset links found: ${cdn.join(', ')}`) : t.ok('no CDN or hosted-font links');
+  // Anything the browser would fetch at runtime from another host: a script or
+  // stylesheet reference, a CSS @import, or a url() inside a stylesheet.
+  const remote = [...shipped.matchAll(
+    /(?:src|href)="(https?:\/\/[^"]+)"|@import\s+(?:url\()?['"]?(https?:\/\/[^'")]+)|url\(['"]?(https?:\/\/[^'")]+)/g,
+  )].map((m) => m[1] || m[2] || m[3]).filter(Boolean);
+  const hosted = [...new Set(remote)].filter((u) => /cdn|unpkg|jsdelivr|googleapis|gstatic|cdnjs|typekit|fontawesome/i.test(u));
+  hosted.length ? t.fail(`assets fetched from another host: ${hosted.join(', ')}`)
+                : t.ok(`no CDN or hosted-font requests (${remote.length} external URLs, all citation links)`);
 
-  const swap = (src.match(/font-display:\s*swap/g) || []).length;
-  swap > 0 ? t.ok(`self-hosted fonts declare font-display: swap (${swap} faces)`)
-           : t.fail('no font-display: swap found');
+  // Match the rule, not the words: "@font-face" also appears in prose comments.
+  const faceRules = [...shipped.matchAll(/@font-face\s*\{([^}]*)\}/g)].map((m) => m[1]);
+  const noSwap = faceRules.filter((b) => !/font-display:\s*swap/.test(b)).length;
+  faceRules.length && !noSwap
+    ? t.ok(`all ${faceRules.length} self-hosted faces declare font-display: swap`)
+    : t.fail(`${noSwap} of ${faceRules.length} @font-face rules lack font-display: swap`);
 
   // --- the old global numbering must not come back -------------------------
   const oldNumbering = [...src.matchAll(/<span class="overline"><span class="n">\d+<\/span>/g)];
