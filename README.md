@@ -15,12 +15,16 @@ operate — a point-kinetics reactor and a grid-mix simulator.
 
 ## Running locally
 
-Open `index.html` directly in a browser, or serve the folder:
+The site is split across `index.html`, `css/`, `js/` and `data/`, and the
+JavaScript is loaded as ES modules, so it needs to be served rather than opened
+from the filesystem:
 
 ```sh
 python3 -m http.server 4174
 # then visit http://localhost:4174
 ```
+
+There is still nothing to install and nothing to build.
 
 ## Tests
 
