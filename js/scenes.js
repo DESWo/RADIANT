@@ -14,18 +14,7 @@
 import { REDUCE, HAS_GSAP, HAS_DRAW } from './env.js';
 import { PLANT_STEPS, FISSION_STEPS, BUILD_STEPS } from '../data/scenes.js';
 
-/* ============ SCROLL-SCRUBBED ACCENTS (GSAP) ============ */
-
-if (!REDUCE && HAS_GSAP) {
-  /* Two scroll tweens used to live here, on the masthead lead and on the plant footage. Neither can run: `.hero` is not part of any wing and is never displayed, and the footage arrives by. */
-
-  /* THE WALK: scroll-driven zoom between rooms (2.5D depth) */
-
-}
-
-/* ============ PINNED SCROLL SCENES ============ */
-
-
+/* ============ PINNED SCENES ============ */
 
 (function () {
   var scenes = [
@@ -36,9 +25,12 @@ if (!REDUCE && HAS_GSAP) {
 
   scenes.forEach(function (sc) {
     if (!sc.el) return;
-    // always render the plain-list fallback from the same copy
+    // The plain-list fallback is baked into the markup for the no-JS reading
+    // order (tests/static.mjs holds it to data/scenes.js); rebuild it here
+    // only if the two have somehow fallen out of step.
     var list = document.getElementById(sc.listId);
-    if (list) {
+    if (list && list.children.length !== sc.steps.length) {
+      while (list.firstChild) list.removeChild(list.firstChild);
       sc.steps.forEach(function (st) {
         var li = document.createElement('li');
         var b = document.createElement('strong'); b.textContent = st.title + '. ';
@@ -81,11 +73,6 @@ if (!REDUCE && HAS_GSAP) {
     if (!sc.el) return;
     if (sc.steps === PLANT_STEPS && !document.getElementById('plant-cam-svg')) return; // clone failed; keep the list
     sc.el.classList.add('is-live');
-    document.documentElement.classList.add('motion-ok');
-
-    // Backdrop footage is preload="none"; only fetch and play it while the
-    // scene is actually on screen, and never fight the reader for attention.
-    // the backdrop is hidden in a wing, so it is never fetched or played
 
     var rail = sc.el.querySelector('[data-role="rail"]');
     if (rail) { rail.innerHTML = ''; sc.steps.forEach(function () { rail.appendChild(document.createElement('span')); }); }
@@ -94,7 +81,8 @@ if (!REDUCE && HAS_GSAP) {
     // Scroll runway: one viewport-ish of travel per beat, plus a screen so
     // the last beat can be read before the stage releases.
     sc.el.style.setProperty('--runway', (n * 62 + 70) + 'vh');
-    /* This was a scroll-scrubbed timeline. The page turn drives it now, one beat per screen, so it is simply paused and addressed by beat. */
+    /* Originally a scroll-scrubbed timeline; the page turn drives it now, so
+       it stays paused and the pager addresses it beat by beat. */
     var tl = gsap.timeline({ paused: true });
     
     var copy = sc.el.querySelector('.pin-copy');
@@ -113,7 +101,8 @@ if (!REDUCE && HAS_GSAP) {
     tl.progress(0);    // and it opens on its first beat, not its last
     paintRail();       // progress(0) on a timeline already at 0 fires nothing
 
-    /* The same timeline, addressable by beat. In a wing there is no scroll to scrub it, so the page turn drives it instead: one beat per page, which keeps every bit of the camera work that the. */
+    /* The same timeline, addressable by beat: one beat per page, which keeps
+       the camera work intact without needing a scroll runway. */
     sc.el._sceneSteps = n;
     
     function paintRail() {
@@ -137,7 +126,10 @@ if (!REDUCE && HAS_GSAP) {
     if (!cam) return;
     var VB_CX = 480, VB_CY = 240;                 // centre of viewBox "-46 -34 1052 548"
     var state = { s: 1, cx: VB_CX, cy: VB_CY };
-    /* The frame is far taller than the drawing now, and it covers rather than letterboxes, so the horizontal field of view is narrower than the one these camera moves were composed for. Scale. */
+    /* The frame is taller than the drawing and covers rather than letterboxes,
+       so the horizontal field of view is narrower than the one these camera
+       moves were composed for. measureFit scales the camera back until every
+       framed shot fits the narrower field. */
     var SRC_ASPECT = 1052 / 548, fit = 1;
     function measureFit() {
       var svg = document.getElementById('plant-cam-svg');

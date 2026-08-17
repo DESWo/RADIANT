@@ -8,9 +8,9 @@
 
 import { REDUCE, HAS_GSAP, HAS_DRAW, whenVisible } from './env.js';
 import { INCIDENTS } from '../data/incidents.js';
-import { FALLBACK_NEWS } from '../data/news.js';
+import { FALLBACK_NEWS, FALLBACK_DATE } from '../data/news.js';
 import { CAREERS } from '../data/careers.js';
-import { createReactor, BETA, T_IN, T_REF } from './reactor-model.js';
+import { createReactor, BETA, T_IN, T_REF, SCRAM_RHO, PCM } from './reactor-model.js';
 
 /* ============ INCIDENT TABS ============ */
 
@@ -74,31 +74,58 @@ function renderIncident(inc) {
   panelEl.appendChild(cols);
 }
 
+/* The standard tabs pattern: one tab stop for the set, arrows move within
+   it, and the panel names its tab so a screen reader hears the incident. */
+function selectIncident(i, focus) {
+  var tabs = tabsEl.querySelectorAll('.tab');
+  tabs.forEach(function (tab, j) {
+    tab.setAttribute('aria-selected', String(j === i));
+    tab.tabIndex = j === i ? 0 : -1;
+  });
+  panelEl.setAttribute('aria-labelledby', 'incident-tab-' + i);
+  renderIncident(INCIDENTS[i]);
+  if (focus) tabs[i].focus();
+}
+
 INCIDENTS.forEach(function (inc, i) {
   var tab = document.createElement('button');
   tab.className = 'tab';
+  tab.id = 'incident-tab-' + i;
   tab.setAttribute('role', 'tab');
   tab.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
+  tab.setAttribute('aria-controls', 'incident-panel');
+  tab.tabIndex = i === 0 ? 0 : -1;
   var strong = document.createElement('span');
   strong.textContent = inc.name;
   var small = document.createElement('small');
   small.textContent = inc.year + ' · ' + inc.location;
   tab.appendChild(strong); tab.appendChild(small);
-  tab.addEventListener('click', function () {
-    tabsEl.querySelectorAll('.tab').forEach(function (t) { t.setAttribute('aria-selected', 'false'); });
-    tab.setAttribute('aria-selected', 'true');
-    renderIncident(inc);
-  });
+  tab.addEventListener('click', function () { selectIncident(i); });
   tabsEl.appendChild(tab);
 });
-renderIncident(INCIDENTS[0]);
+tabsEl.addEventListener('keydown', function (e) {
+  var tabs = tabsEl.querySelectorAll('.tab');
+  var at = [].indexOf.call(tabs, document.activeElement);
+  if (at < 0) return;
+  var to = e.key === 'ArrowRight' || e.key === 'ArrowDown' ? (at + 1) % tabs.length
+         : e.key === 'ArrowLeft' || e.key === 'ArrowUp' ? (at - 1 + tabs.length) % tabs.length
+         : e.key === 'Home' ? 0 : e.key === 'End' ? tabs.length - 1 : -1;
+  if (to < 0) return;
+  e.preventDefault();
+  selectIncident(to, true);
+});
+selectIncident(0);
 
 /* ============ NEWS CARDS ============ */
-// Baked-in fallback: shown if news.json is missing or unreachable
+// The room renders the baked-in snapshot first, then upgrades to news.json if
+// the fetch succeeds. If it does not, the snapshot stays up and the note under
+// the grid says so, dated — stale headlines are never passed off as live.
 var newsGrid = document.getElementById('news-grid');
 function renderNews(items) {
   while (newsGrid.firstChild) newsGrid.removeChild(newsGrid.firstChild);
   items.forEach(function (n) {
+    // Feed content is third-party; never let it name a URL scheme.
+    if (!/^https?:\/\//.test(n.url || '')) return;
     var a = document.createElement('a');
     a.className = 'news-card reveal in';
     a.href = n.url; a.target = '_blank'; a.rel = 'noopener noreferrer';
@@ -115,20 +142,29 @@ function renderNews(items) {
     newsGrid.appendChild(a);
   });
 }
+function noteNews(text) {
+  var upd = document.getElementById('news-updated');
+  if (upd) upd.textContent = text;
+}
 renderNews(FALLBACK_NEWS);
 fetch('news.json', { cache: 'no-store' })
   .then(function (r) { if (!r.ok) throw new Error('no news.json'); return r.json(); })
   .then(function (d) {
-    if (d && d.items && d.items.length) {
-      renderNews(d.items);
-      var upd = document.getElementById('news-updated');
-      if (upd && d.generated_at) {
-        var when = new Date(d.generated_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-        upd.textContent = 'Headlines refresh automatically several times a day. Last updated ' + when + '.';
-      }
-    }
+    if (!d || !Array.isArray(d.items) || !d.items.length) throw new Error('empty news.json');
+    renderNews(d.items);
+    var when = d.generated_at && new Date(d.generated_at);
+    noteNews(when && !isNaN(when)
+      ? 'Headlines refresh automatically several times a day. Last updated '
+        + when.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) + '.'
+      : 'Headlines refresh automatically several times a day.');
+    /* A deep link into the Frontier wing paginates before this fetch settles,
+       so the pager may be holding the fallback cards this render just
+       detached. The pager owns that state, so tell it to re-measure. */
+    document.dispatchEvent(new CustomEvent('radiant:content-replaced', { detail: { room: 'news' } }));
   })
-  .catch(function () { /* fallback cards already rendered */ });
+  .catch(function () {
+    noteNews('Live headlines are unavailable right now; showing the saved set from ' + FALLBACK_DATE + '.');
+  });
 
 /* ============ CAREER ACCORDIONS ============ */
 var careerList = document.getElementById('career-list');
@@ -182,11 +218,21 @@ CAREERS.forEach(function (c) {
 
 
 /* ============ ACCORDION BEHAVIOR (myths + careers) ============ */
-document.querySelectorAll('.acc-head').forEach(function (head) {
+/* The panel collapses visually via grid-template-rows, which leaves its
+   contents in the reading order and the tab order; inert removes them so a
+   closed accordion reads closed. */
+document.querySelectorAll('.acc-head').forEach(function (head, i) {
+  var acc = head.closest('.acc');
+  var panel = acc && acc.querySelector('.acc-panel');
+  if (panel) {
+    if (!panel.id) panel.id = 'acc-panel-' + i;
+    head.setAttribute('aria-controls', panel.id);
+    panel.inert = true;
+  }
   head.addEventListener('click', function () {
-    var acc = head.closest('.acc');
     var open = acc.classList.toggle('open');
     head.setAttribute('aria-expanded', String(open));
+    if (panel) panel.inert = !open;
   });
 });
 
@@ -202,46 +248,15 @@ document.querySelectorAll('.reveal').forEach(function (el) {
   whenVisible(el, function () { el.classList.add('in'); });
 });
 
-/* ============ KINETIC MASTHEAD ============ */
-
-(function () {
-  var h1 = document.querySelector('.hero h1');
-  if (!h1 || REDUCE || typeof SplitText === 'undefined') return;
-  gsap.registerPlugin(SplitText);
-  SplitText.create(h1, {
-    type: 'words',
-    mask: 'words',        // each word gets its own clip box
-    autoSplit: true,      // re-split when the font loads or the line wraps
-    onSplit: function (self) {
-      return gsap.from(self.words, {
-        yPercent: 118, duration: 0.85, stagger: 0.07,
-        ease: 'expo.out', delay: 0.12
-      });
-    }
-  });
-})();
-
-/* ============ READING PROGRESS ============ */
-var progress = document.getElementById('progress');
-if (progress) {
-  var setProgress = function () {
-    var de = document.documentElement;
-    var max = de.scrollHeight - de.clientHeight;
-    progress.style.transform = 'scaleX(' + (max > 0 ? Math.min(window.scrollY / max, 1) : 0) + ')';
-  };
-  window.addEventListener('scroll', setProgress, { passive: true });
-  window.addEventListener('resize', setProgress);
-  window.addEventListener('hashchange', setProgress); // view switches change page height
-  setProgress();
-}
-
 /* DOSIMETER (signature instrument) */
 (function () {
   var el = document.getElementById('dosimeter');
   var valEl = document.getElementById('dose-val');
   var hallEl = document.getElementById('dose-hall');
   if (!el || !valEl) return;
-  /* 0.040 mSv for the whole building, which is one round-trip New York to Los Angeles by air. It used to be read off the scrollbar; */
+  /* 0.040 mSv for the whole building — about one New York to Los Angeles
+     round-trip by air. Accrued per room visited, so the badge tracks the
+     walk itself rather than a scrollbar position. */
   var DOSE_FULL = 0.040, DOSE_ROOMS = 18;
   /* Counted from WINGS once it exists, so adding or retiring a room can
      never leave the badge reading 100% before the museum ends. */
@@ -264,15 +279,16 @@ if (progress) {
     if (REDUCE) { shown = target; render(shown); return; }
     if (!raf) raf = requestAnimationFrame(tick);
   }
-  /* The pager calls this on every page it opens. A room you have already stood in adds nothing, which is what makes the badge mean anything. */
   /* 0.040 mSv is a number almost nobody can size. Say what it is worth. */
   window.__doseSay = function () {
     var mSv = DOSE_FULL * frac();
     var pct = Math.round(frac() * 100);
     if (!pct) return '';
     return 'You have taken ' + mSv.toFixed(3) + ' mSv walking this museum: about '
-      + pct + '% of one New York to Los Angeles flight.';
+      + pct + '% of one New York to Los Angeles round-trip by air.';
   };
+  /* The pager calls this on every page it opens. A room you have already
+     stood in adds nothing, which is what makes the badge mean anything. */
   window.__doseWalk = function (roomId, label) {
     if (roomId && !seen[roomId]) { seen[roomId] = 1; seenCount++; }
     if (hallEl && label) hallEl.textContent = label;
@@ -297,7 +313,21 @@ if (progress) {
   if (!cv || !cv.getContext) return;
   var ctx = cv.getContext('2d');
 
-  var P_TAU = 6.0;
+  /* Backing store scaled to the device so the trace stays sharp on high-DPI
+     screens; drawing code works in CSS pixels via the transform. Falls back
+     to the markup's 900x280 while the room is hidden and measures 0. */
+  var DPR = Math.min(window.devicePixelRatio || 1, 2);
+  var CW = 900, CH = 280;
+  function sizeCanvas() {
+    var w = cv.clientWidth;
+    if (!w) return;
+    CW = w; CH = Math.round(w * 280 / 900);
+    cv.width = Math.round(CW * DPR); cv.height = Math.round(CH * DPR);
+    cv.style.height = CH + 'px';
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  }
+  window.addEventListener('resize', sizeCanvas);
+
   var el = function (id) { return document.getElementById(id); };
   var out = { state: el('rk-state'), pow: el('rk-power'), temp: el('rk-temp'), per: el('rk-period'),
               rod: el('rk-rodpos'), rhoRod: el('rk-rho-rod'), rhoDop: el('rk-rho-dop'),
@@ -324,14 +354,18 @@ if (progress) {
     out.rhoRod.textContent = (pRod >= 0 ? '+' : '') + pRod;
     out.rhoDop.textContent = (pDop >= 0 ? '+' : '−') + Math.abs(pDop);
     out.rho.textContent = (pRho >= 0 ? '+' : '−') + Math.abs(pRho);
-    out.rod.textContent = S.rod;
+    // A scram inserts more worth than the slider's bottom stop, so show the
+    // reactivity actually applied rather than the slider's resting position.
+    out.rod.textContent = core.scrammed ? Math.round(SCRAM_RHO / PCM) : S.rod;
     var per = r.period;
     out.per.textContent = !isFinite(per) ? '∞' : Math.abs(per) > 999 ? '∞'
-      : Math.abs(per) < 0.01 ? per.toExponential(1) : per.toFixed(1);
+      : Math.abs(per) < 1 ? per.toPrecision(2) : per.toFixed(1);
 
+    // Prompt critical is rho >= beta by definition; the model's 0.97*beta
+    // threshold is only its internal integrator switch.
     var st = 'Critical', tag = '';
     if (core.scrammed) { st = 'Scrammed'; tag = 'scram'; }
-    else if (r.rho >= BETA * 0.97) { st = 'Prompt critical'; tag = 'prompt'; }
+    else if (r.rho >= BETA) { st = 'Prompt critical'; tag = 'prompt'; }
     else if (r.rho > 2e-5) st = 'Supercritical';
     else if (r.rho < -2e-5) { st = 'Subcritical'; tag = 'sub'; }
     out.state.textContent = st; out.state.setAttribute('data-s', tag);
@@ -341,18 +375,22 @@ if (progress) {
     out.bar.style.width = w + '%';
     out.beta.style.left = (50 + 650 / 1000 * 50) + '%';
 
-    // the message that teaches the exhibit
-    if (core.scrammed) out.live.textContent = 'Rods in. The chain reaction stops in seconds; decay heat does not.';
-    else if (r.rho >= BETA * 0.97 && S.n > 1.5)
-      out.live.textContent = 'Prompt critical — and the fuel, not the operator, is what pulls it back.';
+    // The message that teaches the exhibit. It is a polite live region, so
+    // write it only when it actually changes: paint() runs every frame, and
+    // an unguarded write would queue a screen-reader announcement 60x/s.
+    var msg;
+    if (core.scrammed) msg = 'Rods in: the reaction collapses to its delayed-neutron tail in seconds. A real core would still make decay heat, which this model omits.';
+    else if (r.rho >= BETA && S.n > 1.5)
+      msg = 'Prompt critical — and the fuel, not the operator, is what pulls it back.';
     else if (S.n > 1.6 && r.dopRho < -1e-4)
-      out.live.textContent = 'Fuel is hot: Doppler is subtracting ' + Math.abs(pDop) + ' pcm and levelling the power.';
-    else if (Math.abs(pRho) < 5 && Math.abs(S.n - 1) < 0.08) out.live.textContent = 'Steady. Reactivity balanced at zero.';
-    else out.live.textContent = '';
+      msg = 'Fuel is hot: Doppler feedback is pushing back and levelling the power.';
+    else if (Math.abs(pRho) < 5 && Math.abs(S.n - 1) < 0.08) msg = 'Steady. Reactivity balanced at zero.';
+    else msg = '';
+    if (msg !== paint._msg) { paint._msg = msg; out.live.textContent = msg; }
   }
 
   function draw() {
-    var W = cv.width, H = cv.height;
+    var W = CW, H = CH;
     ctx.clearRect(0, 0, W, H);
     ctx.strokeStyle = 'rgba(228,220,201,0.10)'; ctx.lineWidth = 1;
     for (var g = 1; g < 4; g++) { var y = H * g / 4; ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
@@ -399,7 +437,7 @@ if (progress) {
   /* Only run while it is on screen: a 20 Hz integrator behind a hidden page
      is work nobody can see. */
   var running = false;
-  function start() { if (running) return; running = true; last = 0; raf = requestAnimationFrame(tick); }
+  function start() { if (running) return; running = true; last = 0; sizeCanvas(); raf = requestAnimationFrame(tick); }
   function stop() { running = false; if (raf) cancelAnimationFrame(raf); raf = 0; }
   if ('IntersectionObserver' in window) {
     new IntersectionObserver(function (es) {
@@ -410,7 +448,14 @@ if (progress) {
 
 /* ============ COUNT-UP NUMBERS ============ */
 var counters = document.querySelectorAll('[data-count]');
-function runCount(el) {
+/* Exported because the pager lights a page's numbers directly when it opens
+   the leaf: the IntersectionObserver path alone cannot see an element that
+   was display:none until the moment the page turned. */
+export function runCount(el) {
+  // Both arrival systems (whenVisible and the pager's litPiece) can reach the
+  // same element; the guard lives here so it can never animate twice at once.
+  if (el._counted) return;
+  el._counted = 1;
   var target = parseFloat(el.dataset.count);
   var dec = parseInt(el.dataset.decimals || '0', 10);
   function fmtCount(v) { return dec ? v.toFixed(dec) : Math.round(v).toLocaleString('en-US'); }
@@ -429,97 +474,6 @@ counters.forEach(function (el) {
   whenVisible(el, function () { runCount(el); });
 });
 
-/* ============ HERO FISSION FIELD ============ */
-(function () {
-  var cv = document.getElementById('hero-bg');
-  if (!cv || !cv.getContext) return;
-  var hero = cv.parentElement;
-  // The masthead belongs to the no-JS reading order. In the museum it is
-  // never displayed, and an animation loop for a hidden canvas is a loop
-  // that runs for the life of the page and paints nothing.
-  if (!hero || !hero.offsetHeight) return;
-  var ctx = cv.getContext('2d');
-  var DPR = Math.min(window.devicePixelRatio || 1, 2);
-  var W = 0, H = 0;
-  function size() {
-    W = hero.clientWidth; H = hero.clientHeight;
-    cv.width = W * DPR; cv.height = H * DPR;
-    cv.style.width = W + 'px'; cv.style.height = H + 'px';
-    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-  }
-  size();
-
-  var parts = [];
-  for (var i = 0; i < 34; i++) {
-    parts.push({
-      x: Math.random(), y: Math.random(),
-      r: 1.3 + Math.random() * 1.9,
-      vx: (Math.random() - 0.5) * 0.00024,
-      vy: (Math.random() - 0.5) * 0.00024,
-      amber: Math.random() < 0.14,
-      tw: Math.random() * Math.PI * 2
-    });
-  }
-  var mx = 0.5, my = 0.45, tx = 0.5, ty = 0.45;
-
-  function frame(t) {
-    ctx.clearRect(0, 0, W, H);
-    // blueprint grid (light lines on the dark stage)
-    ctx.strokeStyle = 'rgba(255,255,255,0.045)';
-    ctx.lineWidth = 1;
-    for (var x = 0.5; x < W; x += 56) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }
-    for (var y = 0.5; y < H; y += 56) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
-    // atom rings with gentle mouse parallax
-    var px = (mx - 0.5) * 14, py = (my - 0.45) * 10;
-    var cx = W * 0.74 + px, cy = H * 0.36 + py;
-    ctx.strokeStyle = 'rgba(242,196,107,0.16)';
-    ctx.lineWidth = 1.2;
-    [H * 0.16, H * 0.24, H * 0.33].forEach(function (r, i) {
-      ctx.beginPath();
-      ctx.ellipse(cx, cy, r, r * (0.55 + i * 0.12), (i * Math.PI) / 3.2, 0, Math.PI * 2);
-      ctx.stroke();
-    });
-    // core glow
-    var grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, H * 0.2);
-    grad.addColorStop(0, 'rgba(242,196,107,0.14)');
-    grad.addColorStop(1, 'rgba(242,196,107,0)');
-    ctx.fillStyle = grad;
-    ctx.fillRect(cx - H * 0.25, cy - H * 0.25, H * 0.5, H * 0.5);
-    // drifting neutrons
-    parts.forEach(function (p) {
-      var a = 0.28 + 0.22 * Math.sin(p.tw + t * 0.0012);
-      ctx.fillStyle = p.amber ? 'rgba(251,191,36,' + (a + 0.1).toFixed(3) + ')' : 'rgba(125,185,255,' + a.toFixed(3) + ')';
-      ctx.beginPath();
-      ctx.arc(p.x * W + px * (p.r / 3), p.y * H + py * (p.r / 3), p.r, 0, Math.PI * 2);
-      ctx.fill();
-    });
-  }
-
-  if (REDUCE) {
-    frame(0);
-    window.addEventListener('resize', function () { size(); frame(0); });
-    return;
-  }
-  window.addEventListener('resize', size);
-  hero.addEventListener('pointermove', function (e) {
-    tx = e.clientX / Math.max(W, 1);
-    ty = e.clientY / Math.max(H, 1);
-  });
-  function loop(t) {
-    if (!document.hidden && window.scrollY < H * 1.05) {
-      mx += (tx - mx) * 0.04; my += (ty - my) * 0.04;
-      parts.forEach(function (p) {
-        p.x += p.vx; p.y += p.vy;
-        if (p.x < -0.02) p.x = 1.02; else if (p.x > 1.02) p.x = -0.02;
-        if (p.y < -0.02) p.y = 1.02; else if (p.y > 1.02) p.y = -0.02;
-      });
-      frame(t);
-    }
-    requestAnimationFrame(loop);
-  }
-  requestAnimationFrame(loop);
-})();
-
 /* ============ PLANT EXPLORER (click a part of the diagram) ============ */
 (function () {
   var svg = document.getElementById('plant-svg');
@@ -530,10 +484,17 @@ counters.forEach(function (el) {
   var textEl = document.querySelector('.pd-text');
   var nEl = document.querySelector('.pd-n');
 
-  function select(n) {
+  function select(n, focus) {
     n = Math.max(1, Math.min(n, steps.length || 6));
     svg.setAttribute('data-active', n);
-    tabs.forEach(function (t) { t.setAttribute('aria-selected', String(parseInt(t.dataset.part, 10) === n)); });
+    tabs.forEach(function (t) {
+      var on = parseInt(t.dataset.part, 10) === n;
+      t.setAttribute('aria-selected', String(on));
+      t.tabIndex = on ? 0 : -1;
+      if (on && focus) t.focus();
+    });
+    var panel = document.getElementById('plant-detail');
+    if (panel) panel.setAttribute('aria-labelledby', 'ptab-' + n);
     var li = steps[n - 1];
     if (li) {
       titleEl.textContent = li.dataset.title;
@@ -558,6 +519,17 @@ counters.forEach(function (el) {
   }
 
   tabs.forEach(function (t) { t.addEventListener('click', function () { select(parseInt(t.dataset.part, 10)); }); });
+  var tablist = document.getElementById('plant-tablist');
+  if (tablist) tablist.addEventListener('keydown', function (e) {
+    var at = tabs.indexOf(document.activeElement);
+    if (at < 0) return;
+    var to = e.key === 'ArrowRight' || e.key === 'ArrowDown' ? (at + 1) % tabs.length
+           : e.key === 'ArrowLeft' || e.key === 'ArrowUp' ? (at - 1 + tabs.length) % tabs.length
+           : e.key === 'Home' ? 0 : e.key === 'End' ? tabs.length - 1 : -1;
+    if (to < 0) return;
+    e.preventDefault();
+    select(to + 1, true);
+  });
   svg.querySelectorAll('.hotspot').forEach(function (h) {
     var go = function () { select(parseInt(h.dataset.part, 10)); };
     h.addEventListener('click', go);
@@ -579,7 +551,12 @@ counters.forEach(function (el) {
   var rodOut = document.getElementById('fz-rods-out');
 
   function size() {
-    var w = cv.clientWidth || 600, h = Math.round(Math.max(220, Math.min(w * 0.62, 340)));
+    // While the lab's page is closed the canvas is display:none and measures
+    // 0; sizing from a guessed width would bake in the wrong aspect until the
+    // next resize. Bail, and re-measure when the exhibit comes on screen.
+    var w = cv.clientWidth;
+    if (!w) return;
+    var h = Math.round(Math.max(220, Math.min(w * 0.62, 340)));
     cv.width = w * DPR; cv.height = h * DPR; cv.style.height = h + 'px';
     ctx.setTransform(DPR, 0, 0, DPR, 0, 0); W = w; H = h; layout();
   }
@@ -610,7 +587,14 @@ counters.forEach(function (el) {
     var waste = 1 + Math.round((1 - k / 1.7) * 2); // rods absorb more when inserted
     for (i = 0; i < waste; i++) neutrons.push(makeNeutron(n, null));
   }
-  function fire() { var t = randomUnspent(null); if (t) fission(t); updateStats(); if (REDUCE) { runStatic(); draw(); } }
+  function fire() {
+    var t = randomUnspent(null);
+    if (t) fission(t);
+    // under reduced motion the whole cascade resolves synchronously, so the
+    // stats must be read after it, not before
+    if (REDUCE) { runStatic(); draw(); }
+    updateStats();
+  }
 
   function stepOnce() {
     for (var i = neutrons.length - 1; i >= 0; i--) {
@@ -642,6 +626,18 @@ counters.forEach(function (el) {
       ctx.beginPath(); ctx.arc(p.x, p.y, p.target ? 2.6 : 2, 0, 6.283); ctx.fill();
     }
   }
+  /* One debounced sentence for screen readers; announcing every slider tick
+     or every frame's counters would flood the queue. */
+  var say = document.getElementById('fz-say'), sayT = null;
+  function announce() {
+    if (!say || !W) return;   // W is 0 until the exhibit has been on screen
+    clearTimeout(sayT);
+    sayT = setTimeout(function () {
+      say.textContent = 'k = ' + kValue().toFixed(1) + ': ' + stateEl.textContent + '. '
+        + fissions + ' splits, ' + neutrons.length + ' free neutrons.';
+    }, 700);
+  }
+
   function updateStats() {
     fissEl.textContent = fissions; neuEl.textContent = neutrons.length;
     var k = kValue(); kEl.textContent = k.toFixed(1);
@@ -653,10 +649,24 @@ counters.forEach(function (el) {
     else { label = 'Runaway'; bg = 'rgba(248,113,113,0.2)'; fg = '#fca5a5'; }
     stateEl.textContent = label; stateEl.style.background = bg; stateEl.style.color = fg;
     rodOut.textContent = rodEl.value;
+    announce();
   }
 
-  var raf = null;
-  function loop() { stepOnce(); draw(); neuEl.textContent = neutrons.length; raf = requestAnimationFrame(loop); }
+  /* Only run while on screen, like the reactor above: the counters update
+     from the frame loop so the Splits readout ticks during a cascade. */
+  var raf = null, running = false;
+  function loop() {
+    stepOnce(); draw();
+    fissEl.textContent = fissions;
+    neuEl.textContent = neutrons.length;
+    raf = requestAnimationFrame(loop);
+  }
+  function start() {
+    if (!W || cv.clientWidth !== W) { size(); draw(); }
+    if (REDUCE || running) return;
+    running = true; raf = requestAnimationFrame(loop);
+  }
+  function stop() { running = false; if (raf) cancelAnimationFrame(raf); raf = null; }
 
   rodEl.addEventListener('input', updateStats);
   document.getElementById('fz-fire').addEventListener('click', fire);
@@ -664,7 +674,11 @@ counters.forEach(function (el) {
   window.addEventListener('resize', function () { size(); draw(); });
 
   size(); updateStats(); draw();
-  if (!REDUCE) { raf = requestAnimationFrame(loop); }
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (es) {
+      es.forEach(function (e) { e.isIntersecting ? start() : stop(); });
+    }, { threshold: 0.15 }).observe(cv);
+  } else start();
 })();
 
 /* ============ TOUR VIDEO (autoplay while in view) ============ */

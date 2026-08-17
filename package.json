@@ -4,10 +4,13 @@
   "private": true,
   "description": "RADIANT - an evidence-based case for nuclear energy, presented as a museum",
   "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "test": "node tests/run.mjs",
     "test:static": "node tests/run.mjs static",
-    "serve": "python3 -m http.server 4174"
+    "serve": "node scripts/serve.mjs"
   },
   "devDependencies": {
     "playwright": "^1.47.0"

@@ -45,13 +45,22 @@ export function createReactor() {
     let period = Infinity;
 
     if (rho < BETA * 0.97) {
-      // The prompt population settles instantly against the precursors, so
-      // the reactor runs on the delayed neutrons.
+      // The prompt population settles against the precursors, so the reactor
+      // runs on the delayed neutrons. Relax onto that equilibrium at the
+      // prompt rate rather than snapping to it: the exponential is exact for
+      // the fast mode, and it keeps the hand-over smooth when a prompt
+      // excursion decays back down through this branch.
       const nq = (DECAY * S.C * LAMBDA) / (BETA - rho);
-      S.n = nq > 0 ? nq : 1e-9;
+      const k = Math.exp((-dt * (BETA - rho)) / LAMBDA);
+      S.n = nq > 0 ? nq + (S.n - nq) * k : 1e-9;
       S.C += ((BETA / LAMBDA) * S.n - DECAY * S.C) * dt;
-      if (Math.abs(rho) > 1e-7) period = (BETA - rho) / (DECAY * rho);
+      // Fuel temperature chases power with a lag; heat removal is proportional.
+      S.T += ((T_IN + (T_REF - T_IN) * S.n - S.T) / T_TAU) * dt;
     } else {
+      // The prompt branch owns the whole state here, temperature included:
+      // the Doppler term must track the excursion inside the substeps, and a
+      // second thermal update outside the loop would integrate the same ODE
+      // twice and halve the effective time constant mid-pulse.
       const sub = 400, h = dt / sub;
       for (let i = 0; i < sub; i++) {
         const dn = ((rho - BETA) / LAMBDA) * S.n + DECAY * S.C;
@@ -60,17 +69,24 @@ export function createReactor() {
         S.C += dC * h;
         if (S.n > 5e3) { S.n = 5e3; break; }
         if (S.n < 1e-9) { S.n = 1e-9; break; }
-        S.T += ((S.n - (S.T - T_IN) / (T_REF - T_IN)) * (T_REF - T_IN) / T_TAU) * h;
+        S.T += ((T_IN + (T_REF - T_IN) * S.n - S.T) / T_TAU) * h;
         dopRho = ALPHA * (S.T - T_REF);
         rho = rodRho + dopRho;
       }
-      period = LAMBDA / Math.max(rho - BETA, 1e-9);
     }
-
-    // Fuel temperature chases power with a lag; heat removal is proportional.
-    const Teq = T_IN + (T_REF - T_IN) * S.n;
-    S.T += ((Teq - S.T) / T_TAU) * dt;
     if (S.T < T_IN) S.T = T_IN;
+
+    // The period readout solves the one-group inhour relation exactly:
+    //   Lambda w^2 + (Lambda lambda + beta - rho) w - rho lambda = 0,
+    // whose dominant root is the asymptotic 1/T for any rho — it reduces to
+    // (beta - rho)/(lambda rho) far below prompt critical and Lambda/(rho -
+    // beta) far above, and unlike either limit it is finite and continuous
+    // through rho = beta itself.
+    if (Math.abs(rho) > 1e-7) {
+      const b = LAMBDA * DECAY + BETA - rho;
+      const w = (-b + Math.sqrt(b * b + 4 * LAMBDA * rho * DECAY)) / (2 * LAMBDA);
+      period = 1 / w;
+    }
 
     return { rho, rodRho, dopRho, period };
   }
@@ -85,11 +101,8 @@ export function createReactor() {
   };
 }
 
-/* Where the Doppler feedback has to settle for a given rod worth: the negative
-   temperature reactivity must cancel it exactly, and the heat balance then
-   fixes the power. Used by the exhibit's own notes and by the tests. */
-export const equilibriumTemp = (rodPcm) => T_REF - (rodPcm * PCM) / ALPHA;
-export const equilibriumPower = (rodPcm) => (equilibriumTemp(rodPcm) - T_IN) / (T_REF - T_IN);
-
-/* The prompt drop a scram produces, before the delayed-neutron tail. */
-export const promptDropRatio = (rho = SCRAM_RHO) => BETA / (BETA - rho);
+/* The closed-form results this model must reproduce — the Doppler equilibrium
+   T = T_REF − ρ_rod/α with n = (T − T_IN)/(T_REF − T_IN), and the prompt drop
+   β/(β − ρ) after a scram — are deliberately NOT exported as helpers here:
+   the tests re-derive them independently so a change to the model has to be
+   re-derived rather than silently re-fitted (see tests/models.mjs). */

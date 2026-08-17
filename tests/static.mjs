@@ -4,6 +4,7 @@
 import { readFile, readdir } from 'node:fs/promises';
 import { join } from 'node:path';
 import { html, ROOT, tracker } from './lib.mjs';
+import { PLANT_STEPS, FISSION_STEPS, BUILD_STEPS } from '../data/scenes.js';
 
 /* Everything the browser is served, concatenated. The site is split across
    index.html plus css/ and js/, so a rule like "no CDN links" has to be
@@ -60,6 +61,18 @@ export async function run() {
     dangling.length
       ? t.fail(`hard-coded "(reference N)" markers point past the list: ${dangling.join(', ')}`)
       : t.ok(`all ${markers.length} hard-coded reference markers are in range 1..${count}`);
+
+    // In-range is not enough: an insertion mid-list keeps every marker in
+    // range while silently pointing it at the wrong source. Pin each
+    // hard-coded marker to a keyword its reference must contain.
+    const MARKER_MEANS = { 4: /IPCC/, 6: /EIA|Electric Power Monthly/, 16: /Ember/ };
+    const entries = [...refBlock[1].matchAll(/<li[^>]*>([\s\S]*?)<\/li>/g)].map((m) => m[1]);
+    const miscited = Object.entries(MARKER_MEANS)
+      .filter(([n, re]) => markers.includes(+n) && !(entries[n - 1] || '').match(re))
+      .map(([n, re]) => `reference ${n} no longer mentions ${re}`);
+    miscited.length
+      ? t.fail(`hard-coded markers point at the wrong source: ${miscited.join('; ')}`)
+      : t.ok('every hard-coded marker still points at the source it names');
   }
 
   // A count-up animation reads its target from the attribute; if the attribute
@@ -96,6 +109,24 @@ export async function run() {
   oldNumbering.length
     ? t.fail(`${oldNumbering.length} section overlines still carry a hard-coded number`)
     : t.ok('no hard-coded section numbers in the overlines');
+
+  // --- scene fallback lists ------------------------------------------------
+  // The no-JS step lists are baked into the markup; they must match the
+  // scenes data the animated version plays from, or the two tell different
+  // stories. Titles are the check — text drift shows up in review, but a
+  // missing or reordered beat is structural.
+  for (const [id, steps] of [
+    ['fission-scene-steps', FISSION_STEPS],
+    ['plant-scene-steps', PLANT_STEPS],
+    ['build-scene-steps', BUILD_STEPS],
+  ]) {
+    const block = src.match(new RegExp(`<ol class="pin-steps" id="${id}">([\\s\\S]*?)</ol>`));
+    const titles = block ? [...block[1].matchAll(/<strong>([\s\S]*?)\.<\/strong>/g)].map((m) => m[1]) : [];
+    const want = steps.map((s) => s.title);
+    JSON.stringify(titles) === JSON.stringify(want)
+      ? t.ok(`${id} carries all ${want.length} beats in order`)
+      : t.fail(`${id} drifted from data/scenes.js: [${titles.join('; ')}] vs [${want.join('; ')}]`);
+  }
 
   // --- news.json -----------------------------------------------------------
   let news;

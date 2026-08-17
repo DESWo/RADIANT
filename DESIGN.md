@@ -6,10 +6,12 @@ numbers come from, see [README.md](README.md).
 
 ## Shape
 
-One page, `index.html`, with no build step and no runtime dependencies. GSAP and
-its plugins are vendored under `assets/` alongside the fonts; nothing is fetched
-from a CDN at runtime. The only external request the site makes is for
-`news.json`, which is served from the same origin.
+One page, `index.html`, with no build step and no runtime dependencies. The
+styles live in `css/`, the runtime in `js/` (with the two physics models as
+their own modules), and the datasets and registries in `data/`, all loaded as
+plain ES modules. GSAP and its plugins are vendored under `assets/` alongside
+the fonts; nothing is fetched from a CDN at runtime. The only external request
+the site makes is for `news.json`, which is served from the same origin.
 
 The page is presented as a museum. There are three screens, and the visitor is
 in exactly one at a time:
@@ -124,7 +126,7 @@ grammar but not their composition — each is drawn for what it has to explain.
 
 ## Data and citations
 
-Every figure on the page carries a primary source. Seventeen numbered references
+Every figure on the page carries a primary source. Eighteen numbered references
 live in the footer, which JavaScript relocates into the Sources exhibit at
 runtime so the pager treats it as that exhibit's content rather than page
 furniture. Charts carry a source line and a "how to read this" note covering
@@ -150,12 +152,13 @@ readable. Charts have a table view. Colour is never the only carrier of meaning.
 
 ## Verification
 
-`npm test` runs four suites against a locally served copy of the site.
+`npm test` runs five suites against a locally served copy of the site.
 
 | Suite | What it covers |
 | --- | --- |
 | `static` | Duplicate ids, internal anchors, aria references, reference-marker integrity, count-up figures matching their printed value, no CDN links, `news.json` shape |
-| `physics` | Both models against closed-form results |
+| `models` | Both models as modules, no browser: the reactor integrator against a fine-step Runge–Kutta reference and closed-form equilibria, the grid arithmetic term by term, and `balance()` invariants over hundreds of random mixes |
+| `physics` | The same models re-checked through the browser UI, off the panel a visitor reads |
 | `museum` | Wing structure, room addresses matching the walkbar, deep links, dosimeter scaling, pagination determinism |
 | `render` | Three viewports for horizontal overflow and blank pages, keyboard paging, reduced motion, interactives surviving re-entry |
 
@@ -167,7 +170,9 @@ the markup existed, so anything asserting about what a visitor sees requires
 non-zero size, on-screen position and cumulative opacity.
 
 **Do not assert a formula against itself.** The reactor panel computes its
-period readout with `(β − ρ) / (λρ)`, so comparing that readout against the same
-expression would assert nothing. The physics suite instead checks results the
-code never evaluates: the temperature and power the Doppler feedback settles at,
-and the prompt-drop ratio `β / (β − ρ)` after a scram.
+period readout from the one-group inhour relation, so comparing that readout
+against the same expression would assert nothing. The suites instead check
+results the code never evaluates: the trajectory against an independent
+Runge–Kutta integration of the same stated equations, the temperature and
+power the Doppler feedback settles at, and the prompt-drop ratio
+`β / (β − ρ)` after a scram.

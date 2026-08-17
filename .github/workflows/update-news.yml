@@ -8,14 +8,28 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: update-news
+  cancel-in-progress: false
+
 jobs:
   update:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
 
       - name: Fetch latest headlines
         run: python3 scripts/update_news.py
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # The static suite needs no browser and no npm install; it gates the
+      # commit so a malformed news.json can never reach the deployed branch.
+      - name: Validate news.json before committing
+        run: node tests/run.mjs static
 
       - name: Commit if changed
         run: |

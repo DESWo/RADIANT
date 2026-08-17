@@ -13,7 +13,7 @@ export const PLANT_STEPS = [
   { title: 'The switchyard', cx: 696, cy: 235, s: 2.3,
     text: 'A transformer boosts the voltage on the way out. High voltage lets the power travel for miles down the transmission lines with very little lost along the way.' },
   { title: 'The cooling tower', cx: 835, cy: 331, s: 2.0,
-    text: 'Leftover heat leaves through a third water loop as water vapour, which condenses into the visible white plume. That plume is not smoke and it is not radioactive; it is the same cloud that rises off a boiling kettle.' }
+    text: 'Leftover heat leaves through a third water loop as water vapor, which condenses into the visible white plume. That plume is not smoke and it is not radioactive; it is the same cloud that rises off a boiling kettle.' }
 ];
 
 export const FISSION_STEPS = [
@@ -27,12 +27,12 @@ export const FISSION_STEPS = [
 
 export const BUILD_STEPS = [
   { title: 'Clearing the site', text: 'Years before any concrete, the ground is surveyed and cleared. The location has to satisfy seismology, hydrology, and a grid connection all at once, which is why siting alone can take a decade.' },
-  { title: 'Excavation', text: 'Crews dig out to solid bedrock, often twenty metres down. The rock has to be sound enough to carry the whole plant and hold it steady through an earthquake.' },
+  { title: 'Excavation', text: 'Crews dig out to solid bedrock, often twenty meters down. The rock has to be sound enough to carry the whole plant and hold it steady through an earthquake.' },
   { title: 'The base mat', text: 'A single raft of reinforced concrete is poured across the pit in one continuous operation, sometimes running for days without stopping. Every building above is anchored to this one slab.' },
   { title: 'Containment rises', text: 'Metre-thick reinforced concrete walls climb around a sealed steel liner. This is the shell built to hold everything in, whatever happens inside it.' },
-  { title: 'The dome goes on', text: 'The dome is assembled on the ground and lifted into place in one piece by one of the largest cranes on earth. It is the moment the building becomes recognisable.' },
-  { title: 'The reactor arrives', text: 'The pressure vessel is lowered in and the internals follow: steam generators, pumps, and thousands of kilometres of cable. Most of the remaining work is now inside.' },
+  { title: 'The dome goes on', text: 'The dome is assembled on the ground and lifted into place in one piece by one of the largest cranes on earth. It is the moment the building becomes recognizable.' },
+  { title: 'The reactor arrives', text: 'The pressure vessel is lowered in and the internals follow: steam generators, pumps, and thousands of kilometers of cable. Most of the remaining work is now inside.' },
   { title: 'The turbine hall', text: 'The conventional half goes up alongside: turbine, generator, condenser. This part is much the same as any thermal power station; only the heat source differs.' },
-  { title: 'Cooling towers', text: 'The towers are slip-formed upward in a continuous pour, growing a few metres a day until they stand taller than almost anything else on site.' },
-  { title: 'Connected to the grid', text: 'The switchyard ties the plant into the transmission network. After years of commissioning and regulator sign-off, it synchronises to the grid and starts delivering power.' }
+  { title: 'Cooling towers', text: 'The towers are slip-formed upward in a continuous pour, growing a few meters a day until they stand taller than almost anything else on site.' },
+  { title: 'Connected to the grid', text: 'The switchyard ties the plant into the transmission network. After years of commissioning and regulator sign-off, it synchronizes to the grid and starts delivering power.' }
 ];

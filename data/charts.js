@@ -46,14 +46,14 @@ export const CHARTS = {
   },
   exposure: {
     unit: 'mSv', labelW: '13rem',
-    caption: 'Everyday radiation doses in millisieverts, effective-dose estimates (U.S. NRC, Doses in Our Daily Lives; EPA)',
+    caption: 'Everyday radiation doses in millisieverts, effective-dose estimates (U.S. NRC, Doses in Our Daily Lives; EPA). Recurring sources are labelled per year; the others are one-time events.',
     cols: ['Source of dose', 'Dose (mSv)'],
     data: [
-      { name: 'Eating a banana',                 v: 0.0001, note: 'potassium-40 (yes, really)' },
-      { name: 'Living near a nuclear plant',     v: 0.001,  note: 'per year; NRC estimate for nearby residents', hero: true },
-      { name: 'Flight, NYC to LA round-trip',    v: 0.04,   note: 'cosmic rays; varies with route and altitude' },
-      { name: 'Chest X-ray',                     v: 0.1,    note: 'one diagnostic image' },
-      { name: 'Natural background',              v: 3.0,    note: 'per year: radon, soil, cosmic rays' }
+      { name: 'Eating a banana',                     v: 0.0001, note: 'one banana; potassium-40 (yes, really)' },
+      { name: 'Living near a nuclear plant (per year)', v: 0.001, note: 'NRC estimate for nearby residents', hero: true },
+      { name: 'Flight, NYC to LA round-trip',        v: 0.04,   note: 'one round-trip; cosmic rays, varies with route and altitude' },
+      { name: 'Chest X-ray',                         v: 0.1,    note: 'one diagnostic image' },
+      { name: 'Natural background (per year)',       v: 3.0,    note: 'radon, soil, cosmic rays' }
     ],
     fmt: function (v) { return String(v); }
   }

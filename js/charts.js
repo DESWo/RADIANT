@@ -46,6 +46,9 @@ Object.keys(CHARTS).forEach(function (key) {
 
     row.appendChild(label);
     row.appendChild(track);
+    // A focusable div needs a role for its label to be announced; each row
+    // is one labelled bar, and the table view carries the full dataset.
+    row.setAttribute('role', 'img');
     row.setAttribute('aria-label', d.name + ': ' + cfg.fmt(d.v) + ' ' + cfg.unit + (d.note ? ', ' + d.note : ''));
     rows.appendChild(row);
 

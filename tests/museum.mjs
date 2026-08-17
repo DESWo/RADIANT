@@ -96,8 +96,10 @@ export async function run(browser, url) {
     const titles = shelves.flat();
     const readings = [];
     for (const title of titles) {
-      await toLobby(p4); await p4.waitForTimeout(620);
-      await openBook(p4, title); await p4.waitForTimeout(2900);
+      // 3400ms like every other open in this file: the book-opening animation
+      // runs ~2.9s, and reading the badge before enterWing fires undercounts.
+      await toLobby(p4); await p4.waitForTimeout(700);
+      await openBook(p4, title); await p4.waitForTimeout(3400);
       readings.push(await p4.evaluate(() =>
         +getComputedStyle(document.getElementById('dosimeter')).getPropertyValue('--f')));
     }
@@ -108,6 +110,23 @@ export async function run(browser, url) {
       t.fail(`dosimeter ends at ${(readings[readings.length - 1] * 100).toFixed(0)}%, never full`);
     else t.ok(`dosimeter reaches 100% at room ${readings.length} of ${readings.length}`);
     await p4.close();
+  }
+
+  // --- deep link into the news room, then walk it --------------------------
+  // A shared link into the Frontier wing paginates over the fallback news
+  // cards before news.json lands; the upgrade then detaches those exact
+  // nodes. Walking onto that leaf used to throw mid page-turn.
+  {
+    const { page: p6, errors: e6 } = await museumPage(browser, { url, hash: '#frontier/news' });
+    await p6.waitForTimeout(3200);
+    for (let i = 0; i < 14; i++) {
+      await p6.keyboard.press('ArrowRight');
+      await p6.waitForTimeout(500);
+    }
+    const end = await p6.evaluate(() => document.getElementById('wb-count')?.textContent || '');
+    e6.length ? t.fail(`deep-linked news walk threw: ${[...new Set(e6)].join(' | ')}`)
+              : t.ok(`deep link into the news room pages cleanly through the upgrade (${end})`);
+    await p6.close();
   }
 
   // --- pagination is deterministic ----------------------------------------

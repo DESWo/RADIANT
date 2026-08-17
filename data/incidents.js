@@ -20,14 +20,14 @@ export const INCIDENTS = [
   {
     year: 1986, name: 'Chernobyl', location: 'Ukraine, USSR', severity: 'INES Level 7',
     description: 'Steam explosion and fire at a flawed Soviet RBMK reactor during a mishandled safety test. The worst nuclear accident in history.',
-    feared: 'Hundreds of thousands', confirmed: '31 direct', dose: 'UNSCEAR estimates ~4,000 eventual deaths from radiation exposure',
+    feared: 'Hundreds of thousands', confirmed: '31 direct', dose: 'The Chernobyl Forum (WHO/IAEA) projected up to ~4,000 eventual deaths among the most-exposed groups',
     happened: [
       'A safety test was run with critical safety systems disabled',
       'The RBMK design flaw made the reactor unstable at low power',
       'No containment structure existed; the design was never used in the West'
     ],
     longterm: [
-      '31 direct deaths among workers and firefighters; ~4,000 eventual deaths estimated by UNSCEAR',
+      '31 direct deaths among workers and firefighters; up to ~4,000 eventual deaths projected by the WHO/IAEA Chernobyl Forum',
       'Most evacuees received doses in the medical X-ray range',
       'RBMK reactors were phased out or heavily modified worldwide'
     ]

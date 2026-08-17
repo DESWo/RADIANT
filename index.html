@@ -26,7 +26,7 @@
 <!-- Fonts are self-hosted in assets/fonts (see @font-face below), so the
      page makes no third-party requests at runtime. Variable woff2 keeps
      the optical-size axis the display headings use. -->
-<link rel="preload" href="assets/fonts/public-sans-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/spectral-400-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/fraunces-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
 <script>document.documentElement.classList.add('js');</script>
   <link rel="stylesheet" href="css/fonts.css">
@@ -36,7 +36,6 @@
   <link rel="stylesheet" href="css/responsive.css">
 </head>
 <body>
-<div id="progress" aria-hidden="true"></div>
 <!-- Signature instrument: accumulates a real tour dose as you walk the halls.
      aria-hidden because it is ambient orientation, not content; the halls it
      names are reachable through the nav and headings. -->
@@ -54,7 +53,7 @@
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="2.3"/><path d="M12 2.6a9.4 9.4 0 0 1 8.1 4.7l-4.1 2.4A4.7 4.7 0 0 0 12 7.3z"/><path d="M12 2.6a9.4 9.4 0 0 1 8.1 4.7l-4.1 2.4A4.7 4.7 0 0 0 12 7.3z" transform="rotate(120 12 12)"/><path d="M12 2.6a9.4 9.4 0 0 1 8.1 4.7l-4.1 2.4A4.7 4.7 0 0 0 12 7.3z" transform="rotate(240 12 12)"/></svg>
     Radiant
   </a>
-  <div class="nav__links" id="nav-links" data-lenis-prevent>
+  <div class="nav__links" id="nav-links">
     <a href="#top">Overview</a>
     <a href="#case">The Case</a>
     <a href="#reactor-motion">Watch</a>
@@ -96,7 +95,7 @@
     <p style="margin-top:2.4rem">
       <button type="button" class="btn" id="go-lobby">Enter the museum <span class="arr">→</span></button>
     </p>
-    <p class="entry__cue" aria-hidden="true">Scroll, or press the button, to walk in ↓</p>
+    <p class="entry__cue">Scroll, or press the button, to walk in ↓</p>
   </div>
 </section>
 
@@ -113,7 +112,6 @@
 
 <!-- ================= OVERVIEW ================= -->
 <header class="view hero" id="top">
-  <canvas id="hero-bg" aria-hidden="true"></canvas>
   <div class="hero__veil" aria-hidden="true"></div>
   <div class="wrap hero__grid">
     <div class="hero__lead">
@@ -269,7 +267,14 @@
       </div>
       </div>
     </div>
-    <ol class="pin-steps" id="fission-scene-steps"></ol>
+    <ol class="pin-steps" id="fission-scene-steps">
+      <li><strong>A free neutron.</strong> It starts with one loose neutron drifting through the fuel. Slow neutrons work best: a fast one tends to glance off, while a slow one lingers long enough to be caught.</li>
+      <li><strong>The nucleus absorbs it.</strong> A uranium-235 nucleus swallows the neutron and becomes uranium-236 for an instant. The extra energy makes it wobble and stretch like a droplet about to break.</li>
+      <li><strong>The split.</strong> It tears in two. A little of its mass converts straight into energy (E = mc²), which is why a fuel pellet the size of a fingertip holds roughly as much energy as a ton of coal.</li>
+      <li><strong>Two or three more neutrons.</strong> The split also flings out fresh neutrons. This is the part that matters: the reaction has just produced the very thing that started it.</li>
+      <li><strong>The chain reaction.</strong> Those neutrons find more nuclei and split them too. Each generation can double the last, which is what makes fission self-sustaining rather than a one-off event.</li>
+      <li><strong>The number that decides.</strong> Whether that chain grows or fades comes down to one number, k: how many neutrons from each split go on to cause another. Below one it dies out; above one it grows; at exactly one it sustains itself. Holding it at one is what a reactor does.</li>
+    </ol>
 
     <div class="fission-lab reveal">
       <div class="fz-stage">
@@ -287,6 +292,7 @@
           <div class="fz-scale"><span>Runaway</span><span>Self-sustaining</span><span>Dies out</span></div>
         </div>
         <div class="fz-stats"><span>Splits: <b id="fz-fissions">0</b></span><span>Free neutrons: <b id="fz-neutrons">0</b></span></div>
+        <p class="sr-only" id="fz-say" role="status" aria-live="polite" aria-atomic="true"></p>
         <button type="button" id="fz-reset" class="fz-btn fz-btn--ghost">Reset the fuel</button>
         <p class="fz-hint">k is the multiplication factor: how many of each split's neutrons go on to cause another split.</p>
       </div>
@@ -343,8 +349,8 @@
           <label class="rk-ctl" for="rk-rods">
             <span class="rk-ctl__label">Control rods <b id="rk-rodpos">0</b><span class="u">&nbsp;pcm withdrawn</span></span>
             <input type="range" id="rk-rods" min="-800" max="900" step="10" value="0"
-              aria-describedby="rk-rodhelp">
-            <span class="rk-scale"><span>inserted</span><span>critical</span><span>withdrawn</span></span>
+              aria-label="Control rod position, pcm withdrawn" aria-describedby="rk-rodhelp">
+            <span class="rk-scale" aria-hidden="true"><span>inserted</span><span>critical</span><span>withdrawn</span></span>
             <span class="rk-help" id="rk-rodhelp">Reactivity added by moving the rods, in pcm (1 pcm = 0.001% change in k).</span>
           </label>
 
@@ -364,11 +370,11 @@
       </div>
     </div>
 
-    <p class="chart-card__src rk-src">Model: one-group point kinetics with a Doppler fuel-temperature feedback, integrated in the quasi-static (prompt-jump) approximation below prompt critical and stepped directly above it. Constants: delayed neutron fraction &beta;&nbsp;=&nbsp;0.0065 for thermal fission of uranium-235; prompt neutron generation time &Lambda;&nbsp;=&nbsp;2&times;10<sup>&minus;5</sup>&nbsp;s for a light-water reactor; fuel temperature coefficient &minus;3&nbsp;pcm/K, inside the &minus;5 to &minus;2&nbsp;pcm/K range quoted for pressurized-water reactors. <strong>How to read this:</strong> a teaching model, not a plant simulator. It does not model xenon, moderator feedback, burnup or thermal-hydraulics. It is checked against the results those constants imply: the reactor period tracks the analytic (&beta;&nbsp;&minus;&nbsp;&rho;)/(&lambda;&rho;) to within 1%, the Doppler equilibrium settles to the temperature and power the feedback coefficient predicts (198.6% at 826&nbsp;&deg;C against 198.8% at 827&nbsp;&deg;C for a 800&nbsp;pcm withdrawal), and after a scram the power falls to the prompt drop and then decays on the delayed-neutron tail rather than to zero. <a href="https://www.nrc.gov/reading-rm/basic-ref/glossary/doppler-coefficient" target="_blank" rel="noopener noreferrer">NRC: Doppler coefficient</a>.</p>
+    <p class="chart-card__src rk-src">Model: one-group point kinetics with a Doppler fuel-temperature feedback, integrated in the quasi-static (prompt-jump) approximation below prompt critical and stepped directly above it. Constants: delayed neutron fraction &beta;&nbsp;=&nbsp;0.0065 for thermal fission of uranium-235; prompt neutron generation time &Lambda;&nbsp;=&nbsp;2&times;10<sup>&minus;5</sup>&nbsp;s for a light-water reactor; fuel temperature coefficient &minus;3&nbsp;pcm/K, inside the &minus;5 to &minus;2&nbsp;pcm/K range quoted for pressurized-water reactors. <strong>How to read this:</strong> a teaching model, not a plant simulator. It does not model xenon, moderator feedback, burnup or thermal-hydraulics. The automated tests check it against results the code never evaluates: the integrated trajectory must track an independent Runge&ndash;Kutta reference through a prompt excursion, the Doppler feedback must settle at the temperature and power the constants predict (198.8% of rated power at 827&nbsp;&deg;C for an 800&nbsp;pcm withdrawal), and after a scram the power must fall by the prompt drop &beta;/(&beta;&nbsp;&minus;&nbsp;&rho;) and then decay on the delayed-neutron tail rather than to zero. The period readout solves the one-group inhour relation for its dominant root, so it stays finite and continuous through prompt critical. <a href="https://www.nrc.gov/reading-rm/basic-ref/glossary/doppler-coefficient" target="_blank" rel="noopener noreferrer">NRC: Doppler coefficient</a>.</p>
 
     <div class="prose reveal">
       <p>Withdraw the rods a little and power climbs, but it climbs on a leash: the period never drops below a few seconds, because the reaction is waiting on neutrons that arrive seconds late. That is the whole reason a human, or a control system, can steer one at all.</p>
-      <p>Push past 650&nbsp;pcm and the leash comes off. The reaction no longer needs the late neutrons, and the period collapses from seconds to fractions of a millisecond. <strong>Watch what stops it.</strong> Nobody moves a rod that fast. The fuel heats, and hot fuel captures more neutrons than cold fuel, so the reaction throttles itself in the time it takes the pellets to warm.</p>
+      <p>Push past 650&nbsp;pcm and the leash comes off. The reaction no longer needs the late neutrons, and the period collapses from seconds to milliseconds. <strong>Watch what stops it.</strong> Nobody moves a rod that fast. The fuel heats, and hot fuel captures more neutrons than cold fuel, so the reaction throttles itself in the time it takes the pellets to warm.</p>
       <p>This is also the honest answer to a question people arrive with. A chain reaction can be arranged to give up its energy over years or in an instant, but those are different machines rather than one machine at two settings: at three to five percent enrichment a power reactor runs out of reactivity long before it could detonate, and the same temperature feedback that catches a rod withdrawal fights any excursion all the way up.</p>
     </div>
   </div>
@@ -384,7 +390,7 @@
     </div>
     <figure class="tour-figure reveal">
       <div class="tour-frame">
-        <video class="tour-video" muted loop playsinline controls preload="metadata"
+        <video class="tour-video" width="1280" height="720" muted loop playsinline controls preload="metadata"
                aria-label="Drone footage of the cooling towers of a working nuclear power plant, releasing steam.">
           <source src="assets/plant-cooling-towers.mp4" type="video/mp4">
         </video>
@@ -425,11 +431,20 @@
       </div>
       </div>
     </div>
-    <ol class="pin-steps" id="plant-scene-steps"></ol>
+    <ol class="pin-steps" id="plant-scene-steps">
+      <li><strong>The reactor core.</strong> Uranium atoms split apart, releasing intense heat with no flame and no smoke. Control rods slide between the fuel rods to speed the reaction up or slow it down.</li>
+      <li><strong>The steam generator.</strong> That superheated water runs through thousands of thin tubes, boiling a completely separate loop into steam. The two loops never mix, so the water that boils never touches the reactor.</li>
+      <li><strong>The turbine hall.</strong> High-pressure steam blasts into the turbine and spins it thousands of times a minute. The shaft drives a generator exactly as it would in a coal or gas plant. Only the heat source is different.</li>
+      <li><strong>The condenser.</strong> Spent steam is cooled back into liquid water and pumped straight to the steam generator to boil again, around and around in a sealed loop.</li>
+      <li><strong>The switchyard.</strong> A transformer boosts the voltage on the way out. High voltage lets the power travel for miles down the transmission lines with very little lost along the way.</li>
+      <li><strong>The cooling tower.</strong> Leftover heat leaves through a third water loop as water vapor, which condenses into the visible white plume. That plume is not smoke and it is not radioactive; it is the same cloud that rises off a boiling kettle.</li>
+    </ol>
 
     <div class="plant-explorer reveal">
       <figure class="plant-fig">
-        <svg id="plant-svg" data-active="1" viewBox="-46 -34 1052 548" role="img" aria-label="Interactive schematic of a pressurized-water reactor. Click a part to learn what it does: the reactor core, steam generator, turbine hall, condenser, switchyard, and cooling tower.">
+        <!-- role="group", not "img": an image role would prune the six
+             focusable hotspot buttons inside from the accessibility tree -->
+        <svg id="plant-svg" data-active="1" viewBox="-46 -34 1052 548" role="group" aria-label="Interactive schematic of a pressurized-water reactor. Click a part to learn what it does: the reactor core, steam generator, turbine hall, condenser, switchyard, and cooling tower.">
           <defs>
             <marker id="plArrow" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
               <path d="M0.5 1.4 L9 5 L0.5 8.6 z" fill="#F2C46B"/>
@@ -537,15 +552,15 @@
         <figcaption>Pressurized-water reactor (PWR), the most common design worldwide; other designs differ. Amber: primary coolant. Off-white: steam and condensate. Gray: cooling water. Cyan: electricity. Not to scale.</figcaption>
       </figure>
       <div class="plant-panel">
-        <div class="plant-tabs" role="tablist" aria-label="Parts of the plant">
-          <button class="ptab" data-part="1" role="tab" aria-selected="true">1 &middot; Reactor core</button>
-          <button class="ptab" data-part="2" role="tab" aria-selected="false">2 &middot; Steam generator</button>
-          <button class="ptab" data-part="3" role="tab" aria-selected="false">3 &middot; Turbine hall</button>
-          <button class="ptab" data-part="4" role="tab" aria-selected="false">4 &middot; Condenser</button>
-          <button class="ptab" data-part="5" role="tab" aria-selected="false">5 &middot; Switchyard</button>
-          <button class="ptab" data-part="6" role="tab" aria-selected="false">6 &middot; Cooling tower</button>
+        <div class="plant-tabs" role="tablist" aria-label="Parts of the plant" id="plant-tablist">
+          <button class="ptab" id="ptab-1" data-part="1" role="tab" aria-selected="true" aria-controls="plant-detail">1 &middot; Reactor core</button>
+          <button class="ptab" id="ptab-2" data-part="2" role="tab" aria-selected="false" aria-controls="plant-detail" tabindex="-1">2 &middot; Steam generator</button>
+          <button class="ptab" id="ptab-3" data-part="3" role="tab" aria-selected="false" aria-controls="plant-detail" tabindex="-1">3 &middot; Turbine hall</button>
+          <button class="ptab" id="ptab-4" data-part="4" role="tab" aria-selected="false" aria-controls="plant-detail" tabindex="-1">4 &middot; Condenser</button>
+          <button class="ptab" id="ptab-5" data-part="5" role="tab" aria-selected="false" aria-controls="plant-detail" tabindex="-1">5 &middot; Switchyard</button>
+          <button class="ptab" id="ptab-6" data-part="6" role="tab" aria-selected="false" aria-controls="plant-detail" tabindex="-1">6 &middot; Cooling tower</button>
         </div>
-        <div class="plant-detail" role="tabpanel" aria-live="polite">
+        <div class="plant-detail" id="plant-detail" role="tabpanel" aria-labelledby="ptab-1" aria-live="polite">
           <span class="pd-step">Step <span class="pd-n">1</span> of 6</span>
           <h3 class="pd-title"></h3>
           <p class="pd-text"></p>
@@ -673,8 +688,8 @@
             </svg>
         </div>
         <div class="pin-copy">
-          <span class="pin-step" data-role="step">Stage 01 / 06</span>
-          <h3 class="pin-title" data-role="title">Excavation</h3>
+          <span class="pin-step" data-role="step">Step 01 / 09</span>
+          <h3 class="pin-title" data-role="title">Clearing the site</h3>
           <p class="pin-text" data-role="text"></p>
           <div class="pin-rail" data-role="rail" aria-hidden="true"></div>
           <p class="pin-hint">
@@ -685,7 +700,17 @@
       </div>
       </div>
     </div>
-    <ol class="pin-steps" id="build-scene-steps"></ol>
+    <ol class="pin-steps" id="build-scene-steps">
+      <li><strong>Clearing the site.</strong> Years before any concrete, the ground is surveyed and cleared. The location has to satisfy seismology, hydrology, and a grid connection all at once, which is why siting alone can take a decade.</li>
+      <li><strong>Excavation.</strong> Crews dig out to solid bedrock, often twenty meters down. The rock has to be sound enough to carry the whole plant and hold it steady through an earthquake.</li>
+      <li><strong>The base mat.</strong> A single raft of reinforced concrete is poured across the pit in one continuous operation, sometimes running for days without stopping. Every building above is anchored to this one slab.</li>
+      <li><strong>Containment rises.</strong> Metre-thick reinforced concrete walls climb around a sealed steel liner. This is the shell built to hold everything in, whatever happens inside it.</li>
+      <li><strong>The dome goes on.</strong> The dome is assembled on the ground and lifted into place in one piece by one of the largest cranes on earth. It is the moment the building becomes recognizable.</li>
+      <li><strong>The reactor arrives.</strong> The pressure vessel is lowered in and the internals follow: steam generators, pumps, and thousands of kilometers of cable. Most of the remaining work is now inside.</li>
+      <li><strong>The turbine hall.</strong> The conventional half goes up alongside: turbine, generator, condenser. This part is much the same as any thermal power station; only the heat source differs.</li>
+      <li><strong>Cooling towers.</strong> The towers are slip-formed upward in a continuous pour, growing a few meters a day until they stand taller than almost anything else on site.</li>
+      <li><strong>Connected to the grid.</strong> The switchyard ties the plant into the transmission network. After years of commissioning and regulator sign-off, it synchronizes to the grid and starts delivering power.</li>
+    </ol>
   </div>
 </section>
 
@@ -782,7 +807,7 @@
       </div>
       <div class="info-card reveal">
         <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.4 20.4h17.2"/><path d="M6.6 20.4V4.6h3.4v15.8"/><path d="M14.4 20.4v-1.8h3.4v1.8"/></svg>The key insight</h3>
-        <p>The NRC estimates that living near a U.S. nuclear plant adds about <strong>0.001 mSv a year</strong>, a few thousandths of natural background. One cross-country flight gives you roughly 40 times more.</p>
+        <p>The NRC estimates that living near a U.S. nuclear plant adds about <strong>0.001 mSv a year</strong>, a few thousandths of natural background. One cross-country round-trip flight gives you roughly 40 times more.</p>
       </div>
     </div>
 
@@ -925,8 +950,8 @@
       <div class="placard">
         <div class="placard__cat">ORIGINAL MODEL &middot; gCO&#8322;/kWh</div>
         <h3 class="placard__title">A city that needs 1,000 MW, around the clock</h3>
-        <div class="placard__prov">Original model &middot; gCO&#8322;/kWh &middot; carbon intensities and capacity factors from the sources cited throughout this museum</div>
-        <p class="placard__text">Choose the mix and the model does the rest. Slide solar toward 80% and watch the buildout climb while the firm share collapses. Slide nuclear up and watch the carbon fall. That trade-off, in one small model, is the argument of this whole building.</p>
+        <div class="placard__prov">Carbon intensities and capacity factors from the sources cited throughout this museum</div>
+        <p class="placard__text">Choose the mix and the model does the rest: the carbon, the hardware you would have to build, and how much of the supply holds when the weather turns.</p>
       </div>
       <div class="sim-card reveal">
         <div class="sim-row">
@@ -951,7 +976,10 @@
         </div>
         <p class="sim-gas">Natural gas fills whatever share is left: <strong id="sim-gas">30%</strong>. Slide a source up and gas gives way.</p>
 
-        <div class="sim-tiles" role="status" aria-live="off">
+        <!-- The tiles update visually on every slider input; announcing that
+             stream would flood a screen reader, so a debounced summary is
+             spoken through #sim-say below instead. -->
+        <div class="sim-tiles">
           <div class="sim-tile">
             <div class="lbl">Grid carbon intensity</div>
             <div class="val" id="sim-co2">162 g/kWh</div>
@@ -960,7 +988,7 @@
           <div class="sim-tile">
             <div class="lbl">Capacity you must build</div>
             <div class="val" id="sim-cap">2,203 MW</div>
-            <div class="sub" id="sim-cap-sub">to reliably average 1,000 MW, because nothing runs all the time</div>
+            <div class="sub" id="sim-cap-sub">to average 1,000 MW across the year, because nothing runs all the time</div>
           </div>
           <div class="sim-tile">
             <div class="lbl">Firm share</div>
@@ -969,9 +997,11 @@
           </div>
         </div>
 
+        <p class="sr-only" id="sim-say" role="status" aria-live="polite" aria-atomic="true"></p>
+
         <div class="sim-bars-title">Your grid, powering the city</div>
         <div class="sim-city-wrap">
-          <svg id="sim-city" viewBox="0 0 640 250" role="img" aria-label="A city skyline whose lit windows are coloured by the energy source powering them; solar and wind windows flicker to show they are intermittent."></svg>
+          <svg id="sim-city" viewBox="0 0 640 250" role="img" aria-label="A city skyline whose lit windows are colored by the energy source powering them; solar and wind windows flicker to show they are intermittent."></svg>
         </div>
         <div class="sim-legend">
           <span class="k"><span class="sw" style="background:#F2C46B"></span>Nuclear</span>
@@ -989,6 +1019,8 @@
             <li>Capacity factors are U.S. 2024 annual averages from EIA (reference 6): nuclear 90.8%, gas combined cycle 60.5%, hydro 34.6%, wind 34.0%, solar 23.2%.</li>
             <li>Lifecycle emissions are IPCC AR5 medians (reference 4): nuclear 12, wind 11, hydro 24, solar 48, gas 490 gCO₂eq/kWh.</li>
             <li>Capacity per source: <code>MW = share × 1,000 ÷ capacity factor</code>. Carbon intensity: <code>g/kWh = Σ share × emission factor</code>. Firm share: <code>nuclear + hydro + gas</code>.</li>
+            <li>Hydropower is counted as firm because reservoir hydro is dispatchable, though droughts and seasonal water levels constrain it in practice.</li>
+            <li>Gas capacity is sized at its average utilization (60.5%). A real grid overbuilds dispatchable backup well beyond this to cover peaks and calm, dark weeks, so a variable-heavy mix needs even more hardware than shown.</li>
             <li>Grid references (U.S. about 370, France about 56 gCO₂/kWh in 2023) are from Ember via Our World in Data (reference 16).</li>
             <li>This is an educational model, not a grid-planning tool. Real planning models hourly weather, transmission, reserve margins, storage, and cost.</li>
           </ul>
@@ -1055,14 +1087,14 @@
     </div>
 
     <div class="school-grid" style="max-width:56rem">
-      <div class="school-card reveal"><h4>Construction cost and time</h4><span class="prog">Recent Western builds have run far over budget and years behind schedule. Georgia's Vogtle units 3 and 4, the only new reactors completed in the United States in decades, finished years late and far above their original budget. Korea, China, and the UAE have built much faster, so the problem is not physics, but it is real.</span></div>
-      <div class="school-card reveal"><h4>Financing risk</h4><span class="prog">Billions must be committed a decade before the first kilowatt-hour is sold. That uncertainty raises the cost of every borrowed dollar and scares off investors.</span></div>
-      <div class="school-card reveal"><h4>Waste disposal politics</h4><span class="prog">Interim storage works today, but no country yet has a permanent geological repository in operation, and the U.S. still has none after decades of trying. Finland's Onkalo project is the closest any country has come.</span></div>
-      <div class="school-card reveal"><h4>Rare but severe accidents</h4><span class="prog">Accidents are extremely infrequent, but when they happen the displacement, cleanup costs, land restrictions, and fear last for decades, well beyond the direct casualties.</span></div>
-      <div class="school-card reveal"><h4>Mining, water, and heat</h4><span class="prog">Uranium mining disturbs land and has a poor historical record near some communities. Plants also need large volumes of cooling water and discharge waste heat.</span></div>
-      <div class="school-card reveal"><h4>Proliferation and security</h4><span class="prog">Enrichment and reprocessing technology overlaps with weapons capability. That is why international safeguards and inspections exist, and they must stay strong.</span></div>
-      <div class="school-card reveal"><h4>Workforce and supply chain</h4><span class="prog">Decades with few new builds thinned out the specialized workforce and supplier base. Rebuilding that capacity takes years, not months.</span></div>
-      <div class="school-card reveal"><h4>SMR uncertainty</h4><span class="prog">Small modular reactors are promising but mostly unbuilt. Their cost and timeline figures are projections, not track records, and first-of-a-kind projects have already seen cancellations.</span></div>
+      <div class="school-card reveal"><h3>Construction cost and time</h3><span class="prog">Recent Western builds have run far over budget and years behind schedule. Georgia's Vogtle units 3 and 4, the only new reactors completed in the United States in decades, finished years late and far above their original budget. Korea, China, and the UAE have built much faster, so the problem is not physics, but it is real.</span></div>
+      <div class="school-card reveal"><h3>Financing risk</h3><span class="prog">Billions must be committed a decade before the first kilowatt-hour is sold. That uncertainty raises the cost of every borrowed dollar and scares off investors.</span></div>
+      <div class="school-card reveal"><h3>Waste disposal politics</h3><span class="prog">Interim storage works today, but no country yet has a permanent geological repository in operation, and the U.S. still has none after decades of trying. Finland's Onkalo project is the closest any country has come.</span></div>
+      <div class="school-card reveal"><h3>Rare but severe accidents</h3><span class="prog">Accidents are extremely infrequent, but when they happen the displacement, cleanup costs, land restrictions, and fear last for decades, well beyond the direct casualties.</span></div>
+      <div class="school-card reveal"><h3>Mining, water, and heat</h3><span class="prog">Uranium mining disturbs land and has a poor historical record near some communities. Plants also need large volumes of cooling water and discharge waste heat.</span></div>
+      <div class="school-card reveal"><h3>Proliferation and security</h3><span class="prog">Enrichment and reprocessing technology overlaps with weapons capability. That is why international safeguards and inspections exist, and they must stay strong.</span></div>
+      <div class="school-card reveal"><h3>Workforce and supply chain</h3><span class="prog">Decades with few new builds thinned out the specialized workforce and supplier base. Rebuilding that capacity takes years, not months.</span></div>
+      <div class="school-card reveal"><h3>SMR uncertainty</h3><span class="prog">Small modular reactors are promising but mostly unbuilt. Their cost and timeline figures are projections, not track records, and first-of-a-kind projects have already seen cancellations.</span></div>
     </div>
 
     <div class="prose reveal" style="margin-top:2rem">
@@ -1081,11 +1113,11 @@
     </div>
 
     <div class="school-grid" style="max-width:56rem">
-      <div class="school-card reveal"><h4>Keeping the existing fleet</h4><span class="prog">The cheapest low-carbon electricity available is a paid-off reactor that keeps running. Licence renewals, uprates, and the restart of recently closed plants decide how much of the current fleet survives the next twenty years.</span></div>
-      <div class="school-card reveal"><h4>Building large reactors on schedule</h4><span class="prog">The open question is not whether large plants work, but whether the West can build them repeatably at a predictable cost. Watch whether later units in a series come in faster and cheaper than the first, which is where the record has been worst.</span></div>
-      <div class="school-card reveal"><h4>Whether SMRs arrive</h4><span class="prog">Small modular reactors trade unit size for the chance to build in a factory. Their projections are not yet track records, so the meaningful news is orders placed, concrete poured, and units finished, rather than designs announced.</span></div>
-      <div class="school-card reveal"><h4>Fuel and the back end</h4><span class="prog">Accident-tolerant fuels, higher enrichment, and where used fuel finally goes. A working geological repository would remove the most durable political objection to the whole technology.</span></div>
-      <div class="school-card reveal"><h4>Who supplies it</h4><span class="prog">Enrichment, components, and the specialised workforce are concentrated in a few countries. Where that capacity is rebuilt shapes both cost and the safeguards question.</span></div>
+      <div class="school-card reveal"><h3>Keeping the existing fleet</h3><span class="prog">The cheapest low-carbon electricity available is a paid-off reactor that keeps running. Licence renewals, uprates, and the restart of recently closed plants decide how much of the current fleet survives the next twenty years.</span></div>
+      <div class="school-card reveal"><h3>Building large reactors on schedule</h3><span class="prog">The open question is not whether large plants work, but whether the West can build them repeatably at a predictable cost. Watch whether later units in a series come in faster and cheaper than the first, which is where the record has been worst.</span></div>
+      <div class="school-card reveal"><h3>Whether SMRs arrive</h3><span class="prog">Small modular reactors trade unit size for the chance to build in a factory. Their projections are not yet track records, so the meaningful news is orders placed, concrete poured, and units finished, rather than designs announced.</span></div>
+      <div class="school-card reveal"><h3>Fuel and the back end</h3><span class="prog">Accident-tolerant fuels, higher enrichment, and where used fuel finally goes. A working geological repository would remove the most durable political objection to the whole technology.</span></div>
+      <div class="school-card reveal"><h3>Who supplies it</h3><span class="prog">Enrichment, components, and the specialized workforce are concentrated in a few countries. Where that capacity is rebuilt shapes both cost and the safeguards question.</span></div>
     </div>
 
     <div class="news-grid" id="news-grid" style="margin-top:2.2rem"></div>
@@ -1093,15 +1125,15 @@
 
     <div class="res-row">
       <a class="res-card reveal" href="https://www.ans.org/news/" target="_blank" rel="noopener noreferrer">
-        <h4>Nuclear News Magazine ↗</h4>
+        <h3>Nuclear News Magazine ↗</h3>
         <p>Monthly publication covering the latest developments in nuclear science and technology.</p>
       </a>
       <a class="res-card reveal" href="https://www.ans.org/news/cafe/" target="_blank" rel="noopener noreferrer">
-        <h4>ANS Nuclear Cafe ↗</h4>
+        <h3>ANS Nuclear Cafe ↗</h3>
         <p>News, analysis, and discussion on nuclear energy topics.</p>
       </a>
       <a class="res-card reveal" href="https://www.ans.org/members/" target="_blank" rel="noopener noreferrer">
-        <h4>ANS Member Resources ↗</h4>
+        <h3>ANS Member Resources ↗</h3>
         <p>Journals, technical publications, and member-exclusive content.</p>
       </a>
     </div>
@@ -1145,8 +1177,8 @@
               <g stroke="#A9A18B" stroke-width="1.5" opacity="0.45">
                 <line x1="340" y1="164" x2="520" y2="164"/><line x1="340" y1="200" x2="520" y2="200"/><line x1="340" y1="236" x2="520" y2="236"/><line x1="385" y1="128" x2="385" y2="272"/><line x1="430" y1="128" x2="430" y2="272"/><line x1="475" y1="128" x2="475" y2="272"/>
               </g>
-              <text x="430" y="98" text-anchor="middle" font-family="'Public Sans', sans-serif" font-weight="700" font-size="24" fill="#EAF0F8" letter-spacing="1">ALL OF IT. EVER.</text>
-              <text x="430" y="318" text-anchor="middle" font-family="'Public Sans', sans-serif" font-weight="500" font-size="14" fill="#A9A18B" letter-spacing="1">one football field, stacked under 10 yards deep</text>
+              <text x="430" y="98" text-anchor="middle" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="700" font-size="24" fill="#EAF0F8" letter-spacing="1">ALL OF IT. EVER.</text>
+              <text x="430" y="318" text-anchor="middle" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" font-size="14" fill="#A9A18B" letter-spacing="1">one football field, stacked under 10 yards deep</text>
             </svg>
             <figcaption>DOE: all U.S. spent fuel, stacked, would cover one football field to a depth of less than 10 yards. Fuel assemblies only; packaging, spacing, and shielding not included. (Illustrative, not to scale.)</figcaption>
           </figure>
@@ -1165,7 +1197,7 @@
         <div class="acc-panel"><div><div class="acc-body">
           <div class="fact-box">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.4 18.6h17.2"/><path d="M6.2 12.4l3.6 3.6 8-9.4"/></svg>
-            <p><span class="fact-label">Fact</span>One cross-country flight (about 0.04 mSv) exposes you to roughly 40 times more radiation than the NRC estimates for living near a nuclear plant for an entire year (about 0.001 mSv). Both are tiny next to the roughly 3 mSv everyone receives annually from natural background radiation.</p>
+            <p><span class="fact-label">Fact</span>One cross-country round trip by air (about 0.04 mSv) exposes you to roughly 40 times more radiation than the NRC estimates for living near a nuclear plant for an entire year (about 0.001 mSv). Both are tiny next to the roughly 3 mSv everyone receives annually from natural background radiation.</p>
           </div>
         </div></div></div>
       </div>
@@ -1266,7 +1298,7 @@
     <div class="section-head reveal">
       <span class="overline"><span class="rm">Students</span></span>
       <h2 id="h-students">Your pathway into nuclear energy</h2>
-      <p class="lede">From a high-school classroom to a national laboratory, the route is well marked and much of it is funded. Every program named on this page is linked to the organisation that runs it.</p>
+      <p class="lede">From a high-school classroom to a national laboratory, the route is well marked and much of it is funded. Every program named on this page is linked to the organization that runs it.</p>
     </div>
 
     <div class="pathway">
@@ -1306,44 +1338,44 @@
 
     <h3 class="sub-head reveal">Where to study</h3>
     <div class="school-grid">
-      <a class="school-card reveal" href="https://www.mit.edu" target="_blank" rel="noopener noreferrer"><h4>MIT <span class="go">↗</span></h4><span class="prog">Nuclear Science &amp; Engineering</span><span class="loc">Cambridge, MA</span></a>
-      <a class="school-card reveal" href="https://umich.edu" target="_blank" rel="noopener noreferrer"><h4>University of Michigan <span class="go">↗</span></h4><span class="prog">Nuclear Engineering &amp; Radiological Sciences</span><span class="loc">Ann Arbor, MI</span></a>
-      <a class="school-card reveal" href="https://www.berkeley.edu" target="_blank" rel="noopener noreferrer"><h4>UC Berkeley <span class="go">↗</span></h4><span class="prog">Nuclear Engineering</span><span class="loc">Berkeley, CA</span></a>
-      <a class="school-card reveal" href="https://www.tamu.edu" target="_blank" rel="noopener noreferrer"><h4>Texas A&amp;M University <span class="go">↗</span></h4><span class="prog">Nuclear Engineering</span><span class="loc">College Station, TX</span></a>
-      <a class="school-card reveal" href="https://www.psu.edu" target="_blank" rel="noopener noreferrer"><h4>Penn State <span class="go">↗</span></h4><span class="prog">Nuclear Engineering</span><span class="loc">University Park, PA</span></a>
-      <a class="school-card reveal" href="https://www.gatech.edu" target="_blank" rel="noopener noreferrer"><h4>Georgia Tech <span class="go">↗</span></h4><span class="prog">Nuclear &amp; Radiological Engineering</span><span class="loc">Atlanta, GA</span></a>
-      <a class="school-card reveal" href="https://www.wisc.edu" target="_blank" rel="noopener noreferrer"><h4>University of Wisconsin <span class="go">↗</span></h4><span class="prog">Nuclear Engineering</span><span class="loc">Madison, WI</span></a>
-      <a class="school-card reveal" href="https://www.utk.edu" target="_blank" rel="noopener noreferrer"><h4>University of Tennessee <span class="go">↗</span></h4><span class="prog">Nuclear Engineering</span><span class="loc">Knoxville, TN</span></a>
-      <a class="school-card reveal" href="https://www.ncsu.edu" target="_blank" rel="noopener noreferrer"><h4>North Carolina State <span class="go">↗</span></h4><span class="prog">Nuclear Engineering</span><span class="loc">Raleigh, NC</span></a>
-      <a class="school-card reveal" href="https://www.purdue.edu" target="_blank" rel="noopener noreferrer"><h4>Purdue University <span class="go">↗</span></h4><span class="prog">Nuclear Engineering</span><span class="loc">West Lafayette, IN</span></a>
-      <a class="school-card reveal" href="https://oregonstate.edu" target="_blank" rel="noopener noreferrer"><h4>Oregon State <span class="go">↗</span></h4><span class="prog">Radiation Health Physics</span><span class="loc">Corvallis, OR</span></a>
-      <a class="school-card reveal" href="https://www.energy.gov/national-laboratories" target="_blank" rel="noopener noreferrer"><h4>National lab partnerships <span class="go">↗</span></h4><span class="prog">PhD programs partnered with Oak Ridge, Argonne, and Idaho National Laboratories</span></a>
+      <a class="school-card reveal" href="https://www.mit.edu" target="_blank" rel="noopener noreferrer"><h3>MIT <span class="go">↗</span></h3><span class="prog">Nuclear Science &amp; Engineering</span><span class="loc">Cambridge, MA</span></a>
+      <a class="school-card reveal" href="https://umich.edu" target="_blank" rel="noopener noreferrer"><h3>University of Michigan <span class="go">↗</span></h3><span class="prog">Nuclear Engineering &amp; Radiological Sciences</span><span class="loc">Ann Arbor, MI</span></a>
+      <a class="school-card reveal" href="https://www.berkeley.edu" target="_blank" rel="noopener noreferrer"><h3>UC Berkeley <span class="go">↗</span></h3><span class="prog">Nuclear Engineering</span><span class="loc">Berkeley, CA</span></a>
+      <a class="school-card reveal" href="https://www.tamu.edu" target="_blank" rel="noopener noreferrer"><h3>Texas A&amp;M University <span class="go">↗</span></h3><span class="prog">Nuclear Engineering</span><span class="loc">College Station, TX</span></a>
+      <a class="school-card reveal" href="https://www.psu.edu" target="_blank" rel="noopener noreferrer"><h3>Penn State <span class="go">↗</span></h3><span class="prog">Nuclear Engineering</span><span class="loc">University Park, PA</span></a>
+      <a class="school-card reveal" href="https://www.gatech.edu" target="_blank" rel="noopener noreferrer"><h3>Georgia Tech <span class="go">↗</span></h3><span class="prog">Nuclear &amp; Radiological Engineering</span><span class="loc">Atlanta, GA</span></a>
+      <a class="school-card reveal" href="https://www.wisc.edu" target="_blank" rel="noopener noreferrer"><h3>University of Wisconsin <span class="go">↗</span></h3><span class="prog">Nuclear Engineering</span><span class="loc">Madison, WI</span></a>
+      <a class="school-card reveal" href="https://www.utk.edu" target="_blank" rel="noopener noreferrer"><h3>University of Tennessee <span class="go">↗</span></h3><span class="prog">Nuclear Engineering</span><span class="loc">Knoxville, TN</span></a>
+      <a class="school-card reveal" href="https://www.ncsu.edu" target="_blank" rel="noopener noreferrer"><h3>North Carolina State <span class="go">↗</span></h3><span class="prog">Nuclear Engineering</span><span class="loc">Raleigh, NC</span></a>
+      <a class="school-card reveal" href="https://www.purdue.edu" target="_blank" rel="noopener noreferrer"><h3>Purdue University <span class="go">↗</span></h3><span class="prog">Nuclear Engineering</span><span class="loc">West Lafayette, IN</span></a>
+      <a class="school-card reveal" href="https://oregonstate.edu" target="_blank" rel="noopener noreferrer"><h3>Oregon State <span class="go">↗</span></h3><span class="prog">Radiation Health Physics</span><span class="loc">Corvallis, OR</span></a>
+      <a class="school-card reveal" href="https://www.energy.gov/national-laboratories" target="_blank" rel="noopener noreferrer"><h3>National lab partnerships <span class="go">↗</span></h3><span class="prog">PhD programs partnered with Oak Ridge, Argonne, and Idaho National Laboratories</span></a>
     </div>
     <p class="school-note reveal">A sampling of well-known programs; many more U.S. universities offer nuclear engineering and related degrees, most from bachelor's through PhD. The <a href="https://www.ans.org/students/" target="_blank" rel="noopener noreferrer">American Nuclear Society</a> maintains student resources and program listings.</p>
 
     <div class="res-row">
       <a class="res-card reveal" href="https://science.osti.gov/wdts/suli" target="_blank" rel="noopener noreferrer">
-        <h4>DOE SULI internships ↗</h4>
+        <h3>DOE SULI internships ↗</h3>
         <p>10-week paid internships at DOE national laboratories for STEM undergraduates.</p>
       </a>
       <a class="res-card reveal" href="https://neup.inl.gov" target="_blank" rel="noopener noreferrer">
-        <h4>NEUP research funding ↗</h4>
+        <h3>NEUP research funding ↗</h3>
         <p>DOE-funded research and internship opportunities for undergraduate and graduate students.</p>
       </a>
       <a class="res-card reveal" href="https://www.ans.org/honors/scholarships/" target="_blank" rel="noopener noreferrer">
-        <h4>ANS scholarships ↗</h4>
+        <h3>ANS scholarships ↗</h3>
         <p>Up to $5,000 for students pursuing nuclear-related degrees.</p>
       </a>
       <a class="res-card reveal" href="https://www.ans.org/students/" target="_blank" rel="noopener noreferrer">
-        <h4>ANS student chapters ↗</h4>
+        <h3>ANS student chapters ↗</h3>
         <p>Network with peers and professionals, attend conferences, enter design competitions.</p>
       </a>
       <a class="res-card reveal" href="https://www.naygn.org" target="_blank" rel="noopener noreferrer">
-        <h4>NAYGN ↗</h4>
+        <h3>NAYGN ↗</h3>
         <p>North American Young Generation in Nuclear, for students and early-career professionals.</p>
       </a>
       <a class="res-card reveal" href="https://www.winus.org" target="_blank" rel="noopener noreferrer">
-        <h4>Women in Nuclear ↗</h4>
+        <h3>Women in Nuclear ↗</h3>
         <p>Support network, scholarships, and professional development for women in nuclear fields.</p>
       </a>
     </div>
@@ -1366,14 +1398,17 @@
   <div class="wrap">
     <div class="section-head reveal" style="margin-bottom:2rem">
       <span class="overline"><span class="rm">About &amp; sources</span></span>
+      <!-- the room's visible name is the overline plaque; this gives the
+           heading outline the same name without drawing it twice -->
+      <h2 id="h-about" class="sr-only">About &amp; sources</h2>
     </div>
     <div class="about-grid reveal">
       <div class="about-mark" aria-hidden="true">DW</div>
       <div>
-        <h3 id="h-about">Desmond Wong</h3>
+        <h3>Desmond Wong</h3>
         <div class="prose">
           <p>Desmond Wong is a 12th-grade student and aspiring nuclear engineer from California, attending Diamond Bar High School (Class of 2027). After years of watching public fear override scientific evidence in energy debates, he created <strong>Radiant</strong> to put the data front and center.</p>
-          <p>The work on these walls is his own: the research and sourcing behind every figure, the three simulations you can operate, the technical illustrations, and the museum itself, which is one hand-written page with no build step behind it.</p>
+          <p>The work on these walls is his own: the research and sourcing behind every figure, the three simulations you can operate, the technical illustrations, and the museum itself, hand-built with no frameworks and no build step behind it.</p>
         </div>
         <p class="about-contact">Contact: <a href="mailto:wongdesmond414@gmail.com">wongdesmond414@gmail.com</a></p>
       </div>
@@ -1406,8 +1441,9 @@
       <li>U.S. NRC. <a href="https://www.nrc.gov/reactors/operating/list-power-reactor-units.html" target="_blank" rel="noopener noreferrer">Operating power reactor list</a>. 94 licensed operating reactors at 54 plants. Accessed Jul 14, 2026.</li>
       <li>Ember, via Our World in Data. <a href="https://ourworldindata.org/grapher/carbon-intensity-electricity" target="_blank" rel="noopener noreferrer">"Carbon intensity of electricity generation"</a>. 2023 grid averages used in the simulator: United States about 370 gCO₂/kWh, France about 56.</li>
       <li>Nuclear Energy Institute. <a href="https://www.nei.org/fundamentals/nuclear-fuel" target="_blank" rel="noopener noreferrer">"Nuclear Fuel"</a>. One uranium fuel pellet holds roughly the energy of one ton of coal; a typical pressurized-water reactor core contains more than 18 million pellets across about 51,000 fuel rods. Basis for the Entry hall. Accessed Jul 31, 2026.</li>
+      <li>The Chernobyl Forum: WHO, IAEA et&nbsp;al. (2006). <a href="https://www.who.int/publications/i/item/9241594179" target="_blank" rel="noopener noreferrer"><em>Health Effects of the Chernobyl Accident and Special Health Care Programmes</em></a>; Chernobyl Forum 2003&ndash;2005, <em>Chernobyl's Legacy</em>. Projects up to about 4,000 eventual deaths among the most-exposed groups; the basis for the modelled Chernobyl estimate in the Accidents room. Accessed Aug 16, 2026.</li>
     </ol>
-    <p class="src-note">Every figure on this page was checked against these sources on July 14, 2026. Estimates carry uncertainty, and where major sources disagree, ranges are shown. Found an error? Use the contact email above; corrections are welcome.</p>
+    <p class="src-note">Every figure on this page was checked against its source on July 14, 2026; references added since carry their own access dates. Estimates carry uncertainty, and where major sources disagree, ranges are shown. Found an error? Use the contact email above; corrections are welcome.</p>
     <div class="foot-base">
       <span>Radiant · an evidence-based educational resource</span>
       <span>© 2026 Desmond Wong</span>
@@ -1415,14 +1451,11 @@
   </div>
 </footer>
 
-<!-- Vendored, MIT/free-licensed: Lenis 1.3.25 smooth scroll, GSAP 3.13 +
-     ScrollTrigger for scroll-scrubbed motion. Local copies keep the site
-     free of runtime third-party requests. -->
+<!-- Vendored under the standard GSAP license (free to use): GSAP 3.13 core
+     and the DrawSVG plugin, which draw the scene timelines and diagram
+     highlights. Local copies keep the site free of third-party requests. -->
 <script src="assets/gsap.min.js"></script>
-<script src="assets/ScrollTrigger.min.js"></script>
-<script src="assets/SplitText.min.js"></script>
 <script src="assets/DrawSVGPlugin.min.js"></script>
-<script src="assets/lenis.min.js"></script>
 
 <script type="module" src="js/main.js"></script>
 <!-- the walk bar: where you are in the wing and how to move through it -->
@@ -1468,12 +1501,18 @@
   <button type="button" class="wb-exit" id="wb-lobby" aria-label="Back to the library">&larr; Lobby</button>
   <span class="walkbar__where" id="wb-where"></span>
   <span class="walkbar__mid" id="wb-count"></span>
+  <span class="walkbar__turn">
+    <button type="button" id="wb-prev" aria-label="Previous page">&larr;</button>
+    <button type="button" id="wb-next" aria-label="Next page">&rarr;</button>
+  </span>
 </div>
 <!-- Turning a page swaps the screen with no scroll and no page load, so a
      screen reader gets no cue on its own. This says what you just turned to. -->
 <p class="sr-only" id="page-say" role="status" aria-live="polite" aria-atomic="true"></p>
 
 <!-- the way out at the end of a wing -->
+<!-- The walkbar's prev/next are the visible, focusable, touch-sized page
+     controls; the wheel, arrow keys and swipe do the same thing faster. -->
 <section class="wing-end" id="wing-end" hidden aria-label="End of wing">
   <div>
     <p class="wing-end__k">End of the wing</p>

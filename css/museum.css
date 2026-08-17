@@ -1,42 +1,3 @@
-  /* ---- THE LOBBY SCREEN: five doors, nothing else ---- */
-  .lobby {
-    min-height: 100vh; display: grid; place-items: center; padding: 6rem 1.5rem 4rem;
-    background: radial-gradient(120% 70% at 50% 8%, rgba(242,196,107,0.07), rgba(22,21,15,0) 60%);
-  }
-  .lobby__inner { width: 100%; max-width: 72rem; text-align: center; }
-  .lobby__title {
-    font-family: var(--display); font-weight: 600; color: var(--ink);
-    font-size: clamp(2.2rem, 5.4vw, 3.8rem); line-height: 1.03; letter-spacing: -0.022em;
-  }
-  .lobby__sub {
-    font-family: var(--serif); font-style: italic; color: var(--muted);
-    max-width: 40rem; margin: 1.1rem auto 3rem; line-height: 1.55;
-  }
-  .wingrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 1.1rem; }
-  /* a doorway: light spills from the head of the frame down to the floor */
-  .wingdoor {
-    position: relative; overflow: hidden; text-align: left; cursor: pointer;
-    display: flex; flex-direction: column; justify-content: flex-end; gap: 0.4rem;
-    min-height: 15rem; padding: 1.3rem 1.3rem 1.4rem;
-    background: linear-gradient(180deg, rgba(242,196,107,0.17) 0%, rgba(242,196,107,0.04) 30%, rgba(12,11,8,0) 66%), var(--vitrine);
-    border: 1px solid var(--hair); border-top: 1px solid rgba(242,196,107,0.45); border-radius: 0;
-    font: inherit; color: inherit;
-    transition: transform 0.28s cubic-bezier(0.16,1,0.3,1), border-top-color 0.28s, background 0.28s;
-  }
-  .wingdoor:hover, .wingdoor:focus-visible {
-    transform: translateY(-4px); border-top-color: var(--spot);
-    background: linear-gradient(180deg, rgba(242,196,107,0.32) 0%, rgba(242,196,107,0.09) 34%, rgba(12,11,8,0) 70%), var(--vitrine);
-  }
-  .wingdoor .wd-n {
-    font-family: var(--mono); font-size: 0.64rem; letter-spacing: 0.26em;
-    text-transform: uppercase; color: var(--spot);
-  }
-  .wingdoor .wd-t { font-family: var(--display); font-size: 1.55rem; font-weight: 600; color: var(--ink); line-height: 1.1; }
-  .wingdoor .wd-d { font-family: var(--serif); font-size: 0.92rem; color: var(--muted); line-height: 1.45; }
-  .wingdoor .wd-c {
-    font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.18em;
-    text-transform: uppercase; color: var(--faint); margin-top: 0.3rem;
-  }
 
   /* THE DOSIMETER (signature instrument) */
   .dose {
@@ -86,8 +47,9 @@
   }
   /* no top bar: the lobby and the walk bar are the whole navigation */
   .js .nav { display: none; }
-  .js #progress { display: none; }
-  .js #main { height: 100vh; }
+  /* svh, not vh: the body never scrolls, so mobile toolbars never retract
+     and 100vh leaves the bottom strip of every screen under them */
+  .js #main { height: 100vh; height: 100svh; }
 
   .js .screen { display: none; }
   .js body[data-screen="title"] #screen-title { display: grid; }
@@ -108,7 +70,7 @@
   .js body[data-screen="wing"] .view { display: none; }
   
   .js body[data-screen="wing"] #main {
-    height: 100vh; overflow: hidden; position: relative; perspective: 2200px;
+    height: 100vh; height: 100svh; overflow: hidden; position: relative; perspective: 2200px;
   }
   .js body[data-screen="wing"] .view.in-wing {
     position: absolute; inset: 0; display: none;
@@ -150,7 +112,7 @@
   .js body[data-screen="wing"] .leaf-full > .wrap { max-width: none; padding: 0; width: 100%; }
 
   .js body[data-screen="wing"] .leaf-full .tour-figure {
-    max-width: none; margin: 0; width: 100%; height: 100vh; position: relative;
+    max-width: none; margin: 0; width: 100%; height: 100vh; height: 100svh; position: relative;
   }
   .js body[data-screen="wing"] .leaf-full .tour-frame {
     border: 0; box-shadow: none; width: 100%; height: 100%;
@@ -177,7 +139,6 @@
 
   /* A pinned scene was a sticky stage travelling through a scroll runway. There is no scroll here, so the stage simply is the page, and its beats are turned one at a time like everything else. */
   
-  .js body[data-screen="wing"] .stage-bg { display: none; }
   .js body[data-screen="wing"] #plant-scene .pin-stage { background: #0C0B08; }
   @media (min-width: 821px) {
     .js body[data-screen="wing"] .pin-stage { grid-template-columns: 1.95fr 1fr; }
@@ -202,11 +163,8 @@
   .js body[data-screen="wing"] .pin-scene.is-live { height: auto; margin-block: 0; }
   .js body[data-screen="wing"] .pin-sticky { position: relative; top: auto; }
   .js body[data-screen="wing"] .pin-stage {
-    min-height: 100vh; border-block: 0;
+    min-height: 100vh; min-height: 100svh; border-block: 0;
     padding: 3.2rem clamp(1.2rem, 5vw, 4rem) 4.6rem;   /* bottom clears the walk bar */
-  }
-  .js body[data-screen="wing"] .seq-scene video {
-    display: block; width: auto; max-width: 100%; max-height: 76vh; margin: 0 auto;
   }
   .js body[data-screen="wing"] .pin-scene.is-live + .plate-credit { display: block; }
   .js body[data-screen="wing"] .wing-end { position: absolute; inset: 0; display: none; }
@@ -295,15 +253,6 @@
   .js body[data-screen="wing"] #screen-title,
   .js body[data-screen="wing"] #screen-lobby { display: none !important; }
 
-  /* the exhibit arrives the way the entry does: out of the dark, into its light */
-  .js .view.is-exhibit > .wrap { animation: exhibit-in 0.85s cubic-bezier(0.16,1,0.3,1) both; }
-  @keyframes exhibit-in {
-    from { opacity: 0; transform: scale(0.86); filter: brightness(0.3) blur(6px); }
-    to   { opacity: 1; transform: none; filter: none; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .js .view.is-exhibit > .wrap { animation: none; }
-  }
 
   /* the walk bar: where you are in the wing, and how to move */
   .walkbar {
@@ -326,6 +275,8 @@
   .walkbar button:disabled { opacity: 0.3; cursor: default; }
   .walkbar .wb-exit { border-color: transparent; color: var(--faint); }
   .walkbar .wb-exit:hover { color: var(--spot); }
+  .walkbar__turn { display: flex; gap: 0.45rem; flex: 0 0 auto; }
+  .walkbar__turn button { min-width: 44px; min-height: 44px; font-size: 0.95rem; padding: 0.5rem 0.9rem; }
   @media (max-width: 640px) {
     .walkbar {
       padding: 0.5rem 0.7rem; gap: 0.55rem;
@@ -335,7 +286,9 @@
     .walkbar__where { min-width: 0; flex: 1 1 auto; overflow: hidden; text-overflow: ellipsis; }
     .walkbar__mid { flex: 0 0 auto; }
     .walkbar button { padding: 0.45rem 0.6rem; }
-    
+    /* the turn buttons are the touch controls; they never shrink below 44px */
+    .walkbar__turn button { min-width: 44px; min-height: 44px; padding: 0.45rem 0.75rem; }
+
     .dose { bottom: var(--walkbar-h, 2.4rem); padding: 0.42rem 0.9rem; }
     .dose__val { font-size: 1rem; }
   }
@@ -379,11 +332,6 @@
   }
   .hub-card:hover::after { opacity: 1; }
 
-  .door-warp {
-    position: fixed; inset: 0; z-index: 90; pointer-events: none;
-    background: radial-gradient(closest-side at 50% 50%, rgba(242,196,107,0.92), rgba(242,196,107,0.16) 55%, rgba(22,21,15,0) 78%);
-    opacity: 0; transform: scale(0.14);
-  }
   .hub-card .hc-n {
     font-family: var(--sans); font-size: 0.78rem; font-weight: 800;
     letter-spacing: 0.16em; text-transform: uppercase; color: var(--faint);
@@ -418,18 +366,12 @@
       transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
     .js .reveal.in { opacity: 1; transform: none; }
 
-    /* Kinetic masthead: SplitText builds the word + mask elements itself and leaves them unclassed, so target them structurally. Its clip box is exactly the line box, which shaves this display. */
-    .hero h1 > div, .hero h1 > em > div {
-      padding: 0 0.08em 0.16em 0;
-      margin: 0 -0.08em -0.16em 0;
-    }
-
     .js .section-head.reveal:not(.in) h2::after { transform: scaleX(0); }
     .section-head h2::after { transition: transform 0.9s cubic-bezier(0.16,1,0.3,1) 0.25s; }
 
     .btn .arr { display: inline-block; transition: transform 0.2s cubic-bezier(0.16,1,0.3,1); }
     .btn:hover .arr, .btn:focus-visible .arr { transform: translateX(5px); }
-    .school-card h4 .go { display: inline-block; transition: transform 0.2s, color 0.2s; }
+    .school-card h3 .go { display: inline-block; transition: transform 0.2s, color 0.2s; }
     a.school-card:hover h4 .go { transform: translate(3px, -3px); }
     .hstat { transition: background 0.25s, transform 0.3s cubic-bezier(0.16,1,0.3,1); }
     .hstat:hover { transform: translateY(-4px); }
@@ -441,12 +383,6 @@
     transform-origin: 0 50%;
   }
   .btn:active { transform: translateY(1px); }
-
-  #progress {
-    position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 60;
-    background: var(--blue); transform: scaleX(0); transform-origin: 0 50%;
-    pointer-events: none;
-  }
 
   /* ============ NAV ============ */
   .nav {
@@ -464,14 +400,6 @@
   .nav__brand svg { color: var(--blue); }
   .nav__links { display: flex; margin-left: auto; overflow-x: auto; scrollbar-width: none; }
   .nav__links::-webkit-scrollbar { display: none; }
-  /* 17 links at the larger type can outrun the bar on smaller desktops. The scrollbar is hidden, so fade the trailing edge to signal there is more to scroll to; */
-  .nav__links.is-overflowing {
-    -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 2.5rem), transparent);
-    mask-image: linear-gradient(to right, #000 calc(100% - 2.5rem), transparent);
-  }
-  .nav__links.is-overflowing.at-end {
-    -webkit-mask-image: none; mask-image: none;
-  }
   .nav__links a {
     font-size: 0.85rem; font-weight: 500; color: var(--muted);
     text-decoration: none; white-space: nowrap;

@@ -1,18 +1,17 @@
 /* RADIANT — museum runtime.
    Loaded as a module, so it is deferred and runs after the document is parsed.
-   GSAP and Lenis are vendored classic scripts loaded before this one; they are
-   read off `window` rather than imported. */
+   GSAP (core + DrawSVG) is a vendored classic script loaded before this one;
+   it is read off `window` rather than imported. */
 
 import { CHARTS } from '../data/charts.js';
-import { SOURCES, DEMAND, balance, solve } from './grid-model.js';
+import { SOURCES, balance, solve, isVariable } from './grid-model.js';
 import { WINGS, BOOK_TITLES, WING_CLOTH, LOTS, CASTS, BOOK_MARKS, OPERABLE } from '../data/wings.js';
 
-import { REDUCE, HAS_GSAP, HAS_DRAW, whenVisible, sweepVisible } from './env.js';
+import { REDUCE, HAS_GSAP } from './env.js';
 import './charts.js';
-import './exhibits.js';
+import { runCount } from './exhibits.js';
 import './scenes.js';
 
-'use strict';
 /* ============ GRID-MIX SIMULATOR ============ */
 (function () {
   var cityEl = document.getElementById('sim-city');
@@ -20,7 +19,6 @@ import './scenes.js';
 
   var SVGNS = 'http://www.w3.org/2000/svg';
   var COLORS = { nuclear: '#F2C46B', solar: '#FBBF24', wind: '#49D6E8', hydro: '#34D399', gas: '#A9A18B' };
-  var VARIABLE = { solar: 1, wind: 1 };
   var WIN_OFF = '#0c1626';
 
   // build the skyline once; collect every window rect
@@ -89,7 +87,7 @@ import './scenes.js';
         var w = wins[order[ptr++]];
         w.setAttribute('fill', COLORS[k]);
         w.style.filter = 'drop-shadow(0 0 3px ' + COLORS[k] + ')';
-        if (VARIABLE[k]) { w.classList.add('win-var'); w.style.animationDelay = (order[ptr] % 26) / 10 + 's'; }
+        if (isVariable(k)) { w.classList.add('win-var'); w.style.animationDelay = (order[ptr] % 26) / 10 + 's'; }
         else { w.classList.remove('win-var'); w.style.animationDelay = ''; }
       }
     });
@@ -121,6 +119,18 @@ import './scenes.js';
       ? 'low: a real grid this weather-dependent needs major storage or backup'
       : 'supply that does not depend on the weather';
 
+    /* The tiles repaint on every input event; a screen reader gets one
+       composed sentence once the sliders settle instead. */
+    if (movedId) {
+      clearTimeout(update._sayT);
+      update._sayT = setTimeout(function () {
+        var say = el('sim-say');
+        if (say) say.textContent = 'Gas fills ' + shares.gas + '%. Carbon intensity '
+          + Math.round(co2) + ' grams per kilowatt hour, capacity to build '
+          + Math.round(totalCap).toLocaleString('en-US') + ' megawatts, firm share ' + firm + '%.';
+      }, 700);
+    }
+
     paintCity(shares);
   }
 
@@ -143,15 +153,14 @@ function bindWalkbar() {
   wbPrev = $('wb-prev'); wbNext = $('wb-next');
   var l = $('wb-lobby');
   if (l && !l._bound) { l._bound = 1; l.addEventListener('click', function () { screenTo('lobby'); }); }
+  if (wbPrev && !wbPrev._bound) { wbPrev._bound = 1; wbPrev.addEventListener('click', function () { turnPage(-1); }); }
+  if (wbNext && !wbNext._bound) { wbNext._bound = 1; wbNext.addEventListener('click', function () { turnPage(1); }); }
 }
 var wing = null, step = 0;
 
 function screenTo(name) {
   bindWalkbar();
   body.setAttribute('data-screen', name);
-  // a canvas sized while hidden measures 0; resize once it is on screen
-  // the atrium must not keep rendering once you have left it: a WebGL loop
-  // running behind a scrolling page is exactly what makes scrolling stutter
   if (walkbar) walkbar.hidden = (name !== 'wing');
   window.scrollTo(0, 0);
 }
@@ -160,8 +169,6 @@ function wingById(id) {
   for (var i = 0; i < WINGS.length; i++) if (WINGS[i].id === id) return WINGS[i];
   return null;
 }
-
-var pieceObserver = null;
 
 function markPieces(root) {
   // an exhibit's own top-level blocks are its pieces
@@ -182,78 +189,41 @@ function litPiece(el) {
   Object.keys(CHARTS).forEach(function (key) {
     if (el.querySelector('#' + key + '-chart') && CHARTS[key]._setWidths) CHARTS[key]._setWidths();
   });
-  // numbers count up on arrival
-  el.querySelectorAll('[data-count]').forEach(function (nEl) {
-    if (nEl._counted) return;
-    nEl._counted = 1;
-    if (typeof runCount === 'function') runCount(nEl);
-  });
+  // numbers count up on arrival; runCount itself guards against re-runs
+  el.querySelectorAll('[data-count]').forEach(runCount);
 }
 
-function watchPieces() {
-  if (pieceObserver) pieceObserver.disconnect();
-  var pieces = document.querySelectorAll('body[data-screen="wing"] .view.in-wing .piece');
-  if (!('IntersectionObserver' in window)) {
-    pieces.forEach(litPiece);
-    return;
-  }
-  pieceObserver = new IntersectionObserver(function (entries) {
-    entries.forEach(function (en) { if (en.isIntersecting) { litPiece(en.target); pieceObserver.unobserve(en.target); } });
-  }, { root: document.getElementById('main'), rootMargin: '0px 0px -8% 0px', threshold: 0.06 });
-  pieces.forEach(function (p) { pieceObserver.observe(p); });
-  // fail open: anything already on screen lights immediately
-  pieces.forEach(function (p) {
-    var r = p.getBoundingClientRect();
-    if (r.top < window.innerHeight && r.bottom > 0) litPiece(p);
-  });
-  // scroll-snap moves the panel, not the window, so watch the panel too
-  var panel = document.getElementById('main');
-  if (panel && !panel._pieceScroll) {
-    panel._pieceScroll = 1;
-    panel.addEventListener('scroll', function () {
-      document.querySelectorAll('.view.in-wing .piece:not(.lit)').forEach(function (p) {
-        var r = p.getBoundingClientRect();
-        if (r.top < window.innerHeight * 0.92 && r.bottom > 0) litPiece(p);
-      });
-    }, { passive: true });
-  }
-}
-
-/* A wing is a book, and an exhibit is not one page of it but a short stack. Each block of an exhibit gets its own screen unless two are small enough to share one, and a pinned scene. */
+/* A wing is a book, and an exhibit is not one page of it but a short stack.
+   Each block of an exhibit gets its own screen unless two are small enough to
+   share one; a pinned scene gets one screen per beat. */
 var pageIdx = 0, turning = false, leaves = [];
 
-function blocksOf(view) {
-  var out = [];
-  [].forEach.call(view.children, function (c) {
-    if (c.classList.contains('wrap')) [].forEach.call(c.children, function (g) { out.push(g); });
-    else out.push(c);
-  });
-  return out;
-}
-
-/* Things that are one exhibit piece, however tall: never split these across screens, or a chart loses its placard and a room name loses its lede. */
+/* Things that are one exhibit piece, however tall: never split these across
+   screens, or a chart loses its placard and a room name loses its lede. */
 var UNIT = '.section-head, .exhibit, .chart-card, .sim-card, .incident-panel,' +
            '.about-grid, .tour-figure, .plant-explorer, .duo, .callout, .tiles,' +
            '.pathway, .bento, .incident-case, .fission-lab, .rk,' +
-           '.seq-scene, .seq-sticky, .pin-scene, .pin-sticky, .pin-stage,' +
+           '.pin-scene, .pin-sticky, .pin-stage,' +
            'figure, table, details';
 
 var UNIT_NARROW = '.section-head, .chart-card, .sim-card, .incident-panel,' +
                   '.about-grid, .tour-figure, .plant-explorer, .callout,' +
                   '.incident-case, .fission-lab, .rk,' +
-                  '.seq-scene, .seq-sticky, .pin-scene, .pin-sticky, .pin-stage,' +
+                  '.pin-scene, .pin-sticky, .pin-stage,' +
                   'figure, table, details';
-/* A short laptop screen is under the same constraint as a phone: there is not enough height for a case and its label together. What matters is the room available, not whether the device is. */
+/* A short laptop screen is under the same constraint as a phone: not enough
+   height for a case and its label together. What matters is the room
+   available, not what the device calls itself. */
 function unitsFor() {
   return (window.innerWidth <= 820 || window.innerHeight < 800) ? UNIT_NARROW : UNIT;
 }
 
-/* Heights can only be read while the page is laid out, and every page but the open one is display:none. */
+/* Heights can only be read while the page is laid out, and every page but
+   the open one is display:none. */
 function buildLeaves() {
   var views = wing.rooms.map(function (id) { return document.getElementById(id); }).filter(Boolean);
   // a live sequence needs a scroll runway it will never get here
   views.forEach(function (v) {
-    v.querySelectorAll('.seq-scene.is-live').forEach(function (sq) { sq.classList.remove('is-live'); });
     v.classList.add('is-page', 'is-measuring');
     v.querySelectorAll('.leaf-off').forEach(function (c) { c.classList.remove('leaf-off'); });
   });
@@ -330,7 +300,10 @@ function buildLeaves() {
       applyLeaf(lf.view, lf.els);
       var el = lf.els[0], k = 1;
       el.style.zoom = '';
-      /* Step it down and look again, rather than computing a ratio once and trusting it: padding does not shrink with the object, and a figure with a fixed aspect gives back less height than the. */
+      /* Step it down and look again, rather than computing a ratio once and
+         trusting it: padding does not shrink with the object, and a figure
+         with a fixed aspect ratio gives back less height than a single scale
+         factor predicts. */
       while (k > 0.84 && lf.view.scrollHeight > lf.view.clientHeight + 4) {
         k = Math.round(k * 96) / 100;
         el.style.zoom = k;
@@ -364,6 +337,9 @@ function applyLeaf(view, els) {
   if (!els.length) return;
   var keep = [];
   els.forEach(function (el) {
+    // a leaf can briefly hold nodes that async content (the news upgrade)
+    // has detached; skipping them beats throwing mid page-turn
+    if (!view.contains(el)) return;
     for (var p = el; p && p !== view; p = p.parentNode) if (keep.indexOf(p) < 0) keep.push(p);
   });
   keep.forEach(function (node) {
@@ -371,7 +347,10 @@ function applyLeaf(view, els) {
     [].forEach.call(parent.children, function (c) {
       if (keep.indexOf(c) < 0) { c.classList.add('leaf-off'); cut = true; }
     });
-    /* A container showing only some of its children is no longer the layout it was designed as. A two-column case with its label hidden would drop the object into the label's narrow column,. */
+    /* A container showing only some of its children is no longer the layout
+       it was designed as: a two-column case with its label hidden would drop
+       the object into the label's narrow column. is-part switches such a
+       container to a plain block so the survivor takes the full width. */
     if (cut && parent !== view && parent.classList) parent.classList.add('is-part');
   });
 }
@@ -395,7 +374,9 @@ function showPage(i, instant) {
   lf.view.scrollTop = 0;
   if (lf.view.id !== 'wing-end') {
     markPieces(lf.view);
-    /* Light the whole path, not just the blocks. When a page is part of a longer list its container is the .reveal, and a container left at opacity 0 renders a page that measures full and. */
+    /* Light the whole path, not just the blocks: when a page is part of a
+       longer list its container is the .reveal, and a container left at
+       opacity 0 renders a page that measures full-height yet paints nothing. */
     lf.els.forEach(function (el) {
       for (var p = el; p && p !== lf.view.parentNode; p = p.parentNode) {
         if (!p.classList) continue;
@@ -415,12 +396,20 @@ function showPage(i, instant) {
     lf.scene._sceneGo(lf.step, instant || !oneBeat);
   }
 
-  lf.view.setAttribute('tabindex', '-1');
-  if (!instant && document.activeElement !== document.body) {
-    try { lf.view.focus({ preventScroll: true }); } catch (err) { lf.view.focus(); }
-  }
   // where you are, counted in screens rather than exhibits
   if (wbCount) wbCount.textContent = 'Page ' + (pageIdx + 1) + ' of ' + leaves.length;
+  if (wbPrev) wbPrev.disabled = pageIdx === 0;
+  if (wbNext) wbNext.disabled = pageIdx === leaves.length - 1;
+  /* Focus the page container on every turn: it is the only scrollable element
+     in a wing, so without focus a keyboard user cannot scroll a tall page.
+     Exception: keep focus on a walkbar turn button mid-click-through — unless
+     that button just disabled itself at the end stop, where the browser would
+     otherwise drop focus to <body>. */
+  lf.view.setAttribute('tabindex', '-1');
+  var ae = document.activeElement;
+  if ((ae !== wbPrev && ae !== wbNext) || (ae && ae.disabled)) {
+    try { lf.view.focus({ preventScroll: true }); } catch (err) { lf.view.focus(); }
+  }
   if (window.__doseWalk) {
     window.__doseWalk(lf.view.id === 'wing-end' ? '' : lf.view.id,
                       lf.view.id === 'wing-end' ? wing.name : (BOOK_TITLES[lf.view.id] || wing.name));
@@ -491,7 +480,9 @@ function turnPage(dir) {
       shade = document.getElementById('pf-shade');
   turning = true;
 
-  /* Photograph the page you are leaving and put it on the front of the sheet. A clone is the only way to have the old page and the new one on screen at once, because most turns move between. */
+  /* Photograph the page you are leaving and put it on the front of the sheet.
+     A clone is the only way to have the old page and the new one on screen at
+     once, because most turns move between leaves of the same section. */
   front.innerHTML = '';
   var snap = leaves[pageIdx].view.cloneNode(true);
   snap.removeAttribute('id');
@@ -555,7 +546,9 @@ function showExhibit() {
       var titles = rooms.map(function (id) { return BOOK_TITLES[id] || id; });
       seenEl.textContent = titles.length === 1
         ? 'One volume: ' + titles[0] + '.'
-        : titles.length + ' volumes: ' + titles.slice(0, -1).join(', ') + ', and ' + titles[titles.length - 1] + '.';
+        : titles.length === 2
+          ? '2 volumes: ' + titles[0] + ' and ' + titles[1] + '.'
+          : titles.length + ' volumes: ' + titles.slice(0, -1).join(', ') + ', and ' + titles[titles.length - 1] + '.';
     }
     var out = document.getElementById('wing-end-lobby');
     if (out && !out._bound) {
@@ -591,7 +584,9 @@ function showExhibit() {
 (function () {
   
   var acc = 0, lastWheel = 0, lockUntil = 0;
-  /* STEP is the distance a trackpad has to glide to turn a page. A mouse wheel does not glide: it arrives in discrete notches of about 100 to 120, or in `deltaMode` lines, and one notch is. */
+  /* STEP is the distance a trackpad has to glide to turn a page. A mouse
+     wheel does not glide: it arrives in discrete notches of about 100 to 120
+     (or in deltaMode lines), and one notch is one deliberate turn. */
   var STEP = 240, NOTCH = 100, GESTURE_GAP = 1500, LOCK = 820, QUIET = 180, LOCK_MAX = 1150;
   var lockFrom = 0;
 
@@ -623,14 +618,26 @@ function showExhibit() {
     acc = 0; lockFrom = now; lockUntil = now + LOCK;
     turnPage(dir);
   }, { passive: true });
+  /* On a tall page the arrows read it before they leave it: scroll the open
+     view until its edge, then the next press turns the page. The view is the
+     only scrollable element, and focus may be elsewhere, so scroll it
+     directly rather than trusting the browser default. */
+  function scrollPage(dir) {
+    var pg = document.querySelector('.view.in-wing.is-page, .wing-end.is-page');
+    if (!pg) return;
+    var step = Math.round(pg.clientHeight * 0.75) * dir;
+    if (REDUCE) pg.scrollTop += step;
+    else pg.scrollBy({ top: step, behavior: 'smooth' });
+  }
   window.addEventListener('keydown', function (e) {
     if (body.getAttribute('data-screen') !== 'wing') return;
+    if (e.defaultPrevented) return; // a control (e.g. the incident tabs) already used the key
     if (e.target && /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
     // left/right always turn; up/down read a tall page first, then turn
     if (e.key === 'ArrowRight' || e.key === 'PageDown') { e.preventDefault(); turnPage(1); }
     else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); turnPage(-1); }
-    else if (e.key === 'ArrowDown' && atEdge(1)) { e.preventDefault(); turnPage(1); }
-    else if (e.key === 'ArrowUp' && atEdge(-1)) { e.preventDefault(); turnPage(-1); }
+    else if (e.key === 'ArrowDown') { e.preventDefault(); atEdge(1) ? turnPage(1) : scrollPage(1); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); atEdge(-1) ? turnPage(-1) : scrollPage(-1); }
     else if (e.key === 'Escape') { e.preventDefault(); screenTo('lobby'); }
   });
   var ty = null;
@@ -645,6 +652,52 @@ function showExhibit() {
     ty = null;
   }, { passive: true });
 })();
+
+/* Re-measure the wing over its current DOM, keeping the reader on the page
+   they were reading. Used when the viewport changes and when an exhibit
+   replaces content the pager had already measured. */
+function repaginate() {
+  if (body.getAttribute('data-screen') !== 'wing' || !wing || !leaves.length) return;
+  // Re-find the page by the DOM block it was showing: the new leaves are
+  // built over the same nodes, so this restores the reader's exact spot
+  // rather than the first page of the room.
+  var was = leaves[pageIdx] || {};
+  var mark = was.scene || (was.els && was.els[0]);
+  var roomId = was.view && was.view.id;
+  buildLeaves();
+  var at = 0;
+  for (var i = 0; i < leaves.length; i++) {
+    if (mark && (leaves[i].scene === mark || (leaves[i].els && leaves[i].els.indexOf(mark) !== -1))) { at = i; break; }
+    if (leaves[i].view.id === roomId && !at) at = i;
+  }
+  showPage(at, true);
+}
+
+/* Pagination is measured against the viewport, so a resize or rotation
+   invalidates every leaf. Rebuild once the size settles. Small height
+   twitches (the mobile URL bar collapsing) are ignored so scrolling does not
+   re-paginate the wing. */
+(function () {
+  var lastW = window.innerWidth, lastH = window.innerHeight, settle = null;
+  window.addEventListener('resize', function () {
+    clearTimeout(settle);
+    settle = setTimeout(function () {
+      var dW = Math.abs(window.innerWidth - lastW), dH = Math.abs(window.innerHeight - lastH);
+      if (dW < 2 && dH < 120) return;
+      lastW = window.innerWidth; lastH = window.innerHeight;
+      repaginate();
+    }, 220);
+  });
+})();
+
+/* An exhibit replaced markup the pager had already measured (the news room
+   swapping its fallback cards for the live feed). Re-measure, or the leaf
+   would still be pointing at detached nodes. */
+document.addEventListener('radiant:content-replaced', function (e) {
+  var room = e.detail && e.detail.room;
+  if (!wing || (room && wing.rooms.indexOf(room) === -1)) return;
+  repaginate();
+});
 
 function enterWing(id, atStep) {
   var w = wingById(id);
@@ -907,27 +960,3 @@ document.addEventListener('click', function (e) {
   screenTo('title');
 })();
 
-var navRail = document.querySelector('.nav__links');
-if (navRail) {
-  var syncRail = function () {
-    var overflowing = navRail.scrollWidth - navRail.clientWidth > 1;
-    navRail.classList.toggle('is-overflowing', overflowing);
-    var atEnd = navRail.scrollLeft + navRail.clientWidth >= navRail.scrollWidth - 2;
-    navRail.classList.toggle('at-end', atEnd);
-  };
-  
-  var pending = null, settle = null;
-  var syncSoon = function () {
-    if (pending) cancelAnimationFrame(pending);
-    pending = requestAnimationFrame(function () { pending = null; syncRail(); });
-    
-    clearTimeout(settle);
-    settle = setTimeout(syncRail, 150);
-  };
-  syncRail();
-  navRail.addEventListener('scroll', syncRail, { passive: true }); // no reflow
-  window.addEventListener('resize', syncSoon);
-  window.addEventListener('load', syncSoon); // re-measure once webfonts settle
-  /* Also observe the rail directly: it can change size without a window resize (webfonts landing, browser zoom). */
-  if (window.ResizeObserver) new ResizeObserver(syncSoon).observe(navRail);
-}

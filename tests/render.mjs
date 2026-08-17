@@ -33,7 +33,9 @@ export async function run(browser, url) {
       await openBook(page, title); await page.waitForTimeout(3400);
       for (let i = 0; i < 14; i++) {
         const r = await page.evaluate(() => {
-          const live = document.querySelector('.view.in-wing.is-page');
+          // The end-of-wing screen is a real page too; without it in the
+          // selector, walking off the last exhibit reads as a blank screen.
+          const live = document.querySelector('.view.in-wing.is-page, #wing-end.is-page');
           // "Painted" means cumulative opacity actually reaches the eye.
           let paint = 0;
           if (live) {

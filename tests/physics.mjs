@@ -73,10 +73,10 @@ async function reactor(browser, url, t) {
     await page.waitForTimeout(1200);
   };
 
-  // Note on what is NOT tested here: the panel's own "period" readout is
-  // computed with (beta - rho) / (lambda * rho), so comparing it against that
-  // formula would assert nothing. Everything below compares the simulation
-  // against a result the code never evaluates.
+  // Note on what is NOT tested here: the panel's own "period" readout is the
+  // model's inhour-relation root, so comparing it against that formula would
+  // assert nothing. Everything below compares the simulation against a result
+  // the code never evaluates.
 
   // 1. A critical reactor holds its power. rho = 0 => dn/dt = 0.
   await reset();

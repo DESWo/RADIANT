@@ -3,28 +3,31 @@
 An evidence-based advocacy website by Desmond Wong, bringing data-driven clarity
 to nuclear energy discussions.
 
-The site is a single self-contained page, [index.html](index.html), with no
-build step and no runtime dependencies. Fonts and libraries are self-hosted
-under `assets/`; nothing is fetched from a CDN. Its content is adapted from the
-advocacy paper *"Radiant: The Case for Nuclear Energy."*
+The site is a single page with no build step, no frameworks, and no runtime
+dependencies: [index.html](index.html) holds the content, with the styles,
+scripts, and datasets split across `css/`, `js/`, and `data/` as plain ES
+modules. Fonts and libraries are self-hosted under `assets/`; nothing is
+fetched from a CDN. Its content is adapted from the advocacy paper *"Radiant:
+The Case for Nuclear Energy."*
 
 It is presented as a museum: five wings, each answering one question, walked a
-page at a time rather than scrolled. Two of the exhibits are original models you
-operate — a point-kinetics reactor and a grid-mix simulator.
-[DESIGN.md](DESIGN.md) explains how it is built.
+page at a time rather than scrolled. Three of the exhibits are original models
+you operate — a chain-reaction lab, a point-kinetics reactor, and a grid-mix
+simulator. [DESIGN.md](DESIGN.md) explains how it is built.
 
 ## Running locally
 
-The site is split across `index.html`, `css/`, `js/` and `data/`, and the
-JavaScript is loaded as ES modules, so it needs to be served rather than opened
-from the filesystem:
+The JavaScript is loaded as ES modules, so the site needs to be served rather
+than opened from the filesystem:
 
 ```sh
-python3 -m http.server 4174
+npm run serve
 # then visit http://localhost:4174
 ```
 
-There is still nothing to install and nothing to build.
+The server is a 40-line Node script ([scripts/serve.mjs](scripts/serve.mjs));
+any static file server works just as well. There is nothing to install and
+nothing to build.
 
 ## Tests
 
@@ -35,10 +38,12 @@ npm install   # Playwright, the only dev dependency
 npm test
 ```
 
-Four suites: markup and citation integrity, both physics models against
-closed-form results, museum navigation and deep links, and rendering at three
-viewports including keyboard and reduced-motion paths. `npm test -- static`
-runs the no-browser checks alone.
+Five suites: markup and citation integrity, both models unit-tested directly
+against closed-form results and a Runge–Kutta reference integration, the same
+models re-checked through the browser UI, museum navigation and deep links,
+and rendering at three viewports including keyboard and reduced-motion paths.
+`npm test -- static models` runs the no-browser checks alone and finishes in
+about a second.
 
 ## Deploying
 
@@ -51,12 +56,19 @@ Every statistic on the page is cited to a primary source (EIA, IPCC, UNECE, NRC,
 DOE, UNSCEAR, BLS, Our World in Data, NEI, IAEA) in a numbered reference list in
 the footer, with links and an access date. Charts carry "how to read this" notes
 covering methodology and what the numbers do and do not include. All figures were
-last verified on July 14, 2026. The site also includes a Limitations section
+last verified on July 14, 2026; references added since carry their own access
+dates. The site also includes a Limitations section
 covering construction costs, financing risk, waste-repository politics, accident
 severity, mining impacts, proliferation, and SMR uncertainty.
 
 See [ROADMAP.md](ROADMAP.md) for planned work (datasets, methodology page,
-reproducible calculations, an original model, and automated testing).
+reproducible calculations, and uncertainty ranges).
+
+## License
+
+MIT for the code, CC BY 4.0 for the written content and illustrations; the
+vendored libraries, fonts, and footage keep their own licenses. See
+[LICENSE](LICENSE).
 
 ## The five wings
 
@@ -86,7 +98,7 @@ questions, then auto-updating headlines).
 
 **V · The Field** — *How do I keep learning, or join?*
 Myths as a reference shelf, Careers, Your Way In (named programs, each linked
-to the organisation that runs it) and Sources.
+to the organization that runs it) and Sources.
 
 ## Auto-updating news
 
@@ -105,9 +117,10 @@ one click on the Actions tab re-enables them.
 
 Safety figures from Our World in Data (Markandya & Wilkinson 2007; Sovacool et
 al. 2016). Lifecycle emissions consistent with IPCC/UNECE assessments.
-Capacity-factor and France generation-share figures from EIA and IEA.
+Capacity-factor figures from EIA; France's generation share from IAEA PRIS
+and RTE.
 
-Every figure on the page carries its source inline: 17 numbered references with
+Every figure on the page carries its source inline: 18 numbered references with
 links and access dates, a source line under each chart, and "how to read this"
 notes covering what a number does and does not include. Figures were last
-verified on July 14, 2026.
+verified on July 14, 2026; references added since carry their own access dates.

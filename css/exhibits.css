@@ -127,19 +127,12 @@
     text-decoration: none; cursor: pointer;
     transition: background 0.2s;
   }
-  .btn:hover { background: #211F19; }
+  /* the ink must survive the ground swap: near-black on near-black is a
+     button that disappears the moment it is pointed at */
+  .btn:hover, .btn:focus-visible { background: var(--wall); color: var(--spot); box-shadow: inset 0 0 0 1px var(--spot); }
   .btn--link { background: none; color: var(--blue-deep); padding: 0.9rem 0.5rem; }
   .btn--link:hover { background: none; text-decoration: underline; }
 
-  .principles {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5rem;
-    max-width: 56rem; margin: 0 auto;
-    padding-top: 3rem; border-top: 1px solid var(--hair);
-    text-align: left;
-  }
-  .principle svg { color: var(--blue); margin-bottom: 0.8rem; }
-  .principle h3 { font-family: var(--sans); font-size: 1rem; font-weight: 600; margin-bottom: 0.4rem; }
-  .principle p { font-size: 0.96rem; color: var(--muted); line-height: 1.6; }
 
   /* ============ CHART CARD ============ */
   
@@ -201,7 +194,7 @@
     text-transform: uppercase; color: var(--muted); margin-bottom: 0.5rem; }
   .rk-ctl__label b { color: var(--ink); font-variant-numeric: tabular-nums; }
   .rk-ctl__label .u { color: var(--faint); }
-  #rk-rods { width: 100%; accent-color: var(--spot); min-height: 34px; cursor: pointer; }
+  #rk-rods { width: 100%; accent-color: var(--spot); min-height: 44px; cursor: pointer; }
   .rk-scale { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 0.58rem;
     letter-spacing: 0.12em; text-transform: uppercase; color: var(--faint); margin-top: 0.15rem; }
   .rk-help { display: block; font-size: 0.78rem; color: var(--muted); margin-top: 0.5rem; line-height: 1.5; }
@@ -243,21 +236,7 @@
     --fig-w2: 1.25;          /* secondary structure and annotation */
     margin: 0 0 1.6rem;
   }
-  .fig__plate { position: relative; background: #0A0906; border: 1px solid var(--hair); padding: 1.1rem 1.2rem 0.9rem; }
   .fig svg { display: block; width: 100%; height: auto; }
-  .fig__num {
-    font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase;
-    color: var(--spot); border: 1px solid rgba(242,196,107,0.3); padding: 0.2rem 0.5rem;
-    display: inline-block; margin-bottom: 0.7rem;
-  }
-  /* numbered callouts: the label sits beside the figure, never inside it */
-  .fig__key { list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
-    gap: 0.35rem 1.4rem; margin: 0.9rem 0 0; }
-  .fig__key li { display: flex; gap: 0.55rem; font-size: 0.86rem; color: var(--muted); line-height: 1.45; }
-  .fig__key b { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.1em; color: var(--spot);
-    padding-top: 0.15rem; flex: 0 0 auto; }
-  .fig__cap { font-size: 0.82rem; color: var(--muted); line-height: 1.55; margin-top: 0.8rem; }
-  .fig__cap a { color: var(--spot-deep, var(--spot)); }
 
   /* in-figure type is always the instrument face, never the wall text */
   .fig text, .fig .fig-lab { font-family: var(--mono); font-size: 13px; letter-spacing: 0.12em;
@@ -450,66 +429,9 @@
   /* ============ TOUR VIDEO (framed, watchable) ============ */
   .tour-figure { max-width: 62rem; margin: 0 0 1.6rem; }
   .tour-frame { position: relative; border-radius: 0; overflow: hidden; border: 1px solid var(--hair); box-shadow: var(--shadow); background: #0a1018; }
-  .tour-video { display: block; width: 100%; height: auto; }
+  .tour-video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; }
   .tour-figure figcaption { font-size: 0.86rem; color: var(--muted); margin-top: 0.85rem; }
 
-  /* ============ SCROLL-SCRUBBED VIDEO (legacy, unused) ============ */
-  /* Base (no JS) and reduced-motion: a normal, playable video with controls. */
-  .videoscape { background: #060a14; color: #fff; padding: 4.5rem 0; border-top: none; }
-  .vs-vp { max-width: 60rem; margin: 0 auto; padding: 0 1.5rem; }
-  .vs-hud { text-align: center; margin-bottom: 1.6rem; }
-  .vs-hud .overline { color: var(--faint); justify-content: center; }
-  .vs-hud h2 { color: #fff; font-family: var(--display); font-weight: 500; font-size: clamp(2.2rem, 6vw, 4rem); line-height: 1; letter-spacing: -0.02em; }
-  .vs-hud p { color: #D6CFBC; font-family: var(--serif); font-style: italic; font-size: clamp(1.1rem, 2vw, 1.4rem); margin-top: 1rem; }
-  .vs-video { width: 100%; border-radius: 0; display: block; background: #060a14; }
-  .vs-veil, .vs-scroll, .vs-progress { display: none; }
-  .vs-credit { text-align: center; margin-top: 1rem; font-size: 0.8rem; color: rgba(255,255,255,0.5); }
-  .vs-credit a { color: rgba(255,255,255,0.7); }
-
-  /* Cinema mode: pinned, full-bleed, scroll drives playback. */
-  .js:not(.reduced) .vs-track { position: relative; height: 320vh; } /* long = gentle scroll */
-  .js:not(.reduced) .vs-vp {
-    position: sticky; top: 0; height: 100vh; height: 100svh; max-width: none; padding: 0;
-    overflow: clip; display: flex; align-items: center; justify-content: center;
-  }
-  .js:not(.reduced) .vs-video {
-    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 0; z-index: 0;
-    transform-origin: 50% 44%; will-change: transform;
-  }
-  .js:not(.reduced) .vs-veil {
-    display: block; position: absolute; inset: 0; z-index: 1; pointer-events: none;
-    background:
-      radial-gradient(60% 48% at 50% 47%, rgba(4,7,14,0.82), rgba(4,7,14,0.15) 78%),
-      linear-gradient(0deg, rgba(4,7,14,0.95), rgba(4,7,14,0) 44%),
-      linear-gradient(180deg, rgba(4,7,14,0.7), rgba(4,7,14,0) 34%);
-  }
-  .js:not(.reduced) .vs-hud {
-    position: relative; z-index: 2; margin: 0; padding: 2rem 2.2rem; max-width: 40rem;
-    transition: opacity 0.3s ease;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.9), 0 2px 30px rgba(0,0,0,0.7);
-  }
-  .js:not(.reduced) .vs-hud h2 { font-weight: 600; }
-  .js:not(.reduced) .vs-hud p { color: #EAF0F8; }
-  .js:not(.reduced) .vs-scroll {
-    display: inline-flex; align-items: center; gap: 0.5rem; margin-top: 1.7rem;
-    font-family: var(--sans); font-size: 0.82rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--faint);
-    animation: scrollnudge 1.8s ease-in-out infinite;
-  }
-  .js:not(.reduced) .vs-credit {
-    position: absolute; bottom: 1rem; right: 1.2rem; z-index: 2; margin: 0; text-align: right; font-size: 0.76rem;
-  }
-  .js:not(.reduced) .vs-progress {
-    display: block; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; z-index: 3; background: rgba(255,255,255,0.14);
-  }
-  .js:not(.reduced) .vs-progress > span { display: block; height: 100%; width: 0; background: var(--amber); }
-
-  /* Seek unsupported: revert to a normal framed, playable video. */
-  .vs-nofx .vs-track { height: auto !important; }
-  .vs-nofx .vs-vp { position: static !important; height: auto !important; max-width: 60rem; margin: 0 auto; padding: 0 1.5rem; display: block; overflow: visible; }
-  .vs-nofx .vs-video { position: static !important; width: 100%; height: auto !important; object-fit: initial; border-radius: 0; }
-  .vs-nofx .vs-veil, .vs-nofx .vs-scroll, .vs-nofx .vs-progress { display: none !important; }
-  .vs-nofx .vs-hud { position: static !important; margin: 0 0 1.6rem !important; padding: 0 !important; max-width: none; opacity: 1 !important; }
-  .vs-nofx .vs-credit { position: static !important; text-align: center; margin-top: 1rem; }
 
   /* ============ PULL QUOTE ============ */
   .pull {
@@ -519,11 +441,6 @@
   }
   .pull mark { background: linear-gradient(transparent 62%, rgba(245,158,11,0.35) 62%); color: inherit; padding: 0 0.1em; }
 
-  /* ============ VERDICTS ============ */
-  .verdicts { max-width: 46rem; display: flex; flex-direction: column; gap: 1rem; margin: 2.6rem 0 0; }
-  .verdict { display: flex; gap: 1rem; align-items: flex-start; }
-  .verdict svg { flex-shrink: 0; margin-top: 0.2rem; }
-  .verdict p { font-size: 1rem; }
 
   /* ============ PLANT DIAGRAM ANIMATION ============ */
   @media (prefers-reduced-motion: no-preference) {
@@ -617,48 +534,6 @@
   .pin-stage--line { background: #0C0B08; }
   .build-head { margin-top: 3.4rem; }
 
-  /* ============ SCROLL-SCRUBBED SEQUENCE ============ */
-  
-  .seq-scene { position: relative; margin: 0 0 1rem; }
-  .js .seq-scene.is-live { height: 300vh; width: 100vw; margin-inline: calc(50% - 50vw); }
-  .seq-sticky { position: sticky; top: 0; height: 100svh; overflow: hidden; }
-  .seq-canvas { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; background: #070C14; }
-  .seq-scrim {
-    position: absolute; inset: 0; pointer-events: none;
-    background: linear-gradient(0deg, rgba(7,12,20,0.92) 0%, rgba(7,12,20,0.15) 42%, rgba(7,12,20,0.55) 100%);
-  }
-  .seq-copy {
-    position: absolute; left: 0; right: 0; bottom: clamp(2.4rem, 8vh, 6rem);
-    padding-inline: clamp(1.2rem, 6vw, 5rem);
-    max-width: 46rem;
-  }
-  .seq-copy h3 { font-family: var(--display); font-weight: 600; font-size: clamp(1.7rem, 4vw, 3rem); line-height: 1.05; letter-spacing: -0.025em; margin-bottom: 0.6rem; }
-  .seq-copy p { font-size: clamp(0.98rem, 1.5vw, 1.15rem); color: var(--body); line-height: 1.6; }
-  .seq-eyebrow { display: block; font-size: 0.78rem; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: var(--blue); margin-bottom: 0.7rem; }
-  .seq-loading { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); font-size: 0.84rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint); }
-  .seq-scene video { display: none; }
-  
-  .js .seq-scene:not(.is-live) .seq-sticky { position: static; height: auto; }
-  .js .seq-scene:not(.is-live) video,
-  .reduced .seq-scene video { display: block; width: 100%; height: auto; }
-  .js .seq-scene:not(.is-live) .seq-canvas,
-  .js .seq-scene:not(.is-live) .seq-loading { display: none; }
-  
-  .stage-bg { position: absolute; inset: 0; z-index: -2; overflow: hidden; }
-  .stage-bg video, .stage-bg img {
-    position: absolute; inset: 0; width: 100%; height: 100%;
-    object-fit: cover; display: block;
-  }
-  .stage-bg video { opacity: 0.3; }
-  /* One photographic plate per step; the timeline crossfades between them. */
-  .stage-bg img { opacity: 0; will-change: opacity; }
-  .stage-bg::after {
-    content: ''; position: absolute; inset: 0;
-    background:
-      linear-gradient(90deg, rgba(7,12,20,0.55) 0%, rgba(7,12,20,0.80) 48%, rgba(7,12,20,0.94) 100%),
-      linear-gradient(0deg, rgba(7,12,20,0.85) 0%, rgba(7,12,20,0.25) 45%, rgba(7,12,20,0.55) 100%);
-  }
-  .reduced .stage-bg, .js:not(.motion-ok) .stage-bg { display: none; }
   .plate-credit { font-size: 0.8rem; color: var(--faint); max-width: 52rem; margin: 0.9rem 0 0; line-height: 1.5; }
   .js .pin-scene:not(.is-live) + .plate-credit { display: none; }
   .pin-figure { position: relative; overflow: hidden; }
@@ -731,86 +606,6 @@
   .pstep-list li::before { content: counter(pstep); position: absolute; left: 0; top: 0.05rem; width: 1.6rem; height: 1.6rem; background: var(--blue-wash); color: var(--blue-deep); border-radius: 0; font-size: 0.86rem; font-weight: 700; display: flex; align-items: center; justify-content: center; }
   @media (max-width: 820px) { .plant-explorer { grid-template-columns: 1fr; } }
 
-  /* CINEMA MODE (legacy, unused) */
-  .js:not(.reduced) .plant-cinema { padding: 0; border-top: none; background: var(--navy); }
-  .js:not(.reduced) .plant-vp {
-    position: sticky; top: 0; height: 100vh; height: 100svh;
-    overflow: clip; display: flex; align-items: center; justify-content: center;
-    background: radial-gradient(125% 90% at 50% 12%, #413724 0%, #211F19 58%, #080d1a 100%);
-  }
-  .js:not(.reduced) .plant-cam {
-    width: min(94vw, 1180px); max-width: none; margin: 0; padding: 0;
-    background: none; border: none; box-shadow: none;
-    transform-origin: center center; will-change: transform;
-  }
-  .js:not(.reduced) .plant-cam svg { filter: drop-shadow(0 20px 55px rgba(0,0,0,0.5)); }
-  .js:not(.reduced) .plant-cam .hl { transition: opacity 0.45s ease; stroke: currentColor; stroke-width: 2; fill: none; }
-  .js:not(.reduced) .plant-cam svg[data-stage="1"] .hl-1,
-  .js:not(.reduced) .plant-cam svg[data-stage="2"] .hl-2,
-  .js:not(.reduced) .plant-cam svg[data-stage="3"] .hl-3,
-  .js:not(.reduced) .plant-cam svg[data-stage="4"] .hl-4,
-  .js:not(.reduced) .plant-cam svg[data-stage="5"] .hl-5,
-  .js:not(.reduced) .plant-cam svg[data-stage="6"] .hl-6 { opacity: 1; }
-
-  .js:not(.reduced) .plant-intro {
-    position: absolute; inset: 0; z-index: 5; margin: 0; pointer-events: none;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    text-align: center; padding: 1.5rem; background: rgba(8,13,26,0.4);
-  }
-  .js:not(.reduced) .plant-intro .overline { color: var(--faint); }
-  .js:not(.reduced) .plant-intro h2 { color: #fff; font-size: clamp(2rem, 5.4vw, 3.6rem); }
-  .js:not(.reduced) .plant-intro .lede { color: #D6CFBC; max-width: 34rem; }
-  .js:not(.reduced) .plant-scroll {
-    display: inline-flex; align-items: center; gap: 0.5rem; margin-top: 1.7rem;
-    font-size: 0.82rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--faint);
-    animation: scrollnudge 1.8s ease-in-out infinite;
-  }
-  @keyframes scrollnudge { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
-
-  .js:not(.reduced) .plant-hud {
-    display: block; position: absolute; left: clamp(1.2rem, 5vw, 4rem); bottom: clamp(1.6rem, 8vh, 4.5rem);
-    z-index: 6; max-width: min(27rem, 80vw); pointer-events: none;
-    transition: opacity 0.28s ease, transform 0.28s ease;
-  }
-  .js:not(.reduced) .plant-hud.swap { opacity: 0; transform: translateY(8px); }
-  .plant-pill {
-    display: inline-flex; align-items: center; gap: 0.55rem;
-    font-family: var(--sans); font-size: 0.84rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
-    color: #fff; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.18);
-    border-radius: 0; padding: 0.5rem 0.95rem; backdrop-filter: blur(6px);
-  }
-  .plant-pill .plus { color: var(--acc, #F2C46B); font-size: 1.15em; line-height: 0; transition: color 0.4s; }
-  .plant-stopnum { display: block; margin-bottom: 0.7rem; font-family: var(--sans); font-size: 0.82rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--faint); }
-  .plant-stopnum .cur { color: var(--acc, #F2C46B); transition: color 0.4s; }
-  .plant-para { margin-top: 0.85rem; color: #E9EEF6; font-family: var(--serif); font-size: clamp(1rem, 1.5vw, 1.22rem); line-height: 1.55; }
-  .plant-nav { display: flex; gap: 0.6rem; margin-top: 1.2rem; pointer-events: auto; }
-  .plant-nav button {
-    font-family: var(--sans); font-size: 0.86rem; font-weight: 600; color: #E9EEF6;
-    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); border-radius: 0;
-    padding: 0.5rem 0.95rem; min-height: 40px; cursor: pointer;
-    transition: background 0.2s, border-color 0.2s, opacity 0.2s;
-  }
-  .plant-nav button:hover { background: rgba(255,255,255,0.16); border-color: rgba(255,255,255,0.35); }
-  .plant-nav button:disabled { opacity: 0.32; cursor: default; }
-
-  .js:not(.reduced) .plant-rail {
-    display: flex; flex-direction: column; gap: 0.8rem;
-    position: absolute; right: clamp(1rem, 3vw, 2.4rem); top: 50%; transform: translateY(-50%); z-index: 6;
-  }
-  .plant-rail button {
-    width: 12px; height: 12px; border-radius: 50%; padding: 0; cursor: pointer;
-    background: rgba(255,255,255,0.24); border: 1px solid rgba(255,255,255,0.3);
-    transition: background 0.25s, transform 0.25s, border-color 0.25s;
-  }
-  .plant-rail button:hover { background: rgba(255,255,255,0.5); }
-  .plant-rail button[aria-current="true"] { background: var(--acc, #F2C46B); border-color: var(--acc, #F2C46B); transform: scale(1.4); }
-  /* cinema: keep steps + note in the DOM for a11y and no-JS, but out of view */
-  .js:not(.reduced) .plant-steps,
-  .js:not(.reduced) .plant-fallnote { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
-  @media (max-width: 640px) {
-    .js:not(.reduced) .plant-para { font-size: 1rem; }
-    .js:not(.reduced) .plant-hud { max-width: 86vw; }
-  }
 
   /* ============ FISSION LAB ============ */
   .fission-lab { display: grid; grid-template-columns: 1.6fr 1fr; gap: 1.3rem; align-items: start; margin-bottom: 1.8rem; }
@@ -829,7 +624,7 @@
   .fz-btn--ghost:hover { background: var(--tint); border-color: #5C5444; }
   .fz-slider label { display: block; font-size: 0.92rem; color: var(--body); margin-bottom: 0.55rem; }
   .fz-slider label b { color: var(--ink); font-weight: 600; }
-  .fz-slider input { width: 100%; accent-color: var(--blue); min-height: 26px; cursor: pointer; }
+  .fz-slider input { width: 100%; accent-color: var(--blue); min-height: 44px; cursor: pointer; }
   .fz-scale { display: flex; justify-content: space-between; font-size: 0.76rem; color: var(--faint); margin-top: 0.3rem; }
   .fz-stats { display: flex; gap: 1.3rem; font-size: 0.9rem; color: var(--muted); }
   .fz-stats b { color: var(--ink); font-variant-numeric: tabular-nums; }
@@ -978,12 +773,9 @@
   }
   .band--tint .res-card { background: var(--card); }
   .res-card:hover { border-color: var(--blue); }
-  .res-card h4 { font-family: var(--sans); font-size: 0.98rem; font-weight: 600; color: var(--ink); margin-bottom: 0.25rem; }
+  .res-card h3 { font-family: var(--sans); font-size: 0.98rem; font-weight: 600; color: var(--ink); margin-bottom: 0.25rem; }
   .res-card p { font-size: 0.88rem; color: var(--muted); line-height: 1.55; }
 
-  /* ============ CAREERS ============ */
-  .career-meta { display: flex; flex-wrap: wrap; gap: 0.5rem 1.4rem; margin-top: 0.5rem; font-size: 0.88rem; color: var(--muted); }
-  .career-meta strong { color: var(--ink); font-weight: 600; }
 
   /* ============ STUDENTS PATHWAY ============ */
   .pathway { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.2rem; max-width: 60rem; margin-bottom: 3rem; counter-reset: stage; }
@@ -1005,8 +797,8 @@
   .school-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); gap: 1rem; max-width: 60rem; margin-bottom: 1rem; }
   .school-card { display: block; text-decoration: none; background: var(--card); border: 1px solid var(--hair); border-radius: 0; padding: 1rem 1.2rem; transition: border-color 0.2s, transform 0.2s, background 0.2s; }
   a.school-card:hover { border-color: var(--blue); transform: translateY(-2px); background: rgba(242,196,107,0.06); }
-  .school-card h4 { font-family: var(--sans); font-size: 0.98rem; font-weight: 600; color: var(--ink); margin-bottom: 0.2rem; display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; }
-  .school-card h4 .go { color: var(--faint); font-weight: 400; transition: color 0.2s; }
+  .school-card h3 { font-family: var(--sans); font-size: 0.98rem; font-weight: 600; color: var(--ink); margin-bottom: 0.2rem; display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; }
+  .school-card h3 .go { color: var(--faint); font-weight: 400; transition: color 0.2s; }
   a.school-card:hover h4 .go { color: var(--blue); }
   .school-card .prog { font-size: 0.86rem; color: var(--muted); line-height: 1.5; display: block; }
   .school-card .loc { font-size: 0.82rem; color: var(--faint); display: block; margin-top: 0.3rem; }
@@ -1032,9 +824,6 @@
   /* ============ FOOTER ============ */
   footer { background: var(--navy); color: #D6CFBC; padding: 4.5rem 0 2.5rem; }
   footer h2 { color: #fff; font-size: 1.8rem; margin-bottom: 2.2rem; }
-  .src-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 1.8rem 2.6rem; margin-bottom: 3rem; }
-  .src-col h3 { font-family: var(--sans); font-size: 0.8rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--faint); margin-bottom: 0.8rem; }
-  .src-col p { font-size: 0.92rem; line-height: 1.65; }
   .src-note { font-size: 0.86rem; color: var(--faint); max-width: 42rem; margin-bottom: 2.6rem; font-style: italic; }
   .ref-list { list-style: decimal; padding-left: 1.5rem; max-width: 56rem; margin-bottom: 2.6rem; }
   .ref-list li { font-size: 0.9rem; line-height: 1.6; margin-bottom: 0.55rem; }

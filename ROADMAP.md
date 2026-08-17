@@ -2,6 +2,13 @@
 
 Shipped so far, newest first. Anything unchecked below is genuinely not done.
 
+**Hardening pass** (August 2026) — model-level unit tests against a
+Runge–Kutta reference integration (which caught a doubled thermal update in
+the reactor's prompt-critical branch), cross-source news dedupe with Python
+unit tests in CI, visible page-turn buttons and keyboard scrolling, debounced
+screen-reader announcements for the interactive models, a license, and about
+half a megabyte of unused fonts and libraries removed.
+
 **Curation pass** (August 2026) — restructured into five wings that each answer
 one question, removed the old global section numbering, reordered the evidence
 wing into two acts and a verdict, and brought the DOM order in line with the
@@ -47,9 +54,12 @@ removal of unverifiable statistics.
       for charts
 - [x] Performance: self-hosted fonts with `font-display: swap`, vendored
       libraries, no CDN or third-party runtime requests
-- [ ] Split the single HTML file into `css/`, `js/`, and `data/` modules
+- [x] Split the single HTML file into `css/`, `js/`, and `data/` modules
+      (August 2026)
+- [x] Unit-test both models directly as modules, against closed-form results
+      and a Runge–Kutta reference integration (`tests/models.mjs`)
 - [ ] Broken-link checking for external citation URLs in CI
-- [ ] Python linting and unit tests for the news parser
+- [x] Syntax gate and unit tests for the news parser in CI
 - [ ] Lighthouse budget enforced in CI
 - [ ] Security headers via meta tags; subresource integrity where applicable
 
@@ -58,7 +68,7 @@ removal of unverifiable statistics.
 - [x] Repository metadata: description, website link, topics
 - [x] Architecture documentation ([DESIGN.md](DESIGN.md))
 - [ ] README upgrade: screenshots, testing instructions, author-role statement
-- [ ] Add a license (MIT for code, CC BY for content)
+- [x] Add a license (MIT for code, CC BY for content) — see [LICENSE](LICENSE)
 - [ ] GitHub Issues and milestones for the items above; tagged v1.x releases
 - [ ] Development journal and technical case study
 - [ ] Expert review (physics teacher, ANS members, an accessibility reviewer)
