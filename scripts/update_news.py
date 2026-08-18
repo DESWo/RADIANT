@@ -19,7 +19,7 @@ from xml.etree import ElementTree
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "news.json"
 MAX_ITEMS = 6
-UA = "Mozilla/5.0 (RadiantNewsBot; +https://deswo.github.io/RADIANT/)"
+UA = "Mozilla/5.0 (RadiantNewsBot; +https://radiant.wongdesmond.com/)"
 
 FEEDS = [
     # (source label or None to use the item's own <source>, url)

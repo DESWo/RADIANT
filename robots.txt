@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://deswo.github.io/RADIANT/sitemap.xml
+Sitemap: https://radiant.wongdesmond.com/sitemap.xml
