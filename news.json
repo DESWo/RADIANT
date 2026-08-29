@@ -1,6 +1,33 @@
 {
-  "generated_at": "2026-08-29T16:45:49.684672+00:00",
+  "generated_at": "2026-08-29T20:57:56.608679+00:00",
   "items": [
+    {
+      "title": "Energy Secretary Jeff Starling discusses federal nuclear energy innovation campus proposal",
+      "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxOQms3NFh0N21WUDMzX2hBNFNrS1NGZ2NpMktqUjg1bXBCczNxemdYVkhkUjBKNVMycHE5c0F2LXNsR1hGTGVqRWZ0cV9OMjhlcUw3T2x1dEJFb2hMSWFoa2tkbWJsazBWN2hmeVlMNl94SEJMSnNZZWJXeDNPN3c1dk5QM1oyR3l0M2diZDJUdDdFNzA?oc=5",
+      "source": "News 9",
+      "published": "2026-08-29T17:26:05+00:00",
+      "date": "Aug 29, 2026",
+      "cat": "Policy",
+      "summary": ""
+    },
+    {
+      "title": "3D Systems and SRNL advance 3D printing for nuclear energy and defense",
+      "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxQWlFxZWV1bDNOY0V3QTRUdERBUlpJQnZjc3FsU2xRQnFMQ3N1VkJnRFRobmVuSE9sZVBvLVRPTnc4Vmtqb0xnZ1BkTmZqS0JxaTRBaVROcG43X3ZtMmZJOGxZUXZ4cHpITHdid3RfdGNTc3BpTk01ZFhPRWVtNVhTYVFNSTVrRmp2YjFQYQ?oc=5",
+      "source": "Interesting Engineering",
+      "published": "2026-08-29T14:56:00+00:00",
+      "date": "Aug 29, 2026",
+      "cat": "News",
+      "summary": ""
+    },
+    {
+      "title": "Lubnau: Wyoming's investment in future of nuclear energy is key to its success",
+      "url": "https://news.google.com/rss/articles/CBMihgJBVV95cUxQM2FOd3JPOURaYlZIdHcwVlhlczB0SkYydElGTFNUTzMxbXFtNGhidlB0SDhIV1RvVlZ0a1VidnBQVVd6UVpydHc2NW12U3BfcnFiWW81VFltYXhWVjN4a0JGd2plSzdTbGpuSVpzTElZcHNLSnF4SEpldlZaU3dLalduS1lHNkpjOGxZQ0R6LXB4S1FockxaSXo1ckFXYTFCWllWM2dkX0lHLUNCekdYYlVmYTFBWGxjNDRSVHVjZzJqNTdicFo1YnotZFdVdG5mdDgxZkt3TnA3NE53cXZXeVpFTERoc0Z4bjN3alU1Z1hBNWVsbXNZdEwwQmI1TF9vb1pSVF93?oc=5",
+      "source": "Wyoming Tribune Eagle",
+      "published": "2026-08-29T10:00:00+00:00",
+      "date": "Aug 29, 2026",
+      "cat": "News",
+      "summary": ""
+    },
     {
       "title": "Outer dome hoisted at Xudabao unit 1",
       "url": "https://www.world-nuclear-news.org/articles/outer-dome-hoisted-at-xudabao-unit-1",
@@ -27,33 +54,6 @@
       "date": "Aug 28, 2026",
       "cat": "News",
       "summary": "Argentina's Nucleoeléctrica says that testing of key equipment is under way as part of the verification process before the commissioning of the dry storage facility for used…"
-    },
-    {
-      "title": "Ampera, LLNL team up for TRISO fuel development",
-      "url": "https://www.world-nuclear-news.org/articles/ampera-llnl-team-up-for-triso-fuel-development",
-      "source": "World Nuclear News",
-      "published": "2026-08-28T10:13:06+00:00",
-      "date": "Aug 28, 2026",
-      "cat": "Technology",
-      "summary": "US microreactor developer Ampera Inc has announced a strategic partnership project with the Lawrence Livermore National Laboratory to further the development of scalable,…"
-    },
-    {
-      "title": "Welding of Akkuyu 2's primary circuit completed",
-      "url": "https://www.world-nuclear-news.org/articles/welding-of-akkuyu-2s-primary-circuit-completed",
-      "source": "World Nuclear News",
-      "published": "2026-08-28T08:30:30+00:00",
-      "date": "Aug 28, 2026",
-      "cat": "Industry",
-      "summary": "The reactor, steam generators and reactor coolant pumps are all connected in the primary circuit of Akkuyu Nuclear Power Plant's second unit, after the completion of the welding…"
-    },
-    {
-      "title": "Drilling of deposition holes starts at Onkalo",
-      "url": "https://www.world-nuclear-news.org/articles/drilling-of-deposition-holes-starts-at-onkalo",
-      "source": "World Nuclear News",
-      "published": "2026-08-27T17:08:44+00:00",
-      "date": "Aug 27, 2026",
-      "cat": "Technology",
-      "summary": "Workers have begun drilling the first deposition hole for use at the Onkalo underground used nuclear fuel repository near Olkiluoto, Finland."
     }
   ]
 }
