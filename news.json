@@ -1,33 +1,6 @@
 {
-  "generated_at": "2026-10-02T22:18:41.345399+00:00",
+  "generated_at": "2026-10-03T05:24:21.086427+00:00",
   "items": [
-    {
-      "title": "US senators expect vote after midterms on Trump's nuclear power pact with Saudi Arabia",
-      "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxNSzRTNFR3cXdZcnJ1NTZWcTl0RXZRZFpRS09tQW5lQ0lDZDdoSGdtcXdGRGJyaV9QR1VnZnJJNFlRZzU5R25MTUl5Z1IzRU5abFZHQlRlWGREQ1YtMDNrR0F6NzNiQUlXUVVpMHRkWDI0TkNZTld2WmVfY0ptQjF0cGJzclBFV3hTMVhqQTRMRmNuZTJfOEg1Y0kxSEVPb2xacXM2dHZnQmhLdkUyT29ETGlFeTBqSDBTdUtxdlktU19UTW9pcUpvMGRhazZGdw?oc=5",
-      "source": "Reuters",
-      "published": "2026-10-02T20:11:30+00:00",
-      "date": "Oct 2, 2026",
-      "cat": "News",
-      "summary": ""
-    },
-    {
-      "title": "New England States Find Common Ground on Nuclear Power",
-      "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxPWXFKbGpCQ3pWNjEwSHBUM1hHVUJXSlpLRU42NTRxVFg5b1EwXzJ4ZndEMGNVVG0zcWw4NFVtZFNraTVsaTVvVjZBZG9SRU5PNVhodHpYelNWUHJVU3hVT0NkWHY3bUdoZ3RRTlYyQTViZmJhNGt2Y0hVVHBOOXFQMFJjNWdWSUpaVVpvRVBIRGF0a1d2VFZaaWRvcw?oc=5",
-      "source": "Governing",
-      "published": "2026-10-02T19:51:34+00:00",
-      "date": "Oct 2, 2026",
-      "cat": "News",
-      "summary": ""
-    },
-    {
-      "title": "New England not likely to see nuclear power revival any time soon",
-      "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxNQU00aUxvZDV2T0VLVnBpbjJ2dzd3LUlIV29LVTBaNC1Qc0J6RkdSRlk4U3o0WE1UeURHbzNPUVNTY1NTMzFqc2FQX2VaT1J0U1RKcV9GMmZReThjV2ZCWGNkSGdIY1c5VURqUTF2TUNPQjMySlJoTEYxUld6VjJQOUJEeE8yZkViSG51Q20wSUJmc1ZHd1pDWXhfcGQ0emc?oc=5",
-      "source": "ctmirror.org",
-      "published": "2026-10-02T18:45:28+00:00",
-      "date": "Oct 2, 2026",
-      "cat": "News",
-      "summary": ""
-    },
     {
       "title": "Second part of construction permit application submitted for SMRs at Palisades",
       "url": "https://www.world-nuclear-news.org/articles/second-part-of-construction-permit-application-submitted-for-pioneer-smrs",
@@ -54,6 +27,33 @@
       "date": "Oct 2, 2026",
       "cat": "Industry",
       "summary": "Ownership of the Hinkley Point B nuclear power station in Somerset, England - which was permanently shut down four years ago - has transferred from EDF Energy to the Nuclear…"
+    },
+    {
+      "title": "Moves to bolster US nuclear workforce development",
+      "url": "https://www.world-nuclear-news.org/articles/moves-to-bolster-us-nuclear-workforce-development",
+      "source": "World Nuclear News",
+      "published": "2026-10-02T09:00:16+00:00",
+      "date": "Oct 2, 2026",
+      "cat": "Education",
+      "summary": "Westinghouse and the University of South Carolina are partnering to create a multidisciplinary nuclear workforce development programme to support US fleet deployment of AP1000…"
+    },
+    {
+      "title": "Polish entrepreneurs invest in SGE's BWRX-300 projects",
+      "url": "https://www.world-nuclear-news.org/articles/polish-entrepreneurs-invest-in-sges-bwrx-300-projects",
+      "source": "World Nuclear News",
+      "published": "2026-10-02T07:04:24+00:00",
+      "date": "Oct 2, 2026",
+      "cat": "Technology",
+      "summary": "A group of Polish business people have invested a total of PLN500 million (USD128 million) in SGE’s plans to build fleets of small modular reactors in Poland, the UK and…"
+    },
+    {
+      "title": "USA, South Korea targeting six AP1000 and two APR1400 units",
+      "url": "https://www.world-nuclear-news.org/articles/usa-south-korea-targeting-six-ap1000-two-apr1400-units",
+      "source": "World Nuclear News",
+      "published": "2026-10-01T12:08:45+00:00",
+      "date": "Oct 1, 2026",
+      "cat": "Policy",
+      "summary": "A USD120 billion framework agreement to build six Westinghouse AP1000 units and two of South Korea's APR1400 units in the USA has been outlined by the US Department of Commerce."
     }
   ]
 }
