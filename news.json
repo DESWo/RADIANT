@@ -1,33 +1,6 @@
 {
-  "generated_at": "2026-10-25T20:55:58.951366+00:00",
+  "generated_at": "2026-10-26T04:55:33.974609+00:00",
   "items": [
-    {
-      "title": "Ticker: Nuke power on the upswing; Helium designated critical material",
-      "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxPaUZYTXpTcGNvdlN0Y2x3cWE5OUJERnBtSFVYODNLR3c0ZlRqckRLcFh2Y1VuT3NPTWdyNWlZUDlVMEdlR05GdXRzVndfM0wwdmJ4dTRaRGZ2cXMtOGtDaUdOZS12a0dIMDVFUDVOSGdVbW1MXzNDWmpVZV9uQnNsdkZvT3lTRkpaWURnVDZ1X1J5dHlISFZYZmlQVVl3akJSeFB1aWNrQl9jYWRyNnc?oc=5",
-      "source": "Boston Herald",
-      "published": "2026-10-25T19:39:10+00:00",
-      "date": "Oct 25, 2026",
-      "cat": "News",
-      "summary": ""
-    },
-    {
-      "title": "Scottish Greens reaffirm opposition to nuclear energy",
-      "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxNSk53YmpTMjNSdGpaUVh4c21lRVRPLVFnYktiZFVhRThmRWNPajJYeXI5WTFXOHI5U3Rpcmtqdjd4WVJhQ0RIbWZxY3o3NDBpNEVxWW5aMGxtUVoyVDJlVTh3NHlBZ1VkNVllSm5fVXpkeFVvQUV3VHpWOG04SW8wSlNoZFk?oc=5",
-      "source": "Scottish Greens",
-      "published": "2026-10-25T12:58:46+00:00",
-      "date": "Oct 25, 2026",
-      "cat": "News",
-      "summary": ""
-    },
-    {
-      "title": "Proposal could create largest U.S. nuclear campus in eastern Kentucky",
-      "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxNYXY0Nm5UNUhXaE9lMHYwX3RBdmtPeFhzYkgwUjF1NWktN0RiM1gtRzRFRElpOG9PQ3dtcUFIYno5VGpHUlVhM3ktendoWm4wd3NSelR5ajR6ZGFTeXlJaF9iYmhWTzNXTmNDR1Z3SlIzVDQxZFJveG14VjhUek9YOFl2cVBnR0MwdUI4WDRGakNCTDJXamNJanNTNUhJT2V2eThFMk8zUGPSAa4BQVVfeXFMTVVZZW1qN3pZZi1KZlN6clNFOEg0Wlhma2FqeEpId0FnU1BCTnNVbVNiaEdHM25Ib0lDV1gyaVp6b2ltRGJwSXp5TFJYZ2JaUFgzX3VnWk90MUF4QlBnS011d19LT2pIcUFvbmdUNEViMjZTbE9vTUFNbUZTZExjSll5VVZyX1JBVjhVNW9UcmpZSE1rRHNyVHl3SXpyY0VMOTQ5MXNpTGhxbU9Dd2pB?oc=5",
-      "source": "FOX 56 News",
-      "published": "2026-10-25T03:58:21+00:00",
-      "date": "Oct 25, 2026",
-      "cat": "News",
-      "summary": ""
-    },
     {
       "title": "Posiva given go-ahead to operate Finnish used fuel repository",
       "url": "https://www.world-nuclear-news.org/articles/posiva-given-go-ahead-to-operate-finnish-used-fuel-repository",
@@ -54,6 +27,33 @@
       "date": "Oct 23, 2026",
       "cat": "Industry",
       "summary": "A positive final investment decision from the Bannerman Energy-CNNC Overseas joint venture means the Etango uranium project in Namibia can transition into full-scale construction…"
+    },
+    {
+      "title": "Rosatom eyes 2027 for Uzbek large reactor construction",
+      "url": "https://www.world-nuclear-news.org/articles/rosatom-eyes-2027-for-uzbek-reactor-construction",
+      "source": "World Nuclear News",
+      "published": "2026-10-23T11:59:44+00:00",
+      "date": "Oct 23, 2026",
+      "cat": "Industry",
+      "summary": "Rosatom plans to launch construction of the large-scale nuclear units at the planned power plant in Uzbekistan in 2027, CEO Alexey Likhachev has said during a visit to the…"
+    },
+    {
+      "title": "Slovenia's deep borehole disposal options studied",
+      "url": "https://www.world-nuclear-news.org/articles/slovenias-deep-borehole-disposal-options-studied",
+      "source": "World Nuclear News",
+      "published": "2026-10-23T11:06:07+00:00",
+      "date": "Oct 23, 2026",
+      "cat": "Technology",
+      "summary": "The US firm Deep Isolation has conducted a cost assessment for Slovenia's radioactive waste agency which has concluded it would be more economic for used fuel from the TRIGA II…"
+    },
+    {
+      "title": "OPG firm joins UK BWRX-300 project",
+      "url": "https://www.world-nuclear-news.org/articles/joint-venture-to-operate-planned-uk-bwrx-300-fleet",
+      "source": "World Nuclear News",
+      "published": "2026-10-22T12:02:58+00:00",
+      "date": "Oct 22, 2026",
+      "cat": "Technology",
+      "summary": "The UK-based project company of European SMR developer and investor SGE, and Origin Nuclear, a subsidiary of Ontario Power Generation, have signed a letter of intent to establish…"
     }
   ]
 }
